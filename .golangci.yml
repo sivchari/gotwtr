@@ -12,6 +12,7 @@ linters-settings:
     enable-all: true
     check-shadowing: false
     disable:
+      - fieldalignment
       - shadow
 
 linters:
