@@ -1,0 +1,40 @@
+run:
+  timeout: 5m
+  skip-files: []
+  skip-dirs: []
+
+linters-settings:
+  misspell:
+    locale: US
+  govet:
+    # report about shadowed variables
+    # FYI https://github.com/golang/go/blob/4a381e3ee3ad6104fc1e1bc255f29d6bf47d7969/src/cmd/vet/shadow.go
+    enable-all: true
+    check-shadowing: false
+    disable:
+      - shadow
+
+linters:
+  disable-all: true
+  enable:
+    - bodyclose
+    - forcetypeassert
+    - goconst
+    - gocritic
+    - goimports
+    - gosimple
+    - govet
+    - ifshort
+    - makezero
+    - misspell
+    - nilerr
+    - noctx
+    - revive
+    - staticcheck
+    - varcheck
+
+issues:
+  exclude-use-default: true
+  max-per-linter: 0
+  max-same-issues: 0
+  exclude: []
