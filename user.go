@@ -1,4 +1,31 @@
-package field
+package twitter
+
+type UserField string
+
+/*
+	You must also pass one of the user expansions to return the desired user fields.
+
+	- expansions=author_id
+	- expansions=entities.mentions.username
+	- expansions=in_reply_to_user_id
+	- expansions=referenced_tweets.id.author_id
+*/
+const (
+	UserFieldCreatedAt       UserField = "created_at"
+	UserFieldDescription     UserField = "description"
+	UserFieldEntities        UserField = "entities"
+	UserFieldID              UserField = "id"
+	UserFieldLocation        UserField = "location"
+	UserFieldName            UserField = "name"
+	UserFieldPinnedTweetID   UserField = "pinned_tweet_id"
+	UserFieldProfileImageURL UserField = "profile_image_url"
+	UserFieldProtected       UserField = "protected"
+	UserFieldPublicMetrics   UserField = "public_metrics"
+	UserFieldURL             UserField = "url"
+	UserFieldUserName        UserField = "username"
+	UserFieldVerified        UserField = "verified"
+	UserFieldWithHeld        UserField = "withheld"
+)
 
 type User struct {
 	ID              string             `json:"id"`
