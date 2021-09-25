@@ -1,4 +1,32 @@
-package field
+package twitter
+
+type TweetField string
+
+/*
+	Tweet field will only return
+	if you've also included the expansions=referenced_tweets.id query parameter in your request.
+*/
+const (
+	TweetFieldAttachments        TweetField = "attachments"
+	TweetFieldAuthorID           TweetField = "author_id"
+	TweetFieldCreatedAt          TweetField = "created_at"
+	TweetFieldConversationID     TweetField = "conversation_id"
+	TweetFieldContextAnnotations TweetField = "context_annotations"
+	TweetFieldEntities           TweetField = "entities"
+	TweetFieldGeo                TweetField = "geo"
+	TweetFieldID                 TweetField = "id"
+	TweetFieldInReplyToUserID    TweetField = "in_reply_to_user_id"
+	TweetFieldLanguage           TweetField = "lang"
+	TweetFieldNonPublicMetrics   TweetField = "non_public_metrics"
+	TweetFieldPublicMetrics      TweetField = "public_metrics"
+	TweetFieldOrganicMetrics     TweetField = "organic_metrics"
+	TweetFieldPromotedMetrics    TweetField = "promoted_metrics"
+	TweetFieldPossiblySensitve   TweetField = "possibly_sensitive"
+	TweetFieldReferencedTweets   TweetField = "referenced_tweets"
+	TweetFieldSource             TweetField = "source"
+	TweetFieldText               TweetField = "text"
+	TweetFieldWithHeld           TweetField = "withheld"
+)
 
 type Tweet struct {
 	ID                 string                    `json:"id"`

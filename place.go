@@ -1,4 +1,21 @@
-package field
+package twitter
+
+type PlaceField string
+
+/*
+	Place field will only return
+	if you've also included the expansions=geo.place_id query parameter in your request.
+*/
+const (
+	PlaceFieldContainedWithin PlaceField = "contained_within"
+	PlaceFieldCountry         PlaceField = "country"
+	PlaceFieldCountryCode     PlaceField = "country_code"
+	PlaceFieldFullName        PlaceField = "full_name"
+	PlaceFieldGeo             PlaceField = "geo"
+	PlaceFieldID              PlaceField = "id"
+	PlaceFieldName            PlaceField = "name"
+	PlaceFieldPlaceType       PlaceField = "place_type"
+)
 
 type Place struct {
 	FullName        string    `json:"full_name"`
