@@ -1,4 +1,9 @@
-package twitter
+package gotwtr
+
+import (
+	"net/http"
+	"strings"
+)
 
 type TweetField string
 
@@ -141,4 +146,63 @@ type TweetReferencedTweet struct {
 type TweetWithheld struct {
 	Copyright    string   `json:"copyright"`
 	CountryCodes []string `json:"country_codes"`
+}
+
+type TweetOption struct {
+	Expansions  []Expansion
+	MediaFields []MediaField
+	PlaceFields []PlaceField
+	PollFields  []PollField
+	TweetFields []TweetField
+	UserFields  []UserField
+}
+
+type TweetLookUpResponse struct {
+	Tweets   []*Tweet            `json:"data"`
+	Includes *TweetIncludes      `json:"includes,omitempty"`
+	Errors   []*APIResponseError `json:"errors,omitempty"`
+	Title    string              `json:"title,omitempty"`
+	Detail   string              `json:"detail,omitempty"`
+	Type     string              `json:"type,omitempty"`
+}
+
+type TweetIncludes struct {
+	Medias []*Media
+	Places []*Place
+	Polls  []*Poll
+	Tweets []*Tweet
+	Users  []*User
+}
+
+func (t *TweetOption) addQuery(req *http.Request) {
+	q := req.URL.Query()
+	if len(t.Expansions) > 0 {
+		q.Add("expansions", strings.Join(expansionsToString(t.Expansions), ","))
+	}
+	if len(t.MediaFields) > 0 {
+		q.Add("media.fields", strings.Join(mediaFieldsToString(t.MediaFields), ","))
+	}
+	if len(t.PlaceFields) > 0 {
+		q.Add("place.fields", strings.Join(placeFieldsToString(t.PlaceFields), ","))
+	}
+	if len(t.PollFields) > 0 {
+		q.Add("poll.fields", strings.Join(pollFieldsToString(t.PollFields), ","))
+	}
+	if len(t.TweetFields) > 0 {
+		q.Add("tweet.fields", strings.Join(tweetFieldsToString(t.TweetFields), ","))
+	}
+	if len(t.UserFields) > 0 {
+		q.Add("user.fields", strings.Join(userFieldsToString(t.UserFields), ","))
+	}
+	if len(q) > 0 {
+		req.URL.RawQuery = q.Encode()
+	}
+}
+
+func tweetFieldsToString(tfs []TweetField) []string {
+	slice := make([]string, len(tfs))
+	for i, tf := range tfs {
+		slice[i] = string(tf)
+	}
+	return slice
 }

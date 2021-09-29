@@ -1,4 +1,4 @@
-package twitter
+package gotwtr
 
 type MediaField string
 
@@ -43,4 +43,12 @@ type MediaMetrics struct {
 	Playback75Count  int `json:"playback_75_count,omitempty"`
 	Playback100Count int `json:"playback_100_count,omitempty"`
 	ViewCount        int `json:"view_count,omitempty"`
+}
+
+func mediaFieldsToString(mfs []MediaField) []string {
+	slice := make([]string, len(mfs))
+	for i, mf := range mfs {
+		slice[i] = string(mf)
+	}
+	return slice
 }

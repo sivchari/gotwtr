@@ -1,4 +1,4 @@
-package twitter
+package gotwtr
 
 type PlaceField string
 
@@ -32,4 +32,12 @@ type PlaceGeo struct {
 	Type       string                 `json:"type"`
 	BBox       []float64              `json:"bbox"`
 	Properties map[string]interface{} `json:"properties"`
+}
+
+func placeFieldsToString(pfs []PlaceField) []string {
+	slice := make([]string, len(pfs))
+	for i, pf := range pfs {
+		slice[i] = string(pf)
+	}
+	return slice
 }
