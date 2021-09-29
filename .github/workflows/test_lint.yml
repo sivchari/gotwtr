@@ -38,13 +38,17 @@ jobs:
       - name: test
         run: go test ./... -v
 
-  lint:
-    name: lint
+  lint-with-reviewdog:
+    name: lint with reviewdog
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
 
       - name: golangci-lint
-        uses: golangci/golangci-lint-action@v2
+        uses: reviewdog/action-golangci-lint@v1
         with:
-          version: v1.42.0
+          github_token: ${{ github.token }}
+          level: warning
+          golangci_lint_flags: "--config=.golangci.yml"
+          filter_mode: nofilter
+          reporter: github-pr-review
