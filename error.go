@@ -1,0 +1,26 @@
+package gotwtr
+
+type HTTPError struct {
+	APIName string
+	Status  string
+	URL     string
+}
+
+func (e *HTTPError) Error() string {
+	return e.APIName + ": " + e.Status + " " + e.URL
+}
+
+type APIResponseError struct {
+	Title        string      `json:"title"`
+	Detail       string      `json:"detail"`
+	Type         string      `json:"type"`
+	ResourceType string      `json:"resource_type"`
+	Parameter    string      `json:"parameter"`
+	Parameters   Parameter   `json:"parameters"`
+	Message      string      `json:"message"`
+	Value        interface{} `json:"value"`
+}
+
+type Parameter struct {
+	IDs []string `json:"ids"`
+}
