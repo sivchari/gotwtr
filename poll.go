@@ -1,4 +1,4 @@
-package twitter
+package gotwtr
 
 type PollField string
 
@@ -26,4 +26,12 @@ type PollOption struct {
 	Position int    `json:"position"`
 	Label    string `json:"label"`
 	Votes    int    `json:"votes"`
+}
+
+func pollFieldsToString(pfs []PollField) []string {
+	slice := make([]string, len(pfs))
+	for i, pf := range pfs {
+		slice[i] = string(pf)
+	}
+	return slice
 }

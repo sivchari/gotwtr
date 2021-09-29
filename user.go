@@ -1,4 +1,4 @@
-package twitter
+package gotwtr
 
 type UserField string
 
@@ -30,7 +30,7 @@ const (
 type User struct {
 	ID              string             `json:"id"`
 	Name            string             `json:"name"`
-	UserName        string             `json:"user_name"`
+	UserName        string             `json:"username"`
 	CreatedAt       string             `json:"created_at,omitempty"`
 	Description     string             `json:"description,omitempty"`
 	Entities        []*UserEntity      `json:"entities,omitempty"`
@@ -96,4 +96,12 @@ type UserPublicMetrics struct {
 type UserWithheld struct {
 	Copyright    string   `json:"copyright"`
 	CountryCodes []string `json:"country_codes"`
+}
+
+func userFieldsToString(ufs []UserField) []string {
+	slice := make([]string, len(ufs))
+	for i, uf := range ufs {
+		slice[i] = string(uf)
+	}
+	return slice
 }
