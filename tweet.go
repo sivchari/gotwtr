@@ -166,6 +166,12 @@ type TweetLookUpResponse struct {
 	Type     string              `json:"type,omitempty"`
 }
 
+type TweetLookUpByIDResponse struct {
+	Tweet    *Tweet              `json:"data"`
+	Includes *TweetIncludes      `json:"includes,omitempty"`
+	Errors   []*APIResponseError `json:"errors,omitempty"`
+}
+
 type TweetIncludes struct {
 	Medias []*Media
 	Places []*Place
