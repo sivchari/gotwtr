@@ -1,2 +1,2 @@
 # go-twitter
-go-twitter is a provides Twitter V2 API
+go-twitter provides Twitter V2 API
