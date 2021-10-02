@@ -12,7 +12,7 @@ import (
 	"github.com/sivchari/gotwtr"
 )
 
-func Test_client_LookUpTweets(t *testing.T) {
+func Test_lookUp(t *testing.T) {
 	type args struct {
 		ctx    context.Context
 		client *http.Client
@@ -26,7 +26,7 @@ func Test_client_LookUpTweets(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name: "success: lookup tweets, no option and single ID",
+			name: "success lookup tweets, no option and single ID",
 			args: args{
 				ctx: context.Background(),
 				client: mockHTTPClient(func(req *http.Request) *http.Response {
@@ -59,7 +59,7 @@ func Test_client_LookUpTweets(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name: "success: lookup tweets, option and single ID",
+			name: "success lookup tweets, option and single ID",
 			args: args{
 				ctx: context.Background(),
 				client: mockHTTPClient(func(req *http.Request) *http.Response {
@@ -126,7 +126,7 @@ func Test_client_LookUpTweets(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name: "success: lookup tweets, no option and multiple IDs",
+			name: "success lookup tweets, no option and multiple IDs",
 			args: args{
 				ctx: context.Background(),
 				client: mockHTTPClient(func(req *http.Request) *http.Response {
@@ -167,7 +167,7 @@ func Test_client_LookUpTweets(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name: "success: lookup tweets, option and multiple IDs",
+			name: "success lookup tweets, option and multiple IDs",
 			args: args{
 				ctx: context.Background(),
 				client: mockHTTPClient(func(req *http.Request) *http.Response {
@@ -257,7 +257,7 @@ func Test_client_LookUpTweets(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name: "success: 1 is valid, 1 is deleted",
+			name: "success 1 is valid, 1 is deleted",
 			args: args{
 				ctx: context.Background(),
 				client: mockHTTPClient(func(req *http.Request) *http.Response {
@@ -308,7 +308,7 @@ func Test_client_LookUpTweets(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name: "error: not found",
+			name: "error not found",
 			args: args{
 				ctx: context.Background(),
 				client: mockHTTPClient(func(req *http.Request) *http.Response {
