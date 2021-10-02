@@ -70,7 +70,6 @@ func lookUpByID(ctx context.Context, c *client, id string, opt ...*TweetOption) 
 		return nil, errors.New("tweet lookup by id: id parameter is required")
 	}
 	tweetLookUpByID := tweetLookUp + "/" + id
-	fmt.Println(tweetLookUpByID)
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, tweetLookUpByID, nil)
 	if err != nil {

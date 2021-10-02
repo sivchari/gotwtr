@@ -15,6 +15,7 @@ type APIResponseError struct {
 	Detail       string      `json:"detail"`
 	Type         string      `json:"type"`
 	ResourceType string      `json:"resource_type"`
+	ResourceID   string      `json:"resource_id"`
 	Parameter    string      `json:"parameter"`
 	Parameters   Parameter   `json:"parameters"`
 	Message      string      `json:"message"`
