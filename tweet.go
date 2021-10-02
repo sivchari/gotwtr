@@ -36,7 +36,7 @@ const (
 type Tweet struct {
 	ID                 string                    `json:"id"`
 	Text               string                    `json:"text"`
-	Attachments        []*TweetAttachment        `json:"attachments,omitempty"`
+	Attachments        *TweetAttachment          `json:"attachments,omitempty"`
 	AuthorID           string                    `json:"author_id,omitempty"`
 	ContextAnnotations []*TweetContextAnnotation `json:"context_annotations,omitempty"`
 	ConversationID     string                    `json:"conversation_id,omitempty"`
@@ -107,15 +107,22 @@ type TweetMention struct {
 }
 
 type TweetURL struct {
-	Start       int    `json:"start"`
-	End         int    `json:"end"`
-	URL         string `json:"url"`
-	ExpandedURL string `json:"expanded_url"`
-	DisplayURL  string `json:"display_url"`
-	Status      string `json:"status"`
-	Title       string `json:"title"`
-	Description string `json:"description"`
-	UnwoundURL  string `json:"unwound_url"`
+	Start       int           `json:"start"`
+	End         int           `json:"end"`
+	URL         string        `json:"url"`
+	ExpandedURL string        `json:"expanded_url"`
+	DisplayURL  string        `json:"display_url"`
+	Images      []*TweetImage `json:"images"`
+	Status      int           `json:"status"`
+	Title       string        `json:"title"`
+	Description string        `json:"description"`
+	UnwoundURL  string        `json:"unwound_url"`
+}
+
+type TweetImage struct {
+	URL    string `json:"url"`
+	Width  int    `json:"width"`
+	Height int    `json:"height"`
 }
 
 type TweetGeo struct {
@@ -173,7 +180,7 @@ type TweetLookUpByIDResponse struct {
 }
 
 type TweetIncludes struct {
-	Medias []*Media
+	Media  []*Media
 	Places []*Place
 	Polls  []*Poll
 	Tweets []*Tweet
