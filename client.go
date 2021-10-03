@@ -11,16 +11,14 @@ type client struct {
 }
 
 const (
-	tweetLookUpMaxIDs = 100
+	tweetLookUpMaxIDs         = 100
+	tweetSearchMaxQueryLength = 512
 )
 
 type Client interface {
 	LookUpTweets(ctx context.Context, ids []string, opt ...*TweetOption) (*TweetLookUpResponse, error)
 	LookUpTweetByID(ctx context.Context, id string, opt ...*TweetOption) (*TweetLookUpByIDResponse, error)
-	// User
-	// Media
-	// Poll
-	// Place
+	SearchRecentTweets(ctx context.Context, query string, opt ...*TweetSearchOption) (*TweetSearchResponse, error)
 }
 
 var _ Client = (*client)(nil)
@@ -52,4 +50,8 @@ func (c *client) LookUpTweets(ctx context.Context, ids []string, opt ...*TweetOp
 
 func (c *client) LookUpTweetByID(ctx context.Context, id string, opt ...*TweetOption) (*TweetLookUpByIDResponse, error) {
 	return lookUpByID(ctx, c, id, opt...)
+}
+
+func (c *client) SearchRecentTweets(ctx context.Context, query string, opt ...*TweetSearchOption) (*TweetSearchResponse, error) {
+	return searchRecentTweets(ctx, c, query, opt...)
 }
