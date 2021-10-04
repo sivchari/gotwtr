@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	client := gotwtr.New("AAAAAAAAAAAAAAAAAAAAAIWbBAEAAAAA8ahKqaHCJ%2FVsAi%2F4GQeTIw31Ioc%3DjzFYjJuReRDZW0gHRCQHCsVoPA3vMrgDOUptyzZepLEFBImSQr")
+	client := gotwtr.New("key")
 	tsr, err := client.SearchRecentTweets(context.Background(), "go", &gotwtr.TweetSearchOption{
 		TweetFields: []gotwtr.TweetField{
 			gotwtr.TweetFieldAuthorID,
