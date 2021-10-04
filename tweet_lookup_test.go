@@ -30,7 +30,7 @@ func Test_lookUp(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name: "200 success lookup tweets, no option and single ID",
+			name: "200 ok no option and single ID",
 			args: args{
 				ctx: context.Background(),
 				client: mockHTTPClient(func(req *http.Request) *http.Response {
@@ -63,7 +63,7 @@ func Test_lookUp(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name: "200 success lookup tweets, option and single ID",
+			name: "200 ok option and single ID",
 			args: args{
 				ctx: context.Background(),
 				client: mockHTTPClient(func(req *http.Request) *http.Response {
@@ -130,7 +130,7 @@ func Test_lookUp(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name: "200 success lookup tweets, no option and multiple IDs",
+			name: "200 ok no option and multiple IDs",
 			args: args{
 				ctx: context.Background(),
 				client: mockHTTPClient(func(req *http.Request) *http.Response {
@@ -171,7 +171,7 @@ func Test_lookUp(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name: "200 success lookup tweets, option and multiple IDs",
+			name: "200 ok option and multiple IDs",
 			args: args{
 				ctx: context.Background(),
 				client: mockHTTPClient(func(req *http.Request) *http.Response {
@@ -261,7 +261,7 @@ func Test_lookUp(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name: "200 success 1 is valid, 1 is deleted",
+			name: "200 ok 1 is valid 1 is deleted",
 			args: args{
 				ctx: context.Background(),
 				client: mockHTTPClient(func(req *http.Request) *http.Response {
@@ -312,7 +312,7 @@ func Test_lookUp(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name: "404 error not found",
+			name: "404 not found",
 			args: args{
 				ctx: context.Background(),
 				client: mockHTTPClient(func(req *http.Request) *http.Response {
@@ -389,7 +389,7 @@ func Test_lookUpByID(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name: "200 success default payload",
+			name: "200 ok default payload",
 			args: args{
 				ctx: context.Background(),
 				client: mockHTTPClient(func(req *http.Request) *http.Response {
@@ -416,7 +416,7 @@ func Test_lookUpByID(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name: "200 success request tweet fields",
+			name: "200 ok request tweet fields",
 			args: args{
 				ctx: context.Background(),
 				client: mockHTTPClient(func(req *http.Request) *http.Response {
@@ -571,7 +571,7 @@ func Test_lookUpByID(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name: "200 success deleted tweet",
+			name: "200 ok deleted tweet",
 			args: args{
 				ctx: context.Background(),
 				client: mockHTTPClient(func(req *http.Request) *http.Response {
@@ -722,7 +722,7 @@ func Test_lookUpByID(t *testing.T) {
 			},
 		},
 		{
-			name: "200 success request poll fields",
+			name: "200 ok request poll fields",
 			args: args{
 				ctx: context.Background(),
 				client: mockHTTPClient(func(req *http.Request) *http.Response {
