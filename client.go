@@ -17,6 +17,8 @@ const (
 type Client interface {
 	LookUpTweets(ctx context.Context, ids []string, opt ...*TweetOption) (*TweetLookUpResponse, error)
 	LookUpTweetByID(ctx context.Context, id string, opt ...*TweetOption) (*TweetLookUpByIDResponse, error)
+	UserTweetTimeline(ctx context.Context, id string, opt ...*TweetOption) (*UserTweetTimelineResponse, error)
+	UserMensionTimeline(ctx context.Context, id string, opt ...*TweetOption) (*UserMensionTimelineResponse, error)
 	// User
 	// Media
 	// Poll
@@ -52,4 +54,12 @@ func (c *client) LookUpTweets(ctx context.Context, ids []string, opt ...*TweetOp
 
 func (c *client) LookUpTweetByID(ctx context.Context, id string, opt ...*TweetOption) (*TweetLookUpByIDResponse, error) {
 	return lookUpByID(ctx, c, id, opt...)
+}
+
+func (c *client) UserTweetTimeline(ctx context.Context, id string, opt ...*TweetOption) (*UserTweetTimelineResponse, error) {
+	return userTweetTimeline(ctx, c, id, opt...)
+}
+
+func (c *client) UserMensionTimeline(ctx context.Context, id string, opt ...*TweetOption) (*UserMensionTimelineResponse, error) {
+	return userMensionTimeline(ctx, c, id, opt...)
 }
