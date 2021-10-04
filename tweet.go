@@ -96,9 +96,9 @@ type TweetHashtag struct {
 }
 
 type TweetMention struct {
-	Start int    `json:"start"`
-	End   int    `json:"end"`
-	Tag   string `json:"tag"`
+	Start    int    `json:"start"`
+	End      int    `json:"end"`
+	UserName string `json:"user_name"`
 }
 
 type TweetURL struct {
