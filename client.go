@@ -19,6 +19,7 @@ type Client interface {
 	LookUpTweets(ctx context.Context, ids []string, opt ...*TweetOption) (*TweetLookUpResponse, error)
 	LookUpTweetByID(ctx context.Context, id string, opt ...*TweetOption) (*TweetLookUpByIDResponse, error)
 	SearchRecentTweets(ctx context.Context, query string, opt ...*TweetSearchOption) (*TweetSearchResponse, error)
+	TweetCounts(ctx context.Context, query string, opt ...*TweetCountsOption) (*TweetCountsResponse, error)
 }
 
 var _ Client = (*client)(nil)
@@ -54,4 +55,8 @@ func (c *client) LookUpTweetByID(ctx context.Context, id string, opt ...*TweetOp
 
 func (c *client) SearchRecentTweets(ctx context.Context, query string, opt ...*TweetSearchOption) (*TweetSearchResponse, error) {
 	return searchRecentTweets(ctx, c, query, opt...)
+}
+
+func (c *client) TweetCounts(ctx context.Context, query string, opt ...*TweetCountsOption) (*TweetCountsResponse, error) {
+	return tweetCounts(ctx, c, query, opt...)
 }
