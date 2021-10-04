@@ -1,10 +1,5 @@
 package gotwtr
 
-import (
-	"net/http"
-	"strings"
-)
-
 type TweetField string
 
 /*
@@ -101,9 +96,9 @@ type TweetHashtag struct {
 }
 
 type TweetMention struct {
-	Start int    `json:"start"`
-	End   int    `json:"end"`
-	Tag   string `json:"tag"`
+	Start    int    `json:"start"`
+	End      int    `json:"end"`
+	UserName string `json:"user_name"`
 }
 
 type TweetURL struct {
@@ -153,15 +148,6 @@ type TweetReferencedTweet struct {
 type TweetWithheld struct {
 	Copyright    string   `json:"copyright"`
 	CountryCodes []string `json:"country_codes"`
-}
-
-type TweetOption struct {
-	Expansions  []Expansion
-	MediaFields []MediaField
-	PlaceFields []PlaceField
-	PollFields  []PollField
-	TweetFields []TweetField
-	UserFields  []UserField
 }
 
 type TweetLookUpResponse struct {
@@ -239,4 +225,16 @@ func tweetFieldsToString(tfs []TweetField) []string {
 		slice[i] = string(tf)
 	}
 	return slice
+type TweetSearchResponse struct {
+	Tweets   []*Tweet            `json:"data"`
+	Includes *TweetIncludes      `json:"includes,omitempty"`
+	Meta     *TweetSearchMeta    `json:"meta,omitempty"`
+	Errors   []*APIResponseError `json:"errors,omitempty"`
+}
+
+type TweetSearchMeta struct {
+	ResultCount int    `json:"result_count"`
+	NewestID    string `json:"newest_id"`
+	OldestID    string `json:"oldest_id"`
+	NextToken   string `json:"next_token,omitempty"`
 }

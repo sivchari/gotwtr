@@ -11,7 +11,8 @@ type client struct {
 }
 
 const (
-	tweetLookUpMaxIDs = 100
+	tweetLookUpMaxIDs         = 100
+	tweetSearchMaxQueryLength = 512
 )
 
 type Client interface {
@@ -23,6 +24,7 @@ type Client interface {
 	// Media
 	// Poll
 	// Place
+	SearchRecentTweets(ctx context.Context, query string, opt ...*TweetSearchOption) (*TweetSearchResponse, error)
 }
 
 var _ Client = (*client)(nil)
@@ -62,4 +64,6 @@ func (c *client) UserTweetTimeline(ctx context.Context, id string, opt ...*Tweet
 
 func (c *client) UserMensionTimeline(ctx context.Context, id string, opt ...*TweetOption) (*UserMensionTimelineResponse, error) {
 	return userMensionTimeline(ctx, c, id, opt...)
+func (c *client) SearchRecentTweets(ctx context.Context, query string, opt ...*TweetSearchOption) (*TweetSearchResponse, error) {
+	return searchRecentTweets(ctx, c, query, opt...)
 }
