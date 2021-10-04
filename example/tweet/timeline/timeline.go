@@ -19,8 +19,8 @@ func main() {
 		fmt.Println(t)
 	}
 
-	// user mension timeline
-	tws, err := client.UserMensionTimeline(context.Background(), "id")
+	// user mention timeline
+	tws, err := client.UserMentionTimeline(context.Background(), "id")
 	if err != nil {
 		log.Fatal(err)
 	}
