@@ -32,7 +32,7 @@ func searchRecentTweets(ctx context.Context, c *client, query string, opt ...*Tw
 	case 1:
 		topt = *opt[0]
 	default:
-		return nil, errors.New("tweet lookup: only one option is allowed")
+		return nil, errors.New("tweets search recent: only one option is allowed")
 	}
 	topt.addQuery(req)
 
