@@ -173,20 +173,6 @@ type TweetIncludes struct {
 	Users  []*User
 }
 
-type TweetSearchResponse struct {
-	Tweets   []*Tweet            `json:"data"`
-	Includes *TweetIncludes      `json:"includes,omitempty"`
-	Meta     *TweetSearchMeta    `json:"meta,omitempty"`
-	Errors   []*APIResponseError `json:"errors,omitempty"`
-}
-
-type TweetSearchMeta struct {
-	ResultCount int    `json:"result_count"`
-	NewestID    string `json:"newest_id"`
-	OldestID    string `json:"oldest_id"`
-	NextToken   string `json:"next_token,omitempty"`
-}
-
 type UserTweetTimelineResponse struct {
 	Tweets   []*Tweet            `json:"data"`
 	Includes *TweetIncludes      `json:"includes,omitempty"`
