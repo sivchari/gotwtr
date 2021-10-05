@@ -16,7 +16,7 @@ func Test_userTweetTimeline(t *testing.T) {
 		ctx    context.Context
 		client *http.Client
 		id     string
-		opt    []*gotwtr.TweetOption
+		opt    []*gotwtr.UserTweetTimelineOpts
 	}
 	tests := []struct {
 		name    string
@@ -156,7 +156,7 @@ func Test_userTweetTimeline(t *testing.T) {
 					}
 				}),
 				id: "2244994945",
-				opt: []*gotwtr.TweetOption{
+				opt: []*gotwtr.UserTweetTimelineOpts{
 					{
 						TweetFields: []gotwtr.TweetField{
 							gotwtr.TweetFieldAttachments,
@@ -279,7 +279,7 @@ func Test_userMentionTimeline(t *testing.T) {
 		ctx    context.Context
 		client *http.Client
 		id     string
-		opt    []*gotwtr.TweetOption
+		opt    []*gotwtr.UserMentionTimelineOpts
 	}
 	tests := []struct {
 		name    string
@@ -332,23 +332,23 @@ func Test_userMentionTimeline(t *testing.T) {
 			want: &gotwtr.UserMentionTimelineResponse{
 				Tweets: []*gotwtr.Tweet{
 					{
-						ID: "1375152598945312768",
+						ID:   "1375152598945312768",
 						Text: "@LeBraat @TwitterDev @LeGuud There's enough @twitterdev love to go around, @LeBraat",
 					},
 					{
-						ID: "1375152449594523649",
+						ID:   "1375152449594523649",
 						Text: "Apparently I'm not the only one (of my test accounts) that loves @TwitterDev nn@LeStaache @LeGuud",
 					},
 					{
-						ID: "1375152043455873027",
+						ID:   "1375152043455873027",
 						Text: "Can I join this @twitterdev love party?!",
 					},
 					{
-						ID: "1375151947360174082",
+						ID:   "1375151947360174082",
 						Text: "I love me some @twitterdev too!",
 					},
 					{
-						ID: "1375151827189137412",
+						ID:   "1375151827189137412",
 						Text: "This is a test, but also a good excuse to express my love for @TwitterDev 😍",
 					},
 				},
@@ -521,7 +521,7 @@ func Test_userMentionTimeline(t *testing.T) {
 					}
 				}),
 				id: "2244994945",
-				opt: []*gotwtr.TweetOption{
+				opt: []*gotwtr.UserMentionTimelineOpts{
 					{
 						TweetFields: []gotwtr.TweetField{
 							gotwtr.TweetFieldAttachments,
@@ -550,150 +550,150 @@ func Test_userMentionTimeline(t *testing.T) {
 			want: &gotwtr.UserMentionTimelineResponse{
 				Tweets: []*gotwtr.Tweet{
 					{
-						AuthorID: "1034147061711679488",
-						Text: "@LeBraat @TwitterDev @LeGuud There's enough @twitterdev love to go around, @LeBraat",
-						Lang: "en",
+						AuthorID:       "1034147061711679488",
+						Text:           "@LeBraat @TwitterDev @LeGuud There's enough @twitterdev love to go around, @LeBraat",
+						Lang:           "en",
 						ConversationID: "1375152449594523649",
-						ID: "1375152598945312768",
+						ID:             "1375152598945312768",
 					},
 					{
-						AuthorID: "199566737",
-						Text: "Apparently I'm not the only one (of my test accounts) that loves @TwitterDev nn@LeStaache @LeGuud",
-						Lang: "en",
+						AuthorID:       "199566737",
+						Text:           "Apparently I'm not the only one (of my test accounts) that loves @TwitterDev nn@LeStaache @LeGuud",
+						Lang:           "en",
 						ConversationID: "1375152449594523649",
-						ID: "1375152449594523649",
+						ID:             "1375152449594523649",
 					},
 					{
-						AuthorID: "930524282358325248",
-						Text: "Can I join this @twitterdev love party?!",
-						Lang: "en",
+						AuthorID:       "930524282358325248",
+						Text:           "Can I join this @twitterdev love party?!",
+						Lang:           "en",
 						ConversationID: "1375152043455873027",
-						ID: "1375152043455873027",
+						ID:             "1375152043455873027",
 					},
 					{
-						AuthorID: "1034147061711679488",
-						Text: "I love me some @twitterdev too!",
-						Lang: "en",
+						AuthorID:       "1034147061711679488",
+						Text:           "I love me some @twitterdev too!",
+						Lang:           "en",
 						ConversationID: "1375151947360174082",
-						ID: "1375151947360174082",
+						ID:             "1375151947360174082",
 					},
 					{
-						AuthorID: "199566737",
-						Text: "This is a test, but also a good excuse to express my love for @TwitterDev 😍",
-						Lang: "en",
+						AuthorID:       "199566737",
+						Text:           "This is a test, but also a good excuse to express my love for @TwitterDev 😍",
+						Lang:           "en",
 						ConversationID: "1375151827189137412",
-						ID: "1375151827189137412",
+						ID:             "1375151827189137412",
 					},
 				},
 				Includes: &gotwtr.TweetIncludes{
 					Users: []*gotwtr.User{
 						{
 							Name: "LeStache",
-							ID: "1034147061711679488",
-							Entities: []*gotwtr.UserEntity {
+							ID:   "1034147061711679488",
+							Entities: []*gotwtr.UserEntity{
 								{
-									URL: &gotwtr.UserURL {
-										URLs: []*gotwtr.UserURLs {
+									URL: &gotwtr.UserURL{
+										URLs: []*gotwtr.UserURLs{
 											{
-												Start: 0,
-												End: 23,
-												URL: "https://t.co/7IDoW8iFLm",
+												Start:       0,
+												End:         23,
+												URL:         "https://t.co/7IDoW8iFLm",
 												ExpandedURL: "https://twitter.com",
-												DisplayURL: "twitter.com",
+												DisplayURL:  "twitter.com",
 											},
 										},
 									},
-									Description: &gotwtr.UserDescription {
-										URLs: []*gotwtr.UserURLs {
+									Description: &gotwtr.UserDescription{
+										URLs: []*gotwtr.UserURLs{
 											{
-												Start: 21,
-												End: 44,
-												URL: "https://t.co/v6nxjDjZR3",
+												Start:       21,
+												End:         44,
+												URL:         "https://t.co/v6nxjDjZR3",
 												ExpandedURL: "https://google.com",
-												DisplayURL: "google.com",
+												DisplayURL:  "google.com",
 											},
 										},
-										Hashtags: []*gotwtr.UserHashtag {
+										Hashtags: []*gotwtr.UserHashtag{
 											{
 												Start: 15,
-												End: 20,
-												Tag: "test",
+												End:   20,
+												Tag:   "test",
 											},
 										},
-										Mentions: []*gotwtr.UserMention {
+										Mentions: []*gotwtr.UserMention{
 											{
-												Start: 0,
-												End: 8,
+												Start:    0,
+												End:      8,
 												UserName: "lebraat",
 											},
 										},
-										Cashtags: []*gotwtr.UserCashtag {
+										Cashtags: []*gotwtr.UserCashtag{
 											{
 												Start: 9,
-												End: 14,
-												Tag: "twtr",
+												End:   14,
+												Tag:   "twtr",
 											},
 										},
 									},
 								},
 							},
-							UserName: "LeStaache",
+							UserName:  "LeStaache",
 							CreatedAt: "2018-08-27T18:34:07.000Z",
 						},
 						{
 							Name: "dan dale",
-							ID: "199566737",
-							Entities: []*gotwtr.UserEntity {
+							ID:   "199566737",
+							Entities: []*gotwtr.UserEntity{
 								{
 									Description: &gotwtr.UserDescription{
-										Hashtags: []*gotwtr.UserHashtag {
+										Hashtags: []*gotwtr.UserHashtag{
 											{
 												Start: 30,
-												End: 37,
-												Tag: "devrel",
+												End:   37,
+												Tag:   "devrel",
 											},
 										},
-										Mentions: []*gotwtr.UserMention {
+										Mentions: []*gotwtr.UserMention{
 											{
-												Start: 18,
-												End: 29,
+												Start:    18,
+												End:      29,
 												UserName: "twitterdev",
 											},
 										},
 									},
 								},
 							},
-							UserName: "LeBraat",
+							UserName:  "LeBraat",
 							CreatedAt: "2010-10-07T05:36:28.000Z",
 						},
 						{
 							Name: "LeGuud",
-							ID: "930524282358325248",
-							Entities: []*gotwtr.UserEntity {
+							ID:   "930524282358325248",
+							Entities: []*gotwtr.UserEntity{
 								{
 									URL: &gotwtr.UserURL{
-										URLs: []*gotwtr.UserURLs {
+										URLs: []*gotwtr.UserURLs{
 											{
-												Start: 0,
-												End: 23,
-												URL: "https://t.co/8IkCzClPCz",
+												Start:       0,
+												End:         23,
+												URL:         "https://t.co/8IkCzClPCz",
 												ExpandedURL: "https://developer.twitter.com",
-												DisplayURL: "developer.twitter.com",
+												DisplayURL:  "developer.twitter.com",
 											},
 										},
 									},
 								},
 							},
-							UserName: "LeGuud",
+							UserName:  "LeGuud",
 							CreatedAt: "2017-11-14T19:54:12.000Z",
 						},
 					},
 				},
 				Meta: &gotwtr.UserTimelineMeta{
-					OldestID: "1375151827189137412",
-					NewestID: "1375152598945312768",
+					OldestID:    "1375151827189137412",
+					NewestID:    "1375152598945312768",
 					ResultCount: 5,
-					NextToken: "7140dibdnow9c7btw3w3y5b6jqjnk3k4g5zkmfkvqwa42",
+					NextToken:   "7140dibdnow9c7btw3w3y5b6jqjnk3k4g5zkmfkvqwa42",
 				},
 			},
 			wantErr: false,

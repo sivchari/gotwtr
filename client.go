@@ -19,9 +19,14 @@ type Client interface {
 	LookUpTweets(ctx context.Context, ids []string, opt ...*TweetOption) (*TweetLookUpResponse, error)
 	LookUpTweetByID(ctx context.Context, id string, opt ...*TweetOption) (*TweetLookUpByIDResponse, error)
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 	UserTweetTimeline(ctx context.Context, id string, opt ...*TweetOption) (*UserTweetTimelineResponse, error)
 	UserMentionTimeline(ctx context.Context, id string, opt ...*TweetOption) (*UserMentionTimelineResponse, error)
+=======
+	UserTweetTimeline(ctx context.Context, id string, opt ...*UserTweetTimelineOpts) (*UserTweetTimelineResponse, error)
+	UserMentionTimeline(ctx context.Context, id string, opt ...*UserMentionTimelineOpts) (*UserMentionTimelineResponse, error)
+>>>>>>> 6265f6e (fix timeline APIs option type)
 	// User
 	// Media
 	// Poll
@@ -63,15 +68,11 @@ func (c *client) LookUpTweetByID(ctx context.Context, id string, opt ...*TweetOp
 	return lookUpByID(ctx, c, id, opt...)
 }
 
-func (c *client) SearchRecentTweets(ctx context.Context, query string, opt ...*TweetSearchOption) (*TweetSearchResponse, error) {
-	return searchRecentTweets(ctx, c, query, opt...)
-}
-
-func (c *client) UserTweetTimeline(ctx context.Context, id string, opt ...*TweetOption) (*UserTweetTimelineResponse, error) {
+func (c *client) UserTweetTimeline(ctx context.Context, id string, opt ...*UserTweetTimelineOpts) (*UserTweetTimelineResponse, error) {
 	return userTweetTimeline(ctx, c, id, opt...)
 }
 
-func (c *client) UserMentionTimeline(ctx context.Context, id string, opt ...*TweetOption) (*UserMentionTimelineResponse, error) {
+func (c *client) UserMentionTimeline(ctx context.Context, id string, opt ...*UserMentionTimelineOpts) (*UserMentionTimelineResponse, error) {
 	return userMentionTimeline(ctx, c, id, opt...)
 }
 
