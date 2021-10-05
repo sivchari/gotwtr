@@ -116,7 +116,7 @@ type UserTweetTimelineOpts struct {
 	PollFields      []PollField
 	TweetFields     []TweetField
 	UserFields      []UserField
-	Excludes        []Exclude
+	Exclude         []Exclude
 	StartTime       time.Time
 	EndTime         time.Time
 	MaxResults      int
@@ -145,8 +145,8 @@ func (t UserTweetTimelineOpts) addQuery(req *http.Request) {
 	if len(t.UserFields) > 0 {
 		q.Add("user.fields", strings.Join(userFieldsToString(t.UserFields), ","))
 	}
-	if len(t.Excludes) > 0 {
-		q.Add("exclude", strings.Join(excludeToString(t.Excludes), ","))
+	if len(t.Exclude) > 0 {
+		q.Add("exclude", strings.Join(excludeToString(t.Exclude), ","))
 	}
 	if t.StartTime.IsZero() == false {
 		q.Add("start_time", t.StartTime.Format(time.RFC3339))
