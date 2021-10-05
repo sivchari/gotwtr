@@ -232,8 +232,8 @@ func (t UserMentionTimelineOpts) addQuery(req *http.Request) {
 type TweetCountsOption struct {
 	StartTime   time.Time
 	EndTime     time.Time
-	SinceId     string
-	UntilId     string
+	SinceID     string
+	UntilID     string
 	Granularity string
 }
 
@@ -247,11 +247,11 @@ func (t *TweetCountsOption) addQuery(req *http.Request) {
 		// YYYY-MM-DDTHH:mm:ssZ (ISO 8601/RFC 3339).
 		q.Add("end_time", t.EndTime.Format(time.RFC3339))
 	}
-	if len(t.SinceId) > 0 {
-		q.Add("since_id", t.SinceId)
+	if len(t.SinceID) > 0 {
+		q.Add("since_id", t.SinceID)
 	}
-	if len(t.UntilId) > 0 {
-		q.Add("until_id", t.UntilId)
+	if len(t.UntilID) > 0 {
+		q.Add("until_id", t.UntilID)
 	}
 	if len(t.Granularity) > 0 {
 		q.Add("granularity", t.Granularity)

@@ -106,7 +106,7 @@ func Test_client_TweetCounts(t *testing.T) {
 					{
 						StartTime:   time.Now(),
 						Granularity: "day",
-						SinceId:     "0",
+						SinceID:     "0",
 					},
 				},
 			},
