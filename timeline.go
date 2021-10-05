@@ -53,16 +53,16 @@ func userTweetTimeline(ctx context.Context, c *client, id string, opt ...*TweetO
 	return &timelines, nil
 }
 
-func userMensionTimeline(ctx context.Context, c *client, id string, opt ...*TweetOption) (*UserMensionTimelineResponse, error) {
+func userMentionTimeline(ctx context.Context, c *client, id string, opt ...*TweetOption) (*UserMentionTimelineResponse, error) {
 	// check id
 	if len(id) == 0 {
-		return nil, errors.New("user mension timeline: id parameter is required")
+		return nil, errors.New("user mention timeline: id parameter is required")
 	}
-	userMensionTimeline := timeline + "?id=" + id + "/mensions"
+	userMentionTimeline := timeline + "?id=" + id + "/mentions"
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, userMensionTimeline, nil)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, userMentionTimeline, nil)
 	if err != nil {
-		return nil, fmt.Errorf("user mension timeline new request with ctx: %w", err)
+		return nil, fmt.Errorf("user mention timeline new request with ctx: %w", err)
 	}
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.bearerToken))
 
@@ -73,23 +73,23 @@ func userMensionTimeline(ctx context.Context, c *client, id string, opt ...*Twee
 	case 1:
 		topt = *opt[0]
 	default:
-		return nil, errors.New("user mension timeline: only one option is allowed")
+		return nil, errors.New("user mention timeline: only one option is allowed")
 	}
 	topt.addQuery(req)
 
 	resp, err := c.client.Do(req)
 	if err != nil {
-		return nil, fmt.Errorf("user mension timeline response: %w", err)
+		return nil, fmt.Errorf("user mention timeline response: %w", err)
 	}
 	defer resp.Body.Close()
 
-	var timelines UserMensionTimelineResponse
+	var timelines UserMentionTimelineResponse
 	if err := json.NewDecoder(resp.Body).Decode(&timelines); err != nil {
-		return nil, fmt.Errorf("user mension timeline decode: %w", err)
+		return nil, fmt.Errorf("user mention timeline decode: %w", err)
 	}
 	if resp.StatusCode != http.StatusOK {
 		return &timelines, &HTTPError{
-			APIName: "user mension timeline",
+			APIName: "user mention timeline",
 			Status:  resp.Status,
 			URL:     req.URL.String(),
 		}

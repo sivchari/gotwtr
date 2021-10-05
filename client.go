@@ -18,6 +18,15 @@ const (
 type Client interface {
 	LookUpTweets(ctx context.Context, ids []string, opt ...*TweetOption) (*TweetLookUpResponse, error)
 	LookUpTweetByID(ctx context.Context, id string, opt ...*TweetOption) (*TweetLookUpByIDResponse, error)
+<<<<<<< HEAD
+=======
+	UserTweetTimeline(ctx context.Context, id string, opt ...*TweetOption) (*UserTweetTimelineResponse, error)
+	UserMentionTimeline(ctx context.Context, id string, opt ...*TweetOption) (*UserMentionTimelineResponse, error)
+	// User
+	// Media
+	// Poll
+	// Place
+>>>>>>> a0c4838 (fix typo and delete unnecessary code)
 	SearchRecentTweets(ctx context.Context, query string, opt ...*TweetSearchOption) (*TweetSearchResponse, error)
 	UserTweetTimeline(ctx context.Context, id string, opt ...*TweetOption) (*UserTweetTimelineResponse, error)
 	UserMentionTimeline(ctx context.Context, id string, opt ...*TweetOption) (*UserMentionTimelineResponse, error)
@@ -62,7 +71,7 @@ func (c *client) UserTweetTimeline(ctx context.Context, id string, opt ...*Tweet
 	return userTweetTimeline(ctx, c, id, opt...)
 }
 
-func (c *client) UserMentionTimeline(ctx context.Context, id string, opt ...*TweetOption) (*UserMensionTimelineResponse, error) {
+func (c *client) UserMentionTimeline(ctx context.Context, id string, opt ...*TweetOption) (*UserMentionTimelineResponse, error) {
 	return userMentionTimeline(ctx, c, id, opt...)
 }
 

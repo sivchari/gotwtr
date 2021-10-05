@@ -208,35 +208,16 @@ type UserTimelineMeta struct {
 	NextToken   string `json:"next_token"`
 }
 
-func (t *TweetOption) addQuery(req *http.Request) {
-	q := req.URL.Query()
-	if len(t.Expansions) > 0 {
-		q.Add("expansions", strings.Join(expansionsToString(t.Expansions), ","))
-	}
-	if len(t.MediaFields) > 0 {
-		q.Add("media.fields", strings.Join(mediaFieldsToString(t.MediaFields), ","))
-	}
-	if len(t.PlaceFields) > 0 {
-		q.Add("place.fields", strings.Join(placeFieldsToString(t.PlaceFields), ","))
-	}
-	if len(t.PollFields) > 0 {
-		q.Add("poll.fields", strings.Join(pollFieldsToString(t.PollFields), ","))
-	}
-	if len(t.TweetFields) > 0 {
-		q.Add("tweet.fields", strings.Join(tweetFieldsToString(t.TweetFields), ","))
-	}
-	if len(t.UserFields) > 0 {
-		q.Add("user.fields", strings.Join(userFieldsToString(t.UserFields), ","))
-	}
-	if len(q) > 0 {
-		req.URL.RawQuery = q.Encode()
-	}
+type TweetSearchResponse struct {
+	Tweets   []*Tweet            `json:"data"`
+	Includes *TweetIncludes      `json:"includes,omitempty"`
+	Meta     *TweetSearchMeta    `json:"meta,omitempty"`
+	Errors   []*APIResponseError `json:"errors,omitempty"`
 }
 
-func tweetFieldsToString(tfs []TweetField) []string {
-	slice := make([]string, len(tfs))
-	for i, tf := range tfs {
-		slice[i] = string(tf)
-	}
-	return slice
+type TweetSearchMeta struct {
+	ResultCount int    `json:"result_count"`
+	NewestID    string `json:"newest_id"`
+	OldestID    string `json:"oldest_id"`
+	NextToken   string `json:"next_token,omitempty"`
 }

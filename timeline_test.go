@@ -274,7 +274,7 @@ func Test_userTweetTimeline(t *testing.T) {
 	}
 }
 
-func Test_userMensionTimeline(t *testing.T) {
+func Test_userMentionTimeline(t *testing.T) {
 	type args struct {
 		ctx    context.Context
 		client *http.Client
@@ -284,7 +284,7 @@ func Test_userMensionTimeline(t *testing.T) {
 	tests := []struct {
 		name    string
 		args    args
-		want    *gotwtr.UserMensionTimelineResponse
+		want    *gotwtr.UserMentionTimelineResponse
 		wantErr bool
 	}{
 		{
@@ -329,7 +329,7 @@ func Test_userMensionTimeline(t *testing.T) {
 				}),
 				id: "1338971066773905408",
 			},
-			want: &gotwtr.UserMensionTimelineResponse{
+			want: &gotwtr.UserMentionTimelineResponse{
 				Tweets: []*gotwtr.Tweet{
 					{
 						ID: "1375152598945312768",
@@ -547,7 +547,7 @@ func Test_userMensionTimeline(t *testing.T) {
 					},
 				},
 			},
-			want: &gotwtr.UserMensionTimelineResponse{
+			want: &gotwtr.UserMentionTimelineResponse{
 				Tweets: []*gotwtr.Tweet{
 					{
 						AuthorID: "1034147061711679488",
@@ -704,13 +704,13 @@ func Test_userMensionTimeline(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
-			got, err := c.UserMensionTimeline(tt.args.ctx, tt.args.id, tt.args.opt...)
+			got, err := c.UserMentionTimeline(tt.args.ctx, tt.args.id, tt.args.opt...)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("client.UserMensionTimeline() index = %v error = %v, wantErr %v", i, err, tt.wantErr)
+				t.Errorf("client.UserMentionTimeline() index = %v error = %v, wantErr %v", i, err, tt.wantErr)
 				return
 			}
 			if diff := cmp.Diff(got, tt.want); diff != "" {
-				t.Errorf("client.UserMensionTimeline() index = %v mismatch (-want +got):\n%s", i, diff)
+				t.Errorf("client.UserMentionTimeline() index = %v mismatch (-want +got):\n%s", i, diff)
 				return
 			}
 		})
