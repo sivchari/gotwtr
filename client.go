@@ -25,7 +25,7 @@ type Client interface {
 	// Poll
 	// Place
 	SearchRecentTweets(ctx context.Context, query string, opt ...*TweetSearchOption) (*TweetSearchResponse, error)
-	TweetCounts(ctx context.Context, query string, opt ...*TweetCountsOption) (*TweetCountsResponse, error)
+	CountsRecentTweet(ctx context.Context, query string, opt ...*TweetCountsOption) (*TweetCountsResponse, error)
 }
 
 var _ Client = (*client)(nil)
@@ -71,6 +71,6 @@ func (c *client) SearchRecentTweets(ctx context.Context, query string, opt ...*T
 	return searchRecentTweets(ctx, c, query, opt...)
 }
 
-func (c *client) TweetCounts(ctx context.Context, query string, opt ...*TweetCountsOption) (*TweetCountsResponse, error) {
-	return tweetCounts(ctx, c, query, opt...)
+func (c *client) CountsRecentTweet(ctx context.Context, query string, opt ...*TweetCountsOption) (*TweetCountsResponse, error) {
+	return countsRecentTweet(ctx, c, query, opt...)
 }

@@ -228,3 +228,35 @@ func (t UserMentionTimelineOpts) addQuery(req *http.Request) {
 		req.URL.RawQuery = q.Encode()
 	}
 }
+
+type TweetCountsOption struct {
+	StartTime   time.Time
+	EndTime     time.Time
+	SinceId     string
+	UntilId     string
+	Granularity string
+}
+
+func (t *TweetCountsOption) addQuery(req *http.Request) {
+	q := req.URL.Query()
+	if !t.StartTime.IsZero() {
+		// YYYY-MM-DDTHH:mm:ssZ (ISO 8601/RFC 3339).
+		q.Add("start_time", t.StartTime.Format(time.RFC3339))
+	}
+	if !t.EndTime.IsZero() {
+		// YYYY-MM-DDTHH:mm:ssZ (ISO 8601/RFC 3339).
+		q.Add("end_time", t.EndTime.Format(time.RFC3339))
+	}
+	if len(t.SinceId) > 0 {
+		q.Add("since_id", t.SinceId)
+	}
+	if len(t.UntilId) > 0 {
+		q.Add("until_id", t.UntilId)
+	}
+	if len(t.Granularity) > 0 {
+		q.Add("granularity", t.Granularity)
+	}
+	if len(q) > 0 {
+		req.URL.RawQuery = q.Encode()
+	}
+}
