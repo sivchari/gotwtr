@@ -1,16 +1,19 @@
-name: reviewdog
+name: lint
 
-on: [pull_request]
+on:
+  pull_request:
 
 jobs:
-  golangci-lint:
-    name: runner / golangci-lint
+  lint-with-reviewdog:
+    name: lint with reviewdog
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
 
       - name: golangci-lint
         uses: reviewdog/action-golangci-lint@v2
+        env:
+          REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           golangci_lint_flags: "--config=.golangci.yml"
           level: error
@@ -18,4 +21,3 @@ jobs:
           reporter: github-pr-review
           go_version: "1.17"
           fail_on_error: true
-
