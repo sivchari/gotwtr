@@ -75,9 +75,9 @@ type UserHashtag struct {
 }
 
 type UserMention struct {
-	Start int    `json:"start"`
-	End   int    `json:"end"`
-	UserName   string `json:"username"`
+	Start    int    `json:"start"`
+	End      int    `json:"end"`
+	UserName string `json:"username"`
 }
 
 type UserCashtag struct {

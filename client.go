@@ -65,3 +65,7 @@ func (c *client) UserTweetTimeline(ctx context.Context, id string, opt ...*Tweet
 func (c *client) UserMentionTimeline(ctx context.Context, id string, opt ...*TweetOption) (*UserMensionTimelineResponse, error) {
 	return userMentionTimeline(ctx, c, id, opt...)
 }
+
+func (c *client) SearchRecentTweets(ctx context.Context, query string, opt ...*TweetSearchOption) (*TweetSearchResponse, error) {
+	return searchRecentTweets(ctx, c, query, opt...)
+}
