@@ -4,4 +4,5 @@ package gotwtr
 var (
 	tweetLookUp       = "https://api.twitter.com/2/tweets"
 	tweetRecentSearch = "https://api.twitter.com/2/tweets/search/recent"
+	timeline          = "https://api.twitter.com/2/users"
 )
