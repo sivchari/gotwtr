@@ -20,10 +20,10 @@ type APIResponseError struct {
 	Parameters         Parameter   `json:"parameters"`
 	Message            string      `json:"message"`
 	Value              interface{} `json:"value"`
-	Reason             string      `json:"reason"`
-	ClientID           string      `json:"client_id"`
-	RequiredEnrollment string      `json:"required_enrollment"`
-	RegistrationURL    string      `json:"registration_url"`
+	Reason             string      `json:"reason,omitempty"`
+	ClientID           string      `json:"client_id,omitempty"`
+	RequiredEnrollment string      `json:"required_enrollment,omitempty"`
+	RegistrationURL    string      `json:"registration_url,omitempty"`
 }
 
 type Parameter struct {
