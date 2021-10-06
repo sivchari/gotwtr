@@ -6,4 +6,5 @@ var (
 	timeline          = "https://api.twitter.com/2/users"
 	tweetRecentSearch = "https://api.twitter.com/2/tweets/search/recent"
 	recentTweetCounts = "https://api.twitter.com/2/tweets/counts/recent"
+	filteredStream    = "https://api.twitter.com/2/tweets/search/stream"
 )

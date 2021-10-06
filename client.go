@@ -26,6 +26,7 @@ type Client interface {
 	// Place
 	SearchRecentTweets(ctx context.Context, query string, opt ...*TweetSearchOption) (*TweetSearchResponse, error)
 	CountsRecentTweet(ctx context.Context, query string, opt ...*TweetCountsOption) (*TweetCountsResponse, error)
+	RetrieveStreamRules(ctx context.Context, opt ...*FilteredStreamOption) (*RetrieveStreamRulesResponse, error)
 }
 
 var _ Client = (*client)(nil)
@@ -73,4 +74,8 @@ func (c *client) SearchRecentTweets(ctx context.Context, query string, opt ...*T
 
 func (c *client) CountsRecentTweet(ctx context.Context, query string, opt ...*TweetCountsOption) (*TweetCountsResponse, error) {
 	return countsRecentTweet(ctx, c, query, opt...)
+}
+
+func (c *client) RetrieveStreamRules(ctx context.Context, opt ...*FilteredStreamOption) (*RetrieveStreamRulesResponse, error) {
+	return retrieveStreamRules(ctx, c, opt...)
 }
