@@ -17,3 +17,5 @@ jobs:
           reporter: github-pr-review
           go_version: "1.17"
           fail_on_error: true
+          filter_mode: diff_context
+
