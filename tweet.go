@@ -207,3 +207,9 @@ type TweetSearchMeta struct {
 	OldestID    string `json:"oldest_id"`
 	NextToken   string `json:"next_token,omitempty"`
 }
+
+type SampledStreamResponse struct {
+	Tweets   []*Tweet            `json:"data"`
+	Includes *TweetIncludes      `json:"includes,omitempty"`
+	Errors   []*APIResponseError `json:"errors,omitempty"`
+}
