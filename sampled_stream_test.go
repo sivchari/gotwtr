@@ -65,36 +65,36 @@ func Test_sampledStream(t *testing.T) {
 						Body:       io.NopCloser(strings.NewReader(body)),
 					}
 				}),
-				opt:   []*gotwtr.SampledStreamOpts{},
+				opt: []*gotwtr.SampledStreamOpts{},
 			},
 			want: &gotwtr.SampledStreamResponse{
 				Tweets: []*gotwtr.Tweet{
 					{
-						AuthorID: "2244994945",
+						AuthorID:  "2244994945",
 						CreatedAt: "2020-02-14T19:00:55.000Z",
-						ID: "1228393702244134912",
-						Text: "What did the developer write in their Valentine’s card?\n  \nwhile(true) {\n    I = Love(You);  \n}",
+						ID:        "1228393702244134912",
+						Text:      "What did the developer write in their Valentine’s card?\n  \nwhile(true) {\n    I = Love(You);  \n}",
 					},
 					{
-						AuthorID: "2244994945",
+						AuthorID:  "2244994945",
 						CreatedAt: "2020-02-12T17:09:56.000Z",
-						ID: "1227640996038684673",
-						Text: "Doctors: Googling stuff online does not make you a doctor\n\nDevelopers: https://t.co/mrju5ypPkb",
+						ID:        "1227640996038684673",
+						Text:      "Doctors: Googling stuff online does not make you a doctor\n\nDevelopers: https://t.co/mrju5ypPkb",
 					},
 					{
-						AuthorID: "2244994945",
+						AuthorID:  "2244994945",
 						CreatedAt: "2019-11-27T20:26:41.000Z",
-						ID: "1199786642791452673",
-						Text: "C#",
+						ID:        "1199786642791452673",
+						Text:      "C#",
 					},
 				},
 				Includes: &gotwtr.TweetIncludes{
 					Users: []*gotwtr.User{
 						{
 							CreatedAt: "2013-12-14T04:35:55.000Z",
-							ID: "2244994945",
-							Name: "Twitter Dev",
-							UserName: "TwitterDev",
+							ID:        "2244994945",
+							Name:      "Twitter Dev",
+							UserName:  "TwitterDev",
 						},
 					},
 				},

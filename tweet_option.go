@@ -231,12 +231,12 @@ func (t UserMentionTimelineOpts) addQuery(req *http.Request) {
 
 type SampledStreamOpts struct {
 	// BackfillMinutes int `json:"backfill_minutes"`
-	Expansions      []Expansion
-	MediaFields     []MediaField
-	PlaceFields     []PlaceField
-	PollFields      []PollField
-	TweetFields     []TweetField
-	UserFields      []UserField
+	Expansions  []Expansion
+	MediaFields []MediaField
+	PlaceFields []PlaceField
+	PollFields  []PollField
+	TweetFields []TweetField
+	UserFields  []UserField
 }
 
 func (t SampledStreamOpts) addQuery(req *http.Request) {
@@ -258,6 +258,38 @@ func (t SampledStreamOpts) addQuery(req *http.Request) {
 	}
 	if len(t.UserFields) > 0 {
 		q.Add("user.fields", strings.Join(userFieldsToString(t.UserFields), ","))
+	}
+	if len(q) > 0 {
+		req.URL.RawQuery = q.Encode()
+	}
+}
+
+type TweetCountsOption struct {
+	StartTime   time.Time
+	EndTime     time.Time
+	SinceID     string
+	UntilID     string
+	Granularity string
+}
+
+func (t *TweetCountsOption) addQuery(req *http.Request) {
+	q := req.URL.Query()
+	if !t.StartTime.IsZero() {
+		// YYYY-MM-DDTHH:mm:ssZ (ISO 8601/RFC 3339).
+		q.Add("start_time", t.StartTime.Format(time.RFC3339))
+	}
+	if !t.EndTime.IsZero() {
+		// YYYY-MM-DDTHH:mm:ssZ (ISO 8601/RFC 3339).
+		q.Add("end_time", t.EndTime.Format(time.RFC3339))
+	}
+	if len(t.SinceID) > 0 {
+		q.Add("since_id", t.SinceID)
+	}
+	if len(t.UntilID) > 0 {
+		q.Add("until_id", t.UntilID)
+	}
+	if len(t.Granularity) > 0 {
+		q.Add("granularity", t.Granularity)
 	}
 	if len(q) > 0 {
 		req.URL.RawQuery = q.Encode()

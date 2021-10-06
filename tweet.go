@@ -213,3 +213,18 @@ type SampledStreamResponse struct {
 	Includes *TweetIncludes      `json:"includes,omitempty"`
 	Errors   []*APIResponseError `json:"errors,omitempty"`
 }
+
+type TimeseriesCount struct {
+	Start      string `json:"start"`
+	End        string `json:"end"`
+	TweetCount int    `json:"tweet_count"`
+}
+
+type TweetCountMeta struct {
+	TotalTweetCount int `json:"total_tweet_count"`
+}
+
+type TweetCountsResponse struct {
+	Counts []*TimeseriesCount `json:"data"`
+	Meta   *TweetCountMeta    `json:"meta"`
+}
