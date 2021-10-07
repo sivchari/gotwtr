@@ -5,5 +5,6 @@ var (
 	tweetLookUp       = "https://api.twitter.com/2/tweets"
 	timeline          = "https://api.twitter.com/2/users"
 	tweetRecentSearch = "https://api.twitter.com/2/tweets/search/recent"
+	sampleStream      = "https://api.twitter.com/2/tweets/sample/stream"
 	recentTweetCounts = "https://api.twitter.com/2/tweets/counts/recent"
 )
