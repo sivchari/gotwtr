@@ -10,7 +10,7 @@ import (
 func main() {
 	client := gotwtr.New("key")
 	// sampled stream
-	tsr, err := client.SampledStream(context.Background(), &gotwtr.SampledStreamOpts)
+	tsr, err := client.SampledStream(context.Background())
 	if err != nil {
 		panic(err)
 	}
