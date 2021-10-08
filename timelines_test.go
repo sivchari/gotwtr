@@ -31,22 +31,22 @@ func Test_userTweetTimeline(t *testing.T) {
 				client: mockHTTPClient(func(req *http.Request) *http.Response {
 					body := `{
 						"data": [
-						  {
-							"id": "1338971066773905408",
-							"text": "💡 Using Twitter data for academic research? Join our next livestream this Friday @ 9am PT on https://t.co/GrtBOXh5Y1!\n \n@SuhemParack will show how to get started with recent search &amp; filtered stream endpoints on the #TwitterAPI v2, the new Tweet payload, annotations, &amp; more. https://t.co/IraD2Z7wEg"
-						  },
-						  {
-							"id": "1338923691497959425",
-							"text": "📈 Live now with @jessicagarson and @i_am_daniele! https://t.co/Y1AFzsTTxb"
-						  }
+							{
+								"id": "1338971066773905408",
+								"text": "💡 Using Twitter data for academic research? Join our next livestream this Friday @ 9am PT on https://t.co/GrtBOXh5Y1!\n \n@SuhemParack will show how to get started with recent search &amp; filtered stream endpoints on the #TwitterAPI v2, the new Tweet payload, annotations, &amp; more. https://t.co/IraD2Z7wEg"
+							},
+							{
+								"id": "1338923691497959425",
+								"text": "📈 Live now with @jessicagarson and @i_am_daniele! https://t.co/Y1AFzsTTxb"
+							}
 						],
 						"meta": {
-						  "oldest_id": "1334564488884862976",
-						  "newest_id": "1338971066773905408",
-						  "result_count": 2,
-						  "next_token": "7140dibdnow9c7btw3w29grvxfcgvpb9n9coehpk7xz5i"
+							"oldest_id": "1334564488884862976",
+							"newest_id": "1338971066773905408",
+							"result_count": 2,
+							"next_token": "7140dibdnow9c7btw3w29grvxfcgvpb9n9coehpk7xz5i"
 						}
-					  }`
+					}`
 					return &http.Response{
 						StatusCode: http.StatusOK,
 						Body:       io.NopCloser(strings.NewReader(body)),
@@ -81,75 +81,75 @@ func Test_userTweetTimeline(t *testing.T) {
 				client: mockHTTPClient(func(req *http.Request) *http.Response {
 					body := `{
 						"data": [
-						  {
-							"author_id": "2244994945",
-							"conversation_id": "1338971066773905408",
-							"text": "💡 Using Twitter data for academic research? Join our next livestream this Friday @ 9am PT on https://t.co/GrtBOXh5Y1!\n \n@SuhemParack will show how to get started with recent search &amp; filtered stream endpoints on the #TwitterAPI v2, the new Tweet payload, annotations, &amp; more. https://t.co/IraD2Z7wEg",
-							"context_annotations": [
-							  {
-								"domain": {
-								  "id": "47",
-								  "name": "Brand",
-								  "description": "Brands and Companies"
+							{
+								"author_id": "2244994945",
+								"conversation_id": "1338971066773905408",
+								"text": "💡 Using Twitter data for academic research? Join our next livestream this Friday @ 9am PT on https://t.co/GrtBOXh5Y1!\n \n@SuhemParack will show how to get started with recent search &amp; filtered stream endpoints on the #TwitterAPI v2, the new Tweet payload, annotations, &amp; more. https://t.co/IraD2Z7wEg",
+								"context_annotations": [
+									{
+										"domain": {
+											"id": "47",
+											"name": "Brand",
+											"description": "Brands and Companies"
+										},
+										"entity": {
+											"id": "10045225402",
+											"name": "Twitter"
+										}
+									}
+								],
+								"public_metrics": {
+									"retweet_count": 10,
+									"reply_count": 1,
+									"like_count": 41,
+									"quote_count": 4
 								},
-								"entity": {
-								  "id": "10045225402",
-								  "name": "Twitter"
-								}
-							  }
-							],
-							"public_metrics": {
-							  "retweet_count": 10,
-							  "reply_count": 1,
-							  "like_count": 41,
-							  "quote_count": 4
+								"id": "1338971066773905408",
+								"created_at": "2020-12-15T22:15:53.000Z"
 							},
-							"id": "1338971066773905408",
-							"created_at": "2020-12-15T22:15:53.000Z"
-						  },
-						  {
-							"author_id": "2244994945",
-							"conversation_id": "1338923691497959425",
-							"text": "📈 Live now with @jessicagarson and @i_am_daniele! https://t.co/Y1AFzsTTxb",
-							"context_annotations": [
-							  {
-								"domain": {
-								  "id": "47",
-								  "name": "Brand",
-								  "description": "Brands and Companies"
+							{
+								"author_id": "2244994945",
+								"conversation_id": "1338923691497959425",
+								"text": "📈 Live now with @jessicagarson and @i_am_daniele! https://t.co/Y1AFzsTTxb",
+								"context_annotations": [
+									{
+										"domain": {
+											"id": "47",
+											"name": "Brand",
+											"description": "Brands and Companies"
+										},
+										"entity": {
+											"id": "10026378521",
+											"name": "Google "
+										}
+									}
+								],
+								"public_metrics": {
+									"retweet_count": 3,
+									"reply_count": 0,
+									"like_count": 12,
+									"quote_count": 1
 								},
-								"entity": {
-								  "id": "10026378521",
-								  "name": "Google "
-								}
-							  }
-							],
-							"public_metrics": {
-							  "retweet_count": 3,
-							  "reply_count": 0,
-							  "like_count": 12,
-							  "quote_count": 1
-							},
-							"id": "1338923691497959425",
-							"created_at": "2020-12-15T19:07:38.000Z"
-						  }
+								"id": "1338923691497959425",
+								"created_at": "2020-12-15T19:07:38.000Z"
+							}
 						],
 						"includes": {
-						  "users": [
-							{
-							  "id": "2244994945",
-							  "name": "Twitter Dev",
-							  "username": "TwitterDev"
-							}
-						  ]
+							"users": [
+								{
+									"id": "2244994945",
+									"name": "Twitter Dev",
+									"username": "TwitterDev"
+								}
+							]
 						},
 						"meta": {
-						  "oldest_id": "1337122535188652033",
-						  "newest_id": "1338971066773905408",
-						  "result_count": 2,
-						  "next_token": "7140dibdnow9c7btw3w29n4v1mtag9kegr0gr7y26pnw3"
+							"oldest_id": "1337122535188652033",
+							"newest_id": "1338971066773905408",
+							"result_count": 2,
+							"next_token": "7140dibdnow9c7btw3w29n4v1mtag9kegr0gr7y26pnw3"
 						}
-					  }`
+					}`
 					return &http.Response{
 						StatusCode: http.StatusOK,
 						Body:       io.NopCloser(strings.NewReader(body)),
@@ -294,7 +294,7 @@ func Test_userMentionTimeline(t *testing.T) {
 				client: mockHTTPClient(func(req *http.Request) *http.Response {
 					body := `{
 						"data": [
-						  {
+							{
 								"id": "1375152598945312768",
 								"text": "@LeBraat @TwitterDev @LeGuud There's enough @twitterdev love to go around, @LeBraat"
 							},
@@ -316,7 +316,7 @@ func Test_userMentionTimeline(t *testing.T) {
 							}
 						],
 						"meta": {
-						  "oldest_id": "1375151827189137412",
+							"oldest_id": "1375151827189137412",
 							"newest_id": "1375152598945312768",
 							"result_count": 5,
 							"next_token": "7140dibdnow9c7btw3w3y5b6jqjnk3k4g5zkmfkvqwa42"
