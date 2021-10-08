@@ -230,7 +230,7 @@ func (t UserMentionTimelineOpts) addQuery(req *http.Request) {
 }
 
 type SampledStreamOpts struct {
-	// BackfillMinutes int `json:"backfill_minutes"`
+	// BackfillMinutes int `json:"backfill_minutes"` // This feature is currently only available to the Academic Research product track.
 	Expansions  []Expansion
 	MediaFields []MediaField
 	PlaceFields []PlaceField

@@ -8,6 +8,11 @@ import (
 	"net/http"
 )
 
+// This endpoint is only available to those users who have been approved for the Academic Research product track.
+func countFullArchiveTweet(ctx context.Context, c *client, query string, opt ...*TweetCountsOption) (*TweetCountsResponse, error) {
+	return nil, nil
+}
+
 func countsRecentTweet(ctx context.Context, c *client, query string, opt ...*TweetCountsOption) (*TweetCountsResponse, error) {
 	switch {
 	case len(query) == 0:

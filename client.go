@@ -16,17 +16,15 @@ const (
 )
 
 type Client interface {
+	// CountsFullArchiveTweet(ctx context.Context, query string, opt ...*TweetCountsOption) (*TweetCountsResponse, error)
+	CountsRecentTweet(ctx context.Context, query string, opt ...*TweetCountsOption) (*TweetCountsResponse, error)
 	LookUpTweets(ctx context.Context, ids []string, opt ...*TweetOption) (*TweetLookUpResponse, error)
 	LookUpTweetByID(ctx context.Context, id string, opt ...*TweetOption) (*TweetLookUpByIDResponse, error)
-	UserTweetTimeline(ctx context.Context, id string, opt ...*UserTweetTimelineOpts) (*UserTweetTimelineResponse, error)
-	UserMentionTimeline(ctx context.Context, id string, opt ...*UserMentionTimelineOpts) (*UserMentionTimelineResponse, error)
 	SampledStream(ctx context.Context, opt ...*SampledStreamOpts) (*SampledStreamResponse, error)
-	// User
-	// Media
-	// Poll
-	// Place
+	// SearchFullArchiveTweets(ctx context.Context, query string, opt ...*TweetSearchOption) (*TweetSearchResponse, error)
 	SearchRecentTweets(ctx context.Context, query string, opt ...*TweetSearchOption) (*TweetSearchResponse, error)
-	CountsRecentTweet(ctx context.Context, query string, opt ...*TweetCountsOption) (*TweetCountsResponse, error)
+	UserMentionTimeline(ctx context.Context, id string, opt ...*UserMentionTimelineOpts) (*UserMentionTimelineResponse, error)
+	UserTweetTimeline(ctx context.Context, id string, opt ...*UserTweetTimelineOpts) (*UserTweetTimelineResponse, error)
 }
 
 var _ Client = (*client)(nil)
@@ -52,6 +50,14 @@ func WithHTTPClient(httpClient *http.Client) ClientOption {
 	}
 }
 
+// func (c *client) CountsFullArchiveTweet(ctx context.Context, query string, opt ...*TweetCountsOption) (*TweetCountsResponse, error) {
+// 	return countFullArchiveTweet(ctx, c, query, opt...)
+// }
+
+func (c *client) CountsRecentTweet(ctx context.Context, query string, opt ...*TweetCountsOption) (*TweetCountsResponse, error) {
+	return countsRecentTweet(ctx, c, query, opt...)
+}
+
 func (c *client) LookUpTweets(ctx context.Context, ids []string, opt ...*TweetOption) (*TweetLookUpResponse, error) {
 	return lookUp(ctx, c, ids, opt...)
 }
@@ -60,22 +66,22 @@ func (c *client) LookUpTweetByID(ctx context.Context, id string, opt ...*TweetOp
 	return lookUpByID(ctx, c, id, opt...)
 }
 
-func (c *client) UserTweetTimeline(ctx context.Context, id string, opt ...*UserTweetTimelineOpts) (*UserTweetTimelineResponse, error) {
-	return userTweetTimeline(ctx, c, id, opt...)
+func (c *client) SampledStream(ctx context.Context, opt ...*SampledStreamOpts) (*SampledStreamResponse, error) {
+	return sampledStream(ctx, c, opt...)
+}
+
+// func (c *client) SearchFullArchiveTweets(ctx context.Context, query string, opt ...*TweetSearchOption) (*TweetSearchResponse, error) {
+// 	return searchFullArchiveTweets(ctx, c, query, opt...)
+// }
+
+func (c *client) SearchRecentTweets(ctx context.Context, query string, opt ...*TweetSearchOption) (*TweetSearchResponse, error) {
+	return searchRecentTweets(ctx, c, query, opt...)
 }
 
 func (c *client) UserMentionTimeline(ctx context.Context, id string, opt ...*UserMentionTimelineOpts) (*UserMentionTimelineResponse, error) {
 	return userMentionTimeline(ctx, c, id, opt...)
 }
 
-func (c *client) SearchRecentTweets(ctx context.Context, query string, opt ...*TweetSearchOption) (*TweetSearchResponse, error) {
-	return searchRecentTweets(ctx, c, query, opt...)
-}
-
-func (c *client) SampledStream(ctx context.Context, opt ...*SampledStreamOpts) (*SampledStreamResponse, error) {
-	return sampledStream(ctx, c, opt...)
-}
-
-func (c *client) CountsRecentTweet(ctx context.Context, query string, opt ...*TweetCountsOption) (*TweetCountsResponse, error) {
-	return countsRecentTweet(ctx, c, query, opt...)
+func (c *client) UserTweetTimeline(ctx context.Context, id string, opt ...*UserTweetTimelineOpts) (*UserTweetTimelineResponse, error) {
+	return userTweetTimeline(ctx, c, id, opt...)
 }

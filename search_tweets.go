@@ -8,6 +8,11 @@ import (
 	"net/http"
 )
 
+// This endpoint is only available to those users who have been approved for the Academic Research product track.
+func searchFullArchiveTweets(ctx context.Context, c *client, query string, opt ...*TweetSearchOption) (*TweetSearchResponse, error) {
+	return nil, nil
+}
+
 func searchRecentTweets(ctx context.Context, c *client, query string, opt ...*TweetSearchOption) (*TweetSearchResponse, error) {
 	switch {
 	case len(query) == 0:
