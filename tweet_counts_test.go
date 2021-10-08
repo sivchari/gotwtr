@@ -44,8 +44,8 @@ func Test_client_TweetCounts(t *testing.T) {
 							}
 						],
 						"meta": {
-        					"total_tweet_count": 4
-    					}
+							"total_tweet_count": 4
+						}
 					}`
 					return &http.Response{
 						StatusCode: http.StatusOK,
@@ -93,8 +93,8 @@ func Test_client_TweetCounts(t *testing.T) {
 							}
 						],
 						"meta": {
-        					"total_tweet_count": 7
-    					}
+							"total_tweet_count": 7
+						}
 					}`
 					return &http.Response{
 						StatusCode: http.StatusOK,
