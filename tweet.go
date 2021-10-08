@@ -228,3 +228,14 @@ type TweetCountsResponse struct {
 	Counts []*TimeseriesCount `json:"data"`
 	Meta   *TweetCountMeta    `json:"meta"`
 }
+
+type RetweetsLookupResponse struct {
+	Users    []*User             `json:"data"`
+	Includes *TweetIncludes      `json:"includes,omitempty"`
+	Errors   []*APIResponseError `json:"errors,omitempty"`
+	Meta     *RetweetsLookupMeta `json:"meta"`
+}
+
+type RetweetsLookupMeta struct {
+	ResultCount int `json:"result_count"`
+}
