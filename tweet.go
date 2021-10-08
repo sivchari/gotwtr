@@ -197,7 +197,7 @@ type UserTimelineMeta struct {
 type TweetSearchResponse struct {
 	Tweets   []*Tweet            `json:"data"`
 	Includes *TweetIncludes      `json:"includes,omitempty"`
-	Meta     *TweetSearchMeta    `json:"meta,omitempty"`
+	Meta     *TweetSearchMeta    `json:"meta"`
 	Errors   []*APIResponseError `json:"errors,omitempty"`
 }
 
