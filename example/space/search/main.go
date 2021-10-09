@@ -33,4 +33,5 @@ func main() {
 	for _, s := range ssr.Spaces {
 		fmt.Println(s)
 	}
+	fmt.Println(ssr.Meta.ResultCount)
 }

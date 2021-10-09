@@ -53,9 +53,14 @@ type Space struct {
 }
 
 type SearchSpacesResponse struct {
-	Spaces   []*Space            `json:"data"`
+	Spaces   []*Space            `json:"data,omitempty"`
 	Includes *SpaceIncludes      `json:"includes,omitempty"`
+	Meta     *SearchSpacesMeta   `json:"meta"`
 	Errors   []*APIResponseError `json:"errors,omitempty"`
+}
+
+type SearchSpacesMeta struct {
+	ResultCount int `json:"result_count"`
 }
 
 type SpaceIncludes struct {
