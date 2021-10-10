@@ -25,6 +25,7 @@ type Client interface {
 	SearchRecentTweets(ctx context.Context, query string, opt ...*TweetSearchOption) (*TweetSearchResponse, error)
 	UserMentionTimeline(ctx context.Context, id string, opt ...*UserMentionTimelineOpts) (*UserMentionTimelineResponse, error)
 	UserTweetTimeline(ctx context.Context, id string, opt ...*UserTweetTimelineOpts) (*UserTweetTimelineResponse, error)
+	RetweetsLookup(ctx context.Context, id string, opt ...*RetweetsLookupOpts) (*RetweetsLookupResponse, error)
 }
 
 var _ Client = (*client)(nil)
@@ -84,4 +85,8 @@ func (c *client) UserMentionTimeline(ctx context.Context, id string, opt ...*Use
 
 func (c *client) UserTweetTimeline(ctx context.Context, id string, opt ...*UserTweetTimelineOpts) (*UserTweetTimelineResponse, error) {
 	return userTweetTimeline(ctx, c, id, opt...)
+}
+
+func (c *client) RetweetsLookup(ctx context.Context, id string, opt ...*RetweetsLookupOpts) (*RetweetsLookupResponse, error) {
+	return retweetsLookup(ctx, c, id, opt...)
 }
