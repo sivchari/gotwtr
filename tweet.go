@@ -340,3 +340,28 @@ type StreamResponse struct {
 	done   chan struct{}
 	wg     *sync.WaitGroup
 }
+type LikesLookUpPublicMetrics struct {
+	FollowersCount int `json:"followers_count"`
+	FollowingCount int `json:"following_count"`
+	TweetCount     int `json:"tweet_count"`
+	ListedCount    int `json:"listed_count"`
+}
+
+type LikesLookUpByTweetResponse struct {
+	ID              string                    `json:"id"`
+	Name            string                    `json:"name"`
+	UserName        string                    `json:"username"`
+	CreatedAt       string                    `json:"created_at,omitempty"`
+	Protected       bool                      `json:"protected,omitempty"`
+	Withheld        *TweetWithheld            `json:"withheld,omitempty"`
+	Location        string                    `json:"location,omitempty"`
+	URL             string                    `json:"url,omitempty"`
+	Description     string                    `json:"description,omitempty"`
+	Verified        bool                      `json:"verified,omitempty"`
+	Entities        *TweetEntity              `json:"entities,omitempty"`
+	ProfileImageUrl string                    `json:"profile_image_url,omitempty"`
+	PublicMetrics   *LikesLookUpPublicMetrics `json:"public_metrics,omitempty"`
+	PinnedTweetID   string                    `json:"pinned_tweet_id,omitempty"`
+	Includes        *TweetIncludes            `json:"includes,omitempty"`
+	Errors          []*APIResponseError       `json:"errors,omitempty"`
+}
