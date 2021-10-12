@@ -347,7 +347,7 @@ type LikesLookUpPublicMetrics struct {
 	ListedCount    int `json:"listed_count"`
 }
 
-type LikesLookUpByTweetResponse struct {
+type LikeLookUpUser struct {
 	ID              string                    `json:"id"`
 	Name            string                    `json:"name"`
 	UserName        string                    `json:"username"`
@@ -362,6 +362,11 @@ type LikesLookUpByTweetResponse struct {
 	ProfileImageUrl string                    `json:"profile_image_url,omitempty"`
 	PublicMetrics   *LikesLookUpPublicMetrics `json:"public_metrics,omitempty"`
 	PinnedTweetID   string                    `json:"pinned_tweet_id,omitempty"`
-	Includes        *TweetIncludes            `json:"includes,omitempty"`
-	Errors          []*APIResponseError       `json:"errors,omitempty"`
+}
+
+type LikesLookUpByTweetResponse struct {
+	Users    []*LikeLookUpUser   `json:"data"`
+	Includes *TweetIncludes      `json:"includes,omitempty"`
+	Meta     *TweetSearchMeta    `json:"meta"`
+	Errors   []*APIResponseError `json:"errors,omitempty"`
 }
