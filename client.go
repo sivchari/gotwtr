@@ -48,6 +48,7 @@ type Client interface {
 	// UndoRetweet(ctx context.Context, id string, stid string) (*UndoRetweetResponse, error)
 	UserMentionTimeline(ctx context.Context, id string, opt ...*UserMentionTimelineOpts) (*UserMentionTimelineResponse, error)
 	UserTweetTimeline(ctx context.Context, id string, opt ...*UserTweetTimelineOpts) (*UserTweetTimelineResponse, error)
+	LikesLookUpUsers(ctx context.Context, id string, opt ...*LikesLookUpByTweetOpts) (*LikesLookUpByTweetResponse, error)
 }
 
 var _ Client = (*client)(nil)
@@ -137,6 +138,10 @@ func (c *client) PostRetweet(ctx context.Context, uid string, tid string) (*Post
 	return postRetweet(ctx, c, uid, tid)
 }
 
+func (c *client) RetrieveStreamRules(ctx context.Context, opt ...*RetrieveStreamRulesOption) (*RetrieveStreamRulesResponse, error) {
+	return retrieveStreamRules(ctx, c, opt...)
+}
+
 func (c *client) RetweetsLookup(ctx context.Context, id string, opt ...*RetweetsLookupOpts) (*RetweetsLookupResponse, error) {
 	return retweetsLookup(ctx, c, id, opt...)
 }
@@ -173,6 +178,6 @@ func (c *client) UserTweetTimeline(ctx context.Context, id string, opt ...*UserT
 	return userTweetTimeline(ctx, c, id, opt...)
 }
 
-func (c *client) RetrieveStreamRules(ctx context.Context, opt ...*RetrieveStreamRulesOption) (*RetrieveStreamRulesResponse, error) {
-	return retrieveStreamRules(ctx, c, opt...)
+func (c *client) LikesLookUpUsers(ctx context.Context, id string, opt ...*LikesLookUpByTweetOpts) (*LikesLookUpByTweetResponse, error) {
+	return likesLookUpUsers(ctx, c, id, opt...)
 }
