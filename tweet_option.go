@@ -296,6 +296,40 @@ func (t *TweetCountsOption) addQuery(req *http.Request) {
 	}
 }
 
+type LikesLookUpByTweetOpts struct {
+	Expansions  []Expansion
+	MediaFields []MediaField
+	PlaceFields []PlaceField
+	PollFields  []PollField
+	TweetFields []TweetField
+	UserFields  []UserField
+}
+
+func (l *LikesLookUpByTweetOpts) addQuery(req *http.Request) {
+	q := req.URL.Query()
+	if len(l.Expansions) > 0 {
+		q.Add("expansions", strings.Join(expansionsToString(l.Expansions), ","))
+	}
+	if len(l.MediaFields) > 0 {
+		q.Add("media.fields", strings.Join(mediaFieldsToString(l.MediaFields), ","))
+	}
+	if len(l.PlaceFields) > 0 {
+		q.Add("place.fields", strings.Join(placeFieldsToString(l.PlaceFields), ","))
+	}
+	if len(l.PollFields) > 0 {
+		q.Add("poll.fields", strings.Join(pollFieldsToString(l.PollFields), ","))
+	}
+	if len(l.TweetFields) > 0 {
+		q.Add("tweet.fields", strings.Join(tweetFieldsToString(l.TweetFields), ","))
+	}
+	if len(l.UserFields) > 0 {
+		q.Add("user.fields", strings.Join(userFieldsToString(l.UserFields), ","))
+	}
+	if len(q) > 0 {
+		req.URL.RawQuery = q.Encode()
+	}
+}
+
 type RetweetsLookupOpts struct {
 	Expansions  []Expansion
 	MediaFields []MediaField
