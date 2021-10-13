@@ -20,16 +20,16 @@ func retweetsLookup(ctx context.Context, c *client, id string, opt ...*RetweetsL
 	}
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.bearerToken))
 
-	var topt RetweetsLookupOpts
+	var ropt RetweetsLookupOpts
 	switch len(opt) {
 	case 0:
 		// do nothing
 	case 1:
-		topt = *opt[0]
+		ropt = *opt[0]
 	default:
 		return nil, errors.New("retweets lookup: only one option is allowed")
 	}
-	topt.addQuery(req)
+	ropt.addQuery(req)
 
 	resp, err := c.client.Do(req)
 	if err != nil {
