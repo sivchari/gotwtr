@@ -21,16 +21,16 @@ func userTweetTimeline(ctx context.Context, c *client, id string, opt ...*UserTw
 	}
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.bearerToken))
 
-	var topt UserTweetTimelineOpts
+	var uopt UserTweetTimelineOpts
 	switch len(opt) {
 	case 0:
 		// do nothing
 	case 1:
-		topt = *opt[0]
+		uopt = *opt[0]
 	default:
 		return nil, errors.New("user tweet timeline: only one option is allowed")
 	}
-	topt.addQuery(req)
+	uopt.addQuery(req)
 
 	resp, err := c.client.Do(req)
 	if err != nil {
@@ -66,16 +66,16 @@ func userMentionTimeline(ctx context.Context, c *client, id string, opt ...*User
 	}
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.bearerToken))
 
-	var topt UserMentionTimelineOpts
+	var uopt UserMentionTimelineOpts
 	switch len(opt) {
 	case 0:
 		// do nothing
 	case 1:
-		topt = *opt[0]
+		uopt = *opt[0]
 	default:
 		return nil, errors.New("user mention timeline: only one option is allowed")
 	}
-	topt.addQuery(req)
+	uopt.addQuery(req)
 
 	resp, err := c.client.Do(req)
 	if err != nil {

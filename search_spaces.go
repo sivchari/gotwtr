@@ -23,17 +23,16 @@ func searchSpaces(ctx context.Context, c *client, query string, opt ...*SearchSp
 	}
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.bearerToken))
 
-	var topt SearchSpacesOption
+	var sopt SearchSpacesOption
 	switch len(opt) {
 	case 0:
 		// do nothing
 	case 1:
-		topt = *opt[0]
+		sopt = *opt[0]
 	default:
 		return nil, errors.New("search spaces: too many options")
 	}
-	topt.addQuery(req)
-	fmt.Println(req.URL.String())
+	sopt.addQuery(req)
 
 	resp, err := c.client.Do(req)
 	if err != nil {
