@@ -66,3 +66,9 @@ type SearchSpacesMeta struct {
 type SpaceIncludes struct {
 	Users []*User
 }
+
+type SpaceLookUpByIDResponse struct {
+	Space    *Space              `json:"data,omitempty"`
+	Includes *SpaceIncludes      `json:"includes,omitempty"`
+	Errors   []*APIResponseError `json:"errors,omitempty"`
+}

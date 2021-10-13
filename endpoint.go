@@ -4,6 +4,7 @@ package gotwtr
 var (
 	recentTweetCounts = "https://api.twitter.com/2/tweets/counts/recent"
 	sampleStream      = "https://api.twitter.com/2/tweets/sample/stream"
+	spaceLookUp       = "https://api.twitter.com/2/spaces"
 	spacesSearch      = "https://api.twitter.com/2/spaces/search"
 	timeline          = "https://api.twitter.com/2/users"
 	tweetLookUp       = "https://api.twitter.com/2/tweets"
