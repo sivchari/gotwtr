@@ -8,7 +8,7 @@ import (
 	"net/http"
 )
 
-func lookUp(ctx context.Context, c *client, ids []string, opt ...*TweetOption) (*TweetLookUpResponse, error) {
+func lookUp(ctx context.Context, c *client, ids []string, opt ...*TweetLookUpOption) (*TweetLookUpResponse, error) {
 	// check ids
 	switch {
 	case len(ids) == 0:
@@ -33,7 +33,7 @@ func lookUp(ctx context.Context, c *client, ids []string, opt ...*TweetOption) (
 	}
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.bearerToken))
 
-	var topt TweetOption
+	var topt TweetLookUpOption
 	switch len(opt) {
 	case 0:
 		// do nothing
@@ -65,7 +65,7 @@ func lookUp(ctx context.Context, c *client, ids []string, opt ...*TweetOption) (
 	return &tweet, nil
 }
 
-func lookUpByID(ctx context.Context, c *client, id string, opt ...*TweetOption) (*TweetLookUpByIDResponse, error) {
+func lookUpByID(ctx context.Context, c *client, id string, opt ...*TweetLookUpOption) (*TweetLookUpByIDResponse, error) {
 	if id == "" {
 		return nil, errors.New("tweet lookup by id: id parameter is required")
 	}
@@ -78,7 +78,7 @@ func lookUpByID(ctx context.Context, c *client, id string, opt ...*TweetOption) 
 
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.bearerToken))
 
-	var topt TweetOption
+	var topt TweetLookUpOption
 	switch len(opt) {
 	case 0:
 		// do nothing

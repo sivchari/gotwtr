@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-type TweetOption struct {
+type TweetLookUpOption struct {
 	Expansions  []Expansion
 	MediaFields []MediaField
 	PlaceFields []PlaceField
@@ -16,7 +16,7 @@ type TweetOption struct {
 	UserFields  []UserField
 }
 
-func (t *TweetOption) addQuery(req *http.Request) {
+func (t *TweetLookUpOption) addQuery(req *http.Request) {
 	q := req.URL.Query()
 	if len(t.Expansions) > 0 {
 		q.Add("expansions", strings.Join(expansionsToString(t.Expansions), ","))

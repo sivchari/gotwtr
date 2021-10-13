@@ -21,7 +21,7 @@ func Test_lookUp(t *testing.T) {
 		ctx    context.Context
 		client *http.Client
 		ids    []string
-		opt    []*gotwtr.TweetOption
+		opt    []*gotwtr.TweetLookUpOption
 	}
 	tests := []struct {
 		name    string
@@ -48,7 +48,7 @@ func Test_lookUp(t *testing.T) {
 					}
 				}),
 				ids: []string{"123456789"},
-				opt: []*gotwtr.TweetOption{},
+				opt: []*gotwtr.TweetLookUpOption{},
 			},
 			want: &gotwtr.TweetLookUpResponse{
 				Tweets: []*gotwtr.Tweet{
@@ -93,7 +93,7 @@ func Test_lookUp(t *testing.T) {
 					}
 				}),
 				ids: []string{"123456789"},
-				opt: []*gotwtr.TweetOption{
+				opt: []*gotwtr.TweetLookUpOption{
 					{
 						Expansions: []gotwtr.Expansion{gotwtr.ExpansionAuthorID},
 						TweetFields: []gotwtr.TweetField{
@@ -152,7 +152,7 @@ func Test_lookUp(t *testing.T) {
 					}
 				}),
 				ids: []string{"123456789", "987654321"},
-				opt: []*gotwtr.TweetOption{},
+				opt: []*gotwtr.TweetLookUpOption{},
 			},
 			want: &gotwtr.TweetLookUpResponse{
 				Tweets: []*gotwtr.Tweet{
@@ -213,7 +213,7 @@ func Test_lookUp(t *testing.T) {
 					}
 				}),
 				ids: []string{"123456789", "987654321"},
-				opt: []*gotwtr.TweetOption{
+				opt: []*gotwtr.TweetLookUpOption{
 					{
 						Expansions: []gotwtr.Expansion{gotwtr.ExpansionAuthorID},
 						TweetFields: []gotwtr.TweetField{
@@ -289,7 +289,7 @@ func Test_lookUp(t *testing.T) {
 					}
 				}),
 				ids: []string{"20", "1276230436478386177"},
-				opt: []*gotwtr.TweetOption{},
+				opt: []*gotwtr.TweetLookUpOption{},
 			},
 			want: &gotwtr.TweetLookUpResponse{
 				Tweets: []*gotwtr.Tweet{
@@ -338,7 +338,7 @@ func Test_lookUp(t *testing.T) {
 					}
 				}),
 				ids: []string{"123456789"},
-				opt: []*gotwtr.TweetOption{},
+				opt: []*gotwtr.TweetLookUpOption{},
 			},
 			want: &gotwtr.TweetLookUpResponse{
 				Tweets: nil,
@@ -380,7 +380,7 @@ func Test_lookUpByID(t *testing.T) {
 		ctx    context.Context
 		client *http.Client
 		id     string
-		opt    []*gotwtr.TweetOption
+		opt    []*gotwtr.TweetLookUpOption
 	}
 	tests := []struct {
 		name    string
@@ -405,7 +405,7 @@ func Test_lookUpByID(t *testing.T) {
 					}
 				}),
 				id:  "20",
-				opt: []*gotwtr.TweetOption{},
+				opt: []*gotwtr.TweetLookUpOption{},
 			},
 			want: &gotwtr.TweetLookUpByIDResponse{
 				Tweet: &gotwtr.Tweet{
@@ -487,7 +487,7 @@ func Test_lookUpByID(t *testing.T) {
 					}
 				}),
 				id: "1275828087666679809",
-				opt: []*gotwtr.TweetOption{
+				opt: []*gotwtr.TweetLookUpOption{
 					{
 						TweetFields: []gotwtr.TweetField{
 							gotwtr.TweetFieldAttachments,
@@ -594,7 +594,7 @@ func Test_lookUpByID(t *testing.T) {
 					}
 				}),
 				id: "1276230436478386177",
-				opt: []*gotwtr.TweetOption{
+				opt: []*gotwtr.TweetLookUpOption{
 					{
 						TweetFields: []gotwtr.TweetField{
 							gotwtr.TweetFieldAttachments,
@@ -671,7 +671,7 @@ func Test_lookUpByID(t *testing.T) {
 					}
 				}),
 				id: "1136017751028449283",
-				opt: []*gotwtr.TweetOption{
+				opt: []*gotwtr.TweetLookUpOption{
 					{
 						Expansions: []gotwtr.Expansion{
 							gotwtr.ExpansionGeoPlaceID,
@@ -765,7 +765,7 @@ func Test_lookUpByID(t *testing.T) {
 					}
 				}),
 				id: "1199786642791452673",
-				opt: []*gotwtr.TweetOption{
+				opt: []*gotwtr.TweetLookUpOption{
 					{
 						Expansions: []gotwtr.Expansion{
 							gotwtr.ExpansionAttachmentsPollIDs,
@@ -868,7 +868,7 @@ func Test_lookUpByID(t *testing.T) {
 					}
 				}),
 				id: "1263145271946551300",
-				opt: []*gotwtr.TweetOption{
+				opt: []*gotwtr.TweetLookUpOption{
 					{
 						TweetFields: []gotwtr.TweetField{
 							gotwtr.TweetFieldAttachments,
