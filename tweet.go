@@ -197,7 +197,7 @@ type UserTimelineMeta struct {
 type TweetSearchResponse struct {
 	Tweets   []*Tweet            `json:"data"`
 	Includes *TweetIncludes      `json:"includes,omitempty"`
-	Meta     *TweetSearchMeta    `json:"meta,omitempty"`
+	Meta     *TweetSearchMeta    `json:"meta"`
 	Errors   []*APIResponseError `json:"errors,omitempty"`
 }
 
@@ -206,6 +206,12 @@ type TweetSearchMeta struct {
 	NewestID    string `json:"newest_id"`
 	OldestID    string `json:"oldest_id"`
 	NextToken   string `json:"next_token,omitempty"`
+}
+
+type SampledStreamResponse struct {
+	Tweets   []*Tweet            `json:"data"`
+	Includes *TweetIncludes      `json:"includes,omitempty"`
+	Errors   []*APIResponseError `json:"errors,omitempty"`
 }
 
 type TimeseriesCount struct {
@@ -221,4 +227,15 @@ type TweetCountMeta struct {
 type TweetCountsResponse struct {
 	Counts []*TimeseriesCount `json:"data"`
 	Meta   *TweetCountMeta    `json:"meta"`
+}
+
+type RetweetsLookupResponse struct {
+	Users    []*User             `json:"data"`
+	Includes *TweetIncludes      `json:"includes,omitempty"`
+	Errors   []*APIResponseError `json:"errors,omitempty"`
+	Meta     *RetweetsLookupMeta `json:"meta"`
+}
+
+type RetweetsLookupMeta struct {
+	ResultCount int `json:"result_count"`
 }

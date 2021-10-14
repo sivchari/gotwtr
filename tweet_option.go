@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-type TweetOption struct {
+type TweetLookUpOption struct {
 	Expansions  []Expansion
 	MediaFields []MediaField
 	PlaceFields []PlaceField
@@ -16,7 +16,7 @@ type TweetOption struct {
 	UserFields  []UserField
 }
 
-func (t *TweetOption) addQuery(req *http.Request) {
+func (t *TweetLookUpOption) addQuery(req *http.Request) {
 	q := req.URL.Query()
 	if len(t.Expansions) > 0 {
 		q.Add("expansions", strings.Join(expansionsToString(t.Expansions), ","))
@@ -229,6 +229,41 @@ func (t UserMentionTimelineOpts) addQuery(req *http.Request) {
 	}
 }
 
+type SampledStreamOpts struct {
+	// BackfillMinutes int `json:"backfill_minutes"` // This feature is currently only available to the Academic Research product track.
+	Expansions  []Expansion
+	MediaFields []MediaField
+	PlaceFields []PlaceField
+	PollFields  []PollField
+	TweetFields []TweetField
+	UserFields  []UserField
+}
+
+func (t SampledStreamOpts) addQuery(req *http.Request) {
+	q := req.URL.Query()
+	if len(t.Expansions) > 0 {
+		q.Add("expansions", strings.Join(expansionsToString(t.Expansions), ","))
+	}
+	if len(t.MediaFields) > 0 {
+		q.Add("media.fields", strings.Join(mediaFieldsToString(t.MediaFields), ","))
+	}
+	if len(t.PlaceFields) > 0 {
+		q.Add("place.fields", strings.Join(placeFieldsToString(t.PlaceFields), ","))
+	}
+	if len(t.PollFields) > 0 {
+		q.Add("poll.fields", strings.Join(pollFieldsToString(t.PollFields), ","))
+	}
+	if len(t.TweetFields) > 0 {
+		q.Add("tweet.fields", strings.Join(tweetFieldsToString(t.TweetFields), ","))
+	}
+	if len(t.UserFields) > 0 {
+		q.Add("user.fields", strings.Join(userFieldsToString(t.UserFields), ","))
+	}
+	if len(q) > 0 {
+		req.URL.RawQuery = q.Encode()
+	}
+}
+
 type TweetCountsOption struct {
 	StartTime   time.Time
 	EndTime     time.Time
@@ -255,6 +290,40 @@ func (t *TweetCountsOption) addQuery(req *http.Request) {
 	}
 	if len(t.Granularity) > 0 {
 		q.Add("granularity", t.Granularity)
+	}
+	if len(q) > 0 {
+		req.URL.RawQuery = q.Encode()
+	}
+}
+
+type RetweetsLookupOpts struct {
+	Expansions  []Expansion
+	MediaFields []MediaField
+	PlaceFields []PlaceField
+	PollFields  []PollField
+	TweetFields []TweetField
+	UserFields  []UserField
+}
+
+func (t RetweetsLookupOpts) addQuery(req *http.Request) {
+	q := req.URL.Query()
+	if len(t.Expansions) > 0 {
+		q.Add("expansions", strings.Join(expansionsToString(t.Expansions), ","))
+	}
+	if len(t.MediaFields) > 0 {
+		q.Add("media.fields", strings.Join(mediaFieldsToString(t.MediaFields), ","))
+	}
+	if len(t.PlaceFields) > 0 {
+		q.Add("place.fields", strings.Join(placeFieldsToString(t.PlaceFields), ","))
+	}
+	if len(t.PollFields) > 0 {
+		q.Add("poll.fields", strings.Join(pollFieldsToString(t.PollFields), ","))
+	}
+	if len(t.TweetFields) > 0 {
+		q.Add("tweet.fields", strings.Join(tweetFieldsToString(t.TweetFields), ","))
+	}
+	if len(t.UserFields) > 0 {
+		q.Add("user.fields", strings.Join(userFieldsToString(t.UserFields), ","))
 	}
 	if len(q) > 0 {
 		req.URL.RawQuery = q.Encode()

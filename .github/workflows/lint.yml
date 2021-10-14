@@ -5,7 +5,7 @@ on: [pull_request]
 jobs:
   golangci-lint:
     name: runner / golangci-lint
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
 
@@ -17,3 +17,5 @@ jobs:
           reporter: github-pr-review
           go_version: "1.17"
           fail_on_error: true
+          filter_mode: diff_context
+
