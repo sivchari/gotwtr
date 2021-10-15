@@ -28,6 +28,8 @@ type Client interface {
 	SearchSpaces(ctx context.Context, query string, opt ...*SearchSpacesOption) (*SearchSpacesResponse, error)
 	UserMentionTimeline(ctx context.Context, id string, opt ...*UserMentionTimelineOpts) (*UserMentionTimelineResponse, error)
 	UserTweetTimeline(ctx context.Context, id string, opt ...*UserTweetTimelineOpts) (*UserTweetTimelineResponse, error)
+	PostRetweet(ctx context.Context, uid string, tid string) (*PostRetweetResponse, error)
+	DeleteRetweet(ctx context.Context, id string, stid string) (*DeleteRetweetResponse, error)
 }
 
 var _ Client = (*client)(nil)
@@ -99,4 +101,12 @@ func (c *client) UserMentionTimeline(ctx context.Context, id string, opt ...*Use
 
 func (c *client) UserTweetTimeline(ctx context.Context, id string, opt ...*UserTweetTimelineOpts) (*UserTweetTimelineResponse, error) {
 	return userTweetTimeline(ctx, c, id, opt...)
+}
+
+func (c *client) PostRetweet(ctx context.Context, uid string, tid string) (*PostRetweetResponse, error) {
+	return postRetweet(ctx, c, uid, tid)
+}
+
+func (c *client) DeleteRetweet(ctx context.Context, id string, stid string) (*DeleteRetweetResponse, error) {
+	return deleteRetweet(ctx, c, id, stid)
 }

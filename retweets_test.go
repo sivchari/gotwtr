@@ -178,3 +178,123 @@ func Test_retweetsLookup(t *testing.T) {
 		})
 	}
 }
+
+func Test_postRetweet(t *testing.T) {
+	type args struct {
+		ctx    context.Context
+		client *http.Client
+		uid    string
+		tid    string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    *gotwtr.PostRetweetResponse
+		wantErr bool
+	}{
+		{
+			name: "200 success",
+			args: args{
+				ctx: context.Background(),
+				client: mockHTTPClient(func(req *http.Request) *http.Response {
+					if req.Method != http.MethodPost {
+						t.Fatalf("the method is not correct got %s want %s", req.Method, http.MethodPost)
+					}
+					body := `{
+						"data": {
+							"retweeted": true
+						}
+					}`
+					return &http.Response{
+						StatusCode: http.StatusOK,
+						Body:       io.NopCloser(strings.NewReader(body)),
+					}
+				}),
+				uid: "2244994945",
+				tid: "1228393702244134912",
+			},
+			want: &gotwtr.PostRetweetResponse{
+				Retweeted: &gotwtr.Retweeted{
+					Retweeted: true,
+				},
+			},
+			wantErr: false,
+		},
+	}
+	for i, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
+			got, err := c.PostRetweet(tt.args.ctx, tt.args.uid, tt.args.tid)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("PostRetweet() index = %v error = %v, wantErr %v", i, err, tt.wantErr)
+				return
+			}
+			if diff := cmp.Diff(got, tt.want); diff != "" {
+				t.Errorf("PostRetweet() index = %v mismatch (-want +got):\n%s", i, diff)
+				return
+			}
+		})
+	}
+}
+
+func Test_deleteRetweet(t *testing.T) {
+	type args struct {
+		ctx    context.Context
+		client *http.Client
+		id     string
+		stid   string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    *gotwtr.DeleteRetweetResponse
+		wantErr bool
+	}{
+		{
+			name: "200 success",
+			args: args{
+				ctx: context.Background(),
+				client: mockHTTPClient(func(req *http.Request) *http.Response {
+					if req.Method != http.MethodDelete {
+						t.Fatalf("the method is not correct got %s want %s", req.Method, http.MethodDelete)
+					}
+					body := `{
+						"data": {
+							"retweeted": false
+						}
+					}`
+					return &http.Response{
+						StatusCode: http.StatusOK,
+						Body:       io.NopCloser(strings.NewReader(body)),
+					}
+				}),
+				id:   "2244994945",
+				stid: "1228393702244134912",
+			},
+			want: &gotwtr.DeleteRetweetResponse{
+				Retweeted: &gotwtr.Retweeted{
+					Retweeted: false,
+				},
+			},
+			wantErr: false,
+		},
+	}
+	for i, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
+			got, err := c.DeleteRetweet(tt.args.ctx, tt.args.id, tt.args.stid)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("DeleteRetweet() index = %v error = %v, wantErr %v", i, err, tt.wantErr)
+				return
+			}
+			if diff := cmp.Diff(got, tt.want); diff != "" {
+				t.Errorf("DeleteRetweet() index = %v mismatch (-want +got):\n%s", i, diff)
+				return
+			}
+		})
+	}
+}
