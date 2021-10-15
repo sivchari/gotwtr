@@ -12,7 +12,7 @@ func retweetsLookup(ctx context.Context, c *client, id string, opt ...*RetweetsL
 	if id == "" {
 		return nil, errors.New("retweets lookup by id: id parameter is required")
 	}
-	retweetsLookupPath := tweetLookUp + "/" + id + "/retweeted_by"
+	retweetsLookupPath := retweetLookUp + "/" + id + "/retweeted_by"
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, retweetsLookupPath, nil)
 	if err != nil {
