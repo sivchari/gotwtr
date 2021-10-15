@@ -27,5 +27,6 @@ type APIResponseError struct {
 }
 
 type Parameter struct {
+	ID  []string `json:"id"`
 	IDs []string `json:"ids"`
 }

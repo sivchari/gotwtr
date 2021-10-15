@@ -12,7 +12,7 @@ func retweetsLookup(ctx context.Context, c *client, id string, opt ...*RetweetsL
 	if id == "" {
 		return nil, errors.New("retweets lookup by id: id parameter is required")
 	}
-	retweetsLookupPath := tweetLookUp + "/" + id + "/retweeted_by"
+	retweetsLookupPath := retweetLookUp + "/" + id + "/retweeted_by"
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, retweetsLookupPath, nil)
 	if err != nil {
@@ -20,16 +20,16 @@ func retweetsLookup(ctx context.Context, c *client, id string, opt ...*RetweetsL
 	}
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.bearerToken))
 
-	var topt RetweetsLookupOpts
+	var ropt RetweetsLookupOpts
 	switch len(opt) {
 	case 0:
 		// do nothing
 	case 1:
-		topt = *opt[0]
+		ropt = *opt[0]
 	default:
 		return nil, errors.New("retweets lookup: only one option is allowed")
 	}
-	topt.addQuery(req)
+	ropt.addQuery(req)
 
 	resp, err := c.client.Do(req)
 	if err != nil {
