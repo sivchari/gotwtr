@@ -133,23 +133,23 @@ func addOrDeleteRules(ctx context.Context, c *client, body *AddOrDeleteJSONBody,
 
 	switch {
 	case len(body.Add) == 0 && len(body.Delete.IDs) == 0:
-		return nil, errors.New("add or delete: add is required")
+		return nil, errors.New("add or delete rules: add is required")
 	default:
 	}
 
 	for _, rule := range body.Add {
 		switch {
 		case len(rule.Value) == 0:
-			return nil, errors.New("tweets search recent: add is required")
+			return nil, errors.New("add or delete rules: add is required")
 		case 512 < len(rule.Value):
-			return nil, errors.New("tweets search recent: delete is required")
+			return nil, errors.New("add or delete rules: delete is required")
 		default:
 		}
 	}
 
 	jsonStr, err := json.Marshal(body)
 	if err != nil {
-		return nil, errors.New("post retweet: can not marshal")
+		return nil, errors.New("add or delete rules : can not marshal")
 	}
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodPost, filteredStreamRules, bytes.NewBuffer(jsonStr))
@@ -172,15 +172,15 @@ func addOrDeleteRules(ctx context.Context, c *client, body *AddOrDeleteJSONBody,
 
 	resp, err := c.client.Do(req)
 	if err != nil {
-		return nil, fmt.Errorf("retrieve stream rules: %w", err)
+		return nil, fmt.Errorf("add or delete rules: %w", err)
 	}
 	defer resp.Body.Close()
 
 	var addOrDelte AddOrDeleteRulesResponse
 	if err := json.NewDecoder(resp.Body).Decode(&addOrDelte); err != nil {
-		return nil, fmt.Errorf("retrieve stream rules decode: %w", err)
+		return nil, fmt.Errorf("add or delete rules decode: %w", err)
 	}
-	if resp.StatusCode != http.StatusOK {
+	if resp.StatusCode != http.StatusCreated {
 		return &addOrDelte, &HTTPError{
 			APIName: " stream rules",
 			Status:  resp.Status,
