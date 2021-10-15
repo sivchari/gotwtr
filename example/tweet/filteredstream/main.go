@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	client := gotwtr.New("AAAAAAAAAAAAAAAAAAAAAIhYUQEAAAAAV8vbjMIPhhXKPVI2Ea8n5RAR%2BbM%3DNh7spVQNQRA9vOHxkeogX2BPNbHSEEGhwnnLKuWgcQ7uFPuVoI")
+	client := gotwtr.New("key")
 	res, err := client.AddOrDeleteRules(context.Background(), &gotwtr.AddOrDeleteJSONBody{
 		Add: []*gotwtr.Add{
 			{
