@@ -93,20 +93,22 @@ type AddOrDeleteRulesResponse struct {
 }
 
 type AddOrDeleteRulesMeta struct {
-	Sent    string // TODO: Is it number ?
-	Summary *AddOrDeleteMetaSummary
+	Sent    string                  `json:"sent"` // TODO: Is it number ?
+	Summary *AddOrDeleteMetaSummary `json:"summary"`
 }
 
 type AddOrDeleteMetaSummary struct {
-	Created    int
-	NotCreated int
-	Valid      int
-	Invalid    int
+	Created    int `json:"created"`
+	NotCreated int `json:"not_created"`
+	Deleted    int `json:"deleted"`
+	NotDeleted int `json:"not_deleted"`
+	Valid      int `json:"valid"`
+	Invalid    int `json:"invalid"`
 }
 
 type AddOrDeleteJSONBody struct {
-	Add    []*Add
-	Delete *Delete
+	Add    []*Add  `json:"add,omitempty"`
+	Delete *Delete `json:"delete,omitempty"`
 }
 
 type Add struct {
@@ -120,7 +122,7 @@ type Delete struct {
 
 func (t *AddOrDeleteRulesOption) addQuery(req *http.Request) {
 	q := req.URL.Query()
-	if t.DryRun == true {
+	if t.DryRun {
 		q.Add("dry_run", strconv.FormatBool(t.DryRun))
 	}
 	if len(q) > 0 {
@@ -133,7 +135,7 @@ func addOrDeleteRules(ctx context.Context, c *client, body *AddOrDeleteJSONBody,
 
 	switch {
 	case len(body.Add) == 0 && len(body.Delete.IDs) == 0:
-		return nil, errors.New("add or delete rules: add is required")
+		return nil, errors.New("add or delete rules: add or delete.ids are required")
 	default:
 	}
 
@@ -176,17 +178,17 @@ func addOrDeleteRules(ctx context.Context, c *client, body *AddOrDeleteJSONBody,
 	}
 	defer resp.Body.Close()
 
-	var addOrDelte AddOrDeleteRulesResponse
-	if err := json.NewDecoder(resp.Body).Decode(&addOrDelte); err != nil {
+	var addOrDelete AddOrDeleteRulesResponse
+	if err := json.NewDecoder(resp.Body).Decode(&addOrDelete); err != nil {
 		return nil, fmt.Errorf("add or delete rules decode: %w", err)
 	}
 	if resp.StatusCode != http.StatusCreated {
-		return &addOrDelte, &HTTPError{
-			APIName: " stream rules",
+		return &addOrDelete, &HTTPError{
+			APIName: "stream rules",
 			Status:  resp.Status,
 			URL:     req.URL.String(),
 		}
 	}
 
-	return &addOrDelte, nil
+	return &addOrDelete, nil
 }
