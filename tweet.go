@@ -239,3 +239,65 @@ type RetweetsLookupResponse struct {
 type RetweetsLookupMeta struct {
 	ResultCount int `json:"result_count"`
 }
+
+type RetrieveStreamRulesResponse struct {
+	Rules  []*FilteredRule          `json:"data"`
+	Meta   *RetrieveStreamRulesMeta `json:"meta"`
+	Errors []*APIResponseError      `json:"errors,omitempty"`
+}
+
+type FilteredRule struct {
+	ID    string `json:"id"`
+	Value string `json:"value"`
+	Tag   string `json:"tag,omitempty"`
+}
+
+type RetrieveStreamRulesMeta struct {
+	Sent string // TODO: Is it number ?
+}
+
+type AddOrDeleteJSONBody struct {
+	Add    []*Add  `json:"add,omitempty"`
+	Delete *Delete `json:"delete,omitempty"`
+}
+
+type Add struct {
+	Value string `json:"value"`
+	Tag   string `json:"tag,omitempty"`
+}
+
+type Delete struct {
+	IDs []string `json:"ids"`
+}
+
+type AddOrDeleteRulesResponse struct {
+	Rules  []*FilteredRule       `json:"data"`
+	Meta   *AddOrDeleteRulesMeta `json:"meta"`
+	Errors []*APIResponseError   `json:"errors,omitempty"`
+}
+
+type AddOrDeleteRulesMeta struct {
+	Sent    string                  `json:"sent"` // TODO: Is it number ?
+	Summary *AddOrDeleteMetaSummary `json:"summary"`
+}
+
+type AddOrDeleteMetaSummary struct {
+	Created    int `json:"created"`
+	NotCreated int `json:"not_created"`
+	Deleted    int `json:"deleted"`
+	NotDeleted int `json:"not_deleted"`
+	Valid      int `json:"valid"`
+	Invalid    int `json:"invalid"`
+}
+
+type ConnectToStreamResponse struct {
+	Tweets        []*Tweet            `json:"data"`
+	Includes      *TweetIncludes      `json:"includes,omitempty"`
+	Errors        []*APIResponseError `json:"errors,omitempty"`
+	MatchingRules []*MatchingRule     `json:"matching_rules"`
+}
+
+type MatchingRule struct {
+	ID  string `json:"id"`
+	Tag string `json:"tag"`
+}

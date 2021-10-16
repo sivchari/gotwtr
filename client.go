@@ -18,6 +18,7 @@ const (
 type Client interface {
 	// CountsFullArchiveTweet(ctx context.Context, query string, opt ...*TweetCountsOption) (*TweetCountsResponse, error)
 	AddOrDeleteRules(ctx context.Context, body *AddOrDeleteJSONBody, opt ...*AddOrDeleteRulesOption) (*AddOrDeleteRulesResponse, error)
+	ConnectToStream(ctx context.Context, opt ...*ConnectToStreamOption) (*ConnectToStreamResponse, error)
 	CountsRecentTweet(ctx context.Context, query string, opt ...*TweetCountsOption) (*TweetCountsResponse, error)
 	LookUpSpaceByID(ctx context.Context, id string, opt ...*SpaceLookUpOption) (*SpaceLookUpByIDResponse, error)
 	LookUpTweets(ctx context.Context, ids []string, opt ...*TweetLookUpOption) (*TweetLookUpResponse, error)
@@ -61,6 +62,10 @@ func WithHTTPClient(httpClient *http.Client) ClientOption {
 
 func (c *client) CountsRecentTweet(ctx context.Context, query string, opt ...*TweetCountsOption) (*TweetCountsResponse, error) {
 	return countsRecentTweet(ctx, c, query, opt...)
+}
+
+func (c *client) ConnectToStream(ctx context.Context, opt ...*ConnectToStreamOption) (*ConnectToStreamResponse, error) {
+	return connectToStream(ctx, c, opt...)
 }
 
 func (c *client) LookUpSpaceByID(ctx context.Context, id string, opt ...*SpaceLookUpOption) (*SpaceLookUpByIDResponse, error) {

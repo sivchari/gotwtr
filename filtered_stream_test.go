@@ -2,12 +2,13 @@ package gotwtr_test
 
 import (
 	"context"
-	"github.com/google/go-cmp/cmp"
-	"github.com/sivchari/gotwtr"
 	"io"
 	"net/http"
 	"strings"
 	"testing"
+
+	"github.com/google/go-cmp/cmp"
+	"github.com/sivchari/gotwtr"
 )
 
 func Test_retrieveStreamRules(t *testing.T) {

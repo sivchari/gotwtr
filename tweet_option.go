@@ -329,3 +329,66 @@ func (t RetweetsLookupOpts) addQuery(req *http.Request) {
 		req.URL.RawQuery = q.Encode()
 	}
 }
+
+type RetrieveStreamRulesOption struct {
+	IDs []string
+}
+
+func (t *RetrieveStreamRulesOption) addQuery(req *http.Request) {
+	q := req.URL.Query()
+	if len(t.IDs) > 0 {
+		q.Add("ids", strings.Join(t.IDs, ","))
+	}
+	if len(q) > 0 {
+		req.URL.RawQuery = q.Encode()
+	}
+}
+
+type AddOrDeleteRulesOption struct {
+	DryRun bool // If it is true, test a the syntax of your rule without submitting it
+}
+
+func (t *AddOrDeleteRulesOption) addQuery(req *http.Request) {
+	q := req.URL.Query()
+	if t.DryRun {
+		q.Add("dry_run", strconv.FormatBool(t.DryRun))
+	}
+	if len(q) > 0 {
+		req.URL.RawQuery = q.Encode()
+	}
+}
+
+type ConnectToStreamOption struct {
+	BackfillMinutes int
+	Expansions      []Expansion
+	MediaFields     []MediaField
+	PlaceFields     []PlaceField
+	PollFields      []PollField
+	TweetFields     []TweetField
+	UserFields      []UserField
+}
+
+func (t *ConnectToStreamOption) addQuery(req *http.Request) {
+	q := req.URL.Query()
+	if len(t.Expansions) > 0 {
+		q.Add("expansions", strings.Join(expansionsToString(t.Expansions), ","))
+	}
+	if len(t.MediaFields) > 0 {
+		q.Add("media.fields", strings.Join(mediaFieldsToString(t.MediaFields), ","))
+	}
+	if len(t.PlaceFields) > 0 {
+		q.Add("place.fields", strings.Join(placeFieldsToString(t.PlaceFields), ","))
+	}
+	if len(t.PollFields) > 0 {
+		q.Add("poll.fields", strings.Join(pollFieldsToString(t.PollFields), ","))
+	}
+	if len(t.TweetFields) > 0 {
+		q.Add("tweet.fields", strings.Join(tweetFieldsToString(t.TweetFields), ","))
+	}
+	if len(t.UserFields) > 0 {
+		q.Add("user.fields", strings.Join(userFieldsToString(t.UserFields), ","))
+	}
+	if len(q) > 0 {
+		req.URL.RawQuery = q.Encode()
+	}
+}

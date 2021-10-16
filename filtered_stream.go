@@ -7,39 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"strconv"
-	"strings"
 )
-
-type RetrieveStreamRulesOption struct {
-	IDs []string
-}
-
-type FilteredRule struct {
-	ID    string `json:"id"`
-	Value string `json:"value"`
-	Tag   string `json:"tag,omitempty"`
-}
-
-type RetrieveStreamRulesResponse struct {
-	Rules  []*FilteredRule          `json:"data"`
-	Meta   *RetrieveStreamRulesMeta `json:"meta"`
-	Errors []*APIResponseError      `json:"errors,omitempty"`
-}
-
-type RetrieveStreamRulesMeta struct {
-	Sent string // TODO: Is it number ?
-}
-
-func (t *RetrieveStreamRulesOption) addQuery(req *http.Request) {
-	q := req.URL.Query()
-	if len(t.IDs) > 0 {
-		q.Add("ids", strings.Join(t.IDs, ","))
-	}
-	if len(q) > 0 {
-		req.URL.RawQuery = q.Encode()
-	}
-}
 
 func retrieveStreamRules(ctx context.Context, c *client, opt ...*RetrieveStreamRulesOption) (*RetrieveStreamRulesResponse, error) {
 	filteredStreamRules := filteredStream + "/rules"
@@ -80,54 +48,6 @@ func retrieveStreamRules(ctx context.Context, c *client, opt ...*RetrieveStreamR
 	}
 
 	return &tweet, nil
-}
-
-type AddOrDeleteRulesOption struct {
-	DryRun bool // If it is true, test a the syntax of your rule without submitting it
-}
-
-type AddOrDeleteRulesResponse struct {
-	Rules  []*FilteredRule       `json:"data"`
-	Meta   *AddOrDeleteRulesMeta `json:"meta"`
-	Errors []*APIResponseError   `json:"errors,omitempty"`
-}
-
-type AddOrDeleteRulesMeta struct {
-	Sent    string                  `json:"sent"` // TODO: Is it number ?
-	Summary *AddOrDeleteMetaSummary `json:"summary"`
-}
-
-type AddOrDeleteMetaSummary struct {
-	Created    int `json:"created"`
-	NotCreated int `json:"not_created"`
-	Deleted    int `json:"deleted"`
-	NotDeleted int `json:"not_deleted"`
-	Valid      int `json:"valid"`
-	Invalid    int `json:"invalid"`
-}
-
-type AddOrDeleteJSONBody struct {
-	Add    []*Add  `json:"add,omitempty"`
-	Delete *Delete `json:"delete,omitempty"`
-}
-
-type Add struct {
-	Value string `json:"value"`
-	Tag   string `json:"tag,omitempty"`
-}
-
-type Delete struct {
-	IDs []string `json:"ids"`
-}
-
-func (t *AddOrDeleteRulesOption) addQuery(req *http.Request) {
-	q := req.URL.Query()
-	if t.DryRun {
-		q.Add("dry_run", strconv.FormatBool(t.DryRun))
-	}
-	if len(q) > 0 {
-		req.URL.RawQuery = q.Encode()
-	}
 }
 
 func addOrDeleteRules(ctx context.Context, c *client, body *AddOrDeleteJSONBody, opt ...*AddOrDeleteRulesOption) (*AddOrDeleteRulesResponse, error) {
@@ -191,4 +111,43 @@ func addOrDeleteRules(ctx context.Context, c *client, body *AddOrDeleteJSONBody,
 	}
 
 	return &addOrDelete, nil
+}
+
+func connectToStream(ctx context.Context, c *client, opt ...*ConnectToStreamOption) (*ConnectToStreamResponse, error) {
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, filteredStream, nil)
+	if err != nil {
+		return nil, fmt.Errorf("connect to stream new request with ctx: %w", err)
+	}
+	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.bearerToken))
+
+	var topt ConnectToStreamOption
+	switch len(opt) {
+	case 0:
+		// do nothing
+	case 1:
+		topt = *opt[0]
+	default:
+		return nil, errors.New("connect to stream: only one option is allowed")
+	}
+	topt.addQuery(req)
+
+	resp, err := c.client.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("connect to stream: %w", err)
+	}
+	defer resp.Body.Close()
+
+	var connectToStream ConnectToStreamResponse
+	if err := json.NewDecoder(resp.Body).Decode(&connectToStream); err != nil {
+		return nil, fmt.Errorf("connect to stream decode: %w", err)
+	}
+	if resp.StatusCode != http.StatusOK {
+		return &connectToStream, &HTTPError{
+			APIName: "connect to stream",
+			Status:  resp.Status,
+			URL:     req.URL.String(),
+		}
+	}
+
+	return &connectToStream, nil
 }
