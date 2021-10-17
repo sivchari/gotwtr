@@ -215,7 +215,7 @@ func Test_AddOrDeleteRules(t *testing.T) {
 				}),
 				opt: []*gotwtr.AddOrDeleteRulesOption{},
 				body: &gotwtr.AddOrDeleteJSONBody{
-					Add: []*gotwtr.Add{
+					Add: []*gotwtr.AddRule{
 						{
 							Value: "puppy has:media",
 							Tag:   "puppies with media",
@@ -224,7 +224,7 @@ func Test_AddOrDeleteRules(t *testing.T) {
 							Value: "meme has:images",
 						},
 					},
-					Delete: &gotwtr.Delete{IDs: []string{}},
+					Delete: &gotwtr.DeleteRule{},
 				},
 			},
 			want: &gotwtr.AddOrDeleteRulesResponse{
@@ -246,6 +246,104 @@ func Test_AddOrDeleteRules(t *testing.T) {
 						NotCreated: 0,
 						Valid:      2,
 						Invalid:    0,
+					},
+				},
+			},
+			wantErr: false,
+		},
+		{
+			name: "Success 201 Created List of Rules with Dry Run",
+			args: args{
+				ctx: context.Background(),
+				client: mockHTTPClient(func(request *http.Request) *http.Response {
+					body := `{
+					    "data": [
+					        {
+					            "value": "tostones recipe",
+					            "id": "1273646795642421249"
+					        }
+					    ],
+					    "meta": {
+					        "sent": "2020-06-18T16:00:33.972Z",
+					        "summary": {
+					            "created": 1,
+					            "not_created": 0,
+					            "valid": 1,
+					            "invalid": 0
+					        }
+					    }
+					}`
+					return &http.Response{
+						StatusCode: http.StatusCreated,
+						Body:       io.NopCloser(strings.NewReader(body)),
+					}
+				}),
+				opt: []*gotwtr.AddOrDeleteRulesOption{
+					{
+						DryRun: true,
+					},
+				},
+				body: &gotwtr.AddOrDeleteJSONBody{
+					Add: []*gotwtr.AddRule{
+						{
+							Value: "tostones recipe",
+						},
+					},
+					Delete: &gotwtr.DeleteRule{},
+				},
+			},
+			want: &gotwtr.AddOrDeleteRulesResponse{
+				Rules: []*gotwtr.FilteredRule{
+					{
+						Value: "tostones recipe",
+						ID:    "1273646795642421249",
+					},
+				},
+				Meta: &gotwtr.AddOrDeleteRulesMeta{
+					Sent: "2020-06-18T16:00:33.972Z",
+					Summary: &gotwtr.AddOrDeleteMetaSummary{
+						Created:    1,
+						NotCreated: 0,
+						Valid:      1,
+						Invalid:    0,
+					},
+				},
+			},
+			wantErr: false,
+		},
+		{
+			name: "Success 200 DeleteRule Rule",
+			args: args{
+				ctx: context.Background(),
+				client: mockHTTPClient(func(request *http.Request) *http.Response {
+					body := `{
+					    "meta": {
+					        "sent": "2020-07-09T21:13:18.284Z",
+					        "summary": {
+					            "deleted": 1,
+					            "not_deleted": 0
+					        }
+					    }
+					}`
+					return &http.Response{
+						StatusCode: http.StatusOK,
+						Body:       io.NopCloser(strings.NewReader(body)),
+					}
+				}),
+				opt: []*gotwtr.AddOrDeleteRulesOption{},
+				body: &gotwtr.AddOrDeleteJSONBody{
+					Add: []*gotwtr.AddRule{},
+					Delete: &gotwtr.DeleteRule{
+						IDs: []string{"1273636687768285186"},
+					},
+				},
+			},
+			want: &gotwtr.AddOrDeleteRulesResponse{
+				Meta: &gotwtr.AddOrDeleteRulesMeta{
+					Sent: "2020-07-09T21:13:18.284Z",
+					Summary: &gotwtr.AddOrDeleteMetaSummary{
+						Deleted:    1,
+						NotDeleted: 0,
 					},
 				},
 			},
@@ -276,12 +374,12 @@ func Test_AddOrDeleteRules(t *testing.T) {
 				}),
 				opt: []*gotwtr.AddOrDeleteRulesOption{},
 				body: &gotwtr.AddOrDeleteJSONBody{
-					Add: []*gotwtr.Add{
+					Add: []*gotwtr.AddRule{
 						{
 							Value: "tostones recipe",
 						},
 					},
-					Delete: &gotwtr.Delete{IDs: []string{}},
+					Delete: &gotwtr.DeleteRule{},
 				},
 			},
 			want: &gotwtr.AddOrDeleteRulesResponse{

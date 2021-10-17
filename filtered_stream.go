@@ -63,7 +63,7 @@ func addOrDeleteRules(ctx context.Context, c *client, body *AddOrDeleteJSONBody,
 		switch {
 		case len(rule.Value) == 0:
 			return nil, errors.New("add or delete rules: add is required")
-		case 512 < len(rule.Value):
+		case filteredStreamRuleMaxLength < len(rule.Value):
 			return nil, errors.New("add or delete rules: delete is required")
 		default:
 		}
@@ -102,9 +102,9 @@ func addOrDeleteRules(ctx context.Context, c *client, body *AddOrDeleteJSONBody,
 	if err := json.NewDecoder(resp.Body).Decode(&addOrDelete); err != nil {
 		return nil, fmt.Errorf("add or delete rules decode: %w", err)
 	}
-	if resp.StatusCode != http.StatusCreated {
+	if resp.StatusCode != http.StatusCreated && resp.StatusCode != http.StatusOK {
 		return &addOrDelete, &HTTPError{
-			APIName: "stream rules",
+			APIName: "add or delete",
 			Status:  resp.Status,
 			URL:     req.URL.String(),
 		}

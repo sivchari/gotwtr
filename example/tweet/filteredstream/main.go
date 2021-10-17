@@ -10,7 +10,7 @@ import (
 func main() {
 	client := gotwtr.New("key")
 	_, err := client.AddOrDeleteRules(context.Background(), &gotwtr.AddOrDeleteJSONBody{
-		Add: []*gotwtr.Add{
+		Add: []*gotwtr.AddRule{
 			{
 				Value: "puppy has:media",
 				Tag:   "puppies with media",
@@ -37,7 +37,7 @@ func main() {
 
 	// delete Stream rules
 	_, err = client.AddOrDeleteRules(context.Background(), &gotwtr.AddOrDeleteJSONBody{
-		Delete: &gotwtr.Delete{
+		Delete: &gotwtr.DeleteRule{
 			IDs: ids,
 		},
 	})

@@ -11,8 +11,9 @@ type client struct {
 }
 
 const (
-	tweetLookUpMaxIDs         = 100
-	tweetSearchMaxQueryLength = 512
+	filteredStreamRuleMaxLength = 512
+	tweetLookUpMaxIDs           = 100
+	tweetSearchMaxQueryLength   = 512
 )
 
 type Client interface {

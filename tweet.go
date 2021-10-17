@@ -257,16 +257,16 @@ type RetrieveStreamRulesMeta struct {
 }
 
 type AddOrDeleteJSONBody struct {
-	Add    []*Add  `json:"add,omitempty"`
-	Delete *Delete `json:"delete,omitempty"`
+	Add    []*AddRule  `json:"add,omitempty"`
+	Delete *DeleteRule `json:"delete,omitempty"`
 }
 
-type Add struct {
+type AddRule struct {
 	Value string `json:"value"`
 	Tag   string `json:"tag,omitempty"`
 }
 
-type Delete struct {
+type DeleteRule struct {
 	IDs []string `json:"ids"`
 }
 
