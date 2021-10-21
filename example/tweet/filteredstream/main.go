@@ -3,11 +3,11 @@ package main
 import (
 	"context"
 	"fmt"
-
 	"github.com/sivchari/gotwtr"
 )
 
 func main() {
+	//client := gotwtr.New("key")
 	client := gotwtr.New("key")
 	_, err := client.AddOrDeleteRules(context.Background(), &gotwtr.AddOrDeleteJSONBody{
 		Add: []*gotwtr.AddRule{
@@ -22,6 +22,16 @@ func main() {
 	})
 	if err != nil {
 		panic(err)
+	}
+
+	ch := make(chan gotwtr.ConnectToStreamResponse)
+	err = client.ConnectToStream(context.Background(), ch)
+	if err != nil {
+		panic(err)
+	}
+
+	for resp := range ch {
+		fmt.Println(resp.Tweet.Text)
 	}
 
 	// retrieve Stream rules

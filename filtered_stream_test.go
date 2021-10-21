@@ -416,6 +416,7 @@ func Test_AddOrDeleteRules(t *testing.T) {
 	}
 }
 
+/*
 func Test_ConnectToStream(t *testing.T) {
 	type args struct {
 		ctx    context.Context
@@ -480,3 +481,4 @@ func Test_ConnectToStream(t *testing.T) {
 		})
 	}
 }
+*/

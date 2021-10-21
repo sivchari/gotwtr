@@ -1,6 +1,7 @@
 package gotwtr
 
 import (
+	"bufio"
 	"bytes"
 	"context"
 	"encoding/json"
@@ -113,10 +114,10 @@ func addOrDeleteRules(ctx context.Context, c *client, body *AddOrDeleteJSONBody,
 	return &addOrDelete, nil
 }
 
-func connectToStream(ctx context.Context, c *client, opt ...*ConnectToStreamOption) (*ConnectToStreamResponse, error) {
+func connectToStream(ctx context.Context, c *client, ch chan<- ConnectToStreamResponse, opt ...*ConnectToStreamOption) error {
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, filteredStream, nil)
 	if err != nil {
-		return nil, fmt.Errorf("connect to stream new request with ctx: %w", err)
+		return fmt.Errorf("connect to stream new request with ctx: %w", err)
 	}
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.bearerToken))
 
@@ -127,27 +128,40 @@ func connectToStream(ctx context.Context, c *client, opt ...*ConnectToStreamOpti
 	case 1:
 		topt = *opt[0]
 	default:
-		return nil, errors.New("connect to stream: only one option is allowed")
+		return errors.New("connect to stream: only one option is allowed")
 	}
 	topt.addQuery(req)
 
 	resp, err := c.client.Do(req)
 	if err != nil {
-		return nil, fmt.Errorf("connect to stream: %w", err)
+		return fmt.Errorf("connect to stream: %w", err)
 	}
-	defer resp.Body.Close()
 
-	var connectToStream ConnectToStreamResponse
-	if err := json.NewDecoder(resp.Body).Decode(&connectToStream); err != nil {
-		return nil, fmt.Errorf("connect to stream decode: %w", err)
-	}
+	scanner := bufio.NewScanner(resp.Body)
+	go func() {
+		defer resp.Body.Close()
+		defer close(ch)
+		for scanner.Scan() {
+			var connectToStream ConnectToStreamResponse
+			body := scanner.Bytes()
+			if len(body) == 0 {
+				continue
+			}
+			if err := json.Unmarshal(body, &connectToStream); err != nil {
+				fmt.Printf("connect to stream decode: %s", err)
+				continue
+			}
+			ch <- connectToStream
+		}
+	}()
+
 	if resp.StatusCode != http.StatusOK {
-		return &connectToStream, &HTTPError{
+		return &HTTPError{
 			APIName: "connect to stream",
 			Status:  resp.Status,
 			URL:     req.URL.String(),
 		}
 	}
 
-	return &connectToStream, nil
+	return nil
 }
