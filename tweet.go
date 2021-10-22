@@ -292,7 +292,7 @@ type AddOrDeleteMetaSummary struct {
 
 type ConnectToStreamResponse struct {
 	Tweet         *Tweet              `json:"data"`
-	Includes      []*TweetIncludes    `json:"includes,omitempty"`
+	Includes      *TweetIncludes      `json:"includes,omitempty"`
 	Errors        []*APIResponseError `json:"errors,omitempty"`
 	MatchingRules []*MatchingRule     `json:"matching_rules"`
 }
