@@ -3,11 +3,11 @@ package main
 import (
 	"context"
 	"fmt"
+
 	"github.com/sivchari/gotwtr"
 )
 
 func main() {
-	//client := gotwtr.New("key")
 	client := gotwtr.New("key")
 	_, err := client.AddOrDeleteRules(context.Background(), &gotwtr.AddOrDeleteJSONBody{
 		Add: []*gotwtr.AddRule{

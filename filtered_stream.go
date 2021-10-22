@@ -137,8 +137,16 @@ func connectToStream(ctx context.Context, c *client, ch chan<- ConnectToStreamRe
 		return fmt.Errorf("connect to stream: %w", err)
 	}
 
+	if resp.StatusCode != http.StatusOK {
+		return &HTTPError{
+			APIName: "connect to stream",
+			Status:  resp.Status,
+			URL:     req.URL.String(),
+		}
+	}
+
 	scanner := bufio.NewScanner(resp.Body)
-	go func() {
+	go func(resp *http.Response) {
 		defer resp.Body.Close()
 		defer close(ch)
 		for scanner.Scan() {
@@ -153,15 +161,7 @@ func connectToStream(ctx context.Context, c *client, ch chan<- ConnectToStreamRe
 			}
 			ch <- connectToStream
 		}
-	}()
-
-	if resp.StatusCode != http.StatusOK {
-		return &HTTPError{
-			APIName: "connect to stream",
-			Status:  resp.Status,
-			URL:     req.URL.String(),
-		}
-	}
+	}(resp)
 
 	return nil
 }
