@@ -27,7 +27,7 @@ func main() {
 	ch := make(chan gotwtr.ConnectToStreamResponse)
 	errCh := make(chan error)
 	client.ConnectToStream(context.Background(), ch, errCh)
-	for {
+	for i := 0; i < 10; i++ {
 		select {
 		case resp, ok := <-ch:
 			if ok {
@@ -37,7 +37,6 @@ func main() {
 			}
 		case err := <-errCh:
 			panic(err)
-			break
 		}
 	}
 
