@@ -251,3 +251,7 @@ type DeleteRetweetResponse struct {
 type Retweeted struct {
 	Retweeted bool `json:"retweeted"`
 }
+
+type TweetBody struct {
+	TweetID string `json:"tweet_id"`
+}

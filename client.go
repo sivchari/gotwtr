@@ -18,9 +18,11 @@ const (
 type Client interface {
 	// CountsFullArchiveTweet(ctx context.Context, query string, opt ...*TweetCountsOption) (*TweetCountsResponse, error)
 	CountsRecentTweet(ctx context.Context, query string, opt ...*TweetCountsOption) (*TweetCountsResponse, error)
+	DeleteRetweet(ctx context.Context, id string, stid string) (*DeleteRetweetResponse, error)
 	LookUpSpaceByID(ctx context.Context, id string, opt ...*SpaceLookUpOption) (*SpaceLookUpByIDResponse, error)
 	LookUpTweets(ctx context.Context, ids []string, opt ...*TweetLookUpOption) (*TweetLookUpResponse, error)
 	LookUpTweetByID(ctx context.Context, id string, opt ...*TweetLookUpOption) (*TweetLookUpByIDResponse, error)
+	PostRetweet(ctx context.Context, uid string, tid string) (*PostRetweetResponse, error)
 	RetweetsLookup(ctx context.Context, id string, opt ...*RetweetsLookupOpts) (*RetweetsLookupResponse, error)
 	SampledStream(ctx context.Context, opt ...*SampledStreamOpts) (*SampledStreamResponse, error)
 	// SearchFullArchiveTweets(ctx context.Context, query string, opt ...*TweetSearchOption) (*TweetSearchResponse, error)
@@ -28,8 +30,6 @@ type Client interface {
 	SearchSpaces(ctx context.Context, query string, opt ...*SearchSpacesOption) (*SearchSpacesResponse, error)
 	UserMentionTimeline(ctx context.Context, id string, opt ...*UserMentionTimelineOpts) (*UserMentionTimelineResponse, error)
 	UserTweetTimeline(ctx context.Context, id string, opt ...*UserTweetTimelineOpts) (*UserTweetTimelineResponse, error)
-	PostRetweet(ctx context.Context, uid string, tid string) (*PostRetweetResponse, error)
-	DeleteRetweet(ctx context.Context, id string, stid string) (*DeleteRetweetResponse, error)
 }
 
 var _ Client = (*client)(nil)
@@ -63,6 +63,10 @@ func (c *client) CountsRecentTweet(ctx context.Context, query string, opt ...*Tw
 	return countsRecentTweet(ctx, c, query, opt...)
 }
 
+func (c *client) DeleteRetweet(ctx context.Context, id string, stid string) (*DeleteRetweetResponse, error) {
+	return deleteRetweet(ctx, c, id, stid)
+}
+
 func (c *client) LookUpSpaceByID(ctx context.Context, id string, opt ...*SpaceLookUpOption) (*SpaceLookUpByIDResponse, error) {
 	return lookUpSpaceByID(ctx, c, id, opt...)
 }
@@ -73,6 +77,10 @@ func (c *client) LookUpTweets(ctx context.Context, ids []string, opt ...*TweetLo
 
 func (c *client) LookUpTweetByID(ctx context.Context, id string, opt ...*TweetLookUpOption) (*TweetLookUpByIDResponse, error) {
 	return lookUpByID(ctx, c, id, opt...)
+}
+
+func (c *client) PostRetweet(ctx context.Context, uid string, tid string) (*PostRetweetResponse, error) {
+	return postRetweet(ctx, c, uid, tid)
 }
 
 func (c *client) RetweetsLookup(ctx context.Context, id string, opt ...*RetweetsLookupOpts) (*RetweetsLookupResponse, error) {
@@ -101,12 +109,4 @@ func (c *client) UserMentionTimeline(ctx context.Context, id string, opt ...*Use
 
 func (c *client) UserTweetTimeline(ctx context.Context, id string, opt ...*UserTweetTimelineOpts) (*UserTweetTimelineResponse, error) {
 	return userTweetTimeline(ctx, c, id, opt...)
-}
-
-func (c *client) PostRetweet(ctx context.Context, uid string, tid string) (*PostRetweetResponse, error) {
-	return postRetweet(ctx, c, uid, tid)
-}
-
-func (c *client) DeleteRetweet(ctx context.Context, id string, stid string) (*DeleteRetweetResponse, error) {
-	return deleteRetweet(ctx, c, id, stid)
 }
