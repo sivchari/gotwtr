@@ -136,6 +136,7 @@ func connectToStream(ctx context.Context, c *client, ch chan<- ConnectToStreamRe
 	if err != nil {
 		return fmt.Errorf("connect to stream: %w", err)
 	}
+	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
 		return &HTTPError{
@@ -150,7 +151,6 @@ func connectToStream(ctx context.Context, c *client, ch chan<- ConnectToStreamRe
 	go func(ctx context.Context, resp *http.Response) {
 		var connectToStream ConnectToStreamResponse
 		defer close(ch)
-		defer resp.Body.Close()
 		for scanner.Scan() {
 			body := scanner.Bytes()
 			if len(body) == 0 {
