@@ -25,15 +25,20 @@ func main() {
 	}
 
 	ch := make(chan gotwtr.ConnectToStreamResponse)
-	ctx, cancel := context.WithCancel(context.Background())
-	err = client.ConnectToStream(ctx, ch)
-	if err != nil {
-		panic(err)
-	}
-
-	defer cancel()
-	for resp := range ch {
-		fmt.Println(resp.Tweet.Text)
+	errCh := make(chan error)
+	client.ConnectToStream(context.Background(), ch, errCh)
+	for {
+		select {
+		case resp, ok := <-ch:
+			if ok {
+				fmt.Println(resp.Tweet.Text)
+			} else {
+				break
+			}
+		case err := <-errCh:
+			panic(err)
+			break
+		}
 	}
 
 	// retrieve Stream rules

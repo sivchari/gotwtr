@@ -114,38 +114,37 @@ func addOrDeleteRules(ctx context.Context, c *client, body *AddOrDeleteJSONBody,
 	return &addOrDelete, nil
 }
 
-func connectToStream(ctx context.Context, c *client, ch chan<- ConnectToStreamResponse, opt ...*ConnectToStreamOption) error {
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, filteredStream, nil)
-	if err != nil {
-		return fmt.Errorf("connect to stream new request with ctx: %w", err)
-	}
-	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.bearerToken))
-
-	var topt ConnectToStreamOption
-	switch len(opt) {
-	case 0:
-		// do nothing
-	case 1:
-		topt = *opt[0]
-	default:
-		return errors.New("connect to stream: only one option is allowed")
-	}
-	topt.addQuery(req)
-
+func connectToStream(ctx context.Context, c *client, ch chan<- ConnectToStreamResponse, errCh chan<- error, opt ...*ConnectToStreamOption) {
 	go func() {
+		req, err := http.NewRequestWithContext(ctx, http.MethodGet, filteredStream, nil)
+		if err != nil {
+			errCh <- fmt.Errorf("connect to stream new request with ctx: %w", err)
+		}
+		req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.bearerToken))
+
+		var topt ConnectToStreamOption
+		switch len(opt) {
+		case 0:
+			// do nothing
+		case 1:
+			topt = *opt[0]
+		default:
+			errCh <- errors.New("connect to stream: only one option is allowed")
+		}
+		topt.addQuery(req)
+
 		resp, err := c.client.Do(req)
 		if err != nil {
-
-			return //fmt.Errorf("connect to stream: %w", err)
+			errCh <- fmt.Errorf("connect to stream: %w", err)
 		}
 		defer resp.Body.Close()
 
 		if resp.StatusCode != http.StatusOK {
-			return /*&HTTPError{
+			errCh <- &HTTPError{
 				APIName: "connect to stream",
 				Status:  resp.Status,
 				URL:     req.URL.String(),
-			}*/
+			}
 		}
 
 		scanner := bufio.NewScanner(resp.Body)
@@ -157,7 +156,7 @@ func connectToStream(ctx context.Context, c *client, ch chan<- ConnectToStreamRe
 				continue
 			}
 			if err := json.Unmarshal(body, &connectToStream); err != nil {
-				return //fmt.Errorf("connect to stream decode: %w", err)
+				errCh <- fmt.Errorf("connect to stream decode: %w", err)
 			}
 			select {
 			case ch <- connectToStream:
@@ -167,6 +166,4 @@ func connectToStream(ctx context.Context, c *client, ch chan<- ConnectToStreamRe
 			}
 		}
 	}()
-
-	return nil
 }

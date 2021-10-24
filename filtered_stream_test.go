@@ -416,7 +416,6 @@ func Test_AddOrDeleteRules(t *testing.T) {
 	}
 }
 
-/*
 func Test_ConnectToStream(t *testing.T) {
 	type args struct {
 		ctx    context.Context
@@ -429,6 +428,33 @@ func Test_ConnectToStream(t *testing.T) {
 		want    *gotwtr.ConnectToStreamResponse
 		wantErr bool
 	}{
+		{
+			name: "200 ok",
+			args: args{
+				ctx: context.Background(),
+				client: mockHTTPClient(func(request *http.Request) *http.Response {
+					body := `{"data":{"id":"1228393702244134912","text":"What did the developer write in their Valentine’s card?\n  \nwhile(true) {\n    I = Love(You);  \n}"},"matching_rules":[{"id":"1452189330902970370","tag":"has:media puppies with media"}]}`
+					return &http.Response{
+						StatusCode: http.StatusOK,
+						Body:       io.NopCloser(strings.NewReader(body)),
+					}
+				}),
+				opt: []*gotwtr.ConnectToStreamOption{},
+			},
+			want: &gotwtr.ConnectToStreamResponse{
+				Tweet: &gotwtr.Tweet{
+					ID:   "1228393702244134912",
+					Text: "What did the developer write in their Valentine’s card?\n  \nwhile(true) {\n    I = Love(You);  \n}",
+				},
+				MatchingRules: []*gotwtr.MatchingRule{
+					{
+						ID:  "1452189330902970370",
+						Tag: "has:media puppies with media",
+					},
+				},
+			},
+			wantErr: false,
+		},
 		{
 			name: "429 - Too Many Requests",
 			args: args{
@@ -468,17 +494,22 @@ func Test_ConnectToStream(t *testing.T) {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
+			ch := make(chan gotwtr.ConnectToStreamResponse)
+			errCh := make(chan error)
 			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
-			got, err := c.ConnectToStream(tt.args.ctx, tt.args.opt...)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("connectToStream() error = %v, wantErr %v", err, tt.wantErr)
-				return
-			}
-			if diff := cmp.Diff(got, tt.want); diff != "" {
-				t.Errorf("connectToStream() mismatch (-want +got):\n%s", diff)
-				return
+			c.ConnectToStream(tt.args.ctx, ch, errCh, tt.args.opt...)
+			select {
+			case got := <-ch:
+				if diff := cmp.Diff(&got, tt.want); diff != "" {
+					t.Errorf("connectToStream() mismatch (-want +got):\n%s", diff)
+					return
+				}
+			case err := <-errCh:
+				if (err != nil) != tt.wantErr {
+					t.Errorf("connectToStream() error = %v, wantErr %v", err, tt.wantErr)
+					return
+				}
 			}
 		})
 	}
 }
-*/

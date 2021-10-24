@@ -359,13 +359,13 @@ func (t *AddOrDeleteRulesOption) addQuery(req *http.Request) {
 }
 
 type ConnectToStreamOption struct {
-	BackfillMinutes int
-	Expansions      []Expansion
-	MediaFields     []MediaField
-	PlaceFields     []PlaceField
-	PollFields      []PollField
-	TweetFields     []TweetField
-	UserFields      []UserField
+	// BackfillMinutes int `json:"backfill_minutes"` // This feature is currently only available to the Academic Research product track.
+	Expansions  []Expansion
+	MediaFields []MediaField
+	PlaceFields []PlaceField
+	PollFields  []PollField
+	TweetFields []TweetField
+	UserFields  []UserField
 }
 
 func (t *ConnectToStreamOption) addQuery(req *http.Request) {
