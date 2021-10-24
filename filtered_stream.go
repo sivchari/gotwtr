@@ -132,23 +132,23 @@ func connectToStream(ctx context.Context, c *client, ch chan<- ConnectToStreamRe
 	}
 	topt.addQuery(req)
 
-	resp, err := c.client.Do(req)
-	if err != nil {
-		return fmt.Errorf("connect to stream: %w", err)
-	}
-	defer resp.Body.Close()
+	go func() {
+		resp, err := c.client.Do(req)
+		if err != nil {
 
-	if resp.StatusCode != http.StatusOK {
-		return &HTTPError{
-			APIName: "connect to stream",
-			Status:  resp.Status,
-			URL:     req.URL.String(),
+			return //fmt.Errorf("connect to stream: %w", err)
 		}
-	}
+		defer resp.Body.Close()
 
-	scanner := bufio.NewScanner(resp.Body)
+		if resp.StatusCode != http.StatusOK {
+			return /*&HTTPError{
+				APIName: "connect to stream",
+				Status:  resp.Status,
+				URL:     req.URL.String(),
+			}*/
+		}
 
-	go func(ctx context.Context, resp *http.Response) {
+		scanner := bufio.NewScanner(resp.Body)
 		var connectToStream ConnectToStreamResponse
 		defer close(ch)
 		for scanner.Scan() {
@@ -157,7 +157,7 @@ func connectToStream(ctx context.Context, c *client, ch chan<- ConnectToStreamRe
 				continue
 			}
 			if err := json.Unmarshal(body, &connectToStream); err != nil {
-				fmt.Errorf("connect to stream decode: %w", err)
+				return //fmt.Errorf("connect to stream decode: %w", err)
 			}
 			select {
 			case ch <- connectToStream:
@@ -166,8 +166,7 @@ func connectToStream(ctx context.Context, c *client, ch chan<- ConnectToStreamRe
 				break
 			}
 		}
-		return
-	}(ctx, resp)
+	}()
 
 	return nil
 }
