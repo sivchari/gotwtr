@@ -25,11 +25,13 @@ func main() {
 	}
 
 	ch := make(chan gotwtr.ConnectToStreamResponse)
-	err = client.ConnectToStream(context.Background(), ch)
+	ctx, cancel := context.WithCancel(context.Background())
+	err = client.ConnectToStream(ctx, ch)
 	if err != nil {
 		panic(err)
 	}
 
+	defer cancel()
 	for resp := range ch {
 		fmt.Println(resp.Tweet.Text)
 	}

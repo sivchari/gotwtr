@@ -146,22 +146,28 @@ func connectToStream(ctx context.Context, c *client, ch chan<- ConnectToStreamRe
 	}
 
 	scanner := bufio.NewScanner(resp.Body)
-	go func(resp *http.Response) {
-		defer resp.Body.Close()
+
+	go func(ctx context.Context, resp *http.Response) {
+		var connectToStream ConnectToStreamResponse
 		defer close(ch)
+		defer resp.Body.Close()
 		for scanner.Scan() {
-			var connectToStream ConnectToStreamResponse
 			body := scanner.Bytes()
 			if len(body) == 0 {
 				continue
 			}
 			if err := json.Unmarshal(body, &connectToStream); err != nil {
-				fmt.Printf("connect to stream decode: %s", err)
-				continue
+				fmt.Errorf("connect to stream decode: %w", err)
 			}
-			ch <- connectToStream
+			select {
+			case ch <- connectToStream:
+				continue
+			case <-ctx.Done():
+				break
+			}
 		}
-	}(resp)
+		return
+	}(ctx, resp)
 
 	return nil
 }
