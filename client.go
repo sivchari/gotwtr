@@ -11,6 +11,7 @@ type client struct {
 }
 
 const (
+	spaceLookUpMaxIDs         = 100
 	tweetLookUpMaxIDs         = 100
 	tweetSearchMaxQueryLength = 512
 )
@@ -18,6 +19,7 @@ const (
 type Client interface {
 	// CountsFullArchiveTweet(ctx context.Context, query string, opt ...*TweetCountsOption) (*TweetCountsResponse, error)
 	CountsRecentTweet(ctx context.Context, query string, opt ...*TweetCountsOption) (*TweetCountsResponse, error)
+	LookUpSpaces(ctx context.Context, ids []string, opt ...*SpaceLookUpOption) (*SpaceLookUpResponse, error)
 	LookUpSpaceByID(ctx context.Context, id string, opt ...*SpaceLookUpOption) (*SpaceLookUpByIDResponse, error)
 	LookUpTweets(ctx context.Context, ids []string, opt ...*TweetLookUpOption) (*TweetLookUpResponse, error)
 	LookUpTweetByID(ctx context.Context, id string, opt ...*TweetLookUpOption) (*TweetLookUpByIDResponse, error)
@@ -61,16 +63,20 @@ func (c *client) CountsRecentTweet(ctx context.Context, query string, opt ...*Tw
 	return countsRecentTweet(ctx, c, query, opt...)
 }
 
+func (c *client) LookUpSpaces(ctx context.Context, ids []string, opt ...*SpaceLookUpOption) (*SpaceLookUpResponse, error) {
+	return lookUpSpaces(ctx, c, ids, opt...)
+}
+
 func (c *client) LookUpSpaceByID(ctx context.Context, id string, opt ...*SpaceLookUpOption) (*SpaceLookUpByIDResponse, error) {
 	return lookUpSpaceByID(ctx, c, id, opt...)
 }
 
 func (c *client) LookUpTweets(ctx context.Context, ids []string, opt ...*TweetLookUpOption) (*TweetLookUpResponse, error) {
-	return lookUp(ctx, c, ids, opt...)
+	return lookUpTweets(ctx, c, ids, opt...)
 }
 
 func (c *client) LookUpTweetByID(ctx context.Context, id string, opt ...*TweetLookUpOption) (*TweetLookUpByIDResponse, error) {
-	return lookUpByID(ctx, c, id, opt...)
+	return lookUpTweetByID(ctx, c, id, opt...)
 }
 
 func (c *client) RetweetsLookup(ctx context.Context, id string, opt ...*RetweetsLookupOpts) (*RetweetsLookupResponse, error) {
