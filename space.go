@@ -75,3 +75,9 @@ type SpaceLookUpByIDResponse struct {
 	Detail   string              `json:"detail,omitempty"`
 	Type     string              `json:"type,omitempty"`
 }
+
+type SpaceLookUpResponse struct {
+	Spaces   []*Space            `json:"data,omitempty"`
+	Includes *SpaceIncludes      `json:"includes,omitempty"`
+	Errors   []*APIResponseError `json:"errors,omitempty"`
+}
