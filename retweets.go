@@ -13,7 +13,7 @@ func retweetsLookup(ctx context.Context, c *client, id string, opt ...*RetweetsL
 	if id == "" {
 		return nil, errors.New("retweets lookup by id: id parameter is required")
 	}
-	retweetsLookupPath := tweetLookUp + "/" + id + "/retweeted_by"
+	retweetsLookupPath := baseTweetPath + "/" + id + "/retweeted_by"
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, retweetsLookupPath, nil)
 	if err != nil {
@@ -53,20 +53,17 @@ func retweetsLookup(ctx context.Context, c *client, id string, opt ...*RetweetsL
 	return &retweetsLookup, nil
 }
 
-type Body struct {
-	TweetID string `json:"tweet_id"`
-}
-
+// uid = "user_id" tid = "tweet_id"
 func postRetweet(ctx context.Context, c *client, uid string, tid string) (*PostRetweetResponse, error) {
 	if uid == "" {
 		return nil, errors.New("post retweet by uid: uid parameter is required")
 	}
-	postRetweetPath := timeline + "/" + uid + "/retweets"
+	postRetweetPath := baseUserPath + "/" + uid + "/retweets"
 
 	if tid == "" {
 		return nil, errors.New("post retweet by tid: tid parameter is required")
 	}
-	body := &Body{
+	body := &TweetBody{
 		TweetID: tid,
 	}
 	jsonStr, err := json.Marshal(body)
@@ -110,7 +107,7 @@ func deleteRetweet(ctx context.Context, c *client, id string, stid string) (*Del
 	if stid == "" {
 		return nil, errors.New("delete retweet by source_tweet_id: source_tweet_id parameter is required")
 	}
-	deleteRetweetPath := timeline + "/" + id + "/retweets/" + stid
+	deleteRetweetPath := baseUserPath + "/" + id + "/retweets/" + stid
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodDelete, deleteRetweetPath, nil)
 	if err != nil {

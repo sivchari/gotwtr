@@ -241,11 +241,13 @@ type RetweetsLookupMeta struct {
 }
 
 type PostRetweetResponse struct {
-	Retweeted *Retweeted `json:"data"`
+	Retweeted *Retweeted          `json:"data,omitempty"`
+	Errors    []*APIResponseError `json:"errors,omitempty"`
 }
 
 type DeleteRetweetResponse struct {
-	Retweeted *Retweeted `json:"data"`
+	Retweeted *Retweeted          `json:"data,omitempty"`
+	Errors    []*APIResponseError `json:"errors,omitempty"`
 }
 
 type Retweeted struct {

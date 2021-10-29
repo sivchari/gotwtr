@@ -160,6 +160,47 @@ func Test_retweetsLookup(t *testing.T) {
 			},
 			wantErr: false,
 		},
+		{
+			name: "404 not found",
+			args: args{
+				ctx: context.Background(),
+				client: mockHTTPClient(func(req *http.Request) *http.Response {
+					body := `{
+						"errors":[
+							{
+								"value":"11111111111111111",
+								"detail":"Could not find tweet with id: [11111111111111111].",
+								"title":"Not Found Error",
+								"resource_type":"tweet",
+								"parameter":"id",
+								"resource_id":"11111111111111111",
+								"type":"https://api.twitter.com/2/problems/resource-not-found"
+							}
+						]
+					}`
+					return &http.Response{
+						StatusCode: http.StatusNotFound,
+						Body:       io.NopCloser(strings.NewReader(body)),
+					}
+				}),
+				id: "11111111111111111",
+			},
+			want: &gotwtr.RetweetsLookupResponse{
+				Users: nil,
+				Errors: []*gotwtr.APIResponseError{
+					{
+						Value:        "11111111111111111",
+						Detail:       "Could not find tweet with id: [11111111111111111].",
+						Title:        "Not Found Error",
+						ResourceType: "tweet",
+						Parameter:    "id",
+						ResourceID:   "11111111111111111",
+						Type:         "https://api.twitter.com/2/problems/resource-not-found",
+					},
+				},
+			},
+			wantErr: true,
+		},
 	}
 	for i, tt := range tests {
 		tt := tt
@@ -220,6 +261,35 @@ func Test_postRetweet(t *testing.T) {
 			},
 			wantErr: false,
 		},
+		{
+			name: "400 request failed",
+			args: args{
+				ctx: context.Background(),
+				client: mockHTTPClient(func(req *http.Request) *http.Response {
+					body := `{
+						"errors": [
+							{
+								"message":"Sorry, that page does not exist, code:34"
+							}
+						]
+					}`
+					return &http.Response{
+						StatusCode: http.StatusBadRequest,
+						Body:       io.NopCloser(strings.NewReader(body)),
+					}
+				}),
+				uid: "2244994945",
+				tid: "1228393702244134912",
+			},
+			want: &gotwtr.PostRetweetResponse{
+				Errors: []*gotwtr.APIResponseError{
+					{
+						Message: "Sorry, that page does not exist, code:34",
+					},
+				},
+			},
+			wantErr: true,
+		},
 	}
 	for i, tt := range tests {
 		tt := tt
@@ -279,6 +349,35 @@ func Test_deleteRetweet(t *testing.T) {
 				},
 			},
 			wantErr: false,
+		},
+		{
+			name: "400 request failed",
+			args: args{
+				ctx: context.Background(),
+				client: mockHTTPClient(func(req *http.Request) *http.Response {
+					body := `{
+						"errors": [
+							{
+								"message":"Sorry, that page does not exist, code:34"
+							}
+						]
+					}`
+					return &http.Response{
+						StatusCode: http.StatusBadRequest,
+						Body:       io.NopCloser(strings.NewReader(body)),
+					}
+				}),
+				id:   "2244994945",
+				stid: "1228393702244134912",
+			},
+			want: &gotwtr.DeleteRetweetResponse{
+				Errors: []*gotwtr.APIResponseError{
+					{
+						Message: "Sorry, that page does not exist, code:34",
+					},
+				},
+			},
+			wantErr: true,
 		},
 	}
 	for i, tt := range tests {
