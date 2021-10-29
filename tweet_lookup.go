@@ -8,7 +8,7 @@ import (
 	"net/http"
 )
 
-func lookUp(ctx context.Context, c *client, ids []string, opt ...*TweetLookUpOption) (*TweetLookUpResponse, error) {
+func lookUpTweets(ctx context.Context, c *client, ids []string, opt ...*TweetLookUpOption) (*TweetLookUpResponse, error) {
 	// check ids
 	switch {
 	case len(ids) == 0:
@@ -65,7 +65,7 @@ func lookUp(ctx context.Context, c *client, ids []string, opt ...*TweetLookUpOpt
 	return &tweet, nil
 }
 
-func lookUpByID(ctx context.Context, c *client, id string, opt ...*TweetLookUpOption) (*TweetLookUpByIDResponse, error) {
+func lookUpTweetByID(ctx context.Context, c *client, id string, opt ...*TweetLookUpOption) (*TweetLookUpByIDResponse, error) {
 	if id == "" {
 		return nil, errors.New("tweet lookup by id: id parameter is required")
 	}
