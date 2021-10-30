@@ -160,6 +160,47 @@ func Test_retweetsLookup(t *testing.T) {
 			},
 			wantErr: false,
 		},
+		{
+			name: "404 not found",
+			args: args{
+				ctx: context.Background(),
+				client: mockHTTPClient(func(req *http.Request) *http.Response {
+					body := `{
+						"errors":[
+							{
+								"value":"11111111111111111",
+								"detail":"Could not find tweet with id: [11111111111111111].",
+								"title":"Not Found Error",
+								"resource_type":"tweet",
+								"parameter":"id",
+								"resource_id":"11111111111111111",
+								"type":"https://api.twitter.com/2/problems/resource-not-found"
+							}
+						]
+					}`
+					return &http.Response{
+						StatusCode: http.StatusNotFound,
+						Body:       io.NopCloser(strings.NewReader(body)),
+					}
+				}),
+				id: "11111111111111111",
+			},
+			want: &gotwtr.RetweetsLookupResponse{
+				Users: nil,
+				Errors: []*gotwtr.APIResponseError{
+					{
+						Value:        "11111111111111111",
+						Detail:       "Could not find tweet with id: [11111111111111111].",
+						Title:        "Not Found Error",
+						ResourceType: "tweet",
+						Parameter:    "id",
+						ResourceID:   "11111111111111111",
+						Type:         "https://api.twitter.com/2/problems/resource-not-found",
+					},
+				},
+			},
+			wantErr: true,
+		},
 	}
 	for i, tt := range tests {
 		tt := tt
@@ -173,6 +214,184 @@ func Test_retweetsLookup(t *testing.T) {
 			}
 			if diff := cmp.Diff(got, tt.want); diff != "" {
 				t.Errorf("RetweetsLookup() index = %v mismatch (-want +got):\n%s", i, diff)
+				return
+			}
+		})
+	}
+}
+
+func Test_postRetweet(t *testing.T) {
+	type args struct {
+		ctx    context.Context
+		client *http.Client
+		uid    string
+		tid    string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    *gotwtr.PostRetweetResponse
+		wantErr bool
+	}{
+		{
+			name: "200 success",
+			args: args{
+				ctx: context.Background(),
+				client: mockHTTPClient(func(req *http.Request) *http.Response {
+					if req.Method != http.MethodPost {
+						t.Fatalf("the method is not correct got %s want %s", req.Method, http.MethodPost)
+					}
+					body := `{
+						"data": {
+							"retweeted": true
+						}
+					}`
+					return &http.Response{
+						StatusCode: http.StatusOK,
+						Body:       io.NopCloser(strings.NewReader(body)),
+					}
+				}),
+				uid: "2244994945",
+				tid: "1228393702244134912",
+			},
+			want: &gotwtr.PostRetweetResponse{
+				Retweeted: &gotwtr.Retweeted{
+					Retweeted: true,
+				},
+			},
+			wantErr: false,
+		},
+		{
+			name: "400 request failed",
+			args: args{
+				ctx: context.Background(),
+				client: mockHTTPClient(func(req *http.Request) *http.Response {
+					body := `{
+						"errors": [
+							{
+								"message":"Sorry, that page does not exist, code:34"
+							}
+						]
+					}`
+					return &http.Response{
+						StatusCode: http.StatusBadRequest,
+						Body:       io.NopCloser(strings.NewReader(body)),
+					}
+				}),
+				uid: "2244994945",
+				tid: "1228393702244134912",
+			},
+			want: &gotwtr.PostRetweetResponse{
+				Errors: []*gotwtr.APIResponseError{
+					{
+						Message: "Sorry, that page does not exist, code:34",
+					},
+				},
+			},
+			wantErr: true,
+		},
+	}
+	for i, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
+			got, err := c.PostRetweet(tt.args.ctx, tt.args.uid, tt.args.tid)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("PostRetweet() index = %v error = %v, wantErr %v", i, err, tt.wantErr)
+				return
+			}
+			if diff := cmp.Diff(got, tt.want); diff != "" {
+				t.Errorf("PostRetweet() index = %v mismatch (-want +got):\n%s", i, diff)
+				return
+			}
+		})
+	}
+}
+
+func Test_deleteRetweet(t *testing.T) {
+	type args struct {
+		ctx    context.Context
+		client *http.Client
+		id     string
+		stid   string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    *gotwtr.DeleteRetweetResponse
+		wantErr bool
+	}{
+		{
+			name: "200 success",
+			args: args{
+				ctx: context.Background(),
+				client: mockHTTPClient(func(req *http.Request) *http.Response {
+					if req.Method != http.MethodDelete {
+						t.Fatalf("the method is not correct got %s want %s", req.Method, http.MethodDelete)
+					}
+					body := `{
+						"data": {
+							"retweeted": false
+						}
+					}`
+					return &http.Response{
+						StatusCode: http.StatusOK,
+						Body:       io.NopCloser(strings.NewReader(body)),
+					}
+				}),
+				id:   "2244994945",
+				stid: "1228393702244134912",
+			},
+			want: &gotwtr.DeleteRetweetResponse{
+				Retweeted: &gotwtr.Retweeted{
+					Retweeted: false,
+				},
+			},
+			wantErr: false,
+		},
+		{
+			name: "400 request failed",
+			args: args{
+				ctx: context.Background(),
+				client: mockHTTPClient(func(req *http.Request) *http.Response {
+					body := `{
+						"errors": [
+							{
+								"message":"Sorry, that page does not exist, code:34"
+							}
+						]
+					}`
+					return &http.Response{
+						StatusCode: http.StatusBadRequest,
+						Body:       io.NopCloser(strings.NewReader(body)),
+					}
+				}),
+				id:   "2244994945",
+				stid: "1228393702244134912",
+			},
+			want: &gotwtr.DeleteRetweetResponse{
+				Errors: []*gotwtr.APIResponseError{
+					{
+						Message: "Sorry, that page does not exist, code:34",
+					},
+				},
+			},
+			wantErr: true,
+		},
+	}
+	for i, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
+			got, err := c.DeleteRetweet(tt.args.ctx, tt.args.id, tt.args.stid)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("DeleteRetweet() index = %v error = %v, wantErr %v", i, err, tt.wantErr)
+				return
+			}
+			if diff := cmp.Diff(got, tt.want); diff != "" {
+				t.Errorf("DeleteRetweet() index = %v mismatch (-want +got):\n%s", i, diff)
 				return
 			}
 		})

@@ -239,3 +239,21 @@ type RetweetsLookupResponse struct {
 type RetweetsLookupMeta struct {
 	ResultCount int `json:"result_count"`
 }
+
+type PostRetweetResponse struct {
+	Retweeted *Retweeted          `json:"data,omitempty"`
+	Errors    []*APIResponseError `json:"errors,omitempty"`
+}
+
+type DeleteRetweetResponse struct {
+	Retweeted *Retweeted          `json:"data,omitempty"`
+	Errors    []*APIResponseError `json:"errors,omitempty"`
+}
+
+type Retweeted struct {
+	Retweeted bool `json:"retweeted"`
+}
+
+type TweetBody struct {
+	TweetID string `json:"tweet_id"`
+}
