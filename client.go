@@ -13,6 +13,7 @@ type client struct {
 const (
 	spaceLookUpMaxIDs         = 100
 	tweetLookUpMaxIDs         = 100
+	userLookUpMaxIDs = 100
 	tweetSearchMaxQueryLength = 512
 )
 
@@ -24,6 +25,10 @@ type Client interface {
 	LookUpSpaceByID(ctx context.Context, id string, opt ...*SpaceLookUpOption) (*SpaceLookUpByIDResponse, error)
 	LookUpTweets(ctx context.Context, ids []string, opt ...*TweetLookUpOption) (*TweetLookUpResponse, error)
 	LookUpTweetByID(ctx context.Context, id string, opt ...*TweetLookUpOption) (*TweetLookUpByIDResponse, error)
+	LookUpUsers(ctx context.Context, ids []string, opt ...*UserLookUpOption) (*UserLookUpResponse, error)
+	LookUpUserByID(ctx context.Context, id string, opt ...*UserLookUpOption) (*UserLookUpByIDResponse, error)
+	LookUpUserByUserName(ctx context.Context, name string, opt ...*UserLookUpOption) (*UserLookUpByUserNameResponse, error)
+	LookUpUsersByUserNames(ctx context.Context, names []string, opt ...*UserLookUpOption) (*UsersLookUpByUserNamesResponse, error)
 	PostRetweet(ctx context.Context, uid string, tid string) (*PostRetweetResponse, error)
 	RetweetsLookup(ctx context.Context, id string, opt ...*RetweetsLookupOpts) (*RetweetsLookupResponse, error)
 	SampledStream(ctx context.Context, opt ...*SampledStreamOpts) (*SampledStreamResponse, error)
@@ -83,6 +88,22 @@ func (c *client) LookUpTweets(ctx context.Context, ids []string, opt ...*TweetLo
 
 func (c *client) LookUpTweetByID(ctx context.Context, id string, opt ...*TweetLookUpOption) (*TweetLookUpByIDResponse, error) {
 	return lookUpTweetByID(ctx, c, id, opt...)
+}
+
+func (c *client) LookUpUsers(ctx context.Context, ids []string, opt ...*UserLookUpOption) (*UserLookUpResponse, error) {
+	return lookUpUsers(ctx, c, ids, opt...)
+}
+
+func (c *client) LookUpUserByID(ctx context.Context, id string, opt ...*UserLookUpOption) (*UserLookUpByIDResponse, error) {
+	return lookUpUserByID(ctx, c, id, opt...)
+}
+
+func (c *client) LookUpUserByUserName(ctx context.Context, name string, opt ...*UserLookUpOption) (*UserLookUpByUserNameResponse, error) {
+	return lookUpUserByUserName(ctx, c, name, opt...)
+}
+
+func (c *client) LookUpUsersByUserNames(ctx context.Context, names []string, opt ...*UserLookUpOption) (*UsersLookUpByUserNamesResponse, error) {
+	return lookUpUsersByUserNames(ctx, c, names, opt...)
 }
 
 func (c *client) PostRetweet(ctx context.Context, uid string, tid string) (*PostRetweetResponse, error) {

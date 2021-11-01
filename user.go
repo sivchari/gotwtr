@@ -98,10 +98,37 @@ type UserWithheld struct {
 	CountryCodes []string `json:"country_codes"`
 }
 
-func userFieldsToString(ufs []UserField) []string {
-	slice := make([]string, len(ufs))
-	for i, uf := range ufs {
-		slice[i] = string(uf)
-	}
-	return slice
+type UserIncludes struct {
+	Users  []*User
+	Tweets []*Tweet
+}
+
+type UserLookUpResponse struct {
+	Users    []*User             `json:"data"`
+	Includes *UserIncludes       `json:"includes,omitempty`
+	Errors   []*APIResponseError `json:"errors,omitempty"`
+}
+
+type UserLookUpByIDResponse struct {
+	User     *User               `json:"data"`
+	Includes *UserIncludes       `json:"includes,omitempty"`
+	Errors   []*APIResponseError `json:"errors,omitempty"`
+}
+
+type UserLookUpByUserNameResponse struct {
+	User     *User               `json:"data"`
+	Includes *UserIncludes       `json:"includes,omitempty"`
+	Errors   []*APIResponseError `json:"errors,omitempty"`
+	Title    string              `json:"title,omitempty"`
+	Detail   string              `json:"detail,omitempty"`
+	Type     string              `json:"type,omitempty"`
+}
+
+type UsersLookUpByUserNamesResponse struct {
+	Users    []*User             `json:"data"`
+	Includes *UserIncludes       `json:"includes,omitempty"`
+	Errors   []*APIResponseError `json:"errors,omitempty"`
+	Title    string              `json:"title,omitempty"`
+	Detail   string              `json:"detail,omitempty"`
+	Type     string              `json:"type,omitempty"`
 }
