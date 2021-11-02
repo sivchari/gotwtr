@@ -105,7 +105,7 @@ type UserIncludes struct {
 
 type UserLookUpResponse struct {
 	Users    []*User             `json:"data"`
-	Includes *UserIncludes       `json:"includes,omitempty`
+	Includes *UserIncludes       `json:"includes,omitempty"`
 	Errors   []*APIResponseError `json:"errors,omitempty"`
 }
 

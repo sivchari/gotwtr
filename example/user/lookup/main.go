@@ -26,7 +26,7 @@ func main() {
 	fmt.Println(*u.User)
 
 	// look up users by username
-	uns, err := client.LookUpUsersByUserNames(context.Background(), []string{"username","username2"})
+	uns, err := client.LookUpUsersByUserNames(context.Background(), []string{"username", "username2"})
 	if err != nil {
 		panic(err)
 	}

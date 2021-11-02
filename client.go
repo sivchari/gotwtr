@@ -13,7 +13,7 @@ type client struct {
 const (
 	spaceLookUpMaxIDs         = 100
 	tweetLookUpMaxIDs         = 100
-	userLookUpMaxIDs = 100
+	userLookUpMaxIDs          = 100
 	tweetSearchMaxQueryLength = 512
 )
 
