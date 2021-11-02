@@ -12,17 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: diff_context
-        uses: reviewdog/action-golangci-lint@v2
-        with:
-          golangci_lint_flags: "--config=.golangci.yml"
-          level: error
-          reporter: github-pr-review
-          go_version: ${{ matrix.go-version }}
-          fail_on_error: true
-          filter_mode: diff_context
-  
-      - name: added
+      - name: reviewdog / added
         uses: reviewdog/action-golangci-lint@v2
         with:
           golangci_lint_flags: "--config=.golangci.yml"
