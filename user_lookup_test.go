@@ -693,7 +693,6 @@ func Test_lookUpUserByUserName(t *testing.T) {
 						"title":"Invalid Request",
 						"detail":"One or more parameters to your request was invalid.",
 						"type":"https://api.twitter.com/2/problems/invalid-request"
-						}
 					}`
 					return &http.Response{
 						StatusCode: http.StatusNotFound,
