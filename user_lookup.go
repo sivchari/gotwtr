@@ -111,7 +111,6 @@ func lookUpUserByID(ctx context.Context, c *client, id string, opt ...*UserLookU
 	return &user, nil
 }
 
-// lookup single user by username
 func lookUpUserByUserName(ctx context.Context, c *client, name string, opt ...*UserLookUpOption) (*UserLookUpByUserNameResponse, error) {
 	if name == "" {
 		return nil, errors.New("user lookup by username: name parameter is required")
@@ -158,7 +157,6 @@ func lookUpUserByUserName(ctx context.Context, c *client, name string, opt ...*U
 	return &user, nil
 }
 
-// lookup multiple users by user names
 func lookUpUsersByUserNames(ctx context.Context, c *client, names []string, opt ...*UserLookUpOption) (*UsersLookUpByUserNamesResponse, error) {
 	// check names
 	switch {
