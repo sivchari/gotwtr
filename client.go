@@ -20,8 +20,8 @@ const (
 type Client interface {
 	// CountsFullArchiveTweet(ctx context.Context, query string, opt ...*TweetCountsOption) (*TweetCountsResponse, error)
 	CountsRecentTweet(ctx context.Context, query string, opt ...*TweetCountsOption) (*TweetCountsResponse, error)
-	DeleteRetweet(ctx context.Context, id string, stid string) (*DeleteRetweetResponse, error)
 	DeleteFollowing(ctx context.Context, suid string, tuid string) (*DeleteFollowingResponse, error)
+	DeleteRetweet(ctx context.Context, id string, stid string) (*DeleteRetweetResponse, error)
 	Followers(ctx context.Context, id string, opt ...*FollowOption) (*FollowersResponse, error)
 	Following(ctx context.Context, id string, opt ...*FollowOption) (*FollowingResponse, error)
 	LookUpSpaces(ctx context.Context, ids []string, opt ...*SpaceLookUpOption) (*SpaceLookUpResponse, error)
