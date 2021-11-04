@@ -75,7 +75,7 @@ func postRetweet(ctx context.Context, c *client, uid string, tid string) (*PostR
 	if err != nil {
 		return nil, fmt.Errorf("post retweet new request with ctx: %w", err)
 	}
-	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.bearerToken))
+	req.Header.Set("Authorization", fmt.Sprintf("OAuth %s", c.bearerToken))
 	req.Header.Set("Content-Type", "application/json")
 
 	resp, err := c.client.Do(req)
@@ -113,7 +113,7 @@ func deleteRetweet(ctx context.Context, c *client, id string, stid string) (*Del
 	if err != nil {
 		return nil, fmt.Errorf("delete retweet new request with ctx: %w", err)
 	}
-	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.bearerToken))
+	req.Header.Set("Authorization", fmt.Sprintf("OAuth %s", c.bearerToken))
 
 	resp, err := c.client.Do(req)
 	if err != nil {

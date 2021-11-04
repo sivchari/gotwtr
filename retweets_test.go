@@ -282,6 +282,7 @@ func Test_postRetweet(t *testing.T) {
 				tid: "1228393702244134912",
 			},
 			want: &gotwtr.PostRetweetResponse{
+				Retweeted: nil,
 				Errors: []*gotwtr.APIResponseError{
 					{
 						Message: "Sorry, that page does not exist, code:34",
@@ -371,6 +372,7 @@ func Test_deleteRetweet(t *testing.T) {
 				stid: "1228393702244134912",
 			},
 			want: &gotwtr.DeleteRetweetResponse{
+				Retweeted: nil,
 				Errors: []*gotwtr.APIResponseError{
 					{
 						Message: "Sorry, that page does not exist, code:34",
