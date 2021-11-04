@@ -156,7 +156,7 @@ func deleteFollowing(ctx context.Context, c *client, suid string, tuid string) (
 		return nil, errors.New("delete following by source_user_id: source_user_id parameter is required")
 	}
 	if tuid == "" {
-		return nil, errors.New("delete retweet by target_user_id: target_user_id parameter is required")
+		return nil, errors.New("delete following by target_user_id: target_user_id parameter is required")
 	}
 	deleteFollowingPath := baseUserPath + "/" + suid + "/following/" + tuid
 
