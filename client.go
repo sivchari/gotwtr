@@ -21,6 +21,9 @@ type Client interface {
 	// CountsFullArchiveTweet(ctx context.Context, query string, opt ...*TweetCountsOption) (*TweetCountsResponse, error)
 	CountsRecentTweet(ctx context.Context, query string, opt ...*TweetCountsOption) (*TweetCountsResponse, error)
 	DeleteRetweet(ctx context.Context, id string, stid string) (*DeleteRetweetResponse, error)
+	DeleteFollowing(ctx context.Context, suid string, tuid string) (*DeleteFollowingResponse, error)
+	Followers(ctx context.Context, id string, opt ...*FollowOption) (*FollowersResponse, error)
+	Following(ctx context.Context, id string, opt ...*FollowOption) (*FollowingResponse, error)
 	LookUpSpaces(ctx context.Context, ids []string, opt ...*SpaceLookUpOption) (*SpaceLookUpResponse, error)
 	LookUpSpaceByID(ctx context.Context, id string, opt ...*SpaceLookUpOption) (*SpaceLookUpByIDResponse, error)
 	LookUpTweets(ctx context.Context, ids []string, opt ...*TweetLookUpOption) (*TweetLookUpResponse, error)
@@ -29,6 +32,7 @@ type Client interface {
 	LookUpUserByID(ctx context.Context, id string, opt ...*UserLookUpOption) (*UserLookUpByIDResponse, error)
 	LookUpUserByUserName(ctx context.Context, name string, opt ...*UserLookUpOption) (*UserLookUpByUserNameResponse, error)
 	LookUpUsersByUserNames(ctx context.Context, names []string, opt ...*UserLookUpOption) (*UsersLookUpByUserNamesResponse, error)
+	PostFollowing(ctx context.Context, id string, tuid string) (*PostFollowingResponse, error)
 	PostRetweet(ctx context.Context, uid string, tid string) (*PostRetweetResponse, error)
 	RetweetsLookup(ctx context.Context, id string, opt ...*RetweetsLookupOpts) (*RetweetsLookupResponse, error)
 	SampledStream(ctx context.Context, opt ...*SampledStreamOpts) (*SampledStreamResponse, error)
@@ -70,8 +74,20 @@ func (c *client) CountsRecentTweet(ctx context.Context, query string, opt ...*Tw
 	return countsRecentTweet(ctx, c, query, opt...)
 }
 
+func (c *client) DeleteFollowing(ctx context.Context, suid string, tuid string) (*DeleteFollowingResponse, error) {
+	return deleteFollowing(ctx, c, suid, tuid)
+}
+
 func (c *client) DeleteRetweet(ctx context.Context, id string, stid string) (*DeleteRetweetResponse, error) {
 	return deleteRetweet(ctx, c, id, stid)
+}
+
+func (c *client) Followers(ctx context.Context, id string, opt ...*FollowOption) (*FollowersResponse, error) {
+	return followers(ctx, c, id, opt...)
+}
+
+func (c *client) Following(ctx context.Context, id string, opt ...*FollowOption) (*FollowingResponse, error) {
+	return following(ctx, c, id, opt...)
 }
 
 func (c *client) LookUpSpaces(ctx context.Context, ids []string, opt ...*SpaceLookUpOption) (*SpaceLookUpResponse, error) {
@@ -104,6 +120,10 @@ func (c *client) LookUpUserByUserName(ctx context.Context, name string, opt ...*
 
 func (c *client) LookUpUsersByUserNames(ctx context.Context, names []string, opt ...*UserLookUpOption) (*UsersLookUpByUserNamesResponse, error) {
 	return lookUpUsersByUserNames(ctx, c, names, opt...)
+}
+
+func (c *client) PostFollowing(ctx context.Context, id string, tuid string) (*PostFollowingResponse, error) {
+	return postFollowing(ctx, c, id, tuid)
 }
 
 func (c *client) PostRetweet(ctx context.Context, uid string, tid string) (*PostRetweetResponse, error) {
