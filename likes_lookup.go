@@ -13,7 +13,7 @@ func likesLookUpUsers(ctx context.Context, c *client, id string, opt ...*LikesLo
 	if len(id) == 0 {
 		return nil, errors.New("likes look up by tweet: id parameter is required")
 	}
-	LikesLookUpByTweet := tweetLookUp + "/" + id + "/iking_users"
+	LikesLookUpByTweet := tweetLookUp + "/" + id + "/liking_users"
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, LikesLookUpByTweet, nil)
 	if err != nil {
@@ -37,6 +37,10 @@ func likesLookUpUsers(ctx context.Context, c *client, id string, opt ...*LikesLo
 		return nil, fmt.Errorf("likes look up by tweet response: %w", err)
 	}
 	defer resp.Body.Close()
+
+	if resp.StatusCode == http.StatusNotFound {
+		return nil, fmt.Errorf("likes look up by tweet response status: %d", http.StatusNotFound)
+	}
 
 	var usersWhoLiked LikesLookUpByTweetResponse
 	if err := json.NewDecoder(resp.Body).Decode(&usersWhoLiked); err != nil {
