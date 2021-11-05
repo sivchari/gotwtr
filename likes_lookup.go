@@ -13,7 +13,7 @@ func likesLookUpUsers(ctx context.Context, c *client, id string, opt ...*LikesLo
 	if len(id) == 0 {
 		return nil, errors.New("likes look up by tweet: id parameter is required")
 	}
-	LikesLookUpByTweet := timeline + "?id=" + id + "/tweets"
+	LikesLookUpByTweet := tweetLookUp + "/" + id + "/iking_users"
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, LikesLookUpByTweet, nil)
 	if err != nil {
