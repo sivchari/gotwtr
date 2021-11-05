@@ -38,10 +38,6 @@ func likesLookUpUsers(ctx context.Context, c *client, id string, opt ...*LikesLo
 	}
 	defer resp.Body.Close()
 
-	if resp.StatusCode == http.StatusNotFound {
-		return nil, fmt.Errorf("likes look up by tweet response status: %d", http.StatusNotFound)
-	}
-
 	var usersWhoLiked LikesLookUpByTweetResponse
 	if err := json.NewDecoder(resp.Body).Decode(&usersWhoLiked); err != nil {
 		return nil, fmt.Errorf("likes look up by tweet decode: %w", err)
