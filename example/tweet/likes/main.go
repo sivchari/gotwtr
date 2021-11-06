@@ -20,7 +20,7 @@ func main() {
 	}
 
 	// get users who liked the tweet that id is "tweet_id" with option
-	t, err = client.LikesLookUpUsers(context.Background(), "tweet_id", &gotwtr.LikesLookUpByTweetOpts{
+	t, err = client.LikesLookUpUsers(context.Background(), "tweet_id", &gotwtr.LikesLookUpUserOpts{
 		Expansions:  []gotwtr.Expansion{gotwtr.ExpansionPinnedTweetID},
 		UserFields:  []gotwtr.UserField{gotwtr.UserFieldCreatedAt},
 		TweetFields: []gotwtr.TweetField{gotwtr.TweetFieldCreatedAt},

@@ -8,7 +8,7 @@ import (
 	"net/http"
 )
 
-func likesLookUpUsers(ctx context.Context, c *client, id string, opt ...*LikesLookUpByTweetOpts) (*LikesLookUpByTweetResponse, error) {
+func likesLookUpUsers(ctx context.Context, c *client, id string, opt ...*LikesLookUpUserOpts) (*LikesLookUpUserResponse, error) {
 	// check id
 	if len(id) == 0 {
 		return nil, errors.New("likes look up by tweet: id parameter is required")
@@ -21,7 +21,7 @@ func likesLookUpUsers(ctx context.Context, c *client, id string, opt ...*LikesLo
 	}
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.bearerToken))
 
-	var topt LikesLookUpByTweetOpts
+	var topt LikesLookUpUserOpts
 	switch len(opt) {
 	case 0:
 		// do nothing
@@ -38,7 +38,7 @@ func likesLookUpUsers(ctx context.Context, c *client, id string, opt ...*LikesLo
 	}
 	defer resp.Body.Close()
 
-	var usersWhoLiked LikesLookUpByTweetResponse
+	var usersWhoLiked LikesLookUpUserResponse
 	if err := json.NewDecoder(resp.Body).Decode(&usersWhoLiked); err != nil {
 		return nil, fmt.Errorf("likes look up by tweet decode: %w", err)
 	}

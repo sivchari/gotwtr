@@ -15,12 +15,12 @@ func Test_likesLookUpUsers(t *testing.T) {
 	type args struct {
 		ctx    context.Context
 		client *http.Client
-		opt    []*gotwtr.LikesLookUpByTweetOpts
+		opt    []*gotwtr.LikesLookUpUserOpts
 	}
 	tests := []struct {
 		name    string
 		args    args
-		want    *gotwtr.LikesLookUpByTweetResponse
+		want    *gotwtr.LikesLookUpUserResponse
 		wantErr bool
 	}{
 		{
@@ -53,7 +53,7 @@ func Test_likesLookUpUsers(t *testing.T) {
 					}
 				}),
 			},
-			want: &gotwtr.LikesLookUpByTweetResponse{
+			want: &gotwtr.LikesLookUpUserResponse{
 				Users: []*gotwtr.LikesLookUpUser{
 					{
 						ID:       "1065249714214457345",
@@ -142,7 +142,7 @@ func Test_likesLookUpUsers(t *testing.T) {
 						Body:       io.NopCloser(strings.NewReader(body)),
 					}
 				}),
-				opt: []*gotwtr.LikesLookUpByTweetOpts{
+				opt: []*gotwtr.LikesLookUpUserOpts{
 					{
 						Expansions:  []gotwtr.Expansion{gotwtr.ExpansionPinnedTweetID},
 						UserFields:  []gotwtr.UserField{gotwtr.UserFieldCreatedAt},
@@ -150,7 +150,7 @@ func Test_likesLookUpUsers(t *testing.T) {
 					},
 				},
 			},
-			want: &gotwtr.LikesLookUpByTweetResponse{
+			want: &gotwtr.LikesLookUpUserResponse{
 				Users: []*gotwtr.LikesLookUpUser{
 					{
 						ID:            "1065249714214457345",
@@ -191,7 +191,7 @@ func Test_likesLookUpUsers(t *testing.T) {
 						UserName:      "TwitterAPI",
 					},
 				},
-				Includes: &gotwtr.TweetIncludes{
+				Includes: &gotwtr.LikesLookUpUserIncludes{
 					Tweets: []*gotwtr.Tweet{
 						{
 							ID:   "1389270063807598594",

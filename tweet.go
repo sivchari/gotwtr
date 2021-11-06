@@ -340,7 +340,55 @@ type StreamResponse struct {
 	done   chan struct{}
 	wg     *sync.WaitGroup
 }
-type LikesLookUpPublicMetrics struct {
+
+type LikesLookUpUserWithheld struct {
+	Scope        string   `json:"scope"`
+	CountryCodes []string `json:"country_codes"`
+}
+
+type LikesLookUpUserEntity struct {
+	URL         *LikesLookUpUserURL         `json:"url"`
+	Description *LikesLookUpUserDescription `json:"description"`
+}
+
+type LikesLookUpUserURL struct {
+	URLs []*LikesLookUpUserURLContent `json:"urls"`
+}
+
+type LikesLookUpUserDescription struct {
+	URLs     []*LikesLookUpUserURLContent `json:"urls"`
+	HashTags []*LikesLookUpUserHashTag    `json:"hashtags"`
+	Mentions []*LikesLookUpUserMention    `json:"mentions"`
+}
+
+type LikesLookUpUserURLContent struct {
+	Start       int    `json:"start"`
+	End         int    `json:"end"`
+	URL         string `json:"url"`
+	ExpandedURL string `json:"expanded_url"`
+	DisplayURL  string `json:"display_url"`
+}
+
+type LikesLookUpUserHashTag struct {
+	Start   int    `json:"start"`
+	End     int    `json:"end"`
+	HashTag string `json:"hashtag"`
+}
+
+type LikesLookUpUserMention struct {
+	Start    int                       `json:"start"`
+	End      int                       `json:"end"`
+	UserName string                    `json:"username"`
+	CashTags []*LikesLookUpUserCashTag `json:"cashtags"`
+}
+
+type LikesLookUpUserCashTag struct {
+	Start   int    `json:"start"`
+	End     int    `json:"end"`
+	CashTag string `json:"cashtag"`
+}
+
+type LikesLookUpUserPublicMetrics struct {
 	FollowersCount int `json:"followers_count"`
 	FollowingCount int `json:"following_count"`
 	TweetCount     int `json:"tweet_count"`
@@ -348,25 +396,33 @@ type LikesLookUpPublicMetrics struct {
 }
 
 type LikesLookUpUser struct {
-	ID              string                    `json:"id"`
-	Name            string                    `json:"name"`
-	UserName        string                    `json:"username"`
-	CreatedAt       string                    `json:"created_at,omitempty"`
-	Protected       bool                      `json:"protected,omitempty"`
-	Withheld        *TweetWithheld            `json:"withheld,omitempty"`
-	Location        string                    `json:"location,omitempty"`
-	URL             string                    `json:"url,omitempty"`
-	Description     string                    `json:"description,omitempty"`
-	Verified        bool                      `json:"verified,omitempty"`
-	Entities        *TweetEntity              `json:"entities,omitempty"`
-	ProfileImageUrl string                    `json:"profile_image_url,omitempty"`
-	PublicMetrics   *LikesLookUpPublicMetrics `json:"public_metrics,omitempty"`
-	PinnedTweetID   string                    `json:"pinned_tweet_id,omitempty"`
+	ID              string                        `json:"id"`
+	Name            string                        `json:"name"`
+	UserName        string                        `json:"username"`
+	CreatedAt       string                        `json:"created_at,omitempty"`
+	Protected       bool                          `json:"protected,omitempty"`
+	Withheld        *LikesLookUpUserWithheld      `json:"withheld,omitempty"`
+	Location        string                        `json:"location,omitempty"`
+	URL             string                        `json:"url,omitempty"`
+	Description     string                        `json:"description,omitempty"`
+	Verified        bool                          `json:"verified,omitempty"`
+	Entities        *LikesLookUpUserEntity        `json:"entities,omitempty"`
+	ProfileImageUrl string                        `json:"profile_image_url,omitempty"`
+	PublicMetrics   *LikesLookUpUserPublicMetrics `json:"public_metrics,omitempty"`
+	PinnedTweetID   string                        `json:"pinned_tweet_id,omitempty"`
 }
 
-type LikesLookUpByTweetResponse struct {
-	Users    []*LikesLookUpUser  `json:"data"`
-	Includes *TweetIncludes      `json:"includes,omitempty"`
-	Meta     *TweetSearchMeta    `json:"meta"`
-	Errors   []*APIResponseError `json:"errors,omitempty"`
+type LikesLookUpUserResponse struct {
+	Users    []*LikesLookUpUser       `json:"data"`
+	Includes *LikesLookUpUserIncludes `json:"includes,omitempty"`
+	Meta     *LikesLookUpUserMeta     `json:"meta"`
+	Errors   []*APIResponseError      `json:"errors,omitempty"`
+}
+
+type LikesLookUpUserIncludes struct {
+	Tweets []*Tweet `json:"tweets"`
+}
+
+type LikesLookUpUserMeta struct {
+	ResultCount int `json:"result_count"`
 }

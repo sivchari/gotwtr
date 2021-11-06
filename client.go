@@ -48,7 +48,7 @@ type Client interface {
 	// UndoRetweet(ctx context.Context, id string, stid string) (*UndoRetweetResponse, error)
 	UserMentionTimeline(ctx context.Context, id string, opt ...*UserMentionTimelineOpts) (*UserMentionTimelineResponse, error)
 	UserTweetTimeline(ctx context.Context, id string, opt ...*UserTweetTimelineOpts) (*UserTweetTimelineResponse, error)
-	LikesLookUpUsers(ctx context.Context, id string, opt ...*LikesLookUpByTweetOpts) (*LikesLookUpByTweetResponse, error)
+	LikesLookUpUsers(ctx context.Context, id string, opt ...*LikesLookUpUserOpts) (*LikesLookUpUserResponse, error)
 }
 
 var _ Client = (*client)(nil)
@@ -178,6 +178,6 @@ func (c *client) UserTweetTimeline(ctx context.Context, id string, opt ...*UserT
 	return userTweetTimeline(ctx, c, id, opt...)
 }
 
-func (c *client) LikesLookUpUsers(ctx context.Context, id string, opt ...*LikesLookUpByTweetOpts) (*LikesLookUpByTweetResponse, error) {
+func (c *client) LikesLookUpUsers(ctx context.Context, id string, opt ...*LikesLookUpUserOpts) (*LikesLookUpUserResponse, error) {
 	return likesLookUpUsers(ctx, c, id, opt...)
 }

@@ -296,7 +296,7 @@ func (t *TweetCountsOption) addQuery(req *http.Request) {
 	}
 }
 
-type LikesLookUpByTweetOpts struct {
+type LikesLookUpUserOpts struct {
 	Expansions  []Expansion
 	MediaFields []MediaField
 	PlaceFields []PlaceField
@@ -305,7 +305,7 @@ type LikesLookUpByTweetOpts struct {
 	UserFields  []UserField
 }
 
-func (l *LikesLookUpByTweetOpts) addQuery(req *http.Request) {
+func (l *LikesLookUpUserOpts) addQuery(req *http.Request) {
 	q := req.URL.Query()
 	if len(l.Expansions) > 0 {
 		q.Add("expansions", strings.Join(expansionsToString(l.Expansions), ","))
