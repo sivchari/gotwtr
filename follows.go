@@ -1,7 +1,6 @@
 package gotwtr
 
 import (
-	"bytes"
 	"context"
 	"encoding/json"
 	"errors"
@@ -105,84 +104,11 @@ func followers(ctx context.Context, c *client, id string, opt ...*FollowOption) 
 
 // tuid = target_user_id
 func postFollowing(ctx context.Context, c *client, id string, tuid string, opt ...*FollowOption) (*PostFollowingResponse, error) {
-	if id == "" {
-		return nil, errors.New("post following by id: id parameter is required")
-	}
-	postFollowingPath := baseUserPath + "/" + id + "/following"
-
-	if tuid == "" {
-		return nil, errors.New("post following by target_user_id: target_user_id parameter is required")
-	}
-	body := &FollowingBody{
-		TargetUserID: tuid,
-	}
-	jsonStr, err := json.Marshal(body)
-	if err != nil {
-		return nil, errors.New("post following: can not marshal")
-	}
-
-	req, err := http.NewRequestWithContext(ctx, http.MethodPost, postFollowingPath, bytes.NewBuffer(jsonStr))
-	if err != nil {
-		return nil, fmt.Errorf("post following new request with ctx: %w", err)
-	}
-	req.Header.Set("Authorization", fmt.Sprintf("OAuth %s", c.bearerToken))
-	req.Header.Set("Content-Type", "application/json")
-
-	resp, err := c.client.Do(req)
-	if err != nil {
-		return nil, fmt.Errorf("post folllowing response: %w", err)
-	}
-	defer resp.Body.Close()
-
-	var postFollowing PostFollowingResponse
-	if err := json.NewDecoder(resp.Body).Decode(&postFollowing); err != nil {
-		return nil, fmt.Errorf("post following decode: %w", err)
-	}
-	if resp.StatusCode != http.StatusOK {
-		return &postFollowing, &HTTPError{
-			APIName: "post following",
-			Status:  resp.Status,
-			URL:     req.URL.String(),
-		}
-	}
-
-	return &postFollowing, nil
+	return nil, nil
 }
 
 // suid = source_user_id
 // tuid = target_user_id
 func deleteFollowing(ctx context.Context, c *client, suid string, tuid string) (*DeleteFollowingResponse, error) {
-	if suid == "" {
-		return nil, errors.New("delete following by source_user_id: source_user_id parameter is required")
-	}
-	if tuid == "" {
-		return nil, errors.New("delete following by target_user_id: target_user_id parameter is required")
-	}
-	deleteFollowingPath := baseUserPath + "/" + suid + "/following/" + tuid
-
-	req, err := http.NewRequestWithContext(ctx, http.MethodDelete, deleteFollowingPath, nil)
-	if err != nil {
-		return nil, fmt.Errorf("delete following new request with ctx: %w", err)
-	}
-	req.Header.Set("Authorization", fmt.Sprintf("OAuth %s", c.bearerToken))
-
-	resp, err := c.client.Do(req)
-	if err != nil {
-		return nil, fmt.Errorf("delete following response: %w", err)
-	}
-	defer resp.Body.Close()
-
-	var deleteFollowing DeleteFollowingResponse
-	if err := json.NewDecoder(resp.Body).Decode(&deleteFollowing); err != nil {
-		return nil, fmt.Errorf("delete following decode: %w", err)
-	}
-	if resp.StatusCode != http.StatusOK {
-		return &deleteFollowing, &HTTPError{
-			APIName: "delete following",
-			Status:  resp.Status,
-			URL:     req.URL.String(),
-		}
-	}
-
-	return &deleteFollowing, nil
+	return nil, nil
 }

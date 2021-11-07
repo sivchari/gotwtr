@@ -25,16 +25,4 @@ func main() {
 	for _, u := range followerUsers.Users {
 		fmt.Println(u)
 	}
-
-	p, err := client.PostFollowing(context.Background(), "id", "target_user_id")
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println(p)
-
-	d, err := client.DeleteFollowing(context.Background(), "source_user_id", "target_user_id")
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println(d)
 }
