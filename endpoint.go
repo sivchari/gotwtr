@@ -20,6 +20,7 @@ const (
 	retweetsLookupURL         = "https://api.twitter.com/2/tweets/%v/retweeted_by"
 	usersLikingTweetURL       = "https://api.twitter.com/2/tweets/%v/liking_users"
 	tweetsUserLikedURL        = "https://api.twitter.com/2/users/%v/liked_tweets"
+	searchAllTweetsURL        = "https://api.twitter.com/2/tweets/search/all?query=%v"
 )
 
 const (
