@@ -28,6 +28,7 @@ type Tweets interface {
 	RetweetsLookup(ctx context.Context, tweetID string, opt ...*RetweetsLookupOption) (*RetweetsResponse, error)
 	TweetsUserLiked(ctx context.Context, userID string, opt ...*TweetsUserLikedOpts) (*TweetsUserLikedResponse, error)
 	UsersLikingTweet(ctx context.Context, tweetID string, opt ...*UsersLikingTweetOption) (*UsersLikingTweetResponse, error)
+	SearchAllTweets(ctx context.Context, tweet string, opt ...*SearchTweetsOption) (*SearchTweetsResponse, error)
 }
 
 type Users interface {
@@ -124,6 +125,12 @@ func (c *Client) UserTweetTimeline(ctx context.Context, userID string, opt ...*U
 // SearchRecentTweets returns Tweets from the last seven days that match a search query.
 func (c *Client) SearchRecentTweets(ctx context.Context, tweet string, opt ...*SearchTweetsOption) (*SearchTweetsResponse, error) {
 	return searchRecentTweets(ctx, c.client, tweet, opt...)
+}
+
+// SearchAllTweets returns Tweets since the first Tweet was created on March 26, 2006.
+// This endpoint is only available to those users who have been approved for Academic Research access.
+func (c *client) SearchAllTweets(ctx context.Context, tweet string, opt ...*SearchTweetsOption) (*SearchTweetsResponse, error) {
+	return searchAllTweets(ctx, c, tweet, opt...)
 }
 
 // CountsRecentTweet returns count of Tweets from the last seven days that match a query.
