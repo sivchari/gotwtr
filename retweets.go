@@ -58,6 +58,6 @@ func postRetweet(ctx context.Context, c *client, uid string, tid string) (*PostR
 }
 
 // stid = "source_tweet_id"
-func deleteRetweet(ctx context.Context, c *client, id string, stid string) (*DeleteRetweetResponse, error) {
+func undoRetweet(ctx context.Context, c *client, id string, stid string) (*UndoRetweetResponse, error) {
 	return nil, nil
 }

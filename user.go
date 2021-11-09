@@ -158,7 +158,7 @@ type PostFollowingResponse struct {
 	Errors    []*APIResponseError `json:"errors,omitempty"`
 }
 
-type DeleteFollowingResponse struct {
+type UndoFollowingResponse struct {
 	Following *Following          `json:"data"`
 	Errors    []*APIResponseError `json:"errors,omitempty"`
 }
