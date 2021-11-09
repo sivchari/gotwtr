@@ -20,8 +20,6 @@ const (
 type Client interface {
 	// CountsFullArchiveTweet(ctx context.Context, query string, opt ...*TweetCountsOption) (*TweetCountsResponse, error)
 	CountsRecentTweet(ctx context.Context, query string, opt ...*TweetCountsOption) (*TweetCountsResponse, error)
-	// DeleteFollowing(ctx context.Context, suid string, tuid string) (*DeleteFollowingResponse, error)
-	// DeleteRetweet(ctx context.Context, id string, stid string) (*DeleteRetweetResponse, error)
 	Followers(ctx context.Context, id string, opt ...*FollowOption) (*FollowersResponse, error)
 	Following(ctx context.Context, id string, opt ...*FollowOption) (*FollowingResponse, error)
 	LookUpSpaces(ctx context.Context, ids []string, opt ...*SpaceLookUpOption) (*SpaceLookUpResponse, error)
@@ -39,6 +37,8 @@ type Client interface {
 	// SearchFullArchiveTweets(ctx context.Context, query string, opt ...*TweetSearchOption) (*TweetSearchResponse, error)
 	SearchRecentTweets(ctx context.Context, query string, opt ...*TweetSearchOption) (*TweetSearchResponse, error)
 	SearchSpaces(ctx context.Context, query string, opt ...*SearchSpacesOption) (*SearchSpacesResponse, error)
+	// UndoFollowing(ctx context.Context, suid string, tuid string) (*UndoFollowingResponse, error)
+	// UndoRetweet(ctx context.Context, id string, stid string) (*UndoRetweetResponse, error)
 	UserMentionTimeline(ctx context.Context, id string, opt ...*UserMentionTimelineOpts) (*UserMentionTimelineResponse, error)
 	UserTweetTimeline(ctx context.Context, id string, opt ...*UserTweetTimelineOpts) (*UserTweetTimelineResponse, error)
 }
@@ -72,14 +72,6 @@ func WithHTTPClient(httpClient *http.Client) ClientOption {
 
 func (c *client) CountsRecentTweet(ctx context.Context, query string, opt ...*TweetCountsOption) (*TweetCountsResponse, error) {
 	return countsRecentTweet(ctx, c, query, opt...)
-}
-
-func (c *client) DeleteFollowing(ctx context.Context, suid string, tuid string) (*DeleteFollowingResponse, error) {
-	return deleteFollowing(ctx, c, suid, tuid)
-}
-
-func (c *client) DeleteRetweet(ctx context.Context, id string, stid string) (*DeleteRetweetResponse, error) {
-	return deleteRetweet(ctx, c, id, stid)
 }
 
 func (c *client) Followers(ctx context.Context, id string, opt ...*FollowOption) (*FollowersResponse, error) {
@@ -148,6 +140,14 @@ func (c *client) SearchRecentTweets(ctx context.Context, query string, opt ...*T
 
 func (c *client) SearchSpaces(ctx context.Context, query string, opt ...*SearchSpacesOption) (*SearchSpacesResponse, error) {
 	return searchSpaces(ctx, c, query, opt...)
+}
+
+func (c *client) UndoFollowing(ctx context.Context, suid string, tuid string) (*UndoFollowingResponse, error) {
+	return undoFollowing(ctx, c, suid, tuid)
+}
+
+func (c *client) UndoRetweet(ctx context.Context, id string, stid string) (*UndoRetweetResponse, error) {
+	return undoRetweet(ctx, c, id, stid)
 }
 
 func (c *client) UserMentionTimeline(ctx context.Context, id string, opt ...*UserMentionTimelineOpts) (*UserMentionTimelineResponse, error) {

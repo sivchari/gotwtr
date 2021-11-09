@@ -246,7 +246,7 @@ type PostRetweetResponse struct {
 	Errors    []*APIResponseError `json:"errors,omitempty"`
 }
 
-type DeleteRetweetResponse struct {
+type UndoRetweetResponse struct {
 	Retweeted *Retweeted          `json:"data"`
 	Errors    []*APIResponseError `json:"errors,omitempty"`
 }

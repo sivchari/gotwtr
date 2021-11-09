@@ -109,6 +109,6 @@ func postFollowing(ctx context.Context, c *client, id string, tuid string, opt .
 
 // suid = source_user_id
 // tuid = target_user_id
-func deleteFollowing(ctx context.Context, c *client, suid string, tuid string) (*DeleteFollowingResponse, error) {
+func undoFollowing(ctx context.Context, c *client, suid string, tuid string) (*UndoFollowingResponse, error) {
 	return nil, nil
 }
