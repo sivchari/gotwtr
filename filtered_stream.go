@@ -145,7 +145,6 @@ func connectToStream(ctx context.Context, c *client, n int, opt ...*ConnectToStr
 		if len(body) == 0 {
 			continue
 		}
-
 		if resp.StatusCode != http.StatusOK {
 			var apiError APIResponseError
 			if err := json.Unmarshal(body, &apiError); err != nil {
@@ -157,14 +156,12 @@ func connectToStream(ctx context.Context, c *client, n int, opt ...*ConnectToStr
 				Status:  resp.Status,
 				URL:     req.URL.String(),
 			}
-		} else {
-			var chunk ConnectToStreamChunk
-			if err := json.Unmarshal(body, &chunk); err != nil {
-				return nil, fmt.Errorf("connect to stream decode: %w", err)
-			}
-			connectToStream.Chunks = append(connectToStream.Chunks, &chunk)
 		}
-
+		var chunk ConnectToStreamChunk
+		if err := json.Unmarshal(body, &chunk); err != nil {
+			return nil, fmt.Errorf("connect to stream decode: %w", err)
+		}
+		connectToStream.Chunks = append(connectToStream.Chunks, &chunk)
 	}
 	return &connectToStream, nil
 }
