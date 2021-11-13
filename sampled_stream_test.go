@@ -42,11 +42,9 @@ func Test_sampledStream(t *testing.T) {
 				opt: []*gotwtr.SampledStreamOpts{},
 			},
 			want: &gotwtr.SampledStreamResponse{
-				Tweets: []*gotwtr.Tweet{
-					{
-						ID:   "1067094924124872705",
-						Text: "Just getting started with Twitter APIs? Find out what you need in order to build an app. Watch this video! https://t.co/Hg8nkfoizN",
-					},
+				Tweet: &gotwtr.Tweet{
+					ID:   "1067094924124872705",
+					Text: "Just getting started with Twitter APIs? Find out what you need in order to build an app. Watch this video! https://t.co/Hg8nkfoizN",
 				},
 			},
 			wantErr: false,

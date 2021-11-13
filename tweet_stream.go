@@ -6,7 +6,7 @@ import (
 )
 
 type SampledStreamResponse struct {
-	Tweets   []*Tweet            `json:"data"`
+	Tweet    *Tweet            `json:"data"`
 	Includes *TweetIncludes      `json:"includes,omitempty"`
 	Errors   []*APIResponseError `json:"errors,omitempty"`
 }

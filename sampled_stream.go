@@ -43,8 +43,7 @@ func (s *StreamResponse) retry(req *http.Request) {
 			if len(data) == 0 {
 				continue
 			}
-			err := json.Unmarshal(data, &res)
-			if err != nil {
+			if err := json.Unmarshal(data, &res); err != nil {
 				s.errCh <- err
 			}
 			select {
