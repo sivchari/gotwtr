@@ -5,17 +5,20 @@ on: [pull_request]
 jobs:
   golangci-lint:
     name: runner / golangci-lint
+    strategy:
+      matrix:
+        go-version: [1.17.x]
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
 
-      - name: golangci-lint
+      - name: reviewdog / added
         uses: reviewdog/action-golangci-lint@v2
         with:
           golangci_lint_flags: "--config=.golangci.yml"
           level: error
           reporter: github-pr-review
-          go_version: "1.17"
+          go_version: ${{ matrix.go-version }}
           fail_on_error: true
-          filter_mode: diff_context
+          filter_mode: added
 
