@@ -209,12 +209,6 @@ type TweetSearchMeta struct {
 	NextToken   string `json:"next_token,omitempty"`
 }
 
-type SampledStreamResponse struct {
-	Tweets   []*Tweet            `json:"data"`
-	Includes *TweetIncludes      `json:"includes,omitempty"`
-	Errors   []*APIResponseError `json:"errors,omitempty"`
-}
-
 type TimeseriesCount struct {
 	Start      string `json:"start"`
 	End        string `json:"end"`
