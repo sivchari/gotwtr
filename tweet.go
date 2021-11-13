@@ -292,10 +292,14 @@ type AddOrDeleteMetaSummary struct {
 }
 
 type ConnectToStreamResponse struct {
-	Tweet         *Tweet              `json:"data"`
-	Includes      *TweetIncludes      `json:"includes,omitempty"`
-	Errors        []*APIResponseError `json:"errors,omitempty"`
-	MatchingRules []*MatchingRule     `json:"matching_rules"`
+	Chunks []*ConnectToStreamChunk
+	Error  *APIResponseError
+}
+
+type ConnectToStreamChunk struct {
+	Tweet         *Tweet          `json:"data"`
+	Includes      *TweetIncludes  `json:"includes,omitempty"`
+	MatchingRules []*MatchingRule `json:"matching_rules"`
 }
 
 type MatchingRule struct {

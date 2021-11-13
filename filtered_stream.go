@@ -114,56 +114,57 @@ func addOrDeleteRules(ctx context.Context, c *client, body *AddOrDeleteJSONBody,
 	return &addOrDelete, nil
 }
 
-func connectToStream(ctx context.Context, c *client, ch chan<- ConnectToStreamResponse, errCh chan<- error, opt ...*ConnectToStreamOption) {
-	go func() {
-		req, err := http.NewRequestWithContext(ctx, http.MethodGet, filteredStream, nil)
-		if err != nil {
-			errCh <- fmt.Errorf("connect to stream new request with ctx: %w", err)
-		}
-		req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.bearerToken))
+func connectToStream(ctx context.Context, c *client, n int, opt ...*ConnectToStreamOption) (*ConnectToStreamResponse, error) {
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, filteredStream, nil)
+	if err != nil {
+		return nil, fmt.Errorf("connect to stream new request with ctx: %w", err)
+	}
+	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.bearerToken))
 
-		var topt ConnectToStreamOption
-		switch len(opt) {
-		case 0:
-			// do nothing
-		case 1:
-			topt = *opt[0]
-		default:
-			errCh <- errors.New("connect to stream: only one option is allowed")
-		}
-		topt.addQuery(req)
+	var topt ConnectToStreamOption
+	switch len(opt) {
+	case 0:
+		// do nothing
+	case 1:
+		topt = *opt[0]
+	default:
+		return nil, errors.New("connect to stream: only one option is allowed")
+	}
+	topt.addQuery(req)
 
-		resp, err := c.client.Do(req)
-		if err != nil {
-			errCh <- fmt.Errorf("connect to stream: %w", err)
+	resp, err := c.client.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("connect to stream: %w", err)
+	}
+	defer resp.Body.Close()
+
+	connectToStream := ConnectToStreamResponse{}
+	scanner := bufio.NewScanner(resp.Body)
+	for i := 0; scanner.Scan() && i < n; i++ {
+		body := scanner.Bytes()
+		if len(body) == 0 {
+			continue
 		}
-		defer resp.Body.Close()
 
 		if resp.StatusCode != http.StatusOK {
-			errCh <- &HTTPError{
+			var apiError APIResponseError
+			if err := json.Unmarshal(body, &apiError); err != nil {
+				return nil, fmt.Errorf("connect to stream decode: %w", err)
+			}
+			connectToStream.Error = &apiError
+			return &connectToStream, &HTTPError{
 				APIName: "connect to stream",
 				Status:  resp.Status,
 				URL:     req.URL.String(),
 			}
+		} else {
+			var chunk ConnectToStreamChunk
+			if err := json.Unmarshal(body, &chunk); err != nil {
+				return nil, fmt.Errorf("connect to stream decode: %w", err)
+			}
+			connectToStream.Chunks = append(connectToStream.Chunks, &chunk)
 		}
 
-		scanner := bufio.NewScanner(resp.Body)
-		var connectToStream ConnectToStreamResponse
-		defer close(ch)
-		for scanner.Scan() {
-			body := scanner.Bytes()
-			if len(body) == 0 {
-				continue
-			}
-			if err := json.Unmarshal(body, &connectToStream); err != nil {
-				errCh <- fmt.Errorf("connect to stream decode: %w", err)
-			}
-			select {
-			case ch <- connectToStream:
-				continue
-			case <-ctx.Done():
-				break
-			}
-		}
-	}()
+	}
+	return &connectToStream, nil
 }

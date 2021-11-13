@@ -442,14 +442,18 @@ func Test_ConnectToStream(t *testing.T) {
 				opt: []*gotwtr.ConnectToStreamOption{},
 			},
 			want: &gotwtr.ConnectToStreamResponse{
-				Tweet: &gotwtr.Tweet{
-					ID:   "1228393702244134912",
-					Text: "What did the developer write in their Valentine’s card?\n  \nwhile(true) {\n    I = Love(You);  \n}",
-				},
-				MatchingRules: []*gotwtr.MatchingRule{
+				Chunks: []*gotwtr.ConnectToStreamChunk{
 					{
-						ID:  "1452189330902970370",
-						Tag: "has:media puppies with media",
+						Tweet: &gotwtr.Tweet{
+							ID:   "1228393702244134912",
+							Text: "What did the developer write in their Valentine’s card?\n  \nwhile(true) {\n    I = Love(You);  \n}",
+						},
+						MatchingRules: []*gotwtr.MatchingRule{
+							{
+								ID:  "1452189330902970370",
+								Tag: "has:media puppies with media",
+							},
+						},
 					},
 				},
 			},
@@ -460,16 +464,7 @@ func Test_ConnectToStream(t *testing.T) {
 			args: args{
 				ctx: context.Background(),
 				client: mockHTTPClient(func(request *http.Request) *http.Response {
-					body := `{
-						"errors": [
-							{
-								"title": "ConnectionException",
-								"detail": "This stream is currently at the maximum allowed connection limit.",
-								"connection_issue": "TooManyConnections",
-								"type": "https://api.twitter.com/2/problems/streaming-connection"
-							}
-						]
-					}`
+					body := `{ "title": "ConnectionException", "detail": "This stream is currently at the maximum allowed connection limit.", "connection_issue": "TooManyConnections","type": "https://api.twitter.com/2/problems/streaming-connection"}`
 					return &http.Response{
 						StatusCode: http.StatusTooManyRequests,
 						Body:       io.NopCloser(strings.NewReader(body)),
@@ -478,13 +473,12 @@ func Test_ConnectToStream(t *testing.T) {
 				opt: []*gotwtr.ConnectToStreamOption{},
 			},
 			want: &gotwtr.ConnectToStreamResponse{
-				Errors: []*gotwtr.APIResponseError{
-					{
-						Title:           "ConnectionException",
-						Detail:          "This stream is currently at the maximum allowed connection limit.",
-						ConnectionIssue: "TooManyConnections",
-						Type:            "https://api.twitter.com/2/problems/streaming-connection",
-					},
+				Chunks: nil,
+				Error: &gotwtr.APIResponseError{
+					Title:           "ConnectionException",
+					Detail:          "This stream is currently at the maximum allowed connection limit.",
+					ConnectionIssue: "TooManyConnections",
+					Type:            "https://api.twitter.com/2/problems/streaming-connection",
 				},
 			},
 			wantErr: true,
@@ -494,21 +488,15 @@ func Test_ConnectToStream(t *testing.T) {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			ch := make(chan gotwtr.ConnectToStreamResponse)
-			errCh := make(chan error)
 			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
-			c.ConnectToStream(tt.args.ctx, ch, errCh, tt.args.opt...)
-			select {
-			case got := <-ch:
-				if diff := cmp.Diff(&got, tt.want); diff != "" {
-					t.Errorf("connectToStream() mismatch (-want +got):\n%s", diff)
-					return
-				}
-			case err := <-errCh:
-				if (err != nil) != tt.wantErr {
-					t.Errorf("connectToStream() error = %v, wantErr %v", err, tt.wantErr)
-					return
-				}
+			got, err := c.ConnectToStream(context.Background(), 1, tt.args.opt...)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("ConnectToStream() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if diff := cmp.Diff(got, tt.want); diff != "" {
+				t.Errorf("ConnectToStream() mismatch (-want +got):\n%s", diff)
+				return
 			}
 		})
 	}

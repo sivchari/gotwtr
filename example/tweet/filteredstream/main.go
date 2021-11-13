@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"fmt"
-
 	"github.com/sivchari/gotwtr"
 )
 
@@ -24,20 +23,16 @@ func main() {
 		panic(err)
 	}
 
-	ch := make(chan gotwtr.ConnectToStreamResponse)
-	errCh := make(chan error)
-	client.ConnectToStream(context.Background(), ch, errCh)
-	for i := 0; i < 10; i++ {
-		select {
-		case resp, ok := <-ch:
-			if ok {
-				fmt.Println(resp.Tweet.Text)
-			} else {
-				break
-			}
-		case err := <-errCh:
-			panic(err)
-		}
+	responses, err := client.ConnectToStream(context.Background(), 10)
+	if err != nil {
+		panic(err)
+	}
+	if responses.Error != nil {
+		fmt.Println(responses.Error)
+		return
+	}
+	for _, resp := range responses.Chunks {
+		fmt.Println(resp.Tweet.Text)
 	}
 
 	// retrieve Stream rules
