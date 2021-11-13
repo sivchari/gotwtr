@@ -10,11 +10,17 @@ import (
 func main() {
 	client := gotwtr.New("key")
 	// sampled stream
-	tsr, err := client.SampledStream(context.Background())
-	if err != nil {
-		panic(err)
-	}
-	for _, t := range tsr.Tweets {
-		fmt.Println(t)
+	ch := make(chan gotwtr.SampledStreamResponse)
+	errCh := make(chan error)
+	client.SampledStream(context.Background(), ch, errCh)
+	select {
+	case data := <-ch:
+		for _, d := range data.Tweets {
+			fmt.Println(d)
+		}
+	case err:= <-errCh:
+		if err != nil {
+			panic(err)
+		}
 	}
 }
