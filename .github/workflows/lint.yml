@@ -21,4 +21,3 @@ jobs:
           go_version: ${{ matrix.go-version }}
           fail_on_error: true
           filter_mode: added
-
