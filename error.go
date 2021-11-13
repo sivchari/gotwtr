@@ -28,6 +28,8 @@ type APIResponseError struct {
 }
 
 type Parameter struct {
-	ID  []string `json:"id"`
-	IDs []string `json:"ids"`
+	ID        []string `json:"id"`
+	IDs       []string `json:"ids"`
+	UserName  []string `json:"username"`
+	UserNames []string `json:"usernames"`
 }

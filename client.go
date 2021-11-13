@@ -11,10 +11,11 @@ type client struct {
 }
 
 const (
-	filteredStreamRuleMaxLength = 512
 	spaceLookUpMaxIDs           = 100
 	tweetLookUpMaxIDs           = 100
+	userLookUpMaxIDs            = 100
 	tweetSearchMaxQueryLength   = 512
+	filteredStreamRuleMaxLength = 512
 )
 
 type Client interface {
@@ -22,18 +23,27 @@ type Client interface {
 	AddOrDeleteRules(ctx context.Context, body *AddOrDeleteJSONBody, opt ...*AddOrDeleteRulesOption) (*AddOrDeleteRulesResponse, error)
 	ConnectToStream(ctx context.Context, ch chan<- ConnectToStreamResponse, errCh chan<- error, opt ...*ConnectToStreamOption)
 	CountsRecentTweet(ctx context.Context, query string, opt ...*TweetCountsOption) (*TweetCountsResponse, error)
-	DeleteRetweet(ctx context.Context, id string, stid string) (*DeleteRetweetResponse, error)
+	Followers(ctx context.Context, id string, opt ...*FollowOption) (*FollowersResponse, error)
+	Following(ctx context.Context, id string, opt ...*FollowOption) (*FollowingResponse, error)
 	LookUpSpaces(ctx context.Context, ids []string, opt ...*SpaceLookUpOption) (*SpaceLookUpResponse, error)
 	LookUpSpaceByID(ctx context.Context, id string, opt ...*SpaceLookUpOption) (*SpaceLookUpByIDResponse, error)
 	LookUpTweets(ctx context.Context, ids []string, opt ...*TweetLookUpOption) (*TweetLookUpResponse, error)
 	LookUpTweetByID(ctx context.Context, id string, opt ...*TweetLookUpOption) (*TweetLookUpByIDResponse, error)
 	RetrieveStreamRules(ctx context.Context, opt ...*RetrieveStreamRulesOption) (*RetrieveStreamRulesResponse, error)
 	PostRetweet(ctx context.Context, uid string, tid string) (*PostRetweetResponse, error)
+	LookUpUsers(ctx context.Context, ids []string, opt ...*UserLookUpOption) (*UserLookUpResponse, error)
+	LookUpUserByID(ctx context.Context, id string, opt ...*UserLookUpOption) (*UserLookUpByIDResponse, error)
+	LookUpUserByUserName(ctx context.Context, name string, opt ...*UserLookUpOption) (*UserLookUpByUserNameResponse, error)
+	LookUpUsersByUserNames(ctx context.Context, names []string, opt ...*UserLookUpOption) (*UsersLookUpByUserNamesResponse, error)
+	// PostFollowing(ctx context.Context, id string, tuid string) (*PostFollowingResponse, error)
+	// PostRetweet(ctx context.Context, uid string, tid string) (*PostRetweetResponse, error)
 	RetweetsLookup(ctx context.Context, id string, opt ...*RetweetsLookupOpts) (*RetweetsLookupResponse, error)
 	SampledStream(ctx context.Context, opt ...*SampledStreamOpts) (*SampledStreamResponse, error)
 	// SearchFullArchiveTweets(ctx context.Context, query string, opt ...*TweetSearchOption) (*TweetSearchResponse, error)
 	SearchRecentTweets(ctx context.Context, query string, opt ...*TweetSearchOption) (*TweetSearchResponse, error)
 	SearchSpaces(ctx context.Context, query string, opt ...*SearchSpacesOption) (*SearchSpacesResponse, error)
+	// UndoFollowing(ctx context.Context, suid string, tuid string) (*UndoFollowingResponse, error)
+	// UndoRetweet(ctx context.Context, id string, stid string) (*UndoRetweetResponse, error)
 	UserMentionTimeline(ctx context.Context, id string, opt ...*UserMentionTimelineOpts) (*UserMentionTimelineResponse, error)
 	UserTweetTimeline(ctx context.Context, id string, opt ...*UserTweetTimelineOpts) (*UserTweetTimelineResponse, error)
 }
@@ -77,8 +87,12 @@ func (c *client) ConnectToStream(ctx context.Context, ch chan<- ConnectToStreamR
 	connectToStream(ctx, c, ch, errCh, opt...)
 }
 
-func (c *client) DeleteRetweet(ctx context.Context, id string, stid string) (*DeleteRetweetResponse, error) {
-	return deleteRetweet(ctx, c, id, stid)
+func (c *client) Followers(ctx context.Context, id string, opt ...*FollowOption) (*FollowersResponse, error) {
+	return followers(ctx, c, id, opt...)
+}
+
+func (c *client) Following(ctx context.Context, id string, opt ...*FollowOption) (*FollowingResponse, error) {
+	return following(ctx, c, id, opt...)
 }
 
 func (c *client) LookUpSpaces(ctx context.Context, ids []string, opt ...*SpaceLookUpOption) (*SpaceLookUpResponse, error) {
@@ -95,6 +109,26 @@ func (c *client) LookUpTweets(ctx context.Context, ids []string, opt ...*TweetLo
 
 func (c *client) LookUpTweetByID(ctx context.Context, id string, opt ...*TweetLookUpOption) (*TweetLookUpByIDResponse, error) {
 	return lookUpTweetByID(ctx, c, id, opt...)
+}
+
+func (c *client) LookUpUsers(ctx context.Context, ids []string, opt ...*UserLookUpOption) (*UserLookUpResponse, error) {
+	return lookUpUsers(ctx, c, ids, opt...)
+}
+
+func (c *client) LookUpUserByID(ctx context.Context, id string, opt ...*UserLookUpOption) (*UserLookUpByIDResponse, error) {
+	return lookUpUserByID(ctx, c, id, opt...)
+}
+
+func (c *client) LookUpUserByUserName(ctx context.Context, name string, opt ...*UserLookUpOption) (*UserLookUpByUserNameResponse, error) {
+	return lookUpUserByUserName(ctx, c, name, opt...)
+}
+
+func (c *client) LookUpUsersByUserNames(ctx context.Context, names []string, opt ...*UserLookUpOption) (*UsersLookUpByUserNamesResponse, error) {
+	return lookUpUsersByUserNames(ctx, c, names, opt...)
+}
+
+func (c *client) PostFollowing(ctx context.Context, id string, tuid string) (*PostFollowingResponse, error) {
+	return postFollowing(ctx, c, id, tuid)
 }
 
 func (c *client) PostRetweet(ctx context.Context, uid string, tid string) (*PostRetweetResponse, error) {
@@ -119,6 +153,14 @@ func (c *client) SearchRecentTweets(ctx context.Context, query string, opt ...*T
 
 func (c *client) SearchSpaces(ctx context.Context, query string, opt ...*SearchSpacesOption) (*SearchSpacesResponse, error) {
 	return searchSpaces(ctx, c, query, opt...)
+}
+
+func (c *client) UndoFollowing(ctx context.Context, suid string, tuid string) (*UndoFollowingResponse, error) {
+	return undoFollowing(ctx, c, suid, tuid)
+}
+
+func (c *client) UndoRetweet(ctx context.Context, id string, stid string) (*UndoRetweetResponse, error) {
+	return undoRetweet(ctx, c, id, stid)
 }
 
 func (c *client) UserMentionTimeline(ctx context.Context, id string, opt ...*UserMentionTimelineOpts) (*UserMentionTimelineResponse, error) {

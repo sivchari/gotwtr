@@ -98,10 +98,82 @@ type UserWithheld struct {
 	CountryCodes []string `json:"country_codes"`
 }
 
-func userFieldsToString(ufs []UserField) []string {
-	slice := make([]string, len(ufs))
-	for i, uf := range ufs {
-		slice[i] = string(uf)
-	}
-	return slice
+type UserIncludes struct {
+	Users  []*User
+	Tweets []*Tweet
+}
+
+type UserLookUpResponse struct {
+	Users    []*User             `json:"data"`
+	Includes *UserIncludes       `json:"includes,omitempty"`
+	Errors   []*APIResponseError `json:"errors,omitempty"`
+}
+
+type UserLookUpByIDResponse struct {
+	User     *User               `json:"data"`
+	Includes *UserIncludes       `json:"includes,omitempty"`
+	Errors   []*APIResponseError `json:"errors,omitempty"`
+}
+
+type UserLookUpByUserNameResponse struct {
+	User     *User               `json:"data"`
+	Includes *UserIncludes       `json:"includes,omitempty"`
+	Errors   []*APIResponseError `json:"errors,omitempty"`
+	Title    string              `json:"title,omitempty"`
+	Detail   string              `json:"detail,omitempty"`
+	Type     string              `json:"type,omitempty"`
+}
+
+type UsersLookUpByUserNamesResponse struct {
+	Users    []*User             `json:"data"`
+	Includes *UserIncludes       `json:"includes,omitempty"`
+	Errors   []*APIResponseError `json:"errors,omitempty"`
+	Title    string              `json:"title,omitempty"`
+	Detail   string              `json:"detail,omitempty"`
+	Type     string              `json:"type,omitempty"`
+}
+
+type FollowingResponse struct {
+	Users    []*User             `json:"data"`
+	Includes *UserIncludes       `json:"includes,omitempty"`
+	Errors   []*APIResponseError `json:"errors,omitempty"`
+	Meta     FollowsMeta         `json:"meta"`
+	Title    string              `json:"title,omitempty"`
+	Detail   string              `json:"detail,omitempty"`
+	Type     string              `json:"type,omitempty"`
+}
+
+type FollowersResponse struct {
+	Users    []*User             `json:"data"`
+	Includes *UserIncludes       `json:"includes,omitempty"`
+	Errors   []*APIResponseError `json:"errors,omitempty"`
+	Meta     FollowsMeta         `json:"meta"`
+	Title    string              `json:"title,omitempty"`
+	Detail   string              `json:"detail,omitempty"`
+	Type     string              `json:"type,omitempty"`
+}
+
+type PostFollowingResponse struct {
+	Following *Following          `json:"data"`
+	Errors    []*APIResponseError `json:"errors,omitempty"`
+}
+
+type UndoFollowingResponse struct {
+	Following *Following          `json:"data"`
+	Errors    []*APIResponseError `json:"errors,omitempty"`
+}
+
+type Following struct {
+	Following     bool `json:"following"`
+	PendingFollow bool `json:"pending_follow,omitempty"`
+}
+
+type FollowsMeta struct {
+	ResultCount   int    `json:"result_count"`
+	PreviousToken string `json:"previous_token,omitempty"`
+	NextToken     string `json:"next_token,omitempty"`
+}
+
+type FollowingBody struct {
+	TargetUserID string `json:"target_user_id"`
 }

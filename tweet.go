@@ -17,6 +17,7 @@ const (
 	TweetFieldID                 TweetField = "id"
 	TweetFieldInReplyToUserID    TweetField = "in_reply_to_user_id"
 	TweetFieldLanguage           TweetField = "lang"
+	TweetFieldMaxResults         TweetField = "max_results"
 	TweetFieldNonPublicMetrics   TweetField = "non_public_metrics"
 	TweetFieldPublicMetrics      TweetField = "public_metrics"
 	TweetFieldOrganicMetrics     TweetField = "organic_metrics"
@@ -303,12 +304,12 @@ type MatchingRule struct {
 }
 
 type PostRetweetResponse struct {
-	Retweeted *Retweeted          `json:"data,omitempty"`
+	Retweeted *Retweeted          `json:"data"`
 	Errors    []*APIResponseError `json:"errors,omitempty"`
 }
 
-type DeleteRetweetResponse struct {
-	Retweeted *Retweeted          `json:"data,omitempty"`
+type UndoRetweetResponse struct {
+	Retweeted *Retweeted          `json:"data"`
 	Errors    []*APIResponseError `json:"errors,omitempty"`
 }
 
