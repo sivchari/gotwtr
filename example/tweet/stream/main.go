@@ -15,10 +15,8 @@ func main() {
 	client.SampledStream(context.Background(), ch, errCh)
 	select {
 	case data := <-ch:
-		for _, d := range data.Tweets {
-			fmt.Println(d)
-		}
-	case err:= <-errCh:
+			fmt.Println(data)
+	case err := <-errCh:
 		if err != nil {
 			panic(err)
 		}
