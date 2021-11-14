@@ -1,7 +1,6 @@
 package gotwtr
 
 import (
-	"bufio"
 	"context"
 	"encoding/json"
 	"errors"
@@ -36,22 +35,15 @@ func (s *StreamResponse) retry(req *http.Request) {
 				URL:     req.URL.String(),
 			}
 		}
-		scanner := bufio.NewScanner(resp.Body)
 		var res SampledStreamResponse
-		for scanner.Scan() {
-			data := scanner.Bytes()
-			if len(data) == 0 {
-				continue
-			}
-			if err := json.Unmarshal(data, &res); err != nil {
-				s.errCh <- err
-			}
-			select {
-			case s.ch <- res:
-				continue
-			case <-s.done:
-				return
-			}
+		if err := json.NewDecoder(resp.Body).Decode(&res); err != nil {
+			s.errCh <- err
+		}
+		select {
+		case s.ch <- res:
+			continue
+		case <-s.done:
+			return
 		}
 	}
 }

@@ -15,7 +15,7 @@ func main() {
 	client.SampledStream(context.Background(), ch, errCh)
 	select {
 	case data := <-ch:
-			fmt.Println(data)
+		fmt.Println(data.Tweet)
 	case err := <-errCh:
 		if err != nil {
 			panic(err)
