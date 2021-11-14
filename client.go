@@ -33,7 +33,7 @@ type Client interface {
 	// PostFollowing(ctx context.Context, id string, tuid string) (*PostFollowingResponse, error)
 	// PostRetweet(ctx context.Context, uid string, tid string) (*PostRetweetResponse, error)
 	RetweetsLookup(ctx context.Context, id string, opt ...*RetweetsLookupOpts) (*RetweetsLookupResponse, error)
-	SampledStream(ctx context.Context, ch chan<- SampledStreamResponse, errCh chan<- error, opt ...*SampledStreamOpts)
+	SampledStream(ctx context.Context, ch chan<- SampledStreamResponse, errCh chan<- error, opt ...*SampledStreamOpts) *StreamResponse
 	// SearchFullArchiveTweets(ctx context.Context, query string, opt ...*TweetSearchOption) (*TweetSearchResponse, error)
 	SearchRecentTweets(ctx context.Context, query string, opt ...*TweetSearchOption) (*TweetSearchResponse, error)
 	SearchSpaces(ctx context.Context, query string, opt ...*SearchSpacesOption) (*SearchSpacesResponse, error)
@@ -126,8 +126,8 @@ func (c *client) RetweetsLookup(ctx context.Context, id string, opt ...*Retweets
 	return retweetsLookup(ctx, c, id, opt...)
 }
 
-func (c *client) SampledStream(ctx context.Context, ch chan<- SampledStreamResponse, errCh chan<- error, opt ...*SampledStreamOpts) {
-	sampledStream(ctx, c, ch, errCh, opt...)
+func (c *client) SampledStream(ctx context.Context, ch chan<- SampledStreamResponse, errCh chan<- error, opt ...*SampledStreamOpts) *StreamResponse {
+	return sampledStream(ctx, c, ch, errCh, opt...)
 }
 
 // func (c *client) SearchFullArchiveTweets(ctx context.Context, query string, opt ...*TweetSearchOption) (*TweetSearchResponse, error) {
