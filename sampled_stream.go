@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 	"sync"
+	"time"
 )
 
 func stopped(done <-chan struct{}) bool {
@@ -18,8 +19,12 @@ func stopped(done <-chan struct{}) bool {
 	}
 }
 
+func (s *StreamResponse) Stop() {
+	close(s.done)
+	s.wg.Wait()
+}
+
 func (s *StreamResponse) retry(req *http.Request) {
-	defer close(s.ch)
 	defer s.wg.Done()
 	for !stopped(s.done) {
 		resp, err := s.client.Do(req)
@@ -39,16 +44,16 @@ func (s *StreamResponse) retry(req *http.Request) {
 		if err := json.NewDecoder(resp.Body).Decode(&res); err != nil {
 			s.errCh <- err
 		}
-		select {
-		case s.ch <- res:
-			continue
-		case <-s.done:
-			return
-		}
+		s.ch <- res
+		/*
+			App rate limit: 50 requests per 15-minute window
+			FYI https://developer.twitter.com/en/docs/twitter-api/tweets/volume-streams/api-reference/get-tweets-sample-stream
+		*/
+		time.Sleep(time.Second * 18)
 	}
 }
 
-func sampledStream(ctx context.Context, c *client, ch chan<- SampledStreamResponse, errCh chan<- error, opt ...*SampledStreamOpts) {
+func sampledStream(ctx context.Context, c *client, ch chan<- SampledStreamResponse, errCh chan<- error, opt ...*SampledStreamOpts) *StreamResponse {
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, sampleStream, nil)
 	if err != nil {
 		errCh <- fmt.Errorf("sampled stream new request with ctx: %w", err)
@@ -75,4 +80,5 @@ func sampledStream(ctx context.Context, c *client, ch chan<- SampledStreamRespon
 	}
 	s.wg.Add(1)
 	go s.retry(req)
+	return s
 }

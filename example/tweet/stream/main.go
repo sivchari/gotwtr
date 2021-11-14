@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/sivchari/gotwtr"
 )
@@ -10,15 +11,23 @@ import (
 func main() {
 	client := gotwtr.New("key")
 	// sampled stream
-	ch := make(chan gotwtr.SampledStreamResponse)
+	ch := make(chan gotwtr.SampledStreamResponse, 5)
 	errCh := make(chan error)
-	client.SampledStream(context.Background(), ch, errCh)
-	select {
-	case data := <-ch:
-		fmt.Println(data.Tweet)
-	case err := <-errCh:
-		if err != nil {
-			panic(err)
+	stream := client.SampledStream(context.Background(), ch, errCh)
+	fmt.Println("streaming...")
+	var i int
+	for ; i < 5; i++ {
+		select {
+		case data := <-ch:
+			fmt.Println(data)
+		case err := <-errCh:
+			if err != nil {
+				panic(err)
+			}
+		default:
+			time.Sleep(time.Second * 10)
 		}
 	}
+	stream.Stop()
+	fmt.Println("done")
 }
