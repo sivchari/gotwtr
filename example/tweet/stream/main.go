@@ -15,19 +15,21 @@ func main() {
 	errCh := make(chan error)
 	stream := client.SampledStream(context.Background(), ch, errCh)
 	fmt.Println("streaming...")
-	var i int
-	for ; i < 5; i++ {
-		select {
-		case data := <-ch:
-			fmt.Println(data)
-		case err := <-errCh:
-			if err != nil {
-				panic(err)
+	done := make(chan struct{})
+	go func(done chan struct{}) {
+		for {
+			select {
+			case data := <-ch:
+				fmt.Println(data.Tweet)
+			case err := <-errCh:
+				fmt.Println(err)
+			case <-done:
+				break
 			}
-		default:
-			time.Sleep(time.Second * 10)
 		}
-	}
+	}(done)
+	time.Sleep(time.Second * 10)
+	close(done)
 	stream.Stop()
 	fmt.Println("done")
 }

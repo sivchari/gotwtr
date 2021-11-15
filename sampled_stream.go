@@ -5,9 +5,9 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"net/http"
 	"sync"
-	"time"
 )
 
 func stopped(done <-chan struct{}) bool {
@@ -26,22 +26,27 @@ func (s *StreamResponse) Stop() {
 
 func (s *StreamResponse) retry(req *http.Request) {
 	defer s.wg.Done()
+	resp, err := s.client.Do(req)
+	if err != nil {
+		s.errCh <- err
+		return
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode != http.StatusOK {
+		s.errCh <- &HTTPError{
+			APIName: "sampled stream",
+			Status:  resp.Status,
+			URL:     req.URL.String(),
+		}
+	}
+	dec := json.NewDecoder(resp.Body)
 	for !stopped(s.done) {
-		resp, err := s.client.Do(req)
-		if err != nil {
-			s.errCh <- err
-			return
-		}
-		defer resp.Body.Close()
-		if resp.StatusCode != http.StatusOK {
-			s.errCh <- &HTTPError{
-				APIName: "sampled stream",
-				Status:  resp.Status,
-				URL:     req.URL.String(),
-			}
-		}
 		var res SampledStreamResponse
-		if err := json.NewDecoder(resp.Body).Decode(&res); err != nil {
+		err := dec.Decode(&res)
+		if err != nil {
+			if err == io.EOF {
+				break
+			}
 			s.errCh <- err
 		}
 		s.ch <- res
@@ -49,7 +54,6 @@ func (s *StreamResponse) retry(req *http.Request) {
 			App rate limit: 50 requests per 15-minute window
 			FYI https://developer.twitter.com/en/docs/twitter-api/tweets/volume-streams/api-reference/get-tweets-sample-stream
 		*/
-		time.Sleep(time.Second * 18)
 	}
 }
 
