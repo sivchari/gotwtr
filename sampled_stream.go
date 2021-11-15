@@ -50,10 +50,6 @@ func (s *StreamResponse) retry(req *http.Request) {
 			s.errCh <- err
 		}
 		s.ch <- res
-		/*
-			App rate limit: 50 requests per 15-minute window
-			FYI https://developer.twitter.com/en/docs/twitter-api/tweets/volume-streams/api-reference/get-tweets-sample-stream
-		*/
 	}
 }
 
