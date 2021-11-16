@@ -94,7 +94,7 @@ type UserPublicMetrics struct {
 }
 
 type UserWithheld struct {
-	Copyright    string   `json:"copyright"`
+	Copyright    bool     `json:"copyright"`
 	CountryCodes []string `json:"country_codes"`
 }
 
