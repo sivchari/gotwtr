@@ -18,6 +18,9 @@ const (
 	filteredStreamRuleMaxLength = 512
 )
 
+// TODO: Add HideReplies interface
+// HideReplises does not handled Twitter v2 API, yet.
+
 type Client interface {
 	// CountsFullArchiveTweet(ctx context.Context, query string, opt ...*TweetCountsOption) (*TweetCountsResponse, error)
 	AddOrDeleteRules(ctx context.Context, body *AddOrDeleteJSONBody, opt ...*AddOrDeleteRulesOption) (*AddOrDeleteRulesResponse, error)
@@ -37,7 +40,7 @@ type Client interface {
 	// PostFollowing(ctx context.Context, id string, tuid string) (*PostFollowingResponse, error)
 	// PostRetweet(ctx context.Context, uid string, tid string) (*PostRetweetResponse, error)
 	RetweetsLookup(ctx context.Context, id string, opt ...*RetweetsLookupOpts) (*RetweetsLookupResponse, error)
-	SampledStream(ctx context.Context, opt ...*SampledStreamOpts) (*SampledStreamResponse, error)
+	SampledStream(ctx context.Context, ch chan<- SampledStreamResponse, errCh chan<- error, opt ...*SampledStreamOpts) *StreamResponse
 	// SearchFullArchiveTweets(ctx context.Context, query string, opt ...*TweetSearchOption) (*TweetSearchResponse, error)
 	SearchRecentTweets(ctx context.Context, query string, opt ...*TweetSearchOption) (*TweetSearchResponse, error)
 	SearchSpaces(ctx context.Context, query string, opt ...*SearchSpacesOption) (*SearchSpacesResponse, error)
@@ -138,8 +141,8 @@ func (c *client) RetweetsLookup(ctx context.Context, id string, opt ...*Retweets
 	return retweetsLookup(ctx, c, id, opt...)
 }
 
-func (c *client) SampledStream(ctx context.Context, opt ...*SampledStreamOpts) (*SampledStreamResponse, error) {
-	return sampledStream(ctx, c, opt...)
+func (c *client) SampledStream(ctx context.Context, ch chan<- SampledStreamResponse, errCh chan<- error, opt ...*SampledStreamOpts) *StreamResponse {
+	return sampledStream(ctx, c, ch, errCh, opt...)
 }
 
 // func (c *client) SearchFullArchiveTweets(ctx context.Context, query string, opt ...*TweetSearchOption) (*TweetSearchResponse, error) {

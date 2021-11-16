@@ -1,5 +1,10 @@
 package gotwtr
 
+import (
+	"net/http"
+	"sync"
+)
+
 type TweetField string
 
 /*
@@ -209,12 +214,6 @@ type TweetSearchMeta struct {
 	NextToken   string `json:"next_token,omitempty"`
 }
 
-type SampledStreamResponse struct {
-	Tweets   []*Tweet            `json:"data"`
-	Includes *TweetIncludes      `json:"includes,omitempty"`
-	Errors   []*APIResponseError `json:"errors,omitempty"`
-}
-
 type TimeseriesCount struct {
 	Start      string `json:"start"`
 	End        string `json:"end"`
@@ -323,4 +322,18 @@ type Retweeted struct {
 
 type TweetBody struct {
 	TweetID string `json:"tweet_id"`
+}
+
+type SampledStreamResponse struct {
+	Tweet    *Tweet              `json:"data"`
+	Includes *TweetIncludes      `json:"includes,omitempty"`
+	Errors   []*APIResponseError `json:"errors,omitempty"`
+}
+
+type StreamResponse struct {
+	client *http.Client
+	errCh  chan<- error
+	ch     chan<- SampledStreamResponse
+	done   chan struct{}
+	wg     *sync.WaitGroup
 }

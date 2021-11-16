@@ -52,11 +52,13 @@ func retweetsLookup(ctx context.Context, c *client, id string, opt ...*RetweetsL
 	return &retweetsLookup, nil
 }
 
+// postRetweet does not handled Twitter v2 API, yet.
 // uid = "user_id" tid = "tweet_id"
 func postRetweet(ctx context.Context, c *client, uid string, tid string) (*PostRetweetResponse, error) {
 	return nil, nil
 }
 
+// undoRetweet does not handled Twitter v2 API, yet.
 // stid = "source_tweet_id"
 func undoRetweet(ctx context.Context, c *client, id string, stid string) (*UndoRetweetResponse, error) {
 	return nil, nil

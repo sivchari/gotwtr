@@ -5,13 +5,58 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"net/http"
+	"sync"
 )
 
-func sampledStream(ctx context.Context, c *client, opt ...*SampledStreamOpts) (*SampledStreamResponse, error) {
+func stopped(done <-chan struct{}) bool {
+	select {
+	case <-done:
+		return true
+	default:
+		return false
+	}
+}
+
+func (s *StreamResponse) Stop() {
+	close(s.done)
+	s.wg.Wait()
+}
+
+func (s *StreamResponse) retry(req *http.Request) {
+	defer s.wg.Done()
+	resp, err := s.client.Do(req)
+	if err != nil {
+		s.errCh <- err
+		return
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode != http.StatusOK {
+		s.errCh <- &HTTPError{
+			APIName: "sampled stream",
+			Status:  resp.Status,
+			URL:     req.URL.String(),
+		}
+	}
+	dec := json.NewDecoder(resp.Body)
+	for !stopped(s.done) {
+		var res SampledStreamResponse
+		err := dec.Decode(&res)
+		if err != nil {
+			if err == io.EOF {
+				break
+			}
+			s.errCh <- err
+		}
+		s.ch <- res
+	}
+}
+
+func sampledStream(ctx context.Context, c *client, ch chan<- SampledStreamResponse, errCh chan<- error, opt ...*SampledStreamOpts) *StreamResponse {
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, sampleStream, nil)
 	if err != nil {
-		return nil, fmt.Errorf("sampled stream new request with ctx: %w", err)
+		errCh <- fmt.Errorf("sampled stream new request with ctx: %w", err)
 	}
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.bearerToken))
 
@@ -22,27 +67,18 @@ func sampledStream(ctx context.Context, c *client, opt ...*SampledStreamOpts) (*
 	case 1:
 		sopt = *opt[0]
 	default:
-		return nil, errors.New("sampled stream: only one option is allowed")
+		errCh <- errors.New("sampled stream: only one option is allowed")
 	}
 	sopt.addQuery(req)
 
-	resp, err := c.client.Do(req)
-	if err != nil {
-		return nil, fmt.Errorf("sampled stream response: %w", err)
+	s := &StreamResponse{
+		client: c.client,
+		errCh:  errCh,
+		ch:     ch,
+		done:   make(chan struct{}),
+		wg:     &sync.WaitGroup{},
 	}
-	defer resp.Body.Close()
-
-	var sampledStream SampledStreamResponse
-	if err := json.NewDecoder(resp.Body).Decode(&sampledStream); err != nil {
-		return nil, fmt.Errorf("sampled stream decode: %w", err)
-	}
-	if resp.StatusCode != http.StatusOK {
-		return &sampledStream, &HTTPError{
-			APIName: "sampled stream",
-			Status:  resp.Status,
-			URL:     req.URL.String(),
-		}
-	}
-
-	return &sampledStream, nil
+	s.wg.Add(1)
+	go s.retry(req)
+	return s
 }
