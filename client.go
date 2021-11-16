@@ -17,6 +17,9 @@ const (
 	tweetSearchMaxQueryLength = 512
 )
 
+// TODO: Add HideReplies interface
+// HideReplises does not handled Twitter v2 API, yet.
+
 type Client interface {
 	// CountsFullArchiveTweet(ctx context.Context, query string, opt ...*TweetCountsOption) (*TweetCountsResponse, error)
 	CountsRecentTweet(ctx context.Context, query string, opt ...*TweetCountsOption) (*TweetCountsResponse, error)
