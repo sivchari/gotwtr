@@ -152,7 +152,7 @@ type TweetReferencedTweet struct {
 }
 
 type TweetWithheld struct {
-	Copyright    string   `json:"copyright"`
+	Copyright    bool     `json:"copyright"`
 	CountryCodes []string `json:"country_codes"`
 }
 
