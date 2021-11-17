@@ -442,45 +442,45 @@ func Test_ConnectToStream(t *testing.T) {
 				opt: []*gotwtr.ConnectToStreamOption{},
 			},
 			want: &gotwtr.ConnectToStreamResponse{
-						Tweet: &gotwtr.Tweet{
-							ID:   "1228393702244134912",
-							Text: "What did the developer write in their Valentine’s card?\n  \nwhile(true) {\n    I = Love(You);  \n}",
-						},
-						MatchingRules: []*gotwtr.MatchingRule{
-							{
-								ID:  "1452189330902970370",
-								Tag: "has:media puppies with media",
-							},
-						},
+				Tweet: &gotwtr.Tweet{
+					ID:   "1228393702244134912",
+					Text: "What did the developer write in their Valentine’s card?\n  \nwhile(true) {\n    I = Love(You);  \n}",
 				},
+				MatchingRules: []*gotwtr.MatchingRule{
+					{
+						ID:  "1452189330902970370",
+						Tag: "has:media puppies with media",
+					},
+				},
+			},
 			wantErr: false,
 		},
 		/*
-		TODO: must consider way of processing APIError such as kind of late limit
-		{
-			name: "429 - Too Many Requests",
-			args: args{
-				ctx: context.Background(),
-				client: mockHTTPClient(func(request *http.Request) *http.Response {
-					body := `{ "title": "ConnectionException", "detail": "This stream is currently at the maximum allowed connection limit.", "connection_issue": "TooManyConnections","type": "https://api.twitter.com/2/problems/streaming-connection"}`
-					return &http.Response{
-						StatusCode: http.StatusTooManyRequests,
-						Body:       io.NopCloser(strings.NewReader(body)),
-					}
-				}),
-				opt: []*gotwtr.ConnectToStreamOption{},
-			},
-			want: &gotwtr.ConnectToStreamResponse{
-				Error: &gotwtr.APIResponseError{
-					Title:           "ConnectionException",
-					Detail:          "This stream is currently at the maximum allowed connection limit.",
-					ConnectionIssue: "TooManyConnections",
-					Type:            "https://api.twitter.com/2/problems/streaming-connection",
+			TODO: must consider way of processing APIError such as kind of late limit
+			{
+				name: "429 - Too Many Requests",
+				args: args{
+					ctx: context.Background(),
+					client: mockHTTPClient(func(request *http.Request) *http.Response {
+						body := `{ "title": "ConnectionException", "detail": "This stream is currently at the maximum allowed connection limit.", "connection_issue": "TooManyConnections","type": "https://api.twitter.com/2/problems/streaming-connection"}`
+						return &http.Response{
+							StatusCode: http.StatusTooManyRequests,
+							Body:       io.NopCloser(strings.NewReader(body)),
+						}
+					}),
+					opt: []*gotwtr.ConnectToStreamOption{},
 				},
+				want: &gotwtr.ConnectToStreamResponse{
+					Error: &gotwtr.APIResponseError{
+						Title:           "ConnectionException",
+						Detail:          "This stream is currently at the maximum allowed connection limit.",
+						ConnectionIssue: "TooManyConnections",
+						Type:            "https://api.twitter.com/2/problems/streaming-connection",
+					},
+				},
+				wantErr: true,
 			},
-			wantErr: true,
-		},
-		 */
+		*/
 	}
 	for _, tt := range tests {
 		tt := tt

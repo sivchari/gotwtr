@@ -115,7 +115,6 @@ func addOrDeleteRules(ctx context.Context, c *client, body *AddOrDeleteJSONBody,
 	return &addOrDelete, nil
 }
 
-
 func (s *ConnectToStream) Stop() {
 	close(s.done)
 	s.wg.Wait()
@@ -166,7 +165,7 @@ func connectToStream(ctx context.Context, c *client, ch chan<- ConnectToStreamRe
 	case 1:
 		copt = *opt[0]
 	default:
-		errCh<-errors.New("connect to stream: only one option is allowed")
+		errCh <- errors.New("connect to stream: only one option is allowed")
 	}
 	copt.addQuery(req)
 
