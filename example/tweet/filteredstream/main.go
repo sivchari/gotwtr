@@ -3,8 +3,9 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/sivchari/gotwtr"
 	"time"
+
+	"github.com/sivchari/gotwtr"
 )
 
 func main() {
@@ -29,7 +30,7 @@ func main() {
 	errCh := make(chan error)
 	stream := client.ConnectToStream(context.Background(), ch, errCh)
 	fmt.Println("streaming...")
-	ctx, cancel:= context.WithCancel(context.Background())
+	ctx, cancel := context.WithCancel(context.Background())
 	go func(ctx context.Context) {
 		for {
 			select {
