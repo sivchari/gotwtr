@@ -1,13 +1,14 @@
 package gotwtr
 
 import (
-	"bufio"
 	"bytes"
 	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"net/http"
+	"sync"
 )
 
 func retrieveStreamRules(ctx context.Context, c *client, opt ...*RetrieveStreamRulesOption) (*RetrieveStreamRulesResponse, error) {
@@ -114,54 +115,70 @@ func addOrDeleteRules(ctx context.Context, c *client, body *AddOrDeleteJSONBody,
 	return &addOrDelete, nil
 }
 
-func connectToStream(ctx context.Context, c *client, n int, opt ...*ConnectToStreamOption) (*ConnectToStreamResponse, error) {
+
+func (s *ConnectToStream) Stop() {
+	close(s.done)
+	s.wg.Wait()
+}
+
+func (s *ConnectToStream) retry(req *http.Request) {
+	defer s.wg.Done()
+	resp, err := s.client.Do(req)
+	if err != nil {
+		s.errCh <- err
+		return
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode != http.StatusOK {
+		s.errCh <- &HTTPError{
+			APIName: "connect to stream",
+			Status:  resp.Status,
+			URL:     req.URL.String(),
+		}
+		fmt.Println(resp.Body)
+	}
+	dec := json.NewDecoder(resp.Body)
+
+	for !stopped(s.done) {
+		var connectToStream ConnectToStreamResponse
+		err := dec.Decode(&connectToStream)
+		if err != nil {
+			if err == io.EOF {
+				break
+			}
+			s.errCh <- err
+		}
+		s.ch <- connectToStream
+	}
+}
+
+func connectToStream(ctx context.Context, c *client, ch chan<- ConnectToStreamResponse, errCh chan<- error, opt ...*ConnectToStreamOption) *ConnectToStream {
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, filteredStream, nil)
 	if err != nil {
-		return nil, fmt.Errorf("connect to stream new request with ctx: %w", err)
+		errCh <- fmt.Errorf("connect to stream new request with ctx: %w", err)
 	}
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.bearerToken))
 
-	var topt ConnectToStreamOption
+	var copt ConnectToStreamOption
 	switch len(opt) {
 	case 0:
 		// do nothing
 	case 1:
-		topt = *opt[0]
+		copt = *opt[0]
 	default:
-		return nil, errors.New("connect to stream: only one option is allowed")
+		errCh<-errors.New("connect to stream: only one option is allowed")
 	}
-	topt.addQuery(req)
+	copt.addQuery(req)
 
-	resp, err := c.client.Do(req)
-	if err != nil {
-		return nil, fmt.Errorf("connect to stream: %w", err)
+	s := &ConnectToStream{
+		client: c.client,
+		errCh:  errCh,
+		ch:     ch,
+		done:   make(chan struct{}),
+		wg:     &sync.WaitGroup{},
 	}
-	defer resp.Body.Close()
 
-	connectToStream := ConnectToStreamResponse{}
-	scanner := bufio.NewScanner(resp.Body)
-	for i := 0; scanner.Scan() && i < n; i++ {
-		body := scanner.Bytes()
-		if len(body) == 0 {
-			continue
-		}
-		if resp.StatusCode != http.StatusOK {
-			var apiError APIResponseError
-			if err := json.Unmarshal(body, &apiError); err != nil {
-				return nil, fmt.Errorf("connect to stream decode: %w", err)
-			}
-			connectToStream.Error = &apiError
-			return &connectToStream, &HTTPError{
-				APIName: "connect to stream",
-				Status:  resp.Status,
-				URL:     req.URL.String(),
-			}
-		}
-		var chunk ConnectToStreamChunk
-		if err := json.Unmarshal(body, &chunk); err != nil {
-			return nil, fmt.Errorf("connect to stream decode: %w", err)
-		}
-		connectToStream.Chunks = append(connectToStream.Chunks, &chunk)
-	}
-	return &connectToStream, nil
+	s.wg.Add(1)
+	go s.retry(req)
+	return s
 }

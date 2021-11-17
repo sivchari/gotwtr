@@ -24,7 +24,7 @@ const (
 type Client interface {
 	// CountsFullArchiveTweet(ctx context.Context, query string, opt ...*TweetCountsOption) (*TweetCountsResponse, error)
 	AddOrDeleteRules(ctx context.Context, body *AddOrDeleteJSONBody, opt ...*AddOrDeleteRulesOption) (*AddOrDeleteRulesResponse, error)
-	ConnectToStream(ctx context.Context, n int, opt ...*ConnectToStreamOption) (*ConnectToStreamResponse, error)
+	ConnectToStream(ctx context.Context,ch chan<- ConnectToStreamResponse, errCh chan<- error, opt ...*ConnectToStreamOption) *ConnectToStream
 	CountsRecentTweet(ctx context.Context, query string, opt ...*TweetCountsOption) (*TweetCountsResponse, error)
 	Followers(ctx context.Context, id string, opt ...*FollowOption) (*FollowersResponse, error)
 	Following(ctx context.Context, id string, opt ...*FollowOption) (*FollowingResponse, error)
@@ -85,8 +85,8 @@ func (c *client) CountsRecentTweet(ctx context.Context, query string, opt ...*Tw
 	return countsRecentTweet(ctx, c, query, opt...)
 }
 
-func (c *client) ConnectToStream(ctx context.Context, n int, opt ...*ConnectToStreamOption) (*ConnectToStreamResponse, error) {
-	return connectToStream(ctx, c, n, opt...)
+func (c *client) ConnectToStream(ctx context.Context, ch chan<- ConnectToStreamResponse, errCh chan<- error, opt ...*ConnectToStreamOption) *ConnectToStream {
+	return connectToStream(ctx, c , ch, errCh, opt...)
 }
 
 func (c *client) Followers(ctx context.Context, id string, opt ...*FollowOption) (*FollowersResponse, error) {

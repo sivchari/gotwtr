@@ -291,11 +291,6 @@ type AddOrDeleteMetaSummary struct {
 }
 
 type ConnectToStreamResponse struct {
-	Chunks []*ConnectToStreamChunk
-	Error  *APIResponseError
-}
-
-type ConnectToStreamChunk struct {
 	Tweet         *Tweet          `json:"data"`
 	Includes      *TweetIncludes  `json:"includes,omitempty"`
 	MatchingRules []*MatchingRule `json:"matching_rules"`
@@ -304,6 +299,14 @@ type ConnectToStreamChunk struct {
 type MatchingRule struct {
 	ID  string `json:"id"`
 	Tag string `json:"tag"`
+}
+
+type ConnectToStream struct {
+	client *http.Client
+	errCh  chan<- error
+	ch     chan<- ConnectToStreamResponse
+	done   chan struct{}
+	wg     *sync.WaitGroup
 }
 
 type PostRetweetResponse struct {
@@ -337,3 +340,6 @@ type StreamResponse struct {
 	done   chan struct{}
 	wg     *sync.WaitGroup
 }
+
+
+
