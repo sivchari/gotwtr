@@ -17,6 +17,8 @@ const (
 	ExpansionCreatorID                  Expansion = "creator_id"
 	ExpansionHostIDs                    Expansion = "host_ids"
 	ExpansionContextAnnotations         Expansion = "context_annotations"
+	ExpansionTopicIDs                   Expansion = "topic_ids"
+	// ExpansionTopics                     Expansion = "topics" TODO: must check
 )
 
 func expansionsToString(es []Expansion) []string {

@@ -94,4 +94,9 @@ type DiscoverSpacesByUserIDsResponse struct {
 	Spaces   []*Space            `json:"data"`
 	Includes *SpaceIncludes      `json:"includes,omitempty"`
 	Errors   []*APIResponseError `json:"errors,omitempty"`
+	Meta     *DiscoverSpacesMeta `json:"meta"`
+}
+
+type DiscoverSpacesMeta struct {
+	ResultCount int `json:"result_count"`
 }
