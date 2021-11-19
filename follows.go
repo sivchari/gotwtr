@@ -8,12 +8,12 @@ import (
 	"net/http"
 )
 
-func following(ctx context.Context, c *client, id string, opt ...*FollowOption) (*FollowingResponse, error) {
+func lookUpFollowing(ctx context.Context, c *client, id string, opt ...*FollowOption) (*FollowingResponse, error) {
 	// check id
 	if id == "" {
 		return nil, errors.New("following by id: id parameter is required")
 	}
-	following := baseUserPath + "/" + id + "/following"
+	following := followingLookUp + "/" + id + "/following"
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, following, nil)
 	if err != nil {
@@ -40,27 +40,27 @@ func following(ctx context.Context, c *client, id string, opt ...*FollowOption) 
 
 	defer resp.Body.Close()
 
-	var user FollowingResponse
-	if err := json.NewDecoder(resp.Body).Decode(&user); err != nil {
+	var f FollowingResponse
+	if err := json.NewDecoder(resp.Body).Decode(&f); err != nil {
 		return nil, fmt.Errorf("following by id decode: %w", err)
 	}
 	if resp.StatusCode != http.StatusOK {
-		return &user, &HTTPError{
+		return &f, &HTTPError{
 			APIName: "following by id",
 			Status:  resp.Status,
 			URL:     req.URL.String(),
 		}
 	}
 
-	return &user, nil
+	return &f, nil
 }
 
-func followers(ctx context.Context, c *client, id string, opt ...*FollowOption) (*FollowersResponse, error) {
+func lookUpFollowers(ctx context.Context, c *client, id string, opt ...*FollowOption) (*FollowersResponse, error) {
 	// check id
 	if id == "" {
 		return nil, errors.New("followers by id: id parameter is required")
 	}
-	followers := baseUserPath + "/" + id + "/followers"
+	followers := followersLookUp + "/" + id + "/followers"
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, followers, nil)
 	if err != nil {
@@ -87,19 +87,19 @@ func followers(ctx context.Context, c *client, id string, opt ...*FollowOption) 
 
 	defer resp.Body.Close()
 
-	var user FollowersResponse
-	if err := json.NewDecoder(resp.Body).Decode(&user); err != nil {
+	var f FollowersResponse
+	if err := json.NewDecoder(resp.Body).Decode(&f); err != nil {
 		return nil, fmt.Errorf("followers by id decode: %w", err)
 	}
 	if resp.StatusCode != http.StatusOK {
-		return &user, &HTTPError{
+		return &f, &HTTPError{
 			APIName: "followers by id",
 			Status:  resp.Status,
 			URL:     req.URL.String(),
 		}
 	}
 
-	return &user, nil
+	return &f, nil
 }
 
 // postFollowing does not handled Twitter v2 API, yet.

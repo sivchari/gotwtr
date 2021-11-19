@@ -29,20 +29,20 @@ func Test_retrieveStreamRules(t *testing.T) {
 				ctx: context.Background(),
 				client: mockHTTPClient(func(request *http.Request) *http.Response {
 					body := `{
-					    "data": [
-					        {
-					            "id": "1273636687768285186",
-					            "value": "meme has:images"
-					        },
-					        {
-					            "id": "1273636687768285187",
-					            "value": "puppy has:media",
-					            "tag": "puppies with media"
-					        }
-					    ],
-					    "meta": {
-					        "sent": "2020-06-18T15:21:58.638Z"
-					    }
+						"data": [
+							{
+								"id": "1273636687768285186",
+								"value": "meme has:images"
+							},
+							{
+								"id": "1273636687768285187",
+								"value": "puppy has:media",
+								"tag": "puppies with media"
+							}
+						],
+						"meta": {
+							"sent": "2020-06-18T15:21:58.638Z"
+						}
 					}`
 					return &http.Response{
 						StatusCode: http.StatusOK,
@@ -75,15 +75,15 @@ func Test_retrieveStreamRules(t *testing.T) {
 				ctx: context.Background(),
 				client: mockHTTPClient(func(request *http.Request) *http.Response {
 					body := `{
-					    "data": [
-					        {
-					            "id": "1273636687768285186",
-					            "value": "meme has:images"
-					        }
-					    ],
-					    "meta": {
-					        "sent": "2020-06-18T15:21:58.638Z"
-					    }
+						"data": [
+							{
+								"id": "1273636687768285186",
+								"value": "meme has:images"
+							}
+						],
+						"meta": {
+							"sent": "2020-06-18T15:21:58.638Z"
+						}
 					}`
 					return &http.Response{
 						StatusCode: http.StatusOK,
@@ -117,13 +117,13 @@ func Test_retrieveStreamRules(t *testing.T) {
 					body := `{
 						"errors": [
 							{
-							    "client_id": "16340226",
-							    "required_enrollment": "Standard Basic",
-							    "registration_url": "https://developer.twitter.com/en/account",
-							    "title": "Client Forbidden",
-							    "detail": "This request must be made using an approved developer account that is enrolled in the requested endpoint. Learn more by visiting our documentation.",
-							    "reason": "client-not-enrolled",
-							    "type": "https://api.twitter.com/2/problems/client-forbidden"
+								"client_id": "16340226",
+								"required_enrollment": "Standard Basic",
+								"registration_url": "https://developer.twitter.com/en/account",
+								"title": "Client Forbidden",
+								"detail": "This request must be made using an approved developer account that is enrolled in the requested endpoint. Learn more by visiting our documentation.",
+								"reason": "client-not-enrolled",
+								"type": "https://api.twitter.com/2/problems/client-forbidden"
 							}
 						]
 					}`
@@ -187,26 +187,26 @@ func Test_AddOrDeleteRules(t *testing.T) {
 				ctx: context.Background(),
 				client: mockHTTPClient(func(request *http.Request) *http.Response {
 					body := `{
-					    "data": [
-					        {
-					            "value": "meme has:images",
-					            "id": "1273636687768285186"
-					        },
-					        {
-					            "value": "puppy has:media",
-					            "tag": "puppies with media",
-					            "id": "1273636687768285187"
-					        }
-					    ],
-					    "meta": {
-					        "sent": "2020-06-18T15:20:24.063Z",
-					        "summary": {
-					            "created": 2,
-					            "not_created": 0,
-					            "valid": 2,
-					            "invalid": 0
-					        }
-					    }
+						"data": [
+							{
+								"value": "meme has:images",
+								"id": "1273636687768285186"
+							},
+							{
+								"value": "puppy has:media",
+								"tag": "puppies with media",
+								"id": "1273636687768285187"
+							}
+						],
+						"meta": {
+							"sent": "2020-06-18T15:20:24.063Z",
+							"summary": {
+								"created": 2,
+								"not_created": 0,
+								"valid": 2,
+								"invalid": 0
+							}
+						}
 					}}`
 					return &http.Response{
 						StatusCode: http.StatusCreated,
@@ -257,21 +257,21 @@ func Test_AddOrDeleteRules(t *testing.T) {
 				ctx: context.Background(),
 				client: mockHTTPClient(func(request *http.Request) *http.Response {
 					body := `{
-					    "data": [
-					        {
-					            "value": "tostones recipe",
-					            "id": "1273646795642421249"
-					        }
-					    ],
-					    "meta": {
-					        "sent": "2020-06-18T16:00:33.972Z",
-					        "summary": {
-					            "created": 1,
-					            "not_created": 0,
-					            "valid": 1,
-					            "invalid": 0
-					        }
-					    }
+						"data": [
+							{
+								"value": "tostones recipe",
+								"id": "1273646795642421249"
+							}
+						],
+						"meta": {
+							"sent": "2020-06-18T16:00:33.972Z",
+							"summary": {
+								"created": 1,
+								"not_created": 0,
+								"valid": 1,
+								"invalid": 0
+							}
+						}
 					}`
 					return &http.Response{
 						StatusCode: http.StatusCreated,
@@ -317,13 +317,13 @@ func Test_AddOrDeleteRules(t *testing.T) {
 				ctx: context.Background(),
 				client: mockHTTPClient(func(request *http.Request) *http.Response {
 					body := `{
-					    "meta": {
-					        "sent": "2020-07-09T21:13:18.284Z",
-					        "summary": {
-					            "deleted": 1,
-					            "not_deleted": 0
-					        }
-					    }
+						"meta": {
+							"sent": "2020-07-09T21:13:18.284Z",
+							"summary": {
+								"deleted": 1,
+								"not_deleted": 0
+							}
+						}
 					}`
 					return &http.Response{
 						StatusCode: http.StatusOK,
@@ -357,13 +357,13 @@ func Test_AddOrDeleteRules(t *testing.T) {
 					body := `{
 						"errors": [
 							{
-							    "client_id": "16340226",
-							    "required_enrollment": "Standard Basic",
-							    "registration_url": "https://developer.twitter.com/en/account",
-							    "title": "Client Forbidden",
-							    "detail": "This request must be made using an approved developer account that is enrolled in the requested endpoint. Learn more by visiting our documentation.",
-							    "reason": "client-not-enrolled",
-							    "type": "https://api.twitter.com/2/problems/client-forbidden"
+								"client_id": "16340226",
+								"required_enrollment": "Standard Basic",
+								"registration_url": "https://developer.twitter.com/en/account",
+								"title": "Client Forbidden",
+								"detail": "This request must be made using an approved developer account that is enrolled in the requested endpoint. Learn more by visiting our documentation.",
+								"reason": "client-not-enrolled",
+								"type": "https://api.twitter.com/2/problems/client-forbidden"
 							}
 						]
 					}`

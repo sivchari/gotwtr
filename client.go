@@ -28,8 +28,8 @@ type Client interface {
 	CountsRecentTweet(ctx context.Context, query string, opt ...*TweetCountsOption) (*TweetCountsResponse, error)
 	ConnectToStream(ctx context.Context, ch chan<- ConnectToStreamResponse, errCh chan<- error, opt ...*ConnectToStreamOption) *ConnectToStream
 	DiscoverSpacesByUserIDs(ctx context.Context, ids []string, opt ...*DiscoverSpacesOption) (*DiscoverSpacesByUserIDsResponse, error)
-	Followers(ctx context.Context, id string, opt ...*FollowOption) (*FollowersResponse, error)
-	Following(ctx context.Context, id string, opt ...*FollowOption) (*FollowingResponse, error)
+	LookUpFollowers(ctx context.Context, id string, opt ...*FollowOption) (*FollowersResponse, error)
+	LookUpFollowing(ctx context.Context, id string, opt ...*FollowOption) (*FollowingResponse, error)
 	LookUpSpaces(ctx context.Context, ids []string, opt ...*SpaceLookUpOption) (*SpaceLookUpResponse, error)
 	LookUpSpaceByID(ctx context.Context, id string, opt ...*SpaceLookUpOption) (*SpaceLookUpByIDResponse, error)
 	LookUpTweets(ctx context.Context, ids []string, opt ...*TweetLookUpOption) (*TweetLookUpResponse, error)
@@ -95,12 +95,12 @@ func (c *client) DiscoverSpacesByUserIDs(ctx context.Context, ids []string, opt 
 	return discoverSpacesByUserIDs(ctx, c, ids, opt...)
 }
 
-func (c *client) Followers(ctx context.Context, id string, opt ...*FollowOption) (*FollowersResponse, error) {
-	return followers(ctx, c, id, opt...)
+func (c *client) LookUpFollowers(ctx context.Context, id string, opt ...*FollowOption) (*FollowersResponse, error) {
+	return lookUpFollowers(ctx, c, id, opt...)
 }
 
-func (c *client) Following(ctx context.Context, id string, opt ...*FollowOption) (*FollowingResponse, error) {
-	return following(ctx, c, id, opt...)
+func (c *client) LookUpFollowing(ctx context.Context, id string, opt ...*FollowOption) (*FollowingResponse, error) {
+	return lookUpFollowing(ctx, c, id, opt...)
 }
 
 func (c *client) LookUpSpaces(ctx context.Context, ids []string, opt ...*SpaceLookUpOption) (*SpaceLookUpResponse, error) {
