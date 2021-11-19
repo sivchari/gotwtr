@@ -409,100 +409,94 @@ func Test_userMentionTimeline(t *testing.T) {
 								{
 									"name": "LeStache",
 									"id": "1034147061711679488",
-									"entities": [
-										{
-											"url": {
-												"urls": [
-													{
-														"start": 0,
-														"end": 23,
-														"url": "https://t.co/7IDoW8iFLm",
-														"expanded_url": "https://twitter.com",
-														"display_url": "twitter.com"
-													}
-												]
-											},
-											"description": {
-												"urls": [
-													{
-														"start": 21,
-														"end": 44,
-														"url": "https://t.co/v6nxjDjZR3",
-														"expanded_url": "https://google.com",
-														"display_url": "google.com"
-													}
-												],
-												"hashtags": [
-													{
-														"start": 15,
-														"end": 20,
-														"tag": "test"
-													}
-												],
-												"user_mentions": [
-													{
-														"start": 0,
-														"end": 8,
-														"username": "lebraat"
-													}
-												],
-												"cashtags": [
-													{
-														"start": 9,
-														"end": 14,
-														"tag": "twtr"
-													}
-												]
-											}
+									"entities": {
+										"url": {
+											"urls": [
+												{
+													"start": 0,
+													"end": 23,
+													"url": "https://t.co/7IDoW8iFLm",
+													"expanded_url": "https://twitter.com",
+													"display_url": "twitter.com"
+												}
+											]
+										},
+										"description": {
+											"urls": [
+												{
+													"start": 21,
+													"end": 44,
+													"url": "https://t.co/v6nxjDjZR3",
+													"expanded_url": "https://google.com",
+													"display_url": "google.com"
+												}
+											],
+											"hashtags": [
+												{
+													"start": 15,
+													"end": 20,
+													"tag": "test"
+												}
+											],
+											"user_mentions": [
+												{
+													"start": 0,
+													"end": 8,
+													"username": "lebraat"
+												}
+											],
+											"cashtags": [
+												{
+													"start": 9,
+													"end": 14,
+													"tag": "twtr"
+												}
+											]
 										}
-									],
+									},
 									"username": "LeStaache",
 									"created_at": "2018-08-27T18:34:07.000Z"
 								},
 								{
 									"name": "dan dale",
 									"id": "199566737",
-									"entities": [
-										{
-											"description": {
-												"hashtags": [
-													{
-														"start": 30,
-														"end": 37,
-														"tag": "devrel"
-													}
-												],
-												"user_mentions": [
-													{
-														"start": 18,
-														"end": 29,
-														"username": "twitterdev"
-													}
-												]
-											}
+									"entities": {
+										"description": {
+											"hashtags": [
+												{
+													"start": 30,
+													"end": 37,
+													"tag": "devrel"
+												}
+											],
+											"user_mentions": [
+												{
+													"start": 18,
+													"end": 29,
+													"username": "twitterdev"
+												}
+											]
 										}
-									],
+									},
 									"username": "LeBraat",
 									"created_at": "2010-10-07T05:36:28.000Z"
 								},
 								{
 									"name": "LeGuud",
 									"id": "930524282358325248",
-									"entities": [
-										{
-											"url": {
-												"urls": [
-													{
-														"start": 0,
-														"end": 23,
-														"url": "https://t.co/8IkCzClPCz",
-														"expanded_url": "https://developer.twitter.com",
-														"display_url": "developer.twitter.com"
-													}
-												]
-											}
+									"entities": {
+										"url": {
+											"urls": [
+												{
+													"start": 0,
+													"end": 23,
+													"url": "https://t.co/8IkCzClPCz",
+													"expanded_url": "https://developer.twitter.com",
+													"display_url": "developer.twitter.com"
+												}
+											]
 										}
-									],
+									},
 									"username": "LeGuud",
 									"created_at": "2017-11-14T19:54:12.000Z"
 								}
@@ -590,49 +584,47 @@ func Test_userMentionTimeline(t *testing.T) {
 						{
 							Name: "LeStache",
 							ID:   "1034147061711679488",
-							Entities: []*gotwtr.UserEntity{
-								{
-									URL: &gotwtr.UserURL{
-										URLs: []*gotwtr.UserURLs{
-											{
-												Start:       0,
-												End:         23,
-												URL:         "https://t.co/7IDoW8iFLm",
-												ExpandedURL: "https://twitter.com",
-												DisplayURL:  "twitter.com",
-											},
+							Entities: &gotwtr.UserEntity{
+								URL: &gotwtr.UserURL{
+									URLs: []*gotwtr.UserURLs{
+										{
+											Start:       0,
+											End:         23,
+											URL:         "https://t.co/7IDoW8iFLm",
+											ExpandedURL: "https://twitter.com",
+											DisplayURL:  "twitter.com",
 										},
 									},
-									Description: &gotwtr.UserDescription{
-										URLs: []*gotwtr.UserURLs{
-											{
-												Start:       21,
-												End:         44,
-												URL:         "https://t.co/v6nxjDjZR3",
-												ExpandedURL: "https://google.com",
-												DisplayURL:  "google.com",
-											},
+								},
+								Description: &gotwtr.UserDescription{
+									URLs: []*gotwtr.UserURLs{
+										{
+											Start:       21,
+											End:         44,
+											URL:         "https://t.co/v6nxjDjZR3",
+											ExpandedURL: "https://google.com",
+											DisplayURL:  "google.com",
 										},
-										Hashtags: []*gotwtr.UserHashtag{
-											{
-												Start: 15,
-												End:   20,
-												Tag:   "test",
-											},
+									},
+									Hashtags: []*gotwtr.UserHashtag{
+										{
+											Start: 15,
+											End:   20,
+											Tag:   "test",
 										},
-										Mentions: []*gotwtr.UserMention{
-											{
-												Start:    0,
-												End:      8,
-												UserName: "lebraat",
-											},
+									},
+									Mentions: []*gotwtr.UserMention{
+										{
+											Start:    0,
+											End:      8,
+											UserName: "lebraat",
 										},
-										Cashtags: []*gotwtr.UserCashtag{
-											{
-												Start: 9,
-												End:   14,
-												Tag:   "twtr",
-											},
+									},
+									Cashtags: []*gotwtr.UserCashtag{
+										{
+											Start: 9,
+											End:   14,
+											Tag:   "twtr",
 										},
 									},
 								},
@@ -643,22 +635,20 @@ func Test_userMentionTimeline(t *testing.T) {
 						{
 							Name: "dan dale",
 							ID:   "199566737",
-							Entities: []*gotwtr.UserEntity{
-								{
-									Description: &gotwtr.UserDescription{
-										Hashtags: []*gotwtr.UserHashtag{
-											{
-												Start: 30,
-												End:   37,
-												Tag:   "devrel",
-											},
+							Entities: &gotwtr.UserEntity{
+								Description: &gotwtr.UserDescription{
+									Hashtags: []*gotwtr.UserHashtag{
+										{
+											Start: 30,
+											End:   37,
+											Tag:   "devrel",
 										},
-										Mentions: []*gotwtr.UserMention{
-											{
-												Start:    18,
-												End:      29,
-												UserName: "twitterdev",
-											},
+									},
+									Mentions: []*gotwtr.UserMention{
+										{
+											Start:    18,
+											End:      29,
+											UserName: "twitterdev",
 										},
 									},
 								},
@@ -669,17 +659,15 @@ func Test_userMentionTimeline(t *testing.T) {
 						{
 							Name: "LeGuud",
 							ID:   "930524282358325248",
-							Entities: []*gotwtr.UserEntity{
-								{
-									URL: &gotwtr.UserURL{
-										URLs: []*gotwtr.UserURLs{
-											{
-												Start:       0,
-												End:         23,
-												URL:         "https://t.co/8IkCzClPCz",
-												ExpandedURL: "https://developer.twitter.com",
-												DisplayURL:  "developer.twitter.com",
-											},
+							Entities: &gotwtr.UserEntity{
+								URL: &gotwtr.UserURL{
+									URLs: []*gotwtr.UserURLs{
+										{
+											Start:       0,
+											End:         23,
+											URL:         "https://t.co/8IkCzClPCz",
+											ExpandedURL: "https://developer.twitter.com",
+											DisplayURL:  "developer.twitter.com",
 										},
 									},
 								},
@@ -709,7 +697,7 @@ func Test_userMentionTimeline(t *testing.T) {
 				t.Errorf("client.UserMentionTimeline() index = %v error = %v, wantErr %v", i, err, tt.wantErr)
 				return
 			}
-			if diff := cmp.Diff(got, tt.want); diff != "" {
+			if diff := cmp.Diff(tt.want, got); diff != "" {
 				t.Errorf("client.UserMentionTimeline() index = %v mismatch (-want +got):\n%s", i, diff)
 				return
 			}

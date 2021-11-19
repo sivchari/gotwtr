@@ -33,7 +33,7 @@ type User struct {
 	UserName        string             `json:"username"`
 	CreatedAt       string             `json:"created_at,omitempty"`
 	Description     string             `json:"description,omitempty"`
-	Entities        []*UserEntity      `json:"entities,omitempty"`
+	Entities        *UserEntity        `json:"entities,omitempty"`
 	Location        string             `json:"location,omitempty"`
 	PinnedTweetID   string             `json:"pinned_tweet_id,omitempty"`
 	ProfileImageURL string             `json:"profile_image_url,omitempty"`
