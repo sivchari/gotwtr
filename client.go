@@ -37,7 +37,7 @@ type Client interface {
 	LookUpUserByID(ctx context.Context, id string, opt ...*UserLookUpOption) (*UserLookUpByIDResponse, error)
 	LookUpUserByUserName(ctx context.Context, name string, opt ...*UserLookUpOption) (*UserLookUpByUserNameResponse, error)
 	LookUpUsersByUserNames(ctx context.Context, names []string, opt ...*UserLookUpOption) (*UsersLookUpByUserNamesResponse, error)
-	LookUpUsersWhoLiked(ctx context.Context, id string, opt ...*LookUpUsersWhoLikedOpts) (*LookUpUsersWhoLikedResponse, error)
+	LookUpUsersWhoLiked(ctx context.Context, tweetID string, opt ...*LookUpUsersWhoLikedOpts) (*LookUpUsersWhoLikedResponse, error)
 	// PostFollowing(ctx context.Context, id string, tuid string) (*PostFollowingResponse, error)
 	// PostRetweet(ctx context.Context, uid string, tid string) (*PostRetweetResponse, error)
 	RetweetsLookup(ctx context.Context, id string, opt ...*RetweetsLookupOpts) (*RetweetsLookupResponse, error)
@@ -130,8 +130,8 @@ func (c *client) LookUpUsersByUserNames(ctx context.Context, names []string, opt
 	return lookUpUsersByUserNames(ctx, c, names, opt...)
 }
 
-func (c *client) LookUpUsersWhoLiked(ctx context.Context, id string, opt ...*LookUpUsersWhoLikedOpts) (*LookUpUsersWhoLikedResponse, error) {
-	return lookUpUsersWhoLiked(ctx, c, id, opt...)
+func (c *client) LookUpUsersWhoLiked(ctx context.Context, tweetID string, opt ...*LookUpUsersWhoLikedOpts) (*LookUpUsersWhoLikedResponse, error) {
+	return lookUpUsersWhoLiked(ctx, c, tweetID, opt...)
 }
 
 func (c *client) PostFollowing(ctx context.Context, id string, tuid string) (*PostFollowingResponse, error) {

@@ -8,12 +8,12 @@ import (
 	"net/http"
 )
 
-func lookUpUsersWhoLiked(ctx context.Context, c *client, id string, opt ...*LookUpUsersWhoLikedOpts) (*LookUpUsersWhoLikedResponse, error) {
+func lookUpUsersWhoLiked(ctx context.Context, c *client, tweetID string, opt ...*LookUpUsersWhoLikedOpts) (*LookUpUsersWhoLikedResponse, error) {
 	// check id
-	if len(id) == 0 {
+	if len(tweetID) == 0 {
 		return nil, errors.New("likes look up by tweet: id parameter is required")
 	}
-	LikesLookUpByTweet := tweetLookUp + "/" + id + "/liking_users"
+	LikesLookUpByTweet := tweetLookUp + "/" + tweetID + "/liking_users"
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, LikesLookUpByTweet, nil)
 	if err != nil {
