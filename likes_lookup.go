@@ -13,9 +13,9 @@ func lookUpUsersWhoLiked(ctx context.Context, c *client, tweetID string, opt ...
 	if len(tweetID) == 0 {
 		return nil, errors.New("likes look up by tweet: id parameter is required")
 	}
-	LikesLookUpByTweet := tweetLookUp + "/" + tweetID + "/liking_users"
+	likesLookUpUsersUrl := likesLookUpUsers + "/" + tweetID + "/liking_users"
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, LikesLookUpByTweet, nil)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, likesLookUpUsersUrl, nil)
 	if err != nil {
 		return nil, fmt.Errorf("likes look up by tweet new request with ctx: %w", err)
 	}
