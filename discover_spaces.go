@@ -13,7 +13,7 @@ func discoverSpacesByUserIDs(ctx context.Context, c *client, ids []string, opt .
 	switch {
 	case len(ids) == 0:
 		return nil, errors.New("discover spaces: ids parameter is required")
-	case len(ids) > spaceLookUpMaxIDs:
+	case len(ids) > discoverSpacesMaxIDs:
 		return nil, errors.New("discover spaces: ids parameter must be less than or equal to 100")
 	default:
 	}
