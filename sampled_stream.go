@@ -38,6 +38,7 @@ func (s *StreamResponse) retry(req *http.Request) {
 			Status:  resp.Status,
 			URL:     req.URL.String(),
 		}
+		return
 	}
 	dec := json.NewDecoder(resp.Body)
 	for !stopped(s.done) {
