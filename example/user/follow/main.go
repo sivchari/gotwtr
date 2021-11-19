@@ -10,7 +10,9 @@ import (
 func main() {
 	client := gotwtr.New("key")
 
-	followingUsers, err := client.Following(context.Background(), "id")
+	followingUsers, err := client.LookUpFollowing(context.Background(), "id", &gotwtr.FollowOption{
+		MaxResults: 10,
+	})
 	if err != nil {
 		panic(err)
 	}
@@ -18,7 +20,7 @@ func main() {
 		fmt.Println(u)
 	}
 
-	followerUsers, err := client.Followers(context.Background(), "id")
+	followerUsers, err := client.LookUpFollowers(context.Background(), "id")
 	if err != nil {
 		panic(err)
 	}

@@ -20,6 +20,8 @@ const (
 	SpaceFieldParticipantCount SpaceField = "participant_count"
 	SpaceFieldSpeakerIDs       SpaceField = "speaker_ids"
 	SpaceFieldStartedAt        SpaceField = "started_at"
+	SpaceFieldEndedAt          SpaceField = "ended_at"
+	SpaceFieldTopicIDs         SpaceField = "topic_ids"
 	SpaceFieldState            SpaceField = "state"
 	SpaceFieldTitle            SpaceField = "title"
 	SpaceFieldUpdatedAt        SpaceField = "updated_at"
@@ -39,6 +41,7 @@ type Space struct {
 	ID               string   `json:"id"`
 	State            string   `json:"state"`
 	CreatedAt        string   `json:"created_at,omitempty"`
+	EndedAt          string   `json:"ended_at,omitempty"`
 	HostIDs          []string `json:"host_ids,omitempty"`
 	Lang             string   `json:"lang,omitempty"`
 	IsTicketed       bool     `json:"is_ticketed,omitempty"`
@@ -47,6 +50,7 @@ type Space struct {
 	ScheduledStart   string   `json:"scheduled_start,omitempty"`
 	SpeakerIDs       []string `json:"speaker_ids,omitempty"`
 	StartedAt        string   `json:"started_at,omitempty"`
+	TopicIDs         []string `json:"topic_ids,omitempty"`
 	Title            string   `json:"title,omitempty"`
 	UpdatedAt        string   `json:"updated_at,omitempty"`
 	CreatorID        string   `json:"creator_id,omitempty"`
@@ -64,7 +68,8 @@ type SearchSpacesMeta struct {
 }
 
 type SpaceIncludes struct {
-	Users []*User
+	Topics []*Topic
+	Users  []*User
 }
 
 type SpaceLookUpByIDResponse struct {
@@ -83,4 +88,15 @@ type SpaceLookUpResponse struct {
 	Title    string              `json:"title,omitempty"`
 	Detail   string              `json:"detail,omitempty"`
 	Type     string              `json:"type,omitempty"`
+}
+
+type DiscoverSpacesByUserIDsResponse struct {
+	Spaces   []*Space            `json:"data"`
+	Includes *SpaceIncludes      `json:"includes,omitempty"`
+	Errors   []*APIResponseError `json:"errors,omitempty"`
+	Meta     *DiscoverSpacesMeta `json:"meta"`
+}
+
+type DiscoverSpacesMeta struct {
+	ResultCount int `json:"result_count"`
 }

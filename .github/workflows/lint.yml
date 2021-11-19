@@ -20,4 +20,3 @@ jobs:
           reporter: github-pr-review
           go_version: ${{ matrix.go-version }}
           fail_on_error: true
-          filter_mode: added

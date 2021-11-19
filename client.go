@@ -11,11 +11,12 @@ type client struct {
 }
 
 const (
+	discoverSpacesMaxIDs        = 100
+	filteredStreamRuleMaxLength = 512
 	spaceLookUpMaxIDs           = 100
 	tweetLookUpMaxIDs           = 100
-	userLookUpMaxIDs            = 100
 	tweetSearchMaxQueryLength   = 512
-	filteredStreamRuleMaxLength = 512
+	userLookUpMaxIDs            = 100
 )
 
 // TODO: Add HideReplies interface
@@ -26,8 +27,9 @@ type Client interface {
 	AddOrDeleteRules(ctx context.Context, body *AddOrDeleteJSONBody, opt ...*AddOrDeleteRulesOption) (*AddOrDeleteRulesResponse, error)
 	CountsRecentTweet(ctx context.Context, query string, opt ...*TweetCountsOption) (*TweetCountsResponse, error)
 	ConnectToStream(ctx context.Context, ch chan<- ConnectToStreamResponse, errCh chan<- error, opt ...*ConnectToStreamOption) *ConnectToStream
-	Followers(ctx context.Context, id string, opt ...*FollowOption) (*FollowersResponse, error)
-	Following(ctx context.Context, id string, opt ...*FollowOption) (*FollowingResponse, error)
+	DiscoverSpacesByUserIDs(ctx context.Context, ids []string, opt ...*DiscoverSpacesOption) (*DiscoverSpacesByUserIDsResponse, error)
+	LookUpFollowers(ctx context.Context, id string, opt ...*FollowOption) (*FollowersResponse, error)
+	LookUpFollowing(ctx context.Context, id string, opt ...*FollowOption) (*FollowingResponse, error)
 	LookUpSpaces(ctx context.Context, ids []string, opt ...*SpaceLookUpOption) (*SpaceLookUpResponse, error)
 	LookUpSpaceByID(ctx context.Context, id string, opt ...*SpaceLookUpOption) (*SpaceLookUpByIDResponse, error)
 	LookUpTweets(ctx context.Context, ids []string, opt ...*TweetLookUpOption) (*TweetLookUpResponse, error)
@@ -90,12 +92,16 @@ func (c *client) ConnectToStream(ctx context.Context, ch chan<- ConnectToStreamR
 	return connectToStream(ctx, c, ch, errCh, opt...)
 }
 
-func (c *client) Followers(ctx context.Context, id string, opt ...*FollowOption) (*FollowersResponse, error) {
-	return followers(ctx, c, id, opt...)
+func (c *client) DiscoverSpacesByUserIDs(ctx context.Context, ids []string, opt ...*DiscoverSpacesOption) (*DiscoverSpacesByUserIDsResponse, error) {
+	return discoverSpacesByUserIDs(ctx, c, ids, opt...)
 }
 
-func (c *client) Following(ctx context.Context, id string, opt ...*FollowOption) (*FollowingResponse, error) {
-	return following(ctx, c, id, opt...)
+func (c *client) LookUpFollowers(ctx context.Context, id string, opt ...*FollowOption) (*FollowersResponse, error) {
+	return lookUpFollowers(ctx, c, id, opt...)
+}
+
+func (c *client) LookUpFollowing(ctx context.Context, id string, opt ...*FollowOption) (*FollowingResponse, error) {
+	return lookUpFollowing(ctx, c, id, opt...)
 }
 
 func (c *client) LookUpSpaces(ctx context.Context, ids []string, opt ...*SpaceLookUpOption) (*SpaceLookUpResponse, error) {

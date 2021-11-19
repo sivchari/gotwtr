@@ -17,7 +17,7 @@ func lookUpUsers(ctx context.Context, c *client, ids []string, opt ...*UserLookU
 		return nil, errors.New("user lookup: ids parameter must be less than or equal to 100")
 	default:
 	}
-	lookUpUsers := baseUserPath + "?ids="
+	lookUpUsers := userLookUp + "?ids="
 	// join ids to url
 	for i, id := range ids {
 		if i+1 < len(ids) {
@@ -69,7 +69,7 @@ func lookUpUserByID(ctx context.Context, c *client, id string, opt ...*UserLookU
 	if id == "" {
 		return nil, errors.New("user lookup by id: id parameter is required")
 	}
-	lookUpUserByID := baseUserPath + "/" + id
+	lookUpUserByID := userLookUp + "/" + id
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, lookUpUserByID, nil)
 	if err != nil {
@@ -115,7 +115,7 @@ func lookUpUserByUserName(ctx context.Context, c *client, name string, opt ...*U
 	if name == "" {
 		return nil, errors.New("user lookup by username: name parameter is required")
 	}
-	lookUpUserByUserName := baseUserPath + "/by/username/" + name
+	lookUpUserByUserName := userLookUp + "/by/username/" + name
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, lookUpUserByUserName, nil)
 	if err != nil {
@@ -166,7 +166,7 @@ func lookUpUsersByUserNames(ctx context.Context, c *client, names []string, opt 
 		return nil, errors.New("users lookup: names parameter must be less than or equal to 100")
 	default:
 	}
-	lookUpUsersByUserName := baseUserPath + "/by?usernames="
+	lookUpUsersByUserName := userLookUp + "/by?usernames="
 	// join ids to url
 	for i, name := range names {
 		if i+1 < len(names) {
