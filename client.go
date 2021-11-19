@@ -11,10 +11,11 @@ type client struct {
 }
 
 const (
-	spaceLookUpMaxIDs         = 100
-	tweetLookUpMaxIDs         = 100
-	userLookUpMaxIDs          = 100
-	tweetSearchMaxQueryLength = 512
+	spaceLookUpMaxIDs           = 100
+	tweetLookUpMaxIDs           = 100
+	userLookUpMaxIDs            = 100
+	tweetSearchMaxQueryLength   = 512
+	filteredStreamRuleMaxLength = 512
 )
 
 // TODO: Add HideReplies interface
@@ -22,13 +23,16 @@ const (
 
 type Client interface {
 	// CountsFullArchiveTweet(ctx context.Context, query string, opt ...*TweetCountsOption) (*TweetCountsResponse, error)
+	AddOrDeleteRules(ctx context.Context, body *AddOrDeleteJSONBody, opt ...*AddOrDeleteRulesOption) (*AddOrDeleteRulesResponse, error)
 	CountsRecentTweet(ctx context.Context, query string, opt ...*TweetCountsOption) (*TweetCountsResponse, error)
+	ConnectToStream(ctx context.Context, ch chan<- ConnectToStreamResponse, errCh chan<- error, opt ...*ConnectToStreamOption) *ConnectToStream
 	Followers(ctx context.Context, id string, opt ...*FollowOption) (*FollowersResponse, error)
 	Following(ctx context.Context, id string, opt ...*FollowOption) (*FollowingResponse, error)
 	LookUpSpaces(ctx context.Context, ids []string, opt ...*SpaceLookUpOption) (*SpaceLookUpResponse, error)
 	LookUpSpaceByID(ctx context.Context, id string, opt ...*SpaceLookUpOption) (*SpaceLookUpByIDResponse, error)
 	LookUpTweets(ctx context.Context, ids []string, opt ...*TweetLookUpOption) (*TweetLookUpResponse, error)
 	LookUpTweetByID(ctx context.Context, id string, opt ...*TweetLookUpOption) (*TweetLookUpByIDResponse, error)
+	RetrieveStreamRules(ctx context.Context, opt ...*RetrieveStreamRulesOption) (*RetrieveStreamRulesResponse, error)
 	LookUpUsers(ctx context.Context, ids []string, opt ...*UserLookUpOption) (*UserLookUpResponse, error)
 	LookUpUserByID(ctx context.Context, id string, opt ...*UserLookUpOption) (*UserLookUpByIDResponse, error)
 	LookUpUserByUserName(ctx context.Context, name string, opt ...*UserLookUpOption) (*UserLookUpByUserNameResponse, error)
@@ -73,8 +77,16 @@ func WithHTTPClient(httpClient *http.Client) ClientOption {
 // 	return countFullArchiveTweet(ctx, c, query, opt...)
 // }
 
+func (c *client) AddOrDeleteRules(ctx context.Context, body *AddOrDeleteJSONBody, opt ...*AddOrDeleteRulesOption) (*AddOrDeleteRulesResponse, error) {
+	return addOrDeleteRules(ctx, c, body, opt...)
+}
+
 func (c *client) CountsRecentTweet(ctx context.Context, query string, opt ...*TweetCountsOption) (*TweetCountsResponse, error) {
 	return countsRecentTweet(ctx, c, query, opt...)
+}
+
+func (c *client) ConnectToStream(ctx context.Context, ch chan<- ConnectToStreamResponse, errCh chan<- error, opt ...*ConnectToStreamOption) *ConnectToStream {
+	return connectToStream(ctx, c, ch, errCh, opt...)
 }
 
 func (c *client) Followers(ctx context.Context, id string, opt ...*FollowOption) (*FollowersResponse, error) {
@@ -159,4 +171,8 @@ func (c *client) UserMentionTimeline(ctx context.Context, id string, opt ...*Use
 
 func (c *client) UserTweetTimeline(ctx context.Context, id string, opt ...*UserTweetTimelineOpts) (*UserTweetTimelineResponse, error) {
 	return userTweetTimeline(ctx, c, id, opt...)
+}
+
+func (c *client) RetrieveStreamRules(ctx context.Context, opt ...*RetrieveStreamRulesOption) (*RetrieveStreamRulesResponse, error) {
+	return retrieveStreamRules(ctx, c, opt...)
 }
