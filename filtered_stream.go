@@ -134,7 +134,7 @@ func (s *ConnectToStream) retry(req *http.Request) {
 			Status:  resp.Status,
 			URL:     req.URL.String(),
 		}
-		fmt.Println(resp.Body)
+		return
 	}
 	dec := json.NewDecoder(resp.Body)
 
