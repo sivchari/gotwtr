@@ -11,11 +11,12 @@ type client struct {
 }
 
 const (
+	discoverSpacesMaxIDs        = 100
+	filteredStreamRuleMaxLength = 512
 	spaceLookUpMaxIDs           = 100
 	tweetLookUpMaxIDs           = 100
-	userLookUpMaxIDs            = 100
 	tweetSearchMaxQueryLength   = 512
-	filteredStreamRuleMaxLength = 512
+	userLookUpMaxIDs            = 100
 )
 
 // TODO: Add HideReplies interface
@@ -26,6 +27,7 @@ type Client interface {
 	AddOrDeleteRules(ctx context.Context, body *AddOrDeleteJSONBody, opt ...*AddOrDeleteRulesOption) (*AddOrDeleteRulesResponse, error)
 	CountsRecentTweet(ctx context.Context, query string, opt ...*TweetCountsOption) (*TweetCountsResponse, error)
 	ConnectToStream(ctx context.Context, ch chan<- ConnectToStreamResponse, errCh chan<- error, opt ...*ConnectToStreamOption) *ConnectToStream
+	DiscoverSpacesByUserIDs(ctx context.Context, ids []string, opt ...*DiscoverSpacesOption) (*DiscoverSpacesByUserIDsResponse, error)
 	Followers(ctx context.Context, id string, opt ...*FollowOption) (*FollowersResponse, error)
 	Following(ctx context.Context, id string, opt ...*FollowOption) (*FollowingResponse, error)
 	LookUpSpaces(ctx context.Context, ids []string, opt ...*SpaceLookUpOption) (*SpaceLookUpResponse, error)
@@ -87,6 +89,10 @@ func (c *client) CountsRecentTweet(ctx context.Context, query string, opt ...*Tw
 
 func (c *client) ConnectToStream(ctx context.Context, ch chan<- ConnectToStreamResponse, errCh chan<- error, opt ...*ConnectToStreamOption) *ConnectToStream {
 	return connectToStream(ctx, c, ch, errCh, opt...)
+}
+
+func (c *client) DiscoverSpacesByUserIDs(ctx context.Context, ids []string, opt ...*DiscoverSpacesOption) (*DiscoverSpacesByUserIDsResponse, error) {
+	return discoverSpacesByUserIDs(ctx, c, ids, opt...)
 }
 
 func (c *client) Followers(ctx context.Context, id string, opt ...*FollowOption) (*FollowersResponse, error) {
