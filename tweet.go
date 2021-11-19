@@ -341,27 +341,27 @@ type StreamResponse struct {
 	wg     *sync.WaitGroup
 }
 
-type LikesLookUpUserWithheld struct {
+type LookUpUsersWhoLikedWithheld struct {
 	Scope        string   `json:"scope"`
 	CountryCodes []string `json:"country_codes"`
 }
 
-type LikesLookUpUserEntity struct {
-	URL         *LikesLookUpUserURL         `json:"url"`
-	Description *LikesLookUpUserDescription `json:"description"`
+type LookUpUsersWhoLikedEntity struct {
+	URL         *LookUpUsersWhoLikedURL         `json:"url"`
+	Description *LookUpUsersWhoLikedDescription `json:"description"`
 }
 
-type LikesLookUpUserURL struct {
-	URLs []*LikesLookUpUserURLContent `json:"urls"`
+type LookUpUsersWhoLikedURL struct {
+	URLs []*LookUpUsersWhoLikedURLContent `json:"urls"`
 }
 
-type LikesLookUpUserDescription struct {
-	URLs     []*LikesLookUpUserURLContent `json:"urls"`
-	HashTags []*LikesLookUpUserHashTag    `json:"hashtags"`
-	Mentions []*LikesLookUpUserMention    `json:"mentions"`
+type LookUpUsersWhoLikedDescription struct {
+	URLs     []*LookUpUsersWhoLikedURLContent `json:"urls"`
+	HashTags []*LookUpUsersWhoLikedHashTag    `json:"hashtags"`
+	Mentions []*LookUpUsersWhoLikedMention    `json:"mentions"`
 }
 
-type LikesLookUpUserURLContent struct {
+type LookUpUsersWhoLikedURLContent struct {
 	Start       int    `json:"start"`
 	End         int    `json:"end"`
 	URL         string `json:"url"`
@@ -369,60 +369,60 @@ type LikesLookUpUserURLContent struct {
 	DisplayURL  string `json:"display_url"`
 }
 
-type LikesLookUpUserHashTag struct {
+type LookUpUsersWhoLikedHashTag struct {
 	Start   int    `json:"start"`
 	End     int    `json:"end"`
 	HashTag string `json:"hashtag"`
 }
 
-type LikesLookUpUserMention struct {
-	Start    int                       `json:"start"`
-	End      int                       `json:"end"`
-	UserName string                    `json:"username"`
-	CashTags []*LikesLookUpUserCashTag `json:"cashtags"`
+type LookUpUsersWhoLikedMention struct {
+	Start    int                           `json:"start"`
+	End      int                           `json:"end"`
+	UserName string                        `json:"username"`
+	CashTags []*LookUpUsersWhoLikedCashTag `json:"cashtags"`
 }
 
-type LikesLookUpUserCashTag struct {
+type LookUpUsersWhoLikedCashTag struct {
 	Start   int    `json:"start"`
 	End     int    `json:"end"`
 	CashTag string `json:"cashtag"`
 }
 
-type LikesLookUpUserPublicMetrics struct {
+type LookUpUsersWhoLikedPublicMetrics struct {
 	FollowersCount int `json:"followers_count"`
 	FollowingCount int `json:"following_count"`
 	TweetCount     int `json:"tweet_count"`
 	ListedCount    int `json:"listed_count"`
 }
 
-type LikesLookUpUser struct {
-	ID              string                        `json:"id"`
-	Name            string                        `json:"name"`
-	UserName        string                        `json:"username"`
-	CreatedAt       string                        `json:"created_at,omitempty"`
-	Protected       bool                          `json:"protected,omitempty"`
-	Withheld        *LikesLookUpUserWithheld      `json:"withheld,omitempty"`
-	Location        string                        `json:"location,omitempty"`
-	URL             string                        `json:"url,omitempty"`
-	Description     string                        `json:"description,omitempty"`
-	Verified        bool                          `json:"verified,omitempty"`
-	Entities        *LikesLookUpUserEntity        `json:"entities,omitempty"`
-	ProfileImageUrl string                        `json:"profile_image_url,omitempty"`
-	PublicMetrics   *LikesLookUpUserPublicMetrics `json:"public_metrics,omitempty"`
-	PinnedTweetID   string                        `json:"pinned_tweet_id,omitempty"`
+type LookUpUsersWhoLiked struct {
+	ID              string                            `json:"id"`
+	Name            string                            `json:"name"`
+	UserName        string                            `json:"username"`
+	CreatedAt       string                            `json:"created_at,omitempty"`
+	Protected       bool                              `json:"protected,omitempty"`
+	Withheld        *LookUpUsersWhoLikedWithheld      `json:"withheld,omitempty"`
+	Location        string                            `json:"location,omitempty"`
+	URL             string                            `json:"url,omitempty"`
+	Description     string                            `json:"description,omitempty"`
+	Verified        bool                              `json:"verified,omitempty"`
+	Entities        *LookUpUsersWhoLikedEntity        `json:"entities,omitempty"`
+	ProfileImageUrl string                            `json:"profile_image_url,omitempty"`
+	PublicMetrics   *LookUpUsersWhoLikedPublicMetrics `json:"public_metrics,omitempty"`
+	PinnedTweetID   string                            `json:"pinned_tweet_id,omitempty"`
 }
 
-type LikesLookUpUserResponse struct {
-	Users    []*LikesLookUpUser       `json:"data"`
-	Includes *LikesLookUpUserIncludes `json:"includes,omitempty"`
-	Meta     *LikesLookUpUserMeta     `json:"meta"`
-	Errors   []*APIResponseError      `json:"errors,omitempty"`
+type LookUpUsersWhoLikedResponse struct {
+	Users    []*LookUpUsersWhoLiked       `json:"data"`
+	Includes *LookUpUsersWhoLikedIncludes `json:"includes,omitempty"`
+	Meta     *LookUpUsersWhoLikedMeta     `json:"meta"`
+	Errors   []*APIResponseError          `json:"errors,omitempty"`
 }
 
-type LikesLookUpUserIncludes struct {
+type LookUpUsersWhoLikedIncludes struct {
 	Tweets []*Tweet `json:"tweets"`
 }
 
-type LikesLookUpUserMeta struct {
+type LookUpUsersWhoLikedMeta struct {
 	ResultCount int `json:"result_count"`
 }

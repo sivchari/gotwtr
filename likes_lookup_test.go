@@ -11,16 +11,16 @@ import (
 	"github.com/sivchari/gotwtr"
 )
 
-func Test_likesLookUpUsers(t *testing.T) {
+func Test_lookUpUsersWhoLiked(t *testing.T) {
 	type args struct {
 		ctx    context.Context
 		client *http.Client
-		opt    []*gotwtr.LikesLookUpUserOpts
+		opt    []*gotwtr.LookUpUsersWhoLikedOpts
 	}
 	tests := []struct {
 		name    string
 		args    args
-		want    *gotwtr.LikesLookUpUserResponse
+		want    *gotwtr.LookUpUsersWhoLikedResponse
 		wantErr bool
 	}{
 		{
@@ -53,8 +53,8 @@ func Test_likesLookUpUsers(t *testing.T) {
 					}
 				}),
 			},
-			want: &gotwtr.LikesLookUpUserResponse{
-				Users: []*gotwtr.LikesLookUpUser{
+			want: &gotwtr.LookUpUsersWhoLikedResponse{
+				Users: []*gotwtr.LookUpUsersWhoLiked{
 					{
 						ID:       "1065249714214457345",
 						Name:     "Spaces",
@@ -142,7 +142,7 @@ func Test_likesLookUpUsers(t *testing.T) {
 						Body:       io.NopCloser(strings.NewReader(body)),
 					}
 				}),
-				opt: []*gotwtr.LikesLookUpUserOpts{
+				opt: []*gotwtr.LookUpUsersWhoLikedOpts{
 					{
 						Expansions:  []gotwtr.Expansion{gotwtr.ExpansionPinnedTweetID},
 						UserFields:  []gotwtr.UserField{gotwtr.UserFieldCreatedAt},
@@ -150,8 +150,8 @@ func Test_likesLookUpUsers(t *testing.T) {
 					},
 				},
 			},
-			want: &gotwtr.LikesLookUpUserResponse{
-				Users: []*gotwtr.LikesLookUpUser{
+			want: &gotwtr.LookUpUsersWhoLikedResponse{
+				Users: []*gotwtr.LookUpUsersWhoLiked{
 					{
 						ID:            "1065249714214457345",
 						CreatedAt:     "2018-11-21T14:24:58.000Z",
@@ -191,7 +191,7 @@ func Test_likesLookUpUsers(t *testing.T) {
 						UserName:      "TwitterAPI",
 					},
 				},
-				Includes: &gotwtr.LikesLookUpUserIncludes{
+				Includes: &gotwtr.LookUpUsersWhoLikedIncludes{
 					Tweets: []*gotwtr.Tweet{
 						{
 							ID:   "1389270063807598594",
@@ -217,13 +217,13 @@ func Test_likesLookUpUsers(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
-			got, err := c.LikesLookUpUsers(tt.args.ctx, "tweet_id", tt.args.opt...)
+			got, err := c.LookUpUsersWhoLiked(tt.args.ctx, "tweet_id", tt.args.opt...)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("LikesLookUpUsers() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("LookUpUsersWhoLiked() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if diff := cmp.Diff(got, tt.want); diff != "" {
-				t.Errorf("LikesLookUpUsersm() mismatch (-want +got):\n%s", diff)
+				t.Errorf("LookUpUsersWhoLiked() mismatch (-want +got):\n%s", diff)
 				return
 			}
 		})
