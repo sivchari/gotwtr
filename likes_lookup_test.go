@@ -24,7 +24,7 @@ func Test_lookUpUsersWhoLiked(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name: "200 success with No Optional fileds",
+			name: "200 success with no optional fileds",
 			args: args{
 				ctx: context.Background(),
 				client: mockHTTPClient(func(request *http.Request) *http.Response {
@@ -75,7 +75,7 @@ func Test_lookUpUsersWhoLiked(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name: "200 success with Optional fileds",
+			name: "200 success with optional fileds",
 			args: args{
 				ctx: context.Background(),
 				client: mockHTTPClient(func(request *http.Request) *http.Response {
