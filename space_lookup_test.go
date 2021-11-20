@@ -249,3 +249,170 @@ func Test_lookUpSpaceByID(t *testing.T) {
 		})
 	}
 }
+
+func Test_lookUpUsersWhoPurchasedSpaceTicket(t *testing.T) {
+	t.Parallel()
+	type args struct {
+		ctx    context.Context
+		client *http.Client
+		id     string
+		opt    []*gotwtr.LookUpUsersWhoPurchasedSpaceTicketOption
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    *gotwtr.LookUpUsersWhoPurchasedSpaceTicketResponse
+		wantErr bool
+	}{
+		{
+			name: "200 ok users who bought a ticket to a Space",
+			args: args{
+				ctx: context.Background(),
+				client: mockHTTPClient(func(request *http.Request) *http.Response {
+					data := `{
+						"data": [
+							{
+								"id": "2244994945",
+								"username": "TwitterDev",
+								"name": "Twitter Dev"
+							},
+							{
+								"id": "783214",
+								"username": "Twitter",
+								"name": "Twitter"
+							}
+						]
+					}`
+					return &http.Response{
+						StatusCode: http.StatusOK,
+						Body:       io.NopCloser(strings.NewReader(data)),
+					}
+				}),
+				id:  "1DXxyRYNejbKM",
+				opt: []*gotwtr.LookUpUsersWhoPurchasedSpaceTicketOption{},
+			},
+			want: &gotwtr.LookUpUsersWhoPurchasedSpaceTicketResponse{
+				Users: []*gotwtr.User{
+					{
+						ID:       "2244994945",
+						UserName: "TwitterDev",
+						Name:     "Twitter Dev",
+					},
+					{
+						ID:       "783214",
+						UserName: "Twitter",
+						Name:     "Twitter",
+					},
+				},
+			},
+			wantErr: false,
+		},
+		{
+			name: "200 ok users who bought a ticket to a Space with optional fields",
+			args: args{
+				ctx: context.Background(),
+				client: mockHTTPClient(func(request *http.Request) *http.Response {
+					data := `{
+						"data": [
+							{
+								"created_at": "2013-12-14T04:35:55.000Z",
+								"username": "TwitterDev",
+								"pinned_tweet_id": "1255542774432063488",
+								"id": "2244994945",
+								"name": "Twitter Dev"
+							},
+							{
+								"created_at": "2007-02-20T14:35:54.000Z",
+								"username": "Twitter",
+								"pinned_tweet_id": "1274087687469715457",
+								"id": "783214",
+								"name": "Twitter"
+							}
+						],
+						"includes": {
+							"tweets": [
+								{
+									"created_at": "2020-04-29T17:01:38.000Z",
+									"text": "During these unprecedented times, what’s happening on Twitter can help the world better understand &amp; respond to the pandemic. nnWe're launching a free COVID-19 stream endpoint so qualified devs &amp; researchers can study the public conversation in real-time. https://t.co/BPqMcQzhId",
+									"id": "1255542774432063488"
+								},
+								{
+									"created_at": "2020-06-19T21:12:30.000Z",
+									"text": "📍 Minneapolisn🗣️ @FredTJoseph https://t.co/lNTOkyguG1",
+									"id": "1274087687469715457"
+								}
+							]
+						}
+					}`
+					return &http.Response{
+						StatusCode: http.StatusOK,
+						Body:       io.NopCloser(strings.NewReader(data)),
+					}
+				}),
+				id: "1DXxyRYNejbKM",
+				opt: []*gotwtr.LookUpUsersWhoPurchasedSpaceTicketOption{
+					{
+						Expansions: []gotwtr.Expansion{
+							gotwtr.ExpansionPinnedTweetID,
+						},
+						UserFields: []gotwtr.UserField{
+							gotwtr.UserFieldCreatedAt,
+						},
+						TweetFields: []gotwtr.TweetField{
+							gotwtr.TweetFieldCreatedAt,
+						},
+					},
+				},
+			},
+			want: &gotwtr.LookUpUsersWhoPurchasedSpaceTicketResponse{
+				Users: []*gotwtr.User{
+					{
+						ID:            "2244994945",
+						UserName:      "TwitterDev",
+						Name:          "Twitter Dev",
+						CreatedAt:     "2013-12-14T04:35:55.000Z",
+						PinnedTweetID: "1255542774432063488",
+					},
+					{
+						ID:            "783214",
+						UserName:      "Twitter",
+						Name:          "Twitter",
+						CreatedAt:     "2007-02-20T14:35:54.000Z",
+						PinnedTweetID: "1274087687469715457",
+					},
+				},
+				Includes: &gotwtr.LookUpUsersWhoPurchasedSpaceTicketIncludes{
+					Tweets: []*gotwtr.Tweet{
+						{
+							ID:        "1255542774432063488",
+							CreatedAt: "2020-04-29T17:01:38.000Z",
+							Text:      "During these unprecedented times, what’s happening on Twitter can help the world better understand &amp; respond to the pandemic. nnWe're launching a free COVID-19 stream endpoint so qualified devs &amp; researchers can study the public conversation in real-time. https://t.co/BPqMcQzhId",
+						},
+						{
+							ID:        "1274087687469715457",
+							CreatedAt: "2020-06-19T21:12:30.000Z",
+							Text:      "📍 Minneapolisn🗣️ @FredTJoseph https://t.co/lNTOkyguG1",
+						},
+					},
+				},
+			},
+			wantErr: false,
+		},
+	}
+	for i, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
+			got, err := c.LookUpUsersWhoPurchasedSpaceTicket(tt.args.ctx, tt.args.id, tt.args.opt...)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("LookUpSpaceByID() index = %v error = %v, wantErr %v", i, err, tt.wantErr)
+				return
+			}
+			if diff := cmp.Diff(got, tt.want); diff != "" {
+				t.Errorf("discoverSpacesByUserIDs() mismatch (-want +got):\n%s", diff)
+				return
+			}
+		})
+	}
+}

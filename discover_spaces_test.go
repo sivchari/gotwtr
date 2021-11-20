@@ -69,11 +69,11 @@ func Test_discoverSpacesByUserIDs(t *testing.T) {
 			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
 			got, err := c.DiscoverSpacesByUserIDs(tt.args.ctx, tt.args.ids, tt.args.opt...)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("discoverSpacesByUserIDs() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("DiscoverSpacesByUserIDs() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if diff := cmp.Diff(got, tt.want); diff != "" {
-				t.Errorf("discoverSpacesByUserIDs() mismatch (-want +got):\n%s", diff)
+				t.Errorf("DiscoverSpacesByUserIDs() mismatch (-want +got):\n%s", diff)
 				return
 			}
 		})

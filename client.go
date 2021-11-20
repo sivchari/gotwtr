@@ -39,6 +39,7 @@ type Client interface {
 	LookUpUserByUserName(ctx context.Context, name string, opt ...*UserLookUpOption) (*UserLookUpByUserNameResponse, error)
 	LookUpUsersByUserNames(ctx context.Context, names []string, opt ...*UserLookUpOption) (*UsersLookUpByUserNamesResponse, error)
 	LookUpUsersWhoLiked(ctx context.Context, tweetID string, opt ...*LookUpUsersWhoLikedOpts) (*LookUpUsersWhoLikedResponse, error)
+	LookUpUsersWhoPurchasedSpaceTicket(ctx context.Context, id string, opt ...*LookUpUsersWhoPurchasedSpaceTicketOption) (*LookUpUsersWhoPurchasedSpaceTicketResponse, error)
 	// PostFollowing(ctx context.Context, id string, tuid string) (*PostFollowingResponse, error)
 	// PostRetweet(ctx context.Context, uid string, tid string) (*PostRetweetResponse, error)
 	RetrieveStreamRules(ctx context.Context, opt ...*RetrieveStreamRulesOption) (*RetrieveStreamRulesResponse, error)
@@ -110,6 +111,10 @@ func (c *client) LookUpSpaces(ctx context.Context, ids []string, opt ...*SpaceLo
 
 func (c *client) LookUpSpaceByID(ctx context.Context, id string, opt ...*SpaceLookUpOption) (*SpaceLookUpByIDResponse, error) {
 	return lookUpSpaceByID(ctx, c, id, opt...)
+}
+
+func (c *client) LookUpUsersWhoPurchasedSpaceTicket(ctx context.Context, id string, opt ...*LookUpUsersWhoPurchasedSpaceTicketOption) (*LookUpUsersWhoPurchasedSpaceTicketResponse, error) {
+	return lookUpUsersWhoPurchasedSpaceTicket(ctx, c, id, opt...)
 }
 
 func (c *client) LookUpTweets(ctx context.Context, ids []string, opt ...*TweetLookUpOption) (*TweetLookUpResponse, error) {
