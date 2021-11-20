@@ -11,6 +11,7 @@ var (
 	sampleStream      = "https://api.twitter.com/2/tweets/sample/stream"
 	spaceDiscover     = "https://api.twitter.com/2/spaces/by/creator_ids"
 	spaceLookUp       = "https://api.twitter.com/2/spaces"
+	spaceLookUpBuyers = "https://api.twitter.com/2/spaces"
 	spacesSearch      = "https://api.twitter.com/2/spaces/search"
 	timeline          = "https://api.twitter.com/2/users"
 	tweetLookUp       = "https://api.twitter.com/2/tweets"

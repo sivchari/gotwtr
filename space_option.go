@@ -107,3 +107,37 @@ func (s *DiscoverSpacesOption) addQuery(req *http.Request) {
 		req.URL.RawQuery = q.Encode()
 	}
 }
+
+type LookUpUsersWhoPurchasedSpaceTicketOption struct {
+	Expansions  []Expansion
+	MediaFields []MediaField
+	PlaceFields []PlaceField
+	PollFields  []PollField
+	TweetFields []TweetField
+	UserFields  []UserField
+}
+
+func (o *LookUpUsersWhoPurchasedSpaceTicketOption) addQuery(req *http.Request) {
+	q := req.URL.Query()
+	if len(o.Expansions) > 0 {
+		q.Add("expansions", strings.Join(expansionsToString(o.Expansions), ","))
+	}
+	if len(o.MediaFields) > 0 {
+		q.Add("media.fields", strings.Join(mediaFieldsToString(o.MediaFields), ","))
+	}
+	if len(o.PlaceFields) > 0 {
+		q.Add("place.fields", strings.Join(placeFieldsToString(o.PlaceFields), ","))
+	}
+	if len(o.PollFields) > 0 {
+		q.Add("poll.fields", strings.Join(pollFieldsToString(o.PollFields), ","))
+	}
+	if len(o.TweetFields) > 0 {
+		q.Add("tweet.fields", strings.Join(tweetFieldsToString(o.TweetFields), ","))
+	}
+	if len(o.UserFields) > 0 {
+		q.Add("user.fields", strings.Join(userFieldsToString(o.UserFields), ","))
+	}
+	if len(q) > 0 {
+		req.URL.RawQuery = q.Encode()
+	}
+}
