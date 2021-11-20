@@ -273,8 +273,8 @@ func Test_lookUpUsersWhoPurchasedSpaceTicket(t *testing.T) {
 						"data": [
 							{
 								"id": "2244994945",
-								"username": "TwitterDev",
-								"name": "Twitter Dev"
+								"username": "Twtr",
+								"name": "Twtr"
 							},
 							{
 								"id": "783214",
@@ -295,8 +295,8 @@ func Test_lookUpUsersWhoPurchasedSpaceTicket(t *testing.T) {
 				Users: []*gotwtr.User{
 					{
 						ID:       "2244994945",
-						UserName: "TwitterDev",
-						Name:     "Twitter Dev",
+						UserName: "Twtr",
+						Name:     "Twtr",
 					},
 					{
 						ID:       "783214",
@@ -316,10 +316,10 @@ func Test_lookUpUsersWhoPurchasedSpaceTicket(t *testing.T) {
 						"data": [
 							{
 								"created_at": "2013-12-14T04:35:55.000Z",
-								"username": "TwitterDev",
+								"username": "TwitterProd",
 								"pinned_tweet_id": "1255542774432063488",
 								"id": "2244994945",
-								"name": "Twitter Dev"
+								"name": "Twitter Prod"
 							},
 							{
 								"created_at": "2007-02-20T14:35:54.000Z",
@@ -368,8 +368,8 @@ func Test_lookUpUsersWhoPurchasedSpaceTicket(t *testing.T) {
 				Users: []*gotwtr.User{
 					{
 						ID:            "2244994945",
-						UserName:      "TwitterDev",
-						Name:          "Twitter Dev",
+						UserName:      "TwitterProd",
+						Name:          "Twitter Prod",
 						CreatedAt:     "2013-12-14T04:35:55.000Z",
 						PinnedTweetID: "1255542774432063488",
 					},
