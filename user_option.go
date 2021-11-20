@@ -41,14 +41,17 @@ func (t FollowOption) addQuery(req *http.Request) {
 	if len(t.Expansions) > 0 {
 		q.Add("expansions", strings.Join(expansionsToString(t.Expansions), ","))
 	}
+	if t.MaxResults > 0 {
+		q.Add("max_results", strconv.Itoa(t.MaxResults))
+	}
+	if len(t.PaginationToken) > 0 {
+		q.Add("pagination_token", t.PaginationToken)
+	}
 	if len(t.TweetFields) > 0 {
 		q.Add("tweet.fields", strings.Join(tweetFieldsToString(t.TweetFields), ","))
 	}
 	if len(t.UserFields) > 0 {
 		q.Add("user.fields", strings.Join(userFieldsToString(t.UserFields), ","))
-	}
-	if t.MaxResults > 0 {
-		q.Add("max_results", strconv.Itoa(t.MaxResults))
 	}
 	if len(q) > 0 {
 		req.URL.RawQuery = q.Encode()

@@ -30,6 +30,8 @@ type Client interface {
 	DiscoverSpacesByUserIDs(ctx context.Context, ids []string, opt ...*DiscoverSpacesOption) (*DiscoverSpacesByUserIDsResponse, error)
 	LookUpFollowers(ctx context.Context, id string, opt ...*FollowOption) (*FollowersResponse, error)
 	LookUpFollowing(ctx context.Context, id string, opt ...*FollowOption) (*FollowingResponse, error)
+	LookUpListByID(ctx context.Context, id string, opt ...*ListLookUpOption) (*ListLookUpByIDResponse, error)
+	LookUpOwnedListsByID(ctx context.Context, id string, opt ...*ListLookUpOption) (*OwnedListsLookUpByIDResponse, error)
 	LookUpSpaces(ctx context.Context, ids []string, opt ...*SpaceLookUpOption) (*SpaceLookUpResponse, error)
 	LookUpSpaceByID(ctx context.Context, id string, opt ...*SpaceLookUpOption) (*SpaceLookUpByIDResponse, error)
 	LookUpTweets(ctx context.Context, ids []string, opt ...*TweetLookUpOption) (*TweetLookUpResponse, error)
@@ -101,6 +103,14 @@ func (c *client) LookUpFollowers(ctx context.Context, id string, opt ...*FollowO
 
 func (c *client) LookUpFollowing(ctx context.Context, id string, opt ...*FollowOption) (*FollowingResponse, error) {
 	return lookUpFollowing(ctx, c, id, opt...)
+}
+
+func (c *client) LookUpListByID(ctx context.Context, id string, opt ...*ListLookUpOption) (*ListLookUpByIDResponse, error) {
+	return lookUpListByID(ctx, c, id, opt...)
+}
+
+func (c *client) LookUpOwnedListsByID(ctx context.Context, id string, opt ...*ListLookUpOption) (*OwnedListsLookUpByIDResponse, error) {
+	return lookUpOwnedListsByID(ctx, c, id, opt...)
 }
 
 func (c *client) LookUpSpaces(ctx context.Context, ids []string, opt ...*SpaceLookUpOption) (*SpaceLookUpResponse, error) {
