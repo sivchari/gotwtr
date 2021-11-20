@@ -407,7 +407,7 @@ type LookUpUsersWhoLiked struct {
 	Description     string                            `json:"description,omitempty"`
 	Verified        bool                              `json:"verified,omitempty"`
 	Entities        *LookUpUsersWhoLikedEntity        `json:"entities,omitempty"`
-	ProfileImageUrl string                            `json:"profile_image_url,omitempty"`
+	ProfileImageURL string                            `json:"profile_image_url,omitempty"`
 	PublicMetrics   *LookUpUsersWhoLikedPublicMetrics `json:"public_metrics,omitempty"`
 	PinnedTweetID   string                            `json:"pinned_tweet_id,omitempty"`
 }
