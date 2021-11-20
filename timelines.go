@@ -8,7 +8,7 @@ import (
 	"net/http"
 )
 
-func userTweetTimeline(ctx context.Context, c *client, id string, opt ...*UserTweetTimelineOpts) (*UserTweetTimelineResponse, error) {
+func userTweetTimeline(ctx context.Context, c *client, id string, opt ...*UserTweetTimelineOption) (*UserTweetTimelineResponse, error) {
 	// check id
 	if len(id) == 0 {
 		return nil, errors.New("user tweet timeline: id parameter is required")
@@ -21,7 +21,7 @@ func userTweetTimeline(ctx context.Context, c *client, id string, opt ...*UserTw
 	}
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.bearerToken))
 
-	var uopt UserTweetTimelineOpts
+	var uopt UserTweetTimelineOption
 	switch len(opt) {
 	case 0:
 		// do nothing
@@ -53,7 +53,7 @@ func userTweetTimeline(ctx context.Context, c *client, id string, opt ...*UserTw
 	return &timelines, nil
 }
 
-func userMentionTimeline(ctx context.Context, c *client, id string, opt ...*UserMentionTimelineOpts) (*UserMentionTimelineResponse, error) {
+func userMentionTimeline(ctx context.Context, c *client, id string, opt ...*UserMentionTimelineOption) (*UserMentionTimelineResponse, error) {
 	// check id
 	if len(id) == 0 {
 		return nil, errors.New("user mention timeline: id parameter is required")
@@ -66,7 +66,7 @@ func userMentionTimeline(ctx context.Context, c *client, id string, opt ...*User
 	}
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.bearerToken))
 
-	var uopt UserMentionTimelineOpts
+	var uopt UserMentionTimelineOption
 	switch len(opt) {
 	case 0:
 		// do nothing

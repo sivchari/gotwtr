@@ -109,7 +109,7 @@ func (t TweetSearchOption) addQuery(req *http.Request) {
 	}
 }
 
-type UserTweetTimelineOpts struct {
+type UserTweetTimelineOption struct {
 	Expansions      []Expansion
 	MediaFields     []MediaField
 	PlaceFields     []PlaceField
@@ -125,7 +125,7 @@ type UserTweetTimelineOpts struct {
 	UntilID         string
 }
 
-func (t UserTweetTimelineOpts) addQuery(req *http.Request) {
+func (t UserTweetTimelineOption) addQuery(req *http.Request) {
 	q := req.URL.Query()
 	if len(t.Expansions) > 0 {
 		q.Add("expansions", strings.Join(expansionsToString(t.Expansions), ","))
@@ -171,7 +171,7 @@ func (t UserTweetTimelineOpts) addQuery(req *http.Request) {
 	}
 }
 
-type UserMentionTimelineOpts struct {
+type UserMentionTimelineOption struct {
 	Expansions      []Expansion
 	MediaFields     []MediaField
 	PlaceFields     []PlaceField
@@ -186,7 +186,7 @@ type UserMentionTimelineOpts struct {
 	UntilID         string
 }
 
-func (t UserMentionTimelineOpts) addQuery(req *http.Request) {
+func (t UserMentionTimelineOption) addQuery(req *http.Request) {
 	q := req.URL.Query()
 	if len(t.Expansions) > 0 {
 		q.Add("expansions", strings.Join(expansionsToString(t.Expansions), ","))
