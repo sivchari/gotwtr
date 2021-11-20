@@ -45,13 +45,13 @@ func Test_lookUpOwnedListByID(t *testing.T) {
 						Body:       io.NopCloser(strings.NewReader(body)),
 					}
 				}),
-				id: "2244994945",
+				id:  "2244994945",
 				opt: []*gotwtr.ListLookUpOption{},
 			},
 			want: &gotwtr.OwnedListsLookUpByIDResponse{
 				Lists: []*gotwtr.List{
 					{
-						ID: "1451305624956858369",
+						ID:   "1451305624956858369",
 						Name: "Test List",
 					},
 				},
@@ -112,18 +112,18 @@ func Test_lookUpOwnedListByID(t *testing.T) {
 				Lists: []*gotwtr.List{
 					{
 						FollowerCount: 0,
-						ID: "1451305624956858369",
-						Name: "Test List",
-						OwnerID: "2244994945",
+						ID:            "1451305624956858369",
+						Name:          "Test List",
+						OwnerID:       "2244994945",
 					},
 				},
 				Includes: &gotwtr.ListIncludes{
 					Users: []*gotwtr.User{
 						{
-							UserName: "TwitterDev",
-							ID: "2244994945",
+							UserName:  "TwitterDev",
+							ID:        "2244994945",
 							CreatedAt: "2013-12-14T04:35:55.000Z",
-							Name: "Twitter Dev",
+							Name:      "Twitter Dev",
 						},
 					},
 				},
@@ -172,9 +172,9 @@ func Test_lookUpOwnedListByID(t *testing.T) {
 						Message: "The id query parameter value [111111111111111111111111] is not valid",
 					},
 				},
-				Title:"Invalid Request",
-				Detail:"One or more parameters to your request was invalid.",
-				Type:"https://api.twitter.com/2/problems/invalid-request",
+				Title:  "Invalid Request",
+				Detail: "One or more parameters to your request was invalid.",
+				Type:   "https://api.twitter.com/2/problems/invalid-request",
 			},
 			wantErr: true,
 		},
@@ -231,7 +231,7 @@ func Test_lookUpListByID(t *testing.T) {
 			},
 			want: &gotwtr.ListLookUpByIDResponse{
 				List: &gotwtr.List{
-					ID: "84839422",
+					ID:   "84839422",
 					Name: "Official Twitter Accounts",
 				},
 			},
@@ -278,15 +278,15 @@ func Test_lookUpListByID(t *testing.T) {
 			want: &gotwtr.ListLookUpByIDResponse{
 				List: &gotwtr.List{
 					FollowerCount: 906,
-					ID: "84839422",
-					Name: "Official Twitter Accounts",
-					OwnerID: "783214",
+					ID:            "84839422",
+					Name:          "Official Twitter Accounts",
+					OwnerID:       "783214",
 				},
 				Includes: &gotwtr.ListIncludes{
 					Users: []*gotwtr.User{
 						{
-							ID: "783214",
-							Name: "Twitter",
+							ID:       "783214",
+							Name:     "Twitter",
 							UserName: "Twitter",
 						},
 					},
@@ -332,9 +332,9 @@ func Test_lookUpListByID(t *testing.T) {
 						Message: "The id query parameter value [111111111111111111111111] is not valid",
 					},
 				},
-				Title:"Invalid Request",
-				Detail:"One or more parameters to your request was invalid.",
-				Type:"https://api.twitter.com/2/problems/invalid-request",
+				Title:  "Invalid Request",
+				Detail: "One or more parameters to your request was invalid.",
+				Type:   "https://api.twitter.com/2/problems/invalid-request",
 			},
 			wantErr: true,
 		},

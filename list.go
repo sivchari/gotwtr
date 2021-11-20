@@ -33,17 +33,17 @@ type ListMeta struct {
 }
 
 type OwnedListsLookUpByIDResponse struct {
-	Lists     []*List               `json:"data"`
+	Lists    []*List             `json:"data"`
 	Includes *ListIncludes       `json:"includes,omitempty"`
 	Errors   []*APIResponseError `json:"errors,omitempty"`
-	Meta     *ListMeta            `json:"meta"`
+	Meta     *ListMeta           `json:"meta"`
 	Title    string              `json:"title,omitempty"`
 	Detail   string              `json:"detail,omitempty"`
 	Type     string              `json:"type,omitempty"`
 }
 
 type ListLookUpByIDResponse struct {
-	List    *List             `json:"data"`
+	List     *List               `json:"data"`
 	Includes *ListIncludes       `json:"includes,omitempty"`
 	Errors   []*APIResponseError `json:"errors,omitempty"`
 	Title    string              `json:"title,omitempty"`

@@ -5,7 +5,7 @@ var (
 	filteredStream    = "https://api.twitter.com/2/tweets/search/stream"
 	followingLookUp   = "https://api.twitter.com/2/users"
 	followersLookUp   = "https://api.twitter.com/2/users"
-	listLookUp = "https://api.twitter.com/2/users"
+	listLookUp        = "https://api.twitter.com/2/users"
 	recentTweetCounts = "https://api.twitter.com/2/tweets/counts/recent"
 	retweet           = "https://api.twitter.com/2/tweets"
 	sampleStream      = "https://api.twitter.com/2/tweets/sample/stream"

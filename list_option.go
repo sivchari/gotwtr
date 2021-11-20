@@ -7,11 +7,11 @@ import (
 )
 
 type ListLookUpOption struct {
-	Expansions []Expansion
-	ListFields []ListField
-	MaxResults int
+	Expansions      []Expansion
+	ListFields      []ListField
+	MaxResults      int
 	PaginationToken string
-	UserFields []UserField
+	UserFields      []UserField
 }
 
 func (t *ListLookUpOption) addQuery(req *http.Request) {
