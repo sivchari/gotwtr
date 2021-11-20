@@ -12,6 +12,7 @@ import (
 )
 
 func Test_lookUpUsersWhoLiked(t *testing.T) {
+	t.Parallel()
 	type args struct {
 		ctx    context.Context
 		client *http.Client
