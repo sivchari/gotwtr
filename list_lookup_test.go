@@ -12,6 +12,7 @@ import (
 )
 
 func Test_lookUpOwnedListByID(t *testing.T) {
+	t.Parallel()
 	type args struct {
 		ctx    context.Context
 		client *http.Client
@@ -199,6 +200,7 @@ func Test_lookUpOwnedListByID(t *testing.T) {
 }
 
 func Test_lookUpListByID(t *testing.T) {
+	t.Parallel()
 	type args struct {
 		ctx    context.Context
 		client *http.Client
