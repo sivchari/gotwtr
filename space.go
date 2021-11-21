@@ -100,3 +100,13 @@ type DiscoverSpacesByUserIDsResponse struct {
 type DiscoverSpacesMeta struct {
 	ResultCount int `json:"result_count"`
 }
+
+type LookUpUsersWhoPurchasedSpaceTicketResponse struct {
+	Users    []*User                                     `json:"data"`
+	Includes *LookUpUsersWhoPurchasedSpaceTicketIncludes `json:"includes,omitempty"`
+	Errors   []*APIResponseError                         `json:"errors,omitempty"`
+}
+
+type LookUpUsersWhoPurchasedSpaceTicketIncludes struct {
+	Tweets []*Tweet
+}

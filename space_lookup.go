@@ -114,3 +114,50 @@ func lookUpSpaceByID(ctx context.Context, c *client, id string, opt ...*SpaceLoo
 
 	return &slr, nil
 }
+
+func lookUpUsersWhoPurchasedSpaceTicket(ctx context.Context, c *client, id string, opt ...*LookUpUsersWhoPurchasedSpaceTicketOption) (*LookUpUsersWhoPurchasedSpaceTicketResponse, error) {
+	if id == "" {
+		return nil, errors.New("look up users who purchased space ticket: id parameter is required")
+	}
+	spaceLookUpUsers := spaceLookUpBuyers + "/" + id + "/buyers"
+
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, spaceLookUpUsers, nil)
+	if err != nil {
+		return nil, fmt.Errorf("look up users who purchased space ticket: %w", err)
+	}
+
+	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.bearerToken))
+
+	var sopt LookUpUsersWhoPurchasedSpaceTicketOption
+	switch len(opt) {
+	case 0:
+		// do nothing
+	case 1:
+		sopt = *opt[0]
+	default:
+		return nil, errors.New("look up users who purchased space ticket: only one option is allowed")
+	}
+	sopt.addQuery(req)
+
+	resp, err := c.client.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("look up users who purchased space ticket: %w", err)
+	}
+
+	defer resp.Body.Close()
+
+	var str LookUpUsersWhoPurchasedSpaceTicketResponse
+	if err := json.NewDecoder(resp.Body).Decode(&str); err != nil {
+		return nil, fmt.Errorf("look up users who purchased space ticket: %w", err)
+	}
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, &HTTPError{
+			APIName: "look up users who purchased space ticket",
+			Status:  resp.Status,
+			URL:     req.URL.String(),
+		}
+	}
+
+	return &str, nil
+}

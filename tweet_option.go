@@ -109,7 +109,7 @@ func (t TweetSearchOption) addQuery(req *http.Request) {
 	}
 }
 
-type UserTweetTimelineOpts struct {
+type UserTweetTimelineOption struct {
 	Expansions      []Expansion
 	MediaFields     []MediaField
 	PlaceFields     []PlaceField
@@ -125,7 +125,7 @@ type UserTweetTimelineOpts struct {
 	UntilID         string
 }
 
-func (t UserTweetTimelineOpts) addQuery(req *http.Request) {
+func (t UserTweetTimelineOption) addQuery(req *http.Request) {
 	q := req.URL.Query()
 	if len(t.Expansions) > 0 {
 		q.Add("expansions", strings.Join(expansionsToString(t.Expansions), ","))
@@ -171,7 +171,7 @@ func (t UserTweetTimelineOpts) addQuery(req *http.Request) {
 	}
 }
 
-type UserMentionTimelineOpts struct {
+type UserMentionTimelineOption struct {
 	Expansions      []Expansion
 	MediaFields     []MediaField
 	PlaceFields     []PlaceField
@@ -186,7 +186,7 @@ type UserMentionTimelineOpts struct {
 	UntilID         string
 }
 
-func (t UserMentionTimelineOpts) addQuery(req *http.Request) {
+func (t UserMentionTimelineOption) addQuery(req *http.Request) {
 	q := req.URL.Query()
 	if len(t.Expansions) > 0 {
 		q.Add("expansions", strings.Join(expansionsToString(t.Expansions), ","))
@@ -290,6 +290,40 @@ func (t *TweetCountsOption) addQuery(req *http.Request) {
 	}
 	if len(t.Granularity) > 0 {
 		q.Add("granularity", t.Granularity)
+	}
+	if len(q) > 0 {
+		req.URL.RawQuery = q.Encode()
+	}
+}
+
+type LookUpUsersWhoLikedOpts struct {
+	Expansions  []Expansion
+	MediaFields []MediaField
+	PlaceFields []PlaceField
+	PollFields  []PollField
+	TweetFields []TweetField
+	UserFields  []UserField
+}
+
+func (l *LookUpUsersWhoLikedOpts) addQuery(req *http.Request) {
+	q := req.URL.Query()
+	if len(l.Expansions) > 0 {
+		q.Add("expansions", strings.Join(expansionsToString(l.Expansions), ","))
+	}
+	if len(l.MediaFields) > 0 {
+		q.Add("media.fields", strings.Join(mediaFieldsToString(l.MediaFields), ","))
+	}
+	if len(l.PlaceFields) > 0 {
+		q.Add("place.fields", strings.Join(placeFieldsToString(l.PlaceFields), ","))
+	}
+	if len(l.PollFields) > 0 {
+		q.Add("poll.fields", strings.Join(pollFieldsToString(l.PollFields), ","))
+	}
+	if len(l.TweetFields) > 0 {
+		q.Add("tweet.fields", strings.Join(tweetFieldsToString(l.TweetFields), ","))
+	}
+	if len(l.UserFields) > 0 {
+		q.Add("user.fields", strings.Join(userFieldsToString(l.UserFields), ","))
 	}
 	if len(q) > 0 {
 		req.URL.RawQuery = q.Encode()

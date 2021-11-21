@@ -16,7 +16,7 @@ func Test_userTweetTimeline(t *testing.T) {
 		ctx    context.Context
 		client *http.Client
 		id     string
-		opt    []*gotwtr.UserTweetTimelineOpts
+		opt    []*gotwtr.UserTweetTimelineOption
 	}
 	tests := []struct {
 		name    string
@@ -156,7 +156,7 @@ func Test_userTweetTimeline(t *testing.T) {
 					}
 				}),
 				id: "2244994945",
-				opt: []*gotwtr.UserTweetTimelineOpts{
+				opt: []*gotwtr.UserTweetTimelineOption{
 					{
 						TweetFields: []gotwtr.TweetField{
 							gotwtr.TweetFieldAttachments,
@@ -279,7 +279,7 @@ func Test_userMentionTimeline(t *testing.T) {
 		ctx    context.Context
 		client *http.Client
 		id     string
-		opt    []*gotwtr.UserMentionTimelineOpts
+		opt    []*gotwtr.UserMentionTimelineOption
 	}
 	tests := []struct {
 		name    string
@@ -515,7 +515,7 @@ func Test_userMentionTimeline(t *testing.T) {
 					}
 				}),
 				id: "2244994945",
-				opt: []*gotwtr.UserMentionTimelineOpts{
+				opt: []*gotwtr.UserMentionTimelineOption{
 					{
 						TweetFields: []gotwtr.TweetField{
 							gotwtr.TweetFieldAttachments,

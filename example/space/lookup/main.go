@@ -28,4 +28,10 @@ func main() {
 	for i, s := range ss.Spaces {
 		fmt.Printf("index: %d, val: %v\n", i, s)
 	}
+
+	str, err := client.LookUpUsersWhoPurchasedSpaceTicket(context.Background(), "spaceid")
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(str)
 }
