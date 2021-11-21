@@ -18,6 +18,7 @@ const (
 	ExpansionHostIDs                    Expansion = "host_ids"
 	ExpansionContextAnnotations         Expansion = "context_annotations"
 	ExpansionTopicIDs                   Expansion = "topic_ids"
+	ExpansionOwnerID                    Expansion = "list.owner_id"
 	// ExpansionTopics                     Expansion = "topics" TODO: must check
 )
 
