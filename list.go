@@ -4,11 +4,11 @@ type ListField string
 
 const (
 	ListFieldCreatedAt   ListField = "created_at"
-	ListFieldPrivate     ListField = "private"
 	ListFollowerCount    ListField = "follower_count"
 	ListMemberCount      ListField = "member_count"
-	ListOwnerID          ListField = "owner_id"
+	ListFieldPrivate     ListField = "private"
 	ListFieldDescription ListField = "description"
+	ListOwnerID          ListField = "owner_id"
 )
 
 type List struct {

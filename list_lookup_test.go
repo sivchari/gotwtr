@@ -172,6 +172,7 @@ func Test_lookUpOwnedListByID(t *testing.T) {
 						Message: "The id query parameter value [111111111111111111111111] is not valid",
 					},
 				},
+				Meta: nil,
 				Title:  "Invalid Request",
 				Detail: "One or more parameters to your request was invalid.",
 				Type:   "https://api.twitter.com/2/problems/invalid-request",
