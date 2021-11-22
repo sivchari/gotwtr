@@ -12,7 +12,7 @@ func lookUpOwnedListsByID(ctx context.Context, c *client, id string, opt ...*Lis
 	if id == "" {
 		return nil, errors.New("owned lists lookup by id: id parameter is required")
 	}
-	lookUpOwnedListsByID := listLookUp + "/" + id + "/owned_lists"
+	lookUpOwnedListsByID := ownedListLookUp + "/" + id + "/owned_lists"
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, lookUpOwnedListsByID, nil)
 	if err != nil {
