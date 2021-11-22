@@ -31,6 +31,7 @@ type Client interface {
 	LookUpFollowers(ctx context.Context, id string, opt ...*FollowOption) (*FollowersResponse, error)
 	LookUpFollowing(ctx context.Context, id string, opt ...*FollowOption) (*FollowingResponse, error)
 	LookUpListByID(ctx context.Context, id string, opt ...*ListLookUpOption) (*ListLookUpByIDResponse, error)
+	LookUpListsTweetsByID(ctx context.Context, id string, opt ...*ListLookUpOption) (*ListsTweetsLookUpByIDResponse, error)
 	LookUpOwnedListsByID(ctx context.Context, id string, opt ...*ListLookUpOption) (*OwnedListsLookUpByIDResponse, error)
 	LookUpSpaces(ctx context.Context, ids []string, opt ...*SpaceLookUpOption) (*SpaceLookUpResponse, error)
 	LookUpSpaceByID(ctx context.Context, id string, opt ...*SpaceLookUpOption) (*SpaceLookUpByIDResponse, error)
@@ -109,6 +110,10 @@ func (c *client) LookUpFollowing(ctx context.Context, id string, opt ...*FollowO
 
 func (c *client) LookUpListByID(ctx context.Context, id string, opt ...*ListLookUpOption) (*ListLookUpByIDResponse, error) {
 	return lookUpListByID(ctx, c, id, opt...)
+}
+
+func (c *client) LookUpListsTweetsByID(ctx context.Context, id string, opt ...*ListLookUpOption) (*ListsTweetsLookUpByIDResponse, error) {
+	return lookUpListsTweetsByID(ctx, c, id, opt...)
 }
 
 func (c *client) LookUpOwnedListsByID(ctx context.Context, id string, opt ...*ListLookUpOption) (*OwnedListsLookUpByIDResponse, error) {

@@ -6,6 +6,7 @@ var (
 	followingLookUp   = "https://api.twitter.com/2/users"
 	followersLookUp   = "https://api.twitter.com/2/users"
 	listLookUp        = "https://api.twitter.com/2/users"
+	listsTweetsLookUp = "https://api.twitter.com/2/lists"
 	likesLookUpUsers  = "https://api.twitter.com/2/tweets"
 	recentTweetCounts = "https://api.twitter.com/2/tweets/counts/recent"
 	retweet           = "https://api.twitter.com/2/tweets"

@@ -11,6 +11,7 @@ type ListLookUpOption struct {
 	ListFields      []ListField
 	MaxResults      int
 	PaginationToken string
+	TweetFields     []TweetField
 	UserFields      []UserField
 }
 
@@ -27,6 +28,9 @@ func (t *ListLookUpOption) addQuery(req *http.Request) {
 	}
 	if len(t.PaginationToken) > 0 {
 		q.Add("pagination_token", t.PaginationToken)
+	}
+	if len(t.TweetFields) > 0 {
+		q.Add("tweet.fields", strings.Join(tweetFieldsToString(t.TweetFields), "."))
 	}
 	if len(t.UserFields) > 0 {
 		q.Add("user.fields", strings.Join(userFieldsToString(t.UserFields), ","))
