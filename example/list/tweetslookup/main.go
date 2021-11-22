@@ -1,0 +1,20 @@
+package main
+
+import (
+	"context"
+	"fmt"
+
+	"github.com/sivchari/gotwtr"
+)
+
+func main() {
+	client := gotwtr.New("key")
+	// look up lists tweets by id
+	ts, err := client.LookUpListsTweetsByID(context.Background(), "id")
+	if err != nil {
+		panic(err)
+	}
+	for _, t := range ts.Tweets {
+		fmt.Println(t)
+	}
+}
