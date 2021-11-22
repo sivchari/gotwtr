@@ -23,7 +23,8 @@ type List struct {
 }
 
 type ListIncludes struct {
-	Users []*User
+	Tweets []*Tweet
+	Users  []*User
 }
 
 type ListMeta struct {
