@@ -145,10 +145,10 @@ func Test_lookUpOwnedListByID(t *testing.T) {
 							{
 								"parameters":{
 									"id":[
-										"111111111111111111111111"
+										"2222222222222222222222222222"
 									]
 								},
-								"message":"The id query parameter value [111111111111111111111111] is not valid"
+								"message":"The id query parameter value [2222222222222222222222222222] is not valid"
 							}
 						],
 						"title":"Invalid Request",
@@ -160,7 +160,7 @@ func Test_lookUpOwnedListByID(t *testing.T) {
 						Body:       io.NopCloser(strings.NewReader(body)),
 					}
 				}),
-				id:  "111111111111111111111111",
+				id:  "2222222222222222222222222222",
 				opt: []*gotwtr.ListLookUpOption{},
 			},
 			want: &gotwtr.OwnedListsLookUpByIDResponse{
@@ -168,9 +168,9 @@ func Test_lookUpOwnedListByID(t *testing.T) {
 				Errors: []*gotwtr.APIResponseError{
 					{
 						Parameters: gotwtr.Parameter{
-							ID: []string{"111111111111111111111111"},
+							ID: []string{"2222222222222222222222222222"},
 						},
-						Message: "The id query parameter value [111111111111111111111111] is not valid",
+						Message: "The id query parameter value [2222222222222222222222222222] is not valid",
 					},
 				},
 				Meta:   nil,
