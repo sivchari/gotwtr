@@ -254,10 +254,10 @@ func Test_lookUpListFollowersByID(t *testing.T) {
 							{
 								"parameters":{
 									"id":[
-										"111111111111111111111111"
+										"111111111111111111111111111111111111"
 									]
 								},
-								"message":"The id query parameter value [111111111111111111111111] is not valid"
+								"message":"The id query parameter value [111111111111111111111111111111111111] is not valid"
 							}
 						],
 						"title":"Invalid Request",
@@ -269,7 +269,7 @@ func Test_lookUpListFollowersByID(t *testing.T) {
 						Body:       io.NopCloser(strings.NewReader(body)),
 					}
 				}),
-				id:  "111111111111111111111111",
+				id:  "111111111111111111111111111111111111",
 				opt: []*gotwtr.ListLookUpOption{},
 			},
 			want: &gotwtr.ListFollowersLookUpByIDResponse{
@@ -277,9 +277,9 @@ func Test_lookUpListFollowersByID(t *testing.T) {
 				Errors: []*gotwtr.APIResponseError{
 					{
 						Parameters: gotwtr.Parameter{
-							ID: []string{"111111111111111111111111"},
+							ID: []string{"111111111111111111111111111111111111"},
 						},
-						Message: "The id query parameter value [111111111111111111111111] is not valid",
+						Message: "The id query parameter value [111111111111111111111111111111111111] is not valid",
 					},
 				},
 				Meta:   nil,
@@ -442,10 +442,10 @@ func Test_lookUpListsUserFollowingByID(t *testing.T) {
 							{
 								"parameters":{
 									"id":[
-										"111111111111111111111111"
+										"111111111111111111111111111111111111111111111111111111"
 									]
 								},
-								"message":"The id query parameter value [111111111111111111111111] is not valid"
+								"message":"The id query parameter value [111111111111111111111111111111111111111111111111111111] is not valid"
 							}
 						],
 						"title":"Invalid Request",
@@ -457,7 +457,7 @@ func Test_lookUpListsUserFollowingByID(t *testing.T) {
 						Body:       io.NopCloser(strings.NewReader(body)),
 					}
 				}),
-				id:  "111111111111111111111111",
+				id:  "111111111111111111111111111111111111111111111111111111",
 				opt: []*gotwtr.ListLookUpOption{},
 			},
 			want: &gotwtr.ListsUserFollowingLookUpByIDResponse{
@@ -465,9 +465,9 @@ func Test_lookUpListsUserFollowingByID(t *testing.T) {
 				Errors: []*gotwtr.APIResponseError{
 					{
 						Parameters: gotwtr.Parameter{
-							ID: []string{"111111111111111111111111"},
+							ID: []string{"111111111111111111111111111111111111111111111111111111"},
 						},
-						Message: "The id query parameter value [111111111111111111111111] is not valid",
+						Message: "The id query parameter value [111111111111111111111111111111111111111111111111111111] is not valid",
 					},
 				},
 				Title:  "Invalid Request",
