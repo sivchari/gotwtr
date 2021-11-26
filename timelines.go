@@ -13,7 +13,7 @@ func userTweetTimeline(ctx context.Context, c *client, id string, opt ...*UserTw
 	if len(id) == 0 {
 		return nil, errors.New("user tweet timeline: id parameter is required")
 	}
-	userTweetTimeline := timeline + "?id=" + id + "/tweets"
+	userTweetTimeline := timeline + "/" + id + "/tweets"
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, userTweetTimeline, nil)
 	if err != nil {
@@ -58,7 +58,7 @@ func userMentionTimeline(ctx context.Context, c *client, id string, opt ...*User
 	if len(id) == 0 {
 		return nil, errors.New("user mention timeline: id parameter is required")
 	}
-	userMentionTimeline := timeline + "?id=" + id + "/mentions"
+	userMentionTimeline := timeline + "/" + id + "/mentions"
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, userMentionTimeline, nil)
 	if err != nil {

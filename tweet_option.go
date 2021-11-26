@@ -154,7 +154,7 @@ func (t UserTweetTimelineOption) addQuery(req *http.Request) {
 	if !t.EndTime.IsZero() {
 		q.Add("end_time", t.EndTime.Format(time.RFC3339))
 	}
-	if t.MaxResults > 0 {
+	if 5 <= t.MaxResults && t.MaxResults <= 100 {
 		q.Add("max_results", strconv.Itoa(t.MaxResults))
 	}
 	if len(t.PaginationToken) > 0 {
@@ -212,7 +212,7 @@ func (t UserMentionTimelineOption) addQuery(req *http.Request) {
 	if !t.EndTime.IsZero() {
 		q.Add("end_time", t.EndTime.Format(time.RFC3339))
 	}
-	if t.MaxResults > 0 {
+	if 5 <= t.MaxResults && t.MaxResults <= 100 {
 		q.Add("max_results", strconv.Itoa(t.MaxResults))
 	}
 	if len(t.PaginationToken) > 0 {
