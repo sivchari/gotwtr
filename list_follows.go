@@ -12,7 +12,7 @@ func lookUpListFollowersByID(ctx context.Context, c *client, id string, opt ...*
 	if id == "" {
 		return nil, errors.New("list followers lookup by id: id parameter is required")
 	}
-	lookUpListFollowersByID := listLookUp + "/" + id + "/followers"
+	lookUpListFollowersByID := listFollowersLookUp + "/" + id + "/followers"
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, lookUpListFollowersByID, nil)
 	if err != nil {
@@ -58,7 +58,7 @@ func lookUpListsUserFollowingByID(ctx context.Context, c *client, id string, opt
 	if id == "" {
 		return nil, errors.New("lists user following lookup by id: id parameter is required")
 	}
-	listsUserFollowingLookUpByID := followingLookUp + "/" + id + "/followed_lists"
+	listsUserFollowingLookUpByID := listsUserFollowingLookUp + "/" + id + "/followed_lists"
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, listsUserFollowingLookUpByID, nil)
 	if err != nil {
