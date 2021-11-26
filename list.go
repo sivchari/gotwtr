@@ -61,3 +61,23 @@ type ListsTweetsLookUpByIDResponse struct {
 	Detail   string              `json:"detail,omitempty"`
 	Type     string              `json:"type,omitempty"`
 }
+
+type ListFollowersLookUpByIDResponse struct {
+	Users    []*User             `json:"data"`
+	Includes *ListIncludes       `json:"includes,omitempty"`
+	Errors   []*APIResponseError `json:"errors,omitempty"`
+	Meta     *ListMeta           `json:"meta"`
+	Title    string              `json:"title,omitempty"`
+	Detail   string              `json:"detail,omitempty"`
+	Type     string              `json:"type,omitempty"`
+}
+
+type ListsUserFollowingLookUpByIDResponse struct {
+	Lists    []*List             `json:"data"`
+	Includes *ListIncludes       `json:"includes,omitempty"`
+	Errors   []*APIResponseError `json:"errors,omitempty"`
+	Meta     *ListMeta           `json:"meta"`
+	Title    string              `json:"title,omitempty"`
+	Detail   string              `json:"detail,omitempty"`
+	Type     string              `json:"type,omitempty"`
+}
