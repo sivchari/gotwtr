@@ -6,22 +6,22 @@ import (
 	"strings"
 )
 
-type UserLookUpOption struct {
+type RetriveUserOption struct {
 	Expansions  []Expansion
 	TweetFields []TweetField
 	UserFields  []UserField
 }
 
-func (t *UserLookUpOption) addQuery(req *http.Request) {
+func (r *RetriveUserOption) addQuery(req *http.Request) {
 	q := req.URL.Query()
-	if len(t.Expansions) > 0 {
-		q.Add("expansions", strings.Join(expansionsToString(t.Expansions), ","))
+	if len(r.Expansions) > 0 {
+		q.Add("expansions", strings.Join(expansionsToString(r.Expansions), ","))
 	}
-	if len(t.TweetFields) > 0 {
-		q.Add("tweet.fields", strings.Join(tweetFieldsToString(t.TweetFields), ","))
+	if len(r.TweetFields) > 0 {
+		q.Add("tweet.fields", strings.Join(tweetFieldsToString(r.TweetFields), ","))
 	}
-	if len(t.UserFields) > 0 {
-		q.Add("user.fields", strings.Join(userFieldsToString(t.UserFields), ","))
+	if len(r.UserFields) > 0 {
+		q.Add("user.fields", strings.Join(userFieldsToString(r.UserFields), ","))
 	}
 	if len(q) > 0 {
 		req.URL.RawQuery = q.Encode()

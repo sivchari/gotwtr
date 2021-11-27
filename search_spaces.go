@@ -8,18 +8,15 @@ import (
 	"net/http"
 )
 
-func searchSpaces(ctx context.Context, c *client, query string, opt ...*SearchSpacesOption) (*SearchSpacesResponse, error) {
-	switch {
-	case len(query) == 0:
-		return nil, errors.New("search spaces: query is empty")
-	default:
+func searchSpaces(ctx context.Context, c *client, searchTerm string, opt ...*SearchSpacesOption) (*SearchSpacesResponse, error) {
+	if searchTerm == "" {
+		return nil, errors.New("search spaces: searchTerm parameter is required")
 	}
+	ep := fmt.Sprintf(searchSpacesURL, searchTerm)
 
-	searchSpaces := spacesSearch + "?query=" + query
-
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, searchSpaces, nil)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, ep, nil)
 	if err != nil {
-		return nil, fmt.Errorf("search spaces: %w", err)
+		return nil, fmt.Errorf("search spaces new request with ctx: %w", err)
 	}
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.bearerToken))
 

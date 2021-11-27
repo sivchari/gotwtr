@@ -15,7 +15,6 @@ func main() {
 			gotwtr.ExpansionCreatorID,
 			gotwtr.ExpansionInvitedUserIDs,
 			gotwtr.ExpansionSpeakerIDs,
-			gotwtr.ExpansionTopicIDs,
 		},
 		TopicFields: []gotwtr.TopicField{
 			gotwtr.TopicFieldName,

@@ -8,55 +8,53 @@ import (
 	"net/http"
 )
 
-func lookUpTweets(ctx context.Context, c *client, ids []string, opt ...*TweetLookUpOption) (*TweetLookUpResponse, error) {
-	// check ids
+func retriveMultipleTweets(ctx context.Context, c *client, tweetIDs []string, opt ...*RetriveTweetOption) (*TweetsResponse, error) {
 	switch {
-	case len(ids) == 0:
-		return nil, errors.New("tweet lookup: ids parameter is required")
-	case len(ids) > tweetLookUpMaxIDs:
-		return nil, errors.New("tweet lookup: ids parameter must be less than or equal to 100")
+	case len(tweetIDs) == 0:
+		return nil, errors.New("retrive multiple tweets: tweet ids parameter is required")
+	case len(tweetIDs) > tweetLookUpMaxIDs:
+		return nil, errors.New("retrive multiple tweets: tweet ids parameter must be less than or equal to 100")
 	default:
 	}
-	tweetLookUp := tweetLookUp + "?ids="
-	// join ids to url
-	for i, id := range ids {
-		if i+1 < len(ids) {
-			tweetLookUp += fmt.Sprintf("%s,", id)
+	ep := retriveMultipleTweetsURL
+	for i, tid := range tweetIDs {
+		if i+1 < len(tweetIDs) {
+			ep += fmt.Sprintf("%s,", tid)
 		} else {
-			tweetLookUp += id
+			ep += tid
 		}
 	}
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, tweetLookUp, nil)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, ep, nil)
 	if err != nil {
-		return nil, fmt.Errorf("tweet lookup new request with ctx: %w", err)
+		return nil, fmt.Errorf("retrive multiple tweets new request with ctx: %w", err)
 	}
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.bearerToken))
 
-	var topt TweetLookUpOption
+	var ropt RetriveTweetOption
 	switch len(opt) {
 	case 0:
 		// do nothing
 	case 1:
-		topt = *opt[0]
+		ropt = *opt[0]
 	default:
-		return nil, errors.New("tweet lookup: only one option is allowed")
+		return nil, errors.New("retrive multiple tweets: only one option is allowed")
 	}
-	topt.addQuery(req)
+	ropt.addQuery(req)
 
 	resp, err := c.client.Do(req)
 	if err != nil {
-		return nil, fmt.Errorf("tweet lookup response: %w", err)
+		return nil, fmt.Errorf("retrive multiple tweets response: %w", err)
 	}
 	defer resp.Body.Close()
 
-	var tweet TweetLookUpResponse
+	var tweet TweetsResponse
 	if err := json.NewDecoder(resp.Body).Decode(&tweet); err != nil {
-		return nil, fmt.Errorf("tweet lookup decode: %w", err)
+		return nil, fmt.Errorf("retrive multiple tweets: %w", err)
 	}
 	if resp.StatusCode != http.StatusOK {
 		return &tweet, &HTTPError{
-			APIName: "tweet lookup",
+			APIName: "retrive multiple tweets",
 			Status:  resp.Status,
 			URL:     req.URL.String(),
 		}
@@ -65,44 +63,44 @@ func lookUpTweets(ctx context.Context, c *client, ids []string, opt ...*TweetLoo
 	return &tweet, nil
 }
 
-func lookUpTweetByID(ctx context.Context, c *client, id string, opt ...*TweetLookUpOption) (*TweetLookUpByIDResponse, error) {
-	if id == "" {
-		return nil, errors.New("tweet lookup by id: id parameter is required")
+func retriveSingleTweet(ctx context.Context, c *client, tweetID string, opt ...*RetriveTweetOption) (*TweetResponse, error) {
+	if tweetID == "" {
+		return nil, errors.New("retrive single tweet: tweet id parameter is required")
 	}
-	tweetLookUpByID := tweetLookUp + "/" + id
+	ep := fmt.Sprintf(retriveSingleTweetURL, tweetID)
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, tweetLookUpByID, nil)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, ep, nil)
 	if err != nil {
-		return nil, fmt.Errorf("tweet lookup by id new request with ctx: %w", err)
+		return nil, fmt.Errorf("retrive single tweet new request with ctx: %w", err)
 	}
 
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.bearerToken))
 
-	var topt TweetLookUpOption
+	var ropt RetriveTweetOption
 	switch len(opt) {
 	case 0:
 		// do nothing
 	case 1:
-		topt = *opt[0]
+		ropt = *opt[0]
 	default:
-		return nil, errors.New("tweet lookup: only one option is allowed")
+		return nil, errors.New("retrive single tweet: only one option is allowed")
 	}
-	topt.addQuery(req)
+	ropt.addQuery(req)
 
 	resp, err := c.client.Do(req)
 	if err != nil {
-		return nil, fmt.Errorf("tweet lookup by id response: %w", err)
+		return nil, fmt.Errorf("retrive single tweet response: %w", err)
 	}
 
 	defer resp.Body.Close()
 
-	var tweet TweetLookUpByIDResponse
+	var tweet TweetResponse
 	if err := json.NewDecoder(resp.Body).Decode(&tweet); err != nil {
-		return nil, fmt.Errorf("tweet lookup by id decode: %w", err)
+		return nil, fmt.Errorf("retrive single tweet: %w", err)
 	}
 	if resp.StatusCode != http.StatusOK {
 		return &tweet, &HTTPError{
-			APIName: "tweet lookup by id",
+			APIName: "retrive single tweet",
 			Status:  resp.Status,
 			URL:     req.URL.String(),
 		}

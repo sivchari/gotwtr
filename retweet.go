@@ -8,19 +8,19 @@ import (
 	"net/http"
 )
 
-func retweetsLookup(ctx context.Context, c *client, id string, opt ...*RetweetsLookupOpts) (*RetweetsLookupResponse, error) {
-	if id == "" {
-		return nil, errors.New("retweets lookup by id: id parameter is required")
+func retweetsLookup(ctx context.Context, c *client, tweetID string, opt ...*RetweetsLookupOption) (*RetweetsLookupResponse, error) {
+	if tweetID == "" {
+		return nil, errors.New("retweets lookup: tweet id parameter is required")
 	}
-	retweetsLookupPath := retweet + "/" + id + "/retweeted_by"
+	ep := fmt.Sprintf(retweetsLookupURL, tweetID)
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, retweetsLookupPath, nil)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, ep, nil)
 	if err != nil {
 		return nil, fmt.Errorf("retweets lookup new request with ctx: %w", err)
 	}
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.bearerToken))
 
-	var ropt RetweetsLookupOpts
+	var ropt RetweetsLookupOption
 	switch len(opt) {
 	case 0:
 		// do nothing

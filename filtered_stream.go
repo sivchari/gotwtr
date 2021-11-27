@@ -11,50 +11,7 @@ import (
 	"sync"
 )
 
-func retrieveStreamRules(ctx context.Context, c *client, opt ...*RetrieveStreamRulesOption) (*RetrieveStreamRulesResponse, error) {
-	filteredStreamRules := filteredStream + "/rules"
-
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, filteredStreamRules, nil)
-	if err != nil {
-		return nil, fmt.Errorf("retrieve stream rules new request with ctx: %w", err)
-	}
-	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.bearerToken))
-
-	var topt RetrieveStreamRulesOption
-	switch len(opt) {
-	case 0:
-		// do nothing
-	case 1:
-		topt = *opt[0]
-	default:
-		return nil, errors.New("retrieve stream rules: only one option is allowed")
-	}
-	topt.addQuery(req)
-
-	resp, err := c.client.Do(req)
-	if err != nil {
-		return nil, fmt.Errorf("retrieve stream rules: %w", err)
-	}
-	defer resp.Body.Close()
-
-	var tweet RetrieveStreamRulesResponse
-	if err := json.NewDecoder(resp.Body).Decode(&tweet); err != nil {
-		return nil, fmt.Errorf("retrieve stream rules decode: %w", err)
-	}
-	if resp.StatusCode != http.StatusOK {
-		return &tweet, &HTTPError{
-			APIName: "retrieve stream rules",
-			Status:  resp.Status,
-			URL:     req.URL.String(),
-		}
-	}
-
-	return &tweet, nil
-}
-
 func addOrDeleteRules(ctx context.Context, c *client, body *AddOrDeleteJSONBody, opt ...*AddOrDeleteRulesOption) (*AddOrDeleteRulesResponse, error) {
-	filteredStreamRules := filteredStream + "/rules"
-
 	switch {
 	case len(body.Add) == 0 && len(body.Delete.IDs) == 0:
 		return nil, errors.New("add or delete rules: add or delete.ids are required")
@@ -76,7 +33,7 @@ func addOrDeleteRules(ctx context.Context, c *client, body *AddOrDeleteJSONBody,
 		return nil, errors.New("add or delete rules : can not marshal")
 	}
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodPost, filteredStreamRules, bytes.NewBuffer(jsonStr))
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, addOrDeleteRulesURL, bytes.NewBuffer(jsonStr))
 	if err != nil {
 		return nil, fmt.Errorf("add or delete rules new request with ctx: %w", err)
 	}
@@ -113,6 +70,45 @@ func addOrDeleteRules(ctx context.Context, c *client, body *AddOrDeleteJSONBody,
 	}
 
 	return &addOrDelete, nil
+}
+
+func retrieveStreamRules(ctx context.Context, c *client, opt ...*RetrieveStreamRulesOption) (*RetrieveStreamRulesResponse, error) {
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, retrieveStreamRulesURL, nil)
+	if err != nil {
+		return nil, fmt.Errorf("retrieve stream rules new request with ctx: %w", err)
+	}
+	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.bearerToken))
+
+	var topt RetrieveStreamRulesOption
+	switch len(opt) {
+	case 0:
+		// do nothing
+	case 1:
+		topt = *opt[0]
+	default:
+		return nil, errors.New("retrieve stream rules: only one option is allowed")
+	}
+	topt.addQuery(req)
+
+	resp, err := c.client.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("retrieve stream rules: %w", err)
+	}
+	defer resp.Body.Close()
+
+	var tweet RetrieveStreamRulesResponse
+	if err := json.NewDecoder(resp.Body).Decode(&tweet); err != nil {
+		return nil, fmt.Errorf("retrieve stream rules decode: %w", err)
+	}
+	if resp.StatusCode != http.StatusOK {
+		return &tweet, &HTTPError{
+			APIName: "retrieve stream rules",
+			Status:  resp.Status,
+			URL:     req.URL.String(),
+		}
+	}
+
+	return &tweet, nil
 }
 
 func (s *ConnectToStream) Stop() {
@@ -152,7 +148,7 @@ func (s *ConnectToStream) retry(req *http.Request) {
 }
 
 func connectToStream(ctx context.Context, c *client, ch chan<- ConnectToStreamResponse, errCh chan<- error, opt ...*ConnectToStreamOption) *ConnectToStream {
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, filteredStream, nil)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, connectToStreamURL, nil)
 	if err != nil {
 		errCh <- fmt.Errorf("connect to stream new request with ctx: %w", err)
 	}

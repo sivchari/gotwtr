@@ -103,16 +103,22 @@ type UserIncludes struct {
 	Tweets []*Tweet
 }
 
-type UserLookUpResponse struct {
+type UsersResponse struct {
 	Users    []*User             `json:"data"`
 	Includes *UserIncludes       `json:"includes,omitempty"`
 	Errors   []*APIResponseError `json:"errors,omitempty"`
+	Title    string              `json:"title,omitempty"`
+	Detail   string              `json:"detail,omitempty"`
+	Type     string              `json:"type,omitempty"`
 }
 
-type UserLookUpByIDResponse struct {
+type UserResponse struct {
 	User     *User               `json:"data"`
 	Includes *UserIncludes       `json:"includes,omitempty"`
 	Errors   []*APIResponseError `json:"errors,omitempty"`
+	Title    string              `json:"title,omitempty"`
+	Detail   string              `json:"detail,omitempty"`
+	Type     string              `json:"type,omitempty"`
 }
 
 type UserLookUpByUserNameResponse struct {

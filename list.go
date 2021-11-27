@@ -33,7 +33,7 @@ type ListMeta struct {
 	NextToken     string `json:"next_token,omitempty"`
 }
 
-type OwnedListsLookUpByIDResponse struct {
+type AllListsOwnedResponse struct {
 	Lists    []*List             `json:"data"`
 	Includes *ListIncludes       `json:"includes,omitempty"`
 	Errors   []*APIResponseError `json:"errors,omitempty"`
@@ -43,7 +43,7 @@ type OwnedListsLookUpByIDResponse struct {
 	Type     string              `json:"type,omitempty"`
 }
 
-type ListLookUpByIDResponse struct {
+type ListResponse struct {
 	List     *List               `json:"data"`
 	Includes *ListIncludes       `json:"includes,omitempty"`
 	Errors   []*APIResponseError `json:"errors,omitempty"`
@@ -52,7 +52,7 @@ type ListLookUpByIDResponse struct {
 	Type     string              `json:"type,omitempty"`
 }
 
-type ListsTweetsLookUpByIDResponse struct {
+type ListTweetsResponse struct {
 	Tweets   []*Tweet            `json:"data"`
 	Includes *ListIncludes       `json:"includes,omitempty"`
 	Errors   []*APIResponseError `json:"errors,omitempty"`
@@ -62,7 +62,7 @@ type ListsTweetsLookUpByIDResponse struct {
 	Type     string              `json:"type,omitempty"`
 }
 
-type ListFollowersLookUpByIDResponse struct {
+type ListFollowersResponse struct {
 	Users    []*User             `json:"data"`
 	Includes *ListIncludes       `json:"includes,omitempty"`
 	Errors   []*APIResponseError `json:"errors,omitempty"`
@@ -72,7 +72,7 @@ type ListFollowersLookUpByIDResponse struct {
 	Type     string              `json:"type,omitempty"`
 }
 
-type ListsUserFollowingLookUpByIDResponse struct {
+type AllListsUserFollowsResponse struct {
 	Lists    []*List             `json:"data"`
 	Includes *ListIncludes       `json:"includes,omitempty"`
 	Errors   []*APIResponseError `json:"errors,omitempty"`

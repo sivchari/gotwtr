@@ -8,92 +8,91 @@ import (
 	"net/http"
 )
 
-func lookUpListFollowersByID(ctx context.Context, c *client, id string, opt ...*ListLookUpOption) (*ListFollowersLookUpByIDResponse, error) {
-	if id == "" {
-		return nil, errors.New("list followers lookup by id: id parameter is required")
+func lookUpListFollowers(ctx context.Context, c *client, listID string, opt ...*ListFollowersOption) (*ListFollowersResponse, error) {
+	if listID == "" {
+		return nil, errors.New("look up list followers: listID parameter is required")
 	}
-	lookUpListFollowersByID := listFollowersLookUp + "/" + id + "/followers"
+	ep := fmt.Sprintf(lookUpListFollowersURL, listID)
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, lookUpListFollowersByID, nil)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, ep, nil)
 	if err != nil {
-		return nil, fmt.Errorf("list followers lookup by id new request with ctx: %w", err)
+		return nil, fmt.Errorf("look up list followers new request with ctx: %w", err)
 	}
 
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.bearerToken))
 
-	var topt ListLookUpOption
+	var lopt ListFollowersOption
 	switch len(opt) {
 	case 0:
 		// do nothing
 	case 1:
-		topt = *opt[0]
+		lopt = *opt[0]
 	default:
-		return nil, errors.New("list followers lookup by id: only one option is allowed")
+		return nil, errors.New("look up list followers: only one option is allowed")
 	}
-	topt.addQuery(req)
+	lopt.addQuery(req)
 
 	resp, err := c.client.Do(req)
 	if err != nil {
-		return nil, fmt.Errorf("list followers lookup by id response: %w", err)
+		return nil, fmt.Errorf("look up list followers: %w", err)
 	}
-
 	defer resp.Body.Close()
 
-	var list ListFollowersLookUpByIDResponse
-	if err := json.NewDecoder(resp.Body).Decode(&list); err != nil {
-		return nil, fmt.Errorf("list followers lookup by id decode: %w", err)
+	var lfr ListFollowersResponse
+	if err := json.NewDecoder(resp.Body).Decode(&lfr); err != nil {
+		return nil, fmt.Errorf("look up list followers: %w", err)
 	}
 	if resp.StatusCode != http.StatusOK {
-		return &list, &HTTPError{
-			APIName: "list followers lookup by id",
+		return &lfr, &HTTPError{
+			APIName: "look up list followers",
 			Status:  resp.Status,
 			URL:     req.URL.String(),
 		}
 	}
 
-	return &list, nil
+	return &lfr, nil
 }
 
-func lookUpListsUserFollowingByID(ctx context.Context, c *client, id string, opt ...*ListLookUpOption) (*ListsUserFollowingLookUpByIDResponse, error) {
-	if id == "" {
-		return nil, errors.New("lists user following lookup by id: id parameter is required")
+func lookUpAllListsUserFollows(ctx context.Context, c *client, userID string, opt ...*ListFollowsOption) (*AllListsUserFollowsResponse, error) {
+	if userID == "" {
+		return nil, errors.New("look up all lists user follows: userID parameter is required")
 	}
-	listsUserFollowingLookUpByID := listsUserFollowingLookUp + "/" + id + "/followed_lists"
+	ep := fmt.Sprintf(lookUpAllListsUserFollowsURL, userID)
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, listsUserFollowingLookUpByID, nil)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, ep, nil)
 	if err != nil {
-		return nil, fmt.Errorf("lists user following lookup new request with ctx: %w", err)
+		return nil, fmt.Errorf("look up all lists user follows new request with ctx: %w", err)
 	}
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.bearerToken))
 
-	var topt ListLookUpOption
+	var lopt ListFollowsOption
 	switch len(opt) {
 	case 0:
 		// do nothing
 	case 1:
-		topt = *opt[0]
+		lopt = *opt[0]
 	default:
-		return nil, errors.New("lists user following lookup by id: only one option is allowed")
+		return nil, errors.New("look up all lists user follows: only one option is allowed")
 	}
-	topt.addQuery(req)
+	lopt.addQuery(req)
 
 	resp, err := c.client.Do(req)
 	if err != nil {
-		return nil, fmt.Errorf("lists user following lookup by id response: %w", err)
+		return nil, fmt.Errorf("look up all lists user follows: %w", err)
 	}
 	defer resp.Body.Close()
 
-	var list ListsUserFollowingLookUpByIDResponse
-	if err := json.NewDecoder(resp.Body).Decode(&list); err != nil {
-		return nil, fmt.Errorf("lists user following lookup by id decode: %w", err)
+	var alufr AllListsUserFollowsResponse
+	if err := json.NewDecoder(resp.Body).Decode(&alufr); err != nil {
+		return nil, fmt.Errorf("look up all lists user follows: %w", err)
 	}
 	if resp.StatusCode != http.StatusOK {
-		return &list, &HTTPError{
-			APIName: "lists user following lookup by id",
+		return &alufr, &HTTPError{
+			APIName: "look up all lists user follows",
 			Status:  resp.Status,
 			URL:     req.URL.String(),
 		}
 	}
 
-	return &list, nil
+	return &alufr, nil
 }

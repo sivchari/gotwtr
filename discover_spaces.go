@@ -8,29 +8,26 @@ import (
 	"net/http"
 )
 
-func discoverSpacesByUserIDs(ctx context.Context, c *client, ids []string, opt ...*DiscoverSpacesOption) (*DiscoverSpacesByUserIDsResponse, error) {
-	// check ids
+func discoverSpaces(ctx context.Context, c *client, userIDs []string, opt ...*DiscoverSpacesOption) (*DiscoverSpacesResponse, error) {
 	switch {
-	case len(ids) == 0:
+	case len(userIDs) == 0:
 		return nil, errors.New("discover spaces: ids parameter is required")
-	case len(ids) > discoverSpacesMaxIDs:
+	case len(userIDs) > discoverSpacesMaxIDs:
 		return nil, errors.New("discover spaces: ids parameter must be less than or equal to 100")
 	default:
 	}
-
-	spaceDiscover := spaceDiscover + "?user_ids="
-	// join ids to url
-	for i, id := range ids {
-		if i+1 < len(ids) {
-			spaceDiscover += fmt.Sprintf("%s,", id)
+	ep := discoverSpacesURL
+	for i, uid := range userIDs {
+		if i+1 < len(userIDs) {
+			ep += fmt.Sprintf("%s,", uid)
 		} else {
-			spaceDiscover += id
+			ep += uid
 		}
 	}
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, spaceDiscover, nil)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, ep, nil)
 	if err != nil {
-		return nil, fmt.Errorf("discover spaces new request with ctx: %w", err)
+		return nil, fmt.Errorf("discover spaces: %w", err)
 	}
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.bearerToken))
 
@@ -51,14 +48,14 @@ func discoverSpacesByUserIDs(ctx context.Context, c *client, ids []string, opt .
 	}
 	defer resp.Body.Close()
 
-	var dsr DiscoverSpacesByUserIDsResponse
+	var dsr DiscoverSpacesResponse
 
 	if err := json.NewDecoder(resp.Body).Decode(&dsr); err != nil {
 		return nil, fmt.Errorf("discover spaces: %w", err)
 	}
 
 	if resp.StatusCode != http.StatusOK {
-		return nil, &HTTPError{
+		return &dsr, &HTTPError{
 			APIName: "discover spaces",
 			Status:  resp.Status,
 			URL:     req.URL.String(),

@@ -8,20 +8,15 @@ import (
 	"net/http"
 )
 
-func countsRecentTweet(ctx context.Context, c *client, query string, opt ...*TweetCountsOption) (*TweetCountsResponse, error) {
-	switch {
-	case len(query) == 0:
-		return nil, errors.New("tweet counts: query parameter is required")
-	case tweetSearchMaxQueryLength < len(query):
-		return nil, errors.New("tweet counts: query parameter length is less than 512")
-	default:
+func countsRecentTweet(ctx context.Context, c *client, tweet string, opt ...*TweetCountsOption) (*TweetCountsResponse, error) {
+	if tweet == "" {
+		return nil, errors.New("counts recent tweets: tweet parameter is required")
 	}
+	ep := fmt.Sprintf(countsRecentTweetsURL, tweet)
 
-	recentTweetCounts := recentTweetCounts + "?query=" + query
-
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, recentTweetCounts, nil)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, ep, nil)
 	if err != nil {
-		return nil, fmt.Errorf("tweet counts new request with ctx: %w", err)
+		return nil, fmt.Errorf("counts recent tweets new request with ctx: %w", err)
 	}
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.bearerToken))
 
@@ -32,27 +27,27 @@ func countsRecentTweet(ctx context.Context, c *client, query string, opt ...*Twe
 	case 1:
 		topt = *opt[0]
 	default:
-		return nil, errors.New("tweet counts: only one option is allowed")
+		return nil, errors.New("counts recent tweets: only one option is allowed")
 	}
 	topt.addQuery(req)
 
 	resp, err := c.client.Do(req)
 	if err != nil {
-		return nil, fmt.Errorf("tweet counts response: %w", err)
+		return nil, fmt.Errorf("counts recent tweets: %w", err)
 	}
 	defer resp.Body.Close()
 
-	var tweet TweetCountsResponse
-	if err := json.NewDecoder(resp.Body).Decode(&tweet); err != nil {
-		return nil, fmt.Errorf("tweet counts decode: %w", err)
+	var tcr TweetCountsResponse
+	if err := json.NewDecoder(resp.Body).Decode(&tcr); err != nil {
+		return nil, fmt.Errorf("tweet counts: %w", err)
 	}
 	if resp.StatusCode != http.StatusOK {
-		return &tweet, &HTTPError{
-			APIName: "tweet counts",
+		return &tcr, &HTTPError{
+			APIName: "counts recent tweets",
 			Status:  resp.Status,
 			URL:     req.URL.String(),
 		}
 	}
 
-	return &tweet, nil
+	return &tcr, nil
 }
