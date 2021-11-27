@@ -11,18 +11,18 @@ import (
 	"github.com/sivchari/gotwtr"
 )
 
-func Test_lookUpListsTweetsByID(t *testing.T) {
+func Test_lookUpListTweets(t *testing.T) {
 	t.Parallel()
 	type args struct {
 		ctx    context.Context
 		client *http.Client
 		id     string
-		opt    []*gotwtr.ListLookUpOption
+		opt    []*gotwtr.ListTweetsOption
 	}
 	tests := []struct {
 		name    string
 		args    args
-		want    *gotwtr.ListsTweetsLookUpByIDResponse
+		want    *gotwtr.ListTweetsResponse
 		wantErr bool
 	}{
 		{
@@ -47,9 +47,9 @@ func Test_lookUpListsTweetsByID(t *testing.T) {
 					}
 				}),
 				id:  "2244994945",
-				opt: []*gotwtr.ListLookUpOption{},
+				opt: []*gotwtr.ListTweetsOption{},
 			},
-			want: &gotwtr.ListsTweetsLookUpByIDResponse{
+			want: &gotwtr.ListTweetsResponse{
 				Tweets: []*gotwtr.Tweet{
 					{
 						ID:   "1067094924124872705",
@@ -98,7 +98,7 @@ func Test_lookUpListsTweetsByID(t *testing.T) {
 					}
 				}),
 				id: "84839422",
-				opt: []*gotwtr.ListLookUpOption{
+				opt: []*gotwtr.ListTweetsOption{
 					{
 						UserFields: []gotwtr.UserField{
 							gotwtr.UserFieldVerified,
@@ -109,7 +109,7 @@ func Test_lookUpListsTweetsByID(t *testing.T) {
 					},
 				},
 			},
-			want: &gotwtr.ListsTweetsLookUpByIDResponse{
+			want: &gotwtr.ListTweetsResponse{
 				Tweets: []*gotwtr.Tweet{
 					{
 						AuthorID:  "2244994945",
@@ -161,9 +161,9 @@ func Test_lookUpListsTweetsByID(t *testing.T) {
 					}
 				}),
 				id:  "111111111111111111111111",
-				opt: []*gotwtr.ListLookUpOption{},
+				opt: []*gotwtr.ListTweetsOption{},
 			},
-			want: &gotwtr.ListsTweetsLookUpByIDResponse{
+			want: &gotwtr.ListTweetsResponse{
 				Tweets: nil,
 				Errors: []*gotwtr.APIResponseError{
 					{
@@ -186,7 +186,7 @@ func Test_lookUpListsTweetsByID(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
-			got, err := c.LookUpListsTweetsByID(tt.args.ctx, tt.args.id, tt.args.opt...)
+			got, err := c.LookUpListTweets(tt.args.ctx, tt.args.id, tt.args.opt...)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("client.LookUpListsTweetsByID() index = %v error = %v, wantErr %v", i, err, tt.wantErr)
 				return

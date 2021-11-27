@@ -720,7 +720,7 @@ func Test_followers(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
-			got, err := c.LookUpFollowers(tt.args.ctx, tt.args.id, tt.args.opt...)
+			got, err := c.Followers(tt.args.ctx, tt.args.id, tt.args.opt...)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("client.Followers() index = %v error = %v, wantErr %v", i, err, tt.wantErr)
 				return
@@ -1442,7 +1442,7 @@ func Test_following(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
-			got, err := c.LookUpFollowing(tt.args.ctx, tt.args.id, tt.args.opt...)
+			got, err := c.Following(tt.args.ctx, tt.args.id, tt.args.opt...)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("client.Following() index = %v error = %v, wantErr %v", i, err, tt.wantErr)
 				return

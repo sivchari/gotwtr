@@ -16,12 +16,12 @@ func Test_sampledStream(t *testing.T) {
 	type args struct {
 		ctx    context.Context
 		client *http.Client
-		opt    []*gotwtr.SampledStreamOpts
+		opt    []*gotwtr.VolumeStreamsOption
 	}
 	tests := []struct {
 		name    string
 		args    args
-		want    *gotwtr.SampledStreamResponse
+		want    *gotwtr.VolumeStreamsResponse
 		wantErr bool
 	}{
 		{
@@ -40,9 +40,9 @@ func Test_sampledStream(t *testing.T) {
 						Body:       io.NopCloser(strings.NewReader(body)),
 					}
 				}),
-				opt: []*gotwtr.SampledStreamOpts{},
+				opt: []*gotwtr.VolumeStreamsOption{},
 			},
-			want: &gotwtr.SampledStreamResponse{
+			want: &gotwtr.VolumeStreamsResponse{
 				Tweet: &gotwtr.Tweet{
 					ID:   "1067094924124872705",
 					Text: "Just getting started with Twitter APIs? Find out what you need in order to build an app. Watch this video! https://t.co/Hg8nkfoizN",
@@ -55,19 +55,19 @@ func Test_sampledStream(t *testing.T) {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			ch := make(chan gotwtr.SampledStreamResponse)
+			ch := make(chan gotwtr.VolumeStreamsResponse)
 			errCh := make(chan error)
 			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
-			c.SampledStream(tt.args.ctx, ch, errCh, tt.args.opt...)
+			c.VolumeStreams(tt.args.ctx, ch, errCh, tt.args.opt...)
 			select {
 			case got := <-ch:
 				if diff := cmp.Diff(tt.want, &got); diff != "" {
-					t.Errorf("client.SampledStream() mismatch (-want +got):\n%s", diff)
+					t.Errorf("client.VolumeStreams() mismatch (-want +got):\n%s", diff)
 					return
 				}
 			case err := <-errCh:
 				if (err != nil) != tt.wantErr {
-					t.Errorf("client.SampledStream() error = %v, wantErr %v", err, tt.wantErr)
+					t.Errorf("client.VolumeStreams() error = %v, wantErr %v", err, tt.wantErr)
 					return
 				}
 			}

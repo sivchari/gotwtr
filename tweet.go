@@ -241,7 +241,7 @@ type TweetCountsResponse struct {
 	Meta   *TweetCountMeta    `json:"meta"`
 }
 
-type RetweetsLookupResponse struct {
+type RetweetsResponse struct {
 	Users    []*User             `json:"data"`
 	Includes *TweetIncludes      `json:"includes,omitempty"`
 	Errors   []*APIResponseError `json:"errors,omitempty"`

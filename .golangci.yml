@@ -1,5 +1,5 @@
 run:
-  timeout: 5m
+  timeout: 10m
   skip-files: []
   skip-dirs: []
 
@@ -14,6 +14,8 @@ linters-settings:
     disable:
       - fieldalignment
       - shadow
+  staticcheck:
+    checks: ["all", "-S1*", "-ST1*", "-SA5011", "-SA1019", "-SA2002"]
 
 linters:
   disable-all: true
@@ -33,6 +35,7 @@ linters:
     - revive
     - staticcheck
     - varcheck
+    - unused
 
 issues:
   exclude-use-default: true

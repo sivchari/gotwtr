@@ -121,24 +121,6 @@ type UserResponse struct {
 	Type     string              `json:"type,omitempty"`
 }
 
-type UserLookUpByUserNameResponse struct {
-	User     *User               `json:"data"`
-	Includes *UserIncludes       `json:"includes,omitempty"`
-	Errors   []*APIResponseError `json:"errors,omitempty"`
-	Title    string              `json:"title,omitempty"`
-	Detail   string              `json:"detail,omitempty"`
-	Type     string              `json:"type,omitempty"`
-}
-
-type UsersLookUpByUserNamesResponse struct {
-	Users    []*User             `json:"data"`
-	Includes *UserIncludes       `json:"includes,omitempty"`
-	Errors   []*APIResponseError `json:"errors,omitempty"`
-	Title    string              `json:"title,omitempty"`
-	Detail   string              `json:"detail,omitempty"`
-	Type     string              `json:"type,omitempty"`
-}
-
 type FollowingResponse struct {
 	Users    []*User             `json:"data"`
 	Includes *UserIncludes       `json:"includes,omitempty"`
