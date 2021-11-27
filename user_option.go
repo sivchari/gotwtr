@@ -6,13 +6,13 @@ import (
 	"strings"
 )
 
-type RetriveUserOption struct {
+type RetrieveUserOption struct {
 	Expansions  []Expansion
 	TweetFields []TweetField
 	UserFields  []UserField
 }
 
-func (r *RetriveUserOption) addQuery(req *http.Request) {
+func (r *RetrieveUserOption) addQuery(req *http.Request) {
 	q := req.URL.Query()
 	if len(r.Expansions) > 0 {
 		q.Add("expansions", strings.Join(expansionsToString(r.Expansions), ","))

@@ -12,6 +12,13 @@ func searchRecentTweets(ctx context.Context, c *client, tweet string, opt ...*Se
 	if tweet == "" {
 		return nil, errors.New("search recent tweets: tweet parameter is required")
 	}
+	switch {
+	case tweet == "":
+		return nil, errors.New("search recent tweets: tweet parameter is required")
+	case len(tweet) < searchTweetMaxQueryLength:
+		return nil, errors.New("search recent tweets: tweet parameter must be less than or equal to 512 characters")
+	}
+
 	ep := fmt.Sprintf(searchRecentTweetsURL, tweet)
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, ep, nil)

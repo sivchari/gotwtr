@@ -8,15 +8,15 @@ import (
 	"net/http"
 )
 
-func retriveMultipleTweets(ctx context.Context, c *client, tweetIDs []string, opt ...*RetriveTweetOption) (*TweetsResponse, error) {
+func retrieveMultipleTweets(ctx context.Context, c *client, tweetIDs []string, opt ...*RetriveTweetOption) (*TweetsResponse, error) {
 	switch {
 	case len(tweetIDs) == 0:
-		return nil, errors.New("retrive multiple tweets: tweet ids parameter is required")
+		return nil, errors.New("retrieve multiple tweets: tweet ids parameter is required")
 	case len(tweetIDs) > tweetLookUpMaxIDs:
-		return nil, errors.New("retrive multiple tweets: tweet ids parameter must be less than or equal to 100")
+		return nil, errors.New("retrieve multiple tweets: tweet ids parameter must be less than or equal to 100")
 	default:
 	}
-	ep := retriveMultipleTweetsURL
+	ep := retrieveMultipleTweetsURL
 	for i, tid := range tweetIDs {
 		if i+1 < len(tweetIDs) {
 			ep += fmt.Sprintf("%s,", tid)
@@ -27,7 +27,7 @@ func retriveMultipleTweets(ctx context.Context, c *client, tweetIDs []string, op
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, ep, nil)
 	if err != nil {
-		return nil, fmt.Errorf("retrive multiple tweets new request with ctx: %w", err)
+		return nil, fmt.Errorf("retrieve multiple tweets new request with ctx: %w", err)
 	}
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.bearerToken))
 
@@ -38,23 +38,23 @@ func retriveMultipleTweets(ctx context.Context, c *client, tweetIDs []string, op
 	case 1:
 		ropt = *opt[0]
 	default:
-		return nil, errors.New("retrive multiple tweets: only one option is allowed")
+		return nil, errors.New("retrieve multiple tweets: only one option is allowed")
 	}
 	ropt.addQuery(req)
 
 	resp, err := c.client.Do(req)
 	if err != nil {
-		return nil, fmt.Errorf("retrive multiple tweets response: %w", err)
+		return nil, fmt.Errorf("retrieve multiple tweets response: %w", err)
 	}
 	defer resp.Body.Close()
 
 	var tweet TweetsResponse
 	if err := json.NewDecoder(resp.Body).Decode(&tweet); err != nil {
-		return nil, fmt.Errorf("retrive multiple tweets: %w", err)
+		return nil, fmt.Errorf("retrieve multiple tweets: %w", err)
 	}
 	if resp.StatusCode != http.StatusOK {
 		return &tweet, &HTTPError{
-			APIName: "retrive multiple tweets",
+			APIName: "retrieve multiple tweets",
 			Status:  resp.Status,
 			URL:     req.URL.String(),
 		}
@@ -63,15 +63,15 @@ func retriveMultipleTweets(ctx context.Context, c *client, tweetIDs []string, op
 	return &tweet, nil
 }
 
-func retriveSingleTweet(ctx context.Context, c *client, tweetID string, opt ...*RetriveTweetOption) (*TweetResponse, error) {
+func retrieveSingleTweet(ctx context.Context, c *client, tweetID string, opt ...*RetriveTweetOption) (*TweetResponse, error) {
 	if tweetID == "" {
-		return nil, errors.New("retrive single tweet: tweet id parameter is required")
+		return nil, errors.New("retrieve single tweet: tweet id parameter is required")
 	}
-	ep := fmt.Sprintf(retriveSingleTweetURL, tweetID)
+	ep := fmt.Sprintf(retrieveSingleTweetURL, tweetID)
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, ep, nil)
 	if err != nil {
-		return nil, fmt.Errorf("retrive single tweet new request with ctx: %w", err)
+		return nil, fmt.Errorf("retrieve single tweet new request with ctx: %w", err)
 	}
 
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.bearerToken))
@@ -83,24 +83,24 @@ func retriveSingleTweet(ctx context.Context, c *client, tweetID string, opt ...*
 	case 1:
 		ropt = *opt[0]
 	default:
-		return nil, errors.New("retrive single tweet: only one option is allowed")
+		return nil, errors.New("retrieve single tweet: only one option is allowed")
 	}
 	ropt.addQuery(req)
 
 	resp, err := c.client.Do(req)
 	if err != nil {
-		return nil, fmt.Errorf("retrive single tweet response: %w", err)
+		return nil, fmt.Errorf("retrieve single tweet response: %w", err)
 	}
 
 	defer resp.Body.Close()
 
 	var tweet TweetResponse
 	if err := json.NewDecoder(resp.Body).Decode(&tweet); err != nil {
-		return nil, fmt.Errorf("retrive single tweet: %w", err)
+		return nil, fmt.Errorf("retrieve single tweet: %w", err)
 	}
 	if resp.StatusCode != http.StatusOK {
 		return &tweet, &HTTPError{
-			APIName: "retrive single tweet",
+			APIName: "retrieve single tweet",
 			Status:  resp.Status,
 			URL:     req.URL.String(),
 		}
