@@ -8,47 +8,46 @@ import (
 	"net/http"
 )
 
-func lookUpUsersWhoLiked(ctx context.Context, c *client, tweetID string, opt ...*LookUpUsersWhoLikedOpts) (*LookUpUsersWhoLikedResponse, error) {
-	// check id
-	if len(tweetID) == 0 {
-		return nil, errors.New("look up users who liked: tweetID parameter is required")
+func usersLikingTweet(ctx context.Context, c *client, tweetID string, opt ...*UsersLikingTweetOption) (*UsersLikingTweetResponse, error) {
+	if tweetID == "" {
+		return nil, errors.New("users liking tweet: tweet id parameter is required")
 	}
-	likesLookUpUsersURL := likesLookUpUsers + "/" + tweetID + "/liking_users"
+	ep := fmt.Sprintf(usersLikingTweetURL, tweetID)
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, likesLookUpUsersURL, nil)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, ep, nil)
 	if err != nil {
-		return nil, fmt.Errorf("look up users who liked: new request with ctx: %w", err)
+		return nil, fmt.Errorf("users liking tweet new request with ctx: %w", err)
 	}
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.bearerToken))
 
-	var topt LookUpUsersWhoLikedOpts
+	var uopt UsersLikingTweetOption
 	switch len(opt) {
 	case 0:
 		// do nothing
 	case 1:
-		topt = *opt[0]
+		uopt = *opt[0]
 	default:
-		return nil, errors.New("look up users who liked: only one option is allowed")
+		return nil, errors.New("users liking tweet: only one option is allowed")
 	}
-	topt.addQuery(req)
+	uopt.addQuery(req)
 
 	resp, err := c.client.Do(req)
 	if err != nil {
-		return nil, fmt.Errorf("look up users who liked response: %w", err)
+		return nil, fmt.Errorf("users liking tweet: %w", err)
 	}
 	defer resp.Body.Close()
 
-	var usersWhoLiked LookUpUsersWhoLikedResponse
-	if err := json.NewDecoder(resp.Body).Decode(&usersWhoLiked); err != nil {
-		return nil, fmt.Errorf("look up users who liked decode: %w", err)
+	var ultr UsersLikingTweetResponse
+	if err := json.NewDecoder(resp.Body).Decode(&ultr); err != nil {
+		return nil, fmt.Errorf("users liking tweet: %w", err)
 	}
 	if resp.StatusCode != http.StatusOK {
-		return &usersWhoLiked, &HTTPError{
-			APIName: "look up users who liked",
+		return &ultr, &HTTPError{
+			APIName: "users liking tweet",
 			Status:  resp.Status,
 			URL:     req.URL.String(),
 		}
 	}
 
-	return &usersWhoLiked, nil
+	return &ultr, nil
 }

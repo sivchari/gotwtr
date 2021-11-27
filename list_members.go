@@ -21,16 +21,16 @@ func listMembers(ctx context.Context, c *client, listid string, opt ...*ListMemb
 
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.bearerToken))
 
-	var topt ListMembersOption
+	var lopt ListMembersOption
 	switch len(opt) {
 	case 0:
 		// do nothing
 	case 1:
-		topt = *opt[0]
+		lopt = *opt[0]
 	default:
 		return nil, errors.New("look up list members: only one option is allowed")
 	}
-	topt.addQuery(req)
+	lopt.addQuery(req)
 
 	resp, err := c.client.Do(req)
 	if err != nil {

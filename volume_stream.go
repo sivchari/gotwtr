@@ -19,12 +19,12 @@ func stopped(done <-chan struct{}) bool {
 	}
 }
 
-func (s *StreamResponse) Stop() {
+func (s *VolumeStreams) Stop() {
 	close(s.done)
 	s.wg.Wait()
 }
 
-func (s *StreamResponse) retry(req *http.Request) {
+func (s *VolumeStreams) retry(req *http.Request) {
 	defer s.wg.Done()
 	resp, err := s.client.Do(req)
 	if err != nil {
@@ -42,44 +42,44 @@ func (s *StreamResponse) retry(req *http.Request) {
 	}
 	dec := json.NewDecoder(resp.Body)
 	for !stopped(s.done) {
-		var res SampledStreamResponse
-		err := dec.Decode(&res)
+		var v VolumeStreamsResponse
+		err := dec.Decode(&v)
 		if err != nil {
 			if err == io.EOF {
 				break
 			}
 			s.errCh <- err
 		}
-		s.ch <- res
+		s.ch <- v
 	}
 }
 
-func sampledStream(ctx context.Context, c *client, ch chan<- SampledStreamResponse, errCh chan<- error, opt ...*SampledStreamOpts) *StreamResponse {
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, sampleStream, nil)
+func volumeStreams(ctx context.Context, c *client, ch chan<- VolumeStreamsResponse, errCh chan<- error, opt ...*VolumeStreamsOption) *VolumeStreams {
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, volumeStreamsURL, nil)
 	if err != nil {
 		errCh <- fmt.Errorf("sampled stream new request with ctx: %w", err)
 	}
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.bearerToken))
 
-	var sopt SampledStreamOpts
+	var vopt VolumeStreamsOption
 	switch len(opt) {
 	case 0:
 		// do nothing
 	case 1:
-		sopt = *opt[0]
+		vopt = *opt[0]
 	default:
 		errCh <- errors.New("sampled stream: only one option is allowed")
 	}
-	sopt.addQuery(req)
+	vopt.addQuery(req)
 
-	s := &StreamResponse{
+	vs := &VolumeStreams{
 		client: c.client,
 		errCh:  errCh,
 		ch:     ch,
 		done:   make(chan struct{}),
 		wg:     &sync.WaitGroup{},
 	}
-	s.wg.Add(1)
-	go s.retry(req)
-	return s
+	vs.wg.Add(1)
+	go vs.retry(req)
+	return vs
 }

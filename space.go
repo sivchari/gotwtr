@@ -72,7 +72,7 @@ type SpaceIncludes struct {
 	Users  []*User
 }
 
-type SpaceLookUpByIDResponse struct {
+type SpaceResponse struct {
 	Space    *Space              `json:"data,omitempty"`
 	Includes *SpaceIncludes      `json:"includes,omitempty"`
 	Errors   []*APIResponseError `json:"errors,omitempty"`
@@ -81,7 +81,7 @@ type SpaceLookUpByIDResponse struct {
 	Type     string              `json:"type,omitempty"`
 }
 
-type SpaceLookUpResponse struct {
+type SpacesResponse struct {
 	Spaces   []*Space            `json:"data,omitempty"`
 	Includes *SpaceIncludes      `json:"includes,omitempty"`
 	Errors   []*APIResponseError `json:"errors,omitempty"`
@@ -90,7 +90,7 @@ type SpaceLookUpResponse struct {
 	Type     string              `json:"type,omitempty"`
 }
 
-type DiscoverSpacesByUserIDsResponse struct {
+type DiscoverSpacesResponse struct {
 	Spaces   []*Space            `json:"data"`
 	Includes *SpaceIncludes      `json:"includes,omitempty"`
 	Errors   []*APIResponseError `json:"errors,omitempty"`
@@ -101,7 +101,7 @@ type DiscoverSpacesMeta struct {
 	ResultCount int `json:"result_count"`
 }
 
-type LookUpUsersWhoPurchasedSpaceTicketResponse struct {
+type UsersPurchasedSpaceTicketResponse struct {
 	Users    []*User                                     `json:"data"`
 	Includes *LookUpUsersWhoPurchasedSpaceTicketIncludes `json:"includes,omitempty"`
 	Errors   []*APIResponseError                         `json:"errors,omitempty"`

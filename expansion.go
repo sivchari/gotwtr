@@ -12,14 +12,14 @@ const (
 	ExpansionReferencedTweetsID         Expansion = "referenced_tweets.id"
 	ExpansionReferencedTweetsIDAuthorID Expansion = "referenced_tweets.id.author_id"
 	ExpansionPinnedTweetID              Expansion = "pinned_tweet_id"
-	ExpansionInvitedUserIDs             Expansion = "invited_user_ids"
-	ExpansionSpeakerIDs                 Expansion = "speaker_ids"
-	ExpansionCreatorID                  Expansion = "creator_id"
-	ExpansionHostIDs                    Expansion = "host_ids"
-	ExpansionContextAnnotations         Expansion = "context_annotations"
-	ExpansionTopicIDs                   Expansion = "topic_ids"
-	ExpansionOwnerID                    Expansion = "list.owner_id"
-	// ExpansionTopics                     Expansion = "topics" TODO: must check
+
+	ExpansionInvitedUserIDs     Expansion = "invited_user_ids"
+	ExpansionSpeakerIDs         Expansion = "speaker_ids"
+	ExpansionCreatorID          Expansion = "creator_id"
+	ExpansionHostIDs            Expansion = "host_ids"
+	ExpansionContextAnnotations Expansion = "context_annotations"
+	ExpansionTopicIDs           Expansion = "topic_ids"
+	ExpansionOwnerID            Expansion = "list.owner_id"
 )
 
 func expansionsToString(es []Expansion) []string {

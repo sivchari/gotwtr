@@ -156,7 +156,7 @@ type TweetWithheld struct {
 	CountryCodes []string `json:"country_codes"`
 }
 
-type TweetLookUpResponse struct {
+type TweetsResponse struct {
 	Tweets   []*Tweet            `json:"data"`
 	Includes *TweetIncludes      `json:"includes,omitempty"`
 	Errors   []*APIResponseError `json:"errors,omitempty"`
@@ -165,10 +165,13 @@ type TweetLookUpResponse struct {
 	Type     string              `json:"type,omitempty"`
 }
 
-type TweetLookUpByIDResponse struct {
+type TweetResponse struct {
 	Tweet    *Tweet              `json:"data"`
 	Includes *TweetIncludes      `json:"includes,omitempty"`
 	Errors   []*APIResponseError `json:"errors,omitempty"`
+	Title    string              `json:"title,omitempty"`
+	Detail   string              `json:"detail,omitempty"`
+	Type     string              `json:"type,omitempty"`
 }
 
 type TweetIncludes struct {
@@ -184,6 +187,9 @@ type UserTweetTimelineResponse struct {
 	Includes *TweetIncludes      `json:"includes,omitempty"`
 	Errors   []*APIResponseError `json:"errors,omitempty"`
 	Meta     *UserTimelineMeta   `json:"meta"`
+	Title    string              `json:"title,omitempty"`
+	Detail   string              `json:"detail,omitempty"`
+	Type     string              `json:"type,omitempty"`
 }
 
 type UserMentionTimelineResponse struct {
@@ -191,6 +197,9 @@ type UserMentionTimelineResponse struct {
 	Includes *TweetIncludes      `json:"includes,omitempty"`
 	Errors   []*APIResponseError `json:"errors,omitempty"`
 	Meta     *UserTimelineMeta   `json:"meta"`
+	Title    string              `json:"title,omitempty"`
+	Detail   string              `json:"detail,omitempty"`
+	Type     string              `json:"type,omitempty"`
 }
 
 type UserTimelineMeta struct {
@@ -200,14 +209,17 @@ type UserTimelineMeta struct {
 	NextToken   string `json:"next_token"`
 }
 
-type TweetSearchResponse struct {
+type SearchTweetsResponse struct {
 	Tweets   []*Tweet            `json:"data"`
 	Includes *TweetIncludes      `json:"includes,omitempty"`
-	Meta     *TweetSearchMeta    `json:"meta"`
+	Meta     *SearchTweetsMeta   `json:"meta"`
 	Errors   []*APIResponseError `json:"errors,omitempty"`
+	Title    string              `json:"title,omitempty"`
+	Detail   string              `json:"detail,omitempty"`
+	Type     string              `json:"type,omitempty"`
 }
 
-type TweetSearchMeta struct {
+type SearchTweetsMeta struct {
 	ResultCount int    `json:"result_count"`
 	NewestID    string `json:"newest_id"`
 	OldestID    string `json:"oldest_id"`
@@ -234,6 +246,9 @@ type RetweetsLookupResponse struct {
 	Includes *TweetIncludes      `json:"includes,omitempty"`
 	Errors   []*APIResponseError `json:"errors,omitempty"`
 	Meta     *RetweetsLookupMeta `json:"meta"`
+	Title    string              `json:"title,omitempty"`
+	Detail   string              `json:"detail,omitempty"`
+	Type     string              `json:"type,omitempty"`
 }
 
 type RetweetsLookupMeta struct {
@@ -253,7 +268,7 @@ type FilteredRule struct {
 }
 
 type RetrieveStreamRulesMeta struct {
-	Sent string // TODO: Is it number ?
+	Sent string
 }
 
 type AddOrDeleteJSONBody struct {
@@ -277,7 +292,7 @@ type AddOrDeleteRulesResponse struct {
 }
 
 type AddOrDeleteRulesMeta struct {
-	Sent    string                  `json:"sent"` // TODO: Is it number ?
+	Sent    string                  `json:"sent"`
 	Summary *AddOrDeleteMetaSummary `json:"summary"`
 }
 
@@ -327,16 +342,16 @@ type TweetBody struct {
 	TweetID string `json:"tweet_id"`
 }
 
-type SampledStreamResponse struct {
+type VolumeStreamsResponse struct {
 	Tweet    *Tweet              `json:"data"`
 	Includes *TweetIncludes      `json:"includes,omitempty"`
 	Errors   []*APIResponseError `json:"errors,omitempty"`
 }
 
-type StreamResponse struct {
+type VolumeStreams struct {
 	client *http.Client
 	errCh  chan<- error
-	ch     chan<- SampledStreamResponse
+	ch     chan<- VolumeStreamsResponse
 	done   chan struct{}
 	wg     *sync.WaitGroup
 }
@@ -412,7 +427,7 @@ type LookUpUsersWhoLiked struct {
 	PinnedTweetID   string                            `json:"pinned_tweet_id,omitempty"`
 }
 
-type LookUpUsersWhoLikedResponse struct {
+type UsersLikingTweetResponse struct {
 	Users    []*LookUpUsersWhoLiked       `json:"data"`
 	Includes *LookUpUsersWhoLikedIncludes `json:"includes,omitempty"`
 	Meta     *LookUpUsersWhoLikedMeta     `json:"meta"`

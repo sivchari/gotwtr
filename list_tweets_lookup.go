@@ -8,48 +8,47 @@ import (
 	"net/http"
 )
 
-func lookUpListsTweetsByID(ctx context.Context, c *client, id string, opt ...*ListLookUpOption) (*ListsTweetsLookUpByIDResponse, error) {
-	if id == "" {
-		return nil, errors.New("lists tweets lookup by id: id parameter is required")
+func lookUpListTweets(ctx context.Context, c *client, listID string, opt ...*ListTweetsOption) (*ListTweetsResponse, error) {
+	if listID == "" {
+		return nil, errors.New("look up list tweets: listID parameter is required")
 	}
-	lookUpListsTweetsByID := listsTweetsLookUp + "/" + id + "/tweets"
+	ep := fmt.Sprintf(lookUpListTweetsURL, listID)
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, lookUpListsTweetsByID, nil)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, ep, nil)
 	if err != nil {
-		return nil, fmt.Errorf("lists tweets lookup by id new request with ctx: %w", err)
+		return nil, fmt.Errorf("look up list tweets new request with ctx: %w", err)
 	}
 
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.bearerToken))
 
-	var topt ListLookUpOption
+	var lopt ListTweetsOption
 	switch len(opt) {
 	case 0:
 		// do nothing
 	case 1:
-		topt = *opt[0]
+		lopt = *opt[0]
 	default:
-		return nil, errors.New("lists tweets lookup by id: only one option is allowed")
+		return nil, errors.New("look up list tweets: only one option is allowed")
 	}
-	topt.addQuery(req)
+	lopt.addQuery(req)
 
 	resp, err := c.client.Do(req)
 	if err != nil {
-		return nil, fmt.Errorf("lists tweets lookup by id response: %w", err)
+		return nil, fmt.Errorf("look up list tweets: %w", err)
 	}
-
 	defer resp.Body.Close()
 
-	var list ListsTweetsLookUpByIDResponse
-	if err := json.NewDecoder(resp.Body).Decode(&list); err != nil {
-		return nil, fmt.Errorf("lists tweets lookup by id decode: %w", err)
+	var ltr ListTweetsResponse
+	if err := json.NewDecoder(resp.Body).Decode(&ltr); err != nil {
+		return nil, fmt.Errorf("look up list tweets: %w", err)
 	}
 	if resp.StatusCode != http.StatusOK {
-		return &list, &HTTPError{
-			APIName: "lists tweets lookup by id",
+		return &ltr, &HTTPError{
+			APIName: "look up list tweets",
 			Status:  resp.Status,
 			URL:     req.URL.String(),
 		}
 	}
 
-	return &list, nil
+	return &ltr, nil
 }

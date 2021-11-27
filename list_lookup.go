@@ -8,92 +8,92 @@ import (
 	"net/http"
 )
 
-func lookUpOwnedListsByID(ctx context.Context, c *client, id string, opt ...*ListLookUpOption) (*OwnedListsLookUpByIDResponse, error) {
-	if id == "" {
-		return nil, errors.New("owned lists lookup by id: id parameter is required")
+func lookUpList(ctx context.Context, c *client, listID string, opt ...*LookUpListOption) (*ListResponse, error) {
+	if listID == "" {
+		return nil, errors.New("look up list: listID parameter is required")
 	}
-	lookUpOwnedListsByID := ownedListLookUp + "/" + id + "/owned_lists"
+	ep := fmt.Sprintf(lookUpListURL, listID)
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, lookUpOwnedListsByID, nil)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, ep, nil)
 	if err != nil {
-		return nil, fmt.Errorf("owned lists lookup by id new request with ctx: %w", err)
+		return nil, fmt.Errorf("look up list new request with ctx: %w", err)
 	}
-
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.bearerToken))
 
-	var topt ListLookUpOption
+	var lopt LookUpListOption
 	switch len(opt) {
 	case 0:
 		// do nothing
 	case 1:
-		topt = *opt[0]
+		lopt = *opt[0]
 	default:
-		return nil, errors.New("owned lists lookup by id: only one option is allowed")
+		return nil, errors.New("look up list: only one option is allowed")
 	}
-	topt.addQuery(req)
+	lopt.addQuery(req)
 
 	resp, err := c.client.Do(req)
 	if err != nil {
-		return nil, fmt.Errorf("owned lists lookup by id response: %w", err)
+		return nil, fmt.Errorf("look up list response: %w", err)
 	}
-
 	defer resp.Body.Close()
 
-	var list OwnedListsLookUpByIDResponse
-	if err := json.NewDecoder(resp.Body).Decode(&list); err != nil {
-		return nil, fmt.Errorf("owned lists lookup by id decode: %w", err)
+	var lr ListResponse
+	if err := json.NewDecoder(resp.Body).Decode(&lr); err != nil {
+		return nil, fmt.Errorf("look up list decode: %w", err)
 	}
 	if resp.StatusCode != http.StatusOK {
-		return &list, &HTTPError{
-			APIName: "owned lists lookup by id",
+		return &lr, &HTTPError{
+			APIName: "look up list",
 			Status:  resp.Status,
 			URL:     req.URL.String(),
 		}
 	}
 
-	return &list, nil
+	return &lr, nil
 }
 
-func lookUpListByID(ctx context.Context, c *client, id string, opt ...*ListLookUpOption) (*ListLookUpByIDResponse, error) {
-	if id == "" {
-		return nil, errors.New("list lookup by id: id parameter is required")
+func lookUpAllListsOwned(ctx context.Context, c *client, userID string, opt ...*AllListsOwnedOption) (*AllListsOwnedResponse, error) {
+	if userID == "" {
+		return nil, errors.New("look up all lists owned: userID parameter is required")
 	}
-	listLookUpByID := listLookUp + "/" + id
+	ep := fmt.Sprintf(lookUpAllListsOwnedURL, userID)
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, listLookUpByID, nil)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, ep, nil)
 	if err != nil {
-		return nil, fmt.Errorf("list lookup new request with ctx: %w", err)
+		return nil, fmt.Errorf("look up all lists owned new request with ctx: %w", err)
 	}
+
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.bearerToken))
 
-	var topt ListLookUpOption
+	var aopt AllListsOwnedOption
 	switch len(opt) {
 	case 0:
 		// do nothing
 	case 1:
-		topt = *opt[0]
+		aopt = *opt[0]
 	default:
-		return nil, errors.New("list lookup by id: only one option is allowed")
+		return nil, errors.New("look up all lists owned: only one option is allowed")
 	}
-	topt.addQuery(req)
+	aopt.addQuery(req)
 
 	resp, err := c.client.Do(req)
 	if err != nil {
-		return nil, fmt.Errorf("list lookup by id response: %w", err)
+		return nil, fmt.Errorf("look up all lists owned response: %w", err)
 	}
+
 	defer resp.Body.Close()
 
-	var list ListLookUpByIDResponse
-	if err := json.NewDecoder(resp.Body).Decode(&list); err != nil {
-		return nil, fmt.Errorf("list lookup by id decode: %w", err)
+	var alor AllListsOwnedResponse
+	if err := json.NewDecoder(resp.Body).Decode(&alor); err != nil {
+		return nil, fmt.Errorf("look up all lists owned decode: %w", err)
 	}
 	if resp.StatusCode != http.StatusOK {
-		return &list, &HTTPError{
-			APIName: "list lookup by id",
+		return &alor, &HTTPError{
+			APIName: "look up all lists owned",
 			Status:  resp.Status,
 			URL:     req.URL.String(),
 		}
 	}
 
-	return &list, nil
+	return &alor, nil
 }

@@ -56,14 +56,14 @@ func stateOptionToString(sopt []StateOption) []string {
 	return slice
 }
 
-type SpaceLookUpOption struct {
+type SpaceOption struct {
 	Expansions  []Expansion
 	SpaceFields []SpaceField
 	TopicFields []TopicField
 	UserFields  []UserField
 }
 
-func (s *SpaceLookUpOption) addQuery(req *http.Request) {
+func (s *SpaceOption) addQuery(req *http.Request) {
 	q := req.URL.Query()
 	if len(s.Expansions) > 0 {
 		q.Add("expansions", strings.Join(expansionsToString(s.Expansions), ","))
@@ -89,26 +89,26 @@ type DiscoverSpacesOption struct {
 	UserFields  []UserField
 }
 
-func (s *DiscoverSpacesOption) addQuery(req *http.Request) {
+func (d *DiscoverSpacesOption) addQuery(req *http.Request) {
 	q := req.URL.Query()
-	if len(s.Expansions) > 0 {
-		q.Add("expansions", strings.Join(expansionsToString(s.Expansions), ","))
+	if len(d.Expansions) > 0 {
+		q.Add("expansions", strings.Join(expansionsToString(d.Expansions), ","))
 	}
-	if len(s.SpaceFields) > 0 {
-		q.Add("space.fields", strings.Join(spaceFieldsToString(s.SpaceFields), ","))
+	if len(d.SpaceFields) > 0 {
+		q.Add("space.fields", strings.Join(spaceFieldsToString(d.SpaceFields), ","))
 	}
-	if len(s.TopicFields) > 0 {
-		q.Add("topic.fields", strings.Join(topicFieldsToString(s.TopicFields), ","))
+	if len(d.TopicFields) > 0 {
+		q.Add("topic.fields", strings.Join(topicFieldsToString(d.TopicFields), ","))
 	}
-	if len(s.UserFields) > 0 {
-		q.Add("user.fields", strings.Join(userFieldsToString(s.UserFields), ","))
+	if len(d.UserFields) > 0 {
+		q.Add("user.fields", strings.Join(userFieldsToString(d.UserFields), ","))
 	}
 	if len(q) > 0 {
 		req.URL.RawQuery = q.Encode()
 	}
 }
 
-type LookUpUsersWhoPurchasedSpaceTicketOption struct {
+type UsersPurchasedSpaceTicketOption struct {
 	Expansions  []Expansion
 	MediaFields []MediaField
 	PlaceFields []PlaceField
@@ -117,25 +117,25 @@ type LookUpUsersWhoPurchasedSpaceTicketOption struct {
 	UserFields  []UserField
 }
 
-func (o *LookUpUsersWhoPurchasedSpaceTicketOption) addQuery(req *http.Request) {
+func (u *UsersPurchasedSpaceTicketOption) addQuery(req *http.Request) {
 	q := req.URL.Query()
-	if len(o.Expansions) > 0 {
-		q.Add("expansions", strings.Join(expansionsToString(o.Expansions), ","))
+	if len(u.Expansions) > 0 {
+		q.Add("expansions", strings.Join(expansionsToString(u.Expansions), ","))
 	}
-	if len(o.MediaFields) > 0 {
-		q.Add("media.fields", strings.Join(mediaFieldsToString(o.MediaFields), ","))
+	if len(u.MediaFields) > 0 {
+		q.Add("media.fields", strings.Join(mediaFieldsToString(u.MediaFields), ","))
 	}
-	if len(o.PlaceFields) > 0 {
-		q.Add("place.fields", strings.Join(placeFieldsToString(o.PlaceFields), ","))
+	if len(u.PlaceFields) > 0 {
+		q.Add("place.fields", strings.Join(placeFieldsToString(u.PlaceFields), ","))
 	}
-	if len(o.PollFields) > 0 {
-		q.Add("poll.fields", strings.Join(pollFieldsToString(o.PollFields), ","))
+	if len(u.PollFields) > 0 {
+		q.Add("poll.fields", strings.Join(pollFieldsToString(u.PollFields), ","))
 	}
-	if len(o.TweetFields) > 0 {
-		q.Add("tweet.fields", strings.Join(tweetFieldsToString(o.TweetFields), ","))
+	if len(u.TweetFields) > 0 {
+		q.Add("tweet.fields", strings.Join(tweetFieldsToString(u.TweetFields), ","))
 	}
-	if len(o.UserFields) > 0 {
-		q.Add("user.fields", strings.Join(userFieldsToString(o.UserFields), ","))
+	if len(u.UserFields) > 0 {
+		q.Add("user.fields", strings.Join(userFieldsToString(u.UserFields), ","))
 	}
 	if len(q) > 0 {
 		req.URL.RawQuery = q.Encode()

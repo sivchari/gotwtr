@@ -15,42 +15,57 @@ const (
 	filteredStreamRuleMaxLength = 512
 	spaceLookUpMaxIDs           = 100
 	tweetLookUpMaxIDs           = 100
-	tweetSearchMaxQueryLength   = 512
+	searchTweetMaxQueryLength   = 512
 	userLookUpMaxIDs            = 100
 )
 
-type Client interface {
+type Tweets interface {
+	RetriveMultipleTweets(ctx context.Context, tweetIDs []string, opt ...*RetriveTweetOption) (*TweetsResponse, error)
+	RetriveSingleTweet(ctx context.Context, tweetID string, opt ...*RetriveTweetOption) (*TweetResponse, error)
+	UserMentionTimeline(ctx context.Context, userID string, opt ...*UserMentionTimelineOption) (*UserMentionTimelineResponse, error)
+	UserTweetTimeline(ctx context.Context, userID string, opt ...*UserTweetTimelineOption) (*UserTweetTimelineResponse, error)
+	SearchRecentTweets(ctx context.Context, tweet string, opt ...*SearchTweetsOption) (*SearchTweetsResponse, error)
+	CountsRecentTweet(ctx context.Context, tweet string, opt ...*TweetCountsOption) (*TweetCountsResponse, error)
 	AddOrDeleteRules(ctx context.Context, body *AddOrDeleteJSONBody, opt ...*AddOrDeleteRulesOption) (*AddOrDeleteRulesResponse, error)
-	CountsRecentTweet(ctx context.Context, query string, opt ...*TweetCountsOption) (*TweetCountsResponse, error)
-	ConnectToStream(ctx context.Context, ch chan<- ConnectToStreamResponse, errCh chan<- error, opt ...*ConnectToStreamOption) *ConnectToStream
-	DiscoverSpacesByUserIDs(ctx context.Context, ids []string, opt ...*DiscoverSpacesOption) (*DiscoverSpacesByUserIDsResponse, error)
-	LookUpFollowers(ctx context.Context, id string, opt ...*FollowOption) (*FollowersResponse, error)
-	LookUpFollowing(ctx context.Context, id string, opt ...*FollowOption) (*FollowingResponse, error)
-	LookUpListByID(ctx context.Context, id string, opt ...*ListLookUpOption) (*ListLookUpByIDResponse, error)
-	LookUpListFollowersByID(ctx context.Context, id string, opt ...*ListLookUpOption) (*ListFollowersLookUpByIDResponse, error)
-	LookUpListsTweetsByID(ctx context.Context, id string, opt ...*ListLookUpOption) (*ListsTweetsLookUpByIDResponse, error)
-	ListMembers(ctx context.Context, listid string, opt ...*ListMembersOption) (*ListMembersResponse, error)
-	LookUpListsUserFollowingByID(ctx context.Context, id string, opt ...*ListLookUpOption) (*ListsUserFollowingLookUpByIDResponse, error)
-	LookUpOwnedListsByID(ctx context.Context, id string, opt ...*ListLookUpOption) (*OwnedListsLookUpByIDResponse, error)
-	LookUpSpaces(ctx context.Context, ids []string, opt ...*SpaceLookUpOption) (*SpaceLookUpResponse, error)
-	LookUpSpaceByID(ctx context.Context, id string, opt ...*SpaceLookUpOption) (*SpaceLookUpByIDResponse, error)
-	LookUpTweets(ctx context.Context, ids []string, opt ...*TweetLookUpOption) (*TweetLookUpResponse, error)
-	LookUpTweetByID(ctx context.Context, id string, opt ...*TweetLookUpOption) (*TweetLookUpByIDResponse, error)
-	LookUpUsers(ctx context.Context, ids []string, opt ...*UserLookUpOption) (*UserLookUpResponse, error)
-	LookUpUserByID(ctx context.Context, id string, opt ...*UserLookUpOption) (*UserLookUpByIDResponse, error)
-	LookUpUserByUserName(ctx context.Context, name string, opt ...*UserLookUpOption) (*UserLookUpByUserNameResponse, error)
-	LookUpUsersByUserNames(ctx context.Context, names []string, opt ...*UserLookUpOption) (*UsersLookUpByUserNamesResponse, error)
-	LookUpUsersWhoLiked(ctx context.Context, tweetID string, opt ...*LookUpUsersWhoLikedOpts) (*LookUpUsersWhoLikedResponse, error)
-	LookUpUsersWhoPurchasedSpaceTicket(ctx context.Context, id string, opt ...*LookUpUsersWhoPurchasedSpaceTicketOption) (*LookUpUsersWhoPurchasedSpaceTicketResponse, error)
 	RetrieveStreamRules(ctx context.Context, opt ...*RetrieveStreamRulesOption) (*RetrieveStreamRulesResponse, error)
-	RetweetsLookup(ctx context.Context, id string, opt ...*RetweetsLookupOpts) (*RetweetsLookupResponse, error)
-	SampledStream(ctx context.Context, ch chan<- SampledStreamResponse, errCh chan<- error, opt ...*SampledStreamOpts) *StreamResponse
-	SearchRecentTweets(ctx context.Context, query string, opt ...*TweetSearchOption) (*TweetSearchResponse, error)
-	SearchSpaces(ctx context.Context, query string, opt ...*SearchSpacesOption) (*SearchSpacesResponse, error)
-	UserMentionTimeline(ctx context.Context, id string, opt ...*UserMentionTimelineOption) (*UserMentionTimelineResponse, error)
-	UserTweetTimeline(ctx context.Context, id string, opt ...*UserTweetTimelineOption) (*UserTweetTimelineResponse, error)
+	ConnectToStream(ctx context.Context, ch chan<- ConnectToStreamResponse, errCh chan<- error, opt ...*ConnectToStreamOption) *ConnectToStream
+	VolumeStreams(ctx context.Context, ch chan<- VolumeStreamsResponse, errCh chan<- error, opt ...*VolumeStreamsOption) *VolumeStreams
+	RetweetsLookup(ctx context.Context, tweetID string, opt ...*RetweetsLookupOption) (*RetweetsLookupResponse, error)
+	UsersLikingTweet(ctx context.Context, tweetID string, opt ...*UsersLikingTweetOption) (*UsersLikingTweetResponse, error)
 }
 
+type Users interface {
+	RetriveMultipleUsersWithIDs(ctx context.Context, userIDs []string, opt ...*RetriveUserOption) (*UsersResponse, error)
+	RetriveSingleUserWithID(ctx context.Context, userID string, opt ...*RetriveUserOption) (*UserResponse, error)
+	RetriveMultipleUsersWithUserNames(ctx context.Context, userNames []string, opt ...*RetriveUserOption) (*UsersResponse, error)
+	RetriveSingleUserWithUserName(ctx context.Context, userName string, opt ...*RetriveUserOption) (*UserResponse, error)
+	Followers(ctx context.Context, userID string, opt ...*FollowOption) (*FollowersResponse, error)
+	Following(ctx context.Context, userID string, opt ...*FollowOption) (*FollowingResponse, error)
+}
+
+type Spaces interface {
+	LookUpSpace(ctx context.Context, spaceID string, opt ...*SpaceOption) (*SpaceResponse, error)
+	LookUpSpaces(ctx context.Context, spaceIDs []string, opt ...*SpaceOption) (*SpacesResponse, error)
+	UsersPurchasedSpaceTicket(ctx context.Context, spaceID string, opt ...*UsersPurchasedSpaceTicketOption) (*UsersPurchasedSpaceTicketResponse, error)
+	DiscoverSpaces(ctx context.Context, userIDs []string, opt ...*DiscoverSpacesOption) (*DiscoverSpacesResponse, error)
+	SearchSpaces(ctx context.Context, searchTerm string, opt ...*SearchSpacesOption) (*SearchSpacesResponse, error)
+}
+
+type Lists interface {
+	LookUpList(ctx context.Context, listID string, opt ...*LookUpListOption) (*ListResponse, error)
+	LookUpAllListsOwned(ctx context.Context, userID string, opt ...*AllListsOwnedOption) (*AllListsOwnedResponse, error)
+	LookUpListTweets(ctx context.Context, listID string, opt ...*ListTweetsOption) (*ListTweetsResponse, error)
+	ListMembers(ctx context.Context, listID string, opt ...*ListMembersOption) (*ListMembersResponse, error)
+	LookUpListFollowers(ctx context.Context, listID string, opt ...*ListFollowersOption) (*ListFollowersResponse, error)
+	LookUpAllListsUserFollows(ctx context.Context, userID string, opt ...*ListFollowsOption) (*AllListsUserFollowsResponse, error)
+}
+
+type Client interface{}
+
+var _ Tweets = (*client)(nil)
+var _ Users = (*client)(nil)
+var _ Spaces = (*client)(nil)
+var _ Lists = (*client)(nil)
 var _ Client = (*client)(nil)
 
 type ClientOption func(*client)
@@ -74,118 +89,117 @@ func WithHTTPClient(httpClient *http.Client) ClientOption {
 	}
 }
 
+func (c *client) RetriveMultipleTweets(ctx context.Context, tweetIDs []string, opt ...*RetriveTweetOption) (*TweetsResponse, error) {
+	return retriveMultipleTweets(ctx, c, tweetIDs, opt...)
+}
+
+func (c *client) RetriveSingleTweet(ctx context.Context, tweetID string, opt ...*RetriveTweetOption) (*TweetResponse, error) {
+	return retriveSingleTweet(ctx, c, tweetID, opt...)
+}
+
+func (c *client) UserMentionTimeline(ctx context.Context, userID string, opt ...*UserMentionTimelineOption) (*UserMentionTimelineResponse, error) {
+	return userMentionTimeline(ctx, c, userID, opt...)
+}
+
+func (c *client) UserTweetTimeline(ctx context.Context, userID string, opt ...*UserTweetTimelineOption) (*UserTweetTimelineResponse, error) {
+	return userTweetTimeline(ctx, c, userID, opt...)
+}
+
+func (c *client) SearchRecentTweets(ctx context.Context, tweet string, opt ...*SearchTweetsOption) (*SearchTweetsResponse, error) {
+	return searchRecentTweets(ctx, c, tweet, opt...)
+}
+
+func (c *client) CountsRecentTweet(ctx context.Context, tweet string, opt ...*TweetCountsOption) (*TweetCountsResponse, error) {
+	return countsRecentTweet(ctx, c, tweet, opt...)
+}
+
 func (c *client) AddOrDeleteRules(ctx context.Context, body *AddOrDeleteJSONBody, opt ...*AddOrDeleteRulesOption) (*AddOrDeleteRulesResponse, error) {
 	return addOrDeleteRules(ctx, c, body, opt...)
-}
-
-func (c *client) CountsRecentTweet(ctx context.Context, query string, opt ...*TweetCountsOption) (*TweetCountsResponse, error) {
-	return countsRecentTweet(ctx, c, query, opt...)
-}
-
-func (c *client) ConnectToStream(ctx context.Context, ch chan<- ConnectToStreamResponse, errCh chan<- error, opt ...*ConnectToStreamOption) *ConnectToStream {
-	return connectToStream(ctx, c, ch, errCh, opt...)
-}
-
-func (c *client) DiscoverSpacesByUserIDs(ctx context.Context, ids []string, opt ...*DiscoverSpacesOption) (*DiscoverSpacesByUserIDsResponse, error) {
-	return discoverSpacesByUserIDs(ctx, c, ids, opt...)
-}
-
-func (c *client) LookUpFollowers(ctx context.Context, id string, opt ...*FollowOption) (*FollowersResponse, error) {
-	return lookUpFollowers(ctx, c, id, opt...)
-}
-
-func (c *client) LookUpFollowing(ctx context.Context, id string, opt ...*FollowOption) (*FollowingResponse, error) {
-	return lookUpFollowing(ctx, c, id, opt...)
-}
-
-func (c *client) LookUpListByID(ctx context.Context, id string, opt ...*ListLookUpOption) (*ListLookUpByIDResponse, error) {
-	return lookUpListByID(ctx, c, id, opt...)
-}
-
-func (c *client) LookUpListFollowersByID(ctx context.Context, id string, opt ...*ListLookUpOption) (*ListFollowersLookUpByIDResponse, error) {
-	return lookUpListFollowersByID(ctx, c, id, opt...)
-}
-
-func (c *client) LookUpListsTweetsByID(ctx context.Context, id string, opt ...*ListLookUpOption) (*ListsTweetsLookUpByIDResponse, error) {
-	return lookUpListsTweetsByID(ctx, c, id, opt...)
-}
-
-func (c *client) ListMembers(ctx context.Context, listid string, opt ...*ListMembersOption) (*ListMembersResponse, error) {
-	return listMembers(ctx, c, listid, opt...)
-}
-
-func (c *client) LookUpListsUserFollowingByID(ctx context.Context, id string, opt ...*ListLookUpOption) (*ListsUserFollowingLookUpByIDResponse, error) {
-	return lookUpListsUserFollowingByID(ctx, c, id, opt...)
-}
-
-func (c *client) LookUpOwnedListsByID(ctx context.Context, id string, opt ...*ListLookUpOption) (*OwnedListsLookUpByIDResponse, error) {
-	return lookUpOwnedListsByID(ctx, c, id, opt...)
-}
-
-func (c *client) LookUpSpaces(ctx context.Context, ids []string, opt ...*SpaceLookUpOption) (*SpaceLookUpResponse, error) {
-	return lookUpSpaces(ctx, c, ids, opt...)
-}
-
-func (c *client) LookUpSpaceByID(ctx context.Context, id string, opt ...*SpaceLookUpOption) (*SpaceLookUpByIDResponse, error) {
-	return lookUpSpaceByID(ctx, c, id, opt...)
-}
-
-func (c *client) LookUpUsersWhoPurchasedSpaceTicket(ctx context.Context, id string, opt ...*LookUpUsersWhoPurchasedSpaceTicketOption) (*LookUpUsersWhoPurchasedSpaceTicketResponse, error) {
-	return lookUpUsersWhoPurchasedSpaceTicket(ctx, c, id, opt...)
-}
-
-func (c *client) LookUpTweets(ctx context.Context, ids []string, opt ...*TweetLookUpOption) (*TweetLookUpResponse, error) {
-	return lookUpTweets(ctx, c, ids, opt...)
-}
-
-func (c *client) LookUpTweetByID(ctx context.Context, id string, opt ...*TweetLookUpOption) (*TweetLookUpByIDResponse, error) {
-	return lookUpTweetByID(ctx, c, id, opt...)
-}
-
-func (c *client) LookUpUsers(ctx context.Context, ids []string, opt ...*UserLookUpOption) (*UserLookUpResponse, error) {
-	return lookUpUsers(ctx, c, ids, opt...)
-}
-
-func (c *client) LookUpUserByID(ctx context.Context, id string, opt ...*UserLookUpOption) (*UserLookUpByIDResponse, error) {
-	return lookUpUserByID(ctx, c, id, opt...)
-}
-
-func (c *client) LookUpUserByUserName(ctx context.Context, name string, opt ...*UserLookUpOption) (*UserLookUpByUserNameResponse, error) {
-	return lookUpUserByUserName(ctx, c, name, opt...)
-}
-
-func (c *client) LookUpUsersByUserNames(ctx context.Context, names []string, opt ...*UserLookUpOption) (*UsersLookUpByUserNamesResponse, error) {
-	return lookUpUsersByUserNames(ctx, c, names, opt...)
-}
-
-func (c *client) LookUpUsersWhoLiked(ctx context.Context, tweetID string, opt ...*LookUpUsersWhoLikedOpts) (*LookUpUsersWhoLikedResponse, error) {
-	return lookUpUsersWhoLiked(ctx, c, tweetID, opt...)
 }
 
 func (c *client) RetrieveStreamRules(ctx context.Context, opt ...*RetrieveStreamRulesOption) (*RetrieveStreamRulesResponse, error) {
 	return retrieveStreamRules(ctx, c, opt...)
 }
 
-func (c *client) RetweetsLookup(ctx context.Context, id string, opt ...*RetweetsLookupOpts) (*RetweetsLookupResponse, error) {
-	return retweetsLookup(ctx, c, id, opt...)
+func (c *client) ConnectToStream(ctx context.Context, ch chan<- ConnectToStreamResponse, errCh chan<- error, opt ...*ConnectToStreamOption) *ConnectToStream {
+	return connectToStream(ctx, c, ch, errCh, opt...)
 }
 
-func (c *client) SampledStream(ctx context.Context, ch chan<- SampledStreamResponse, errCh chan<- error, opt ...*SampledStreamOpts) *StreamResponse {
-	return sampledStream(ctx, c, ch, errCh, opt...)
+func (c *client) VolumeStreams(ctx context.Context, ch chan<- VolumeStreamsResponse, errCh chan<- error, opt ...*VolumeStreamsOption) *VolumeStreams {
+	return volumeStreams(ctx, c, ch, errCh, opt...)
 }
 
-func (c *client) SearchRecentTweets(ctx context.Context, query string, opt ...*TweetSearchOption) (*TweetSearchResponse, error) {
-	return searchRecentTweets(ctx, c, query, opt...)
+func (c *client) RetweetsLookup(ctx context.Context, tweetID string, opt ...*RetweetsLookupOption) (*RetweetsLookupResponse, error) {
+	return retweetsLookup(ctx, c, tweetID, opt...)
 }
 
-func (c *client) SearchSpaces(ctx context.Context, query string, opt ...*SearchSpacesOption) (*SearchSpacesResponse, error) {
-	return searchSpaces(ctx, c, query, opt...)
+func (c *client) UsersLikingTweet(ctx context.Context, tweetID string, opt ...*UsersLikingTweetOption) (*UsersLikingTweetResponse, error) {
+	return usersLikingTweet(ctx, c, tweetID, opt...)
 }
 
-func (c *client) UserMentionTimeline(ctx context.Context, id string, opt ...*UserMentionTimelineOption) (*UserMentionTimelineResponse, error) {
-	return userMentionTimeline(ctx, c, id, opt...)
+func (c *client) RetriveMultipleUsersWithIDs(ctx context.Context, userIDs []string, opt ...*RetriveUserOption) (*UsersResponse, error) {
+	return retriveMultipleUsersWithIDs(ctx, c, userIDs, opt...)
 }
 
-func (c *client) UserTweetTimeline(ctx context.Context, id string, opt ...*UserTweetTimelineOption) (*UserTweetTimelineResponse, error) {
-	return userTweetTimeline(ctx, c, id, opt...)
+func (c *client) RetriveSingleUserWithID(ctx context.Context, userID string, opt ...*RetriveUserOption) (*UserResponse, error) {
+	return retriveSingleUserWithID(ctx, c, userID, opt...)
+}
+
+func (c *client) RetriveMultipleUsersWithUserNames(ctx context.Context, userNames []string, opt ...*RetriveUserOption) (*UsersResponse, error) {
+	return retriveMultipleUsersWithUserNames(ctx, c, userNames, opt...)
+}
+
+func (c *client) RetriveSingleUserWithUserName(ctx context.Context, userName string, opt ...*RetriveUserOption) (*UserResponse, error) {
+	return retriveSingleUserWithUserName(ctx, c, userName, opt...)
+}
+
+func (c *client) Followers(ctx context.Context, userID string, opt ...*FollowOption) (*FollowersResponse, error) {
+	return followers(ctx, c, userID, opt...)
+}
+
+func (c *client) Following(ctx context.Context, userID string, opt ...*FollowOption) (*FollowingResponse, error) {
+	return following(ctx, c, userID, opt...)
+}
+
+func (c *client) LookUpSpace(ctx context.Context, spaceID string, opt ...*SpaceOption) (*SpaceResponse, error) {
+	return lookUpSpace(ctx, c, spaceID, opt...)
+}
+
+func (c *client) LookUpSpaces(ctx context.Context, spaceIDs []string, opt ...*SpaceOption) (*SpacesResponse, error) {
+	return lookUpSpaces(ctx, c, spaceIDs, opt...)
+}
+
+func (c *client) UsersPurchasedSpaceTicket(ctx context.Context, spaceID string, opt ...*UsersPurchasedSpaceTicketOption) (*UsersPurchasedSpaceTicketResponse, error) {
+	return usersPurchasedSpaceTicket(ctx, c, spaceID, opt...)
+}
+func (c *client) DiscoverSpaces(ctx context.Context, userIDs []string, opt ...*DiscoverSpacesOption) (*DiscoverSpacesResponse, error) {
+	return discoverSpaces(ctx, c, userIDs, opt...)
+}
+
+func (c *client) SearchSpaces(ctx context.Context, searchTerm string, opt ...*SearchSpacesOption) (*SearchSpacesResponse, error) {
+	return searchSpaces(ctx, c, searchTerm, opt...)
+}
+
+func (c *client) LookUpList(ctx context.Context, listID string, opt ...*LookUpListOption) (*ListResponse, error) {
+	return lookUpList(ctx, c, listID, opt...)
+}
+
+func (c *client) LookUpAllListsOwned(ctx context.Context, userID string, opt ...*AllListsOwnedOption) (*AllListsOwnedResponse, error) {
+	return lookUpAllListsOwned(ctx, c, userID, opt...)
+}
+
+func (c *client) LookUpListTweets(ctx context.Context, listID string, opt ...*ListTweetsOption) (*ListTweetsResponse, error) {
+	return lookUpListTweets(ctx, c, listID, opt...)
+}
+
+func (c *client) ListMembers(ctx context.Context, listid string, opt ...*ListMembersOption) (*ListMembersResponse, error) {
+	return listMembers(ctx, c, listid, opt...)
+}
+
+func (c *client) LookUpListFollowers(ctx context.Context, listID string, opt ...*ListFollowersOption) (*ListFollowersResponse, error) {
+	return lookUpListFollowers(ctx, c, listID, opt...)
+}
+
+func (c *client) LookUpAllListsUserFollows(ctx context.Context, userID string, opt ...*ListFollowsOption) (*AllListsUserFollowsResponse, error) {
+	return lookUpAllListsUserFollows(ctx, c, userID, opt...)
 }
