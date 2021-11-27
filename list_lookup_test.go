@@ -191,7 +191,7 @@ func Test_lookUpOwnedListByID(t *testing.T) {
 				t.Errorf("client.LookUpOwnedListsByID() index = %v error = %v, wantErr %v", i, err, tt.wantErr)
 				return
 			}
-			if diff := cmp.Diff(got, tt.want); diff != "" {
+			if diff := cmp.Diff(tt.want, got); diff != "" {
 				t.Errorf("client.LookUpOwnedListsByID() index = %v mismatch (-want +got):\n%s", i, diff)
 				return
 			}
@@ -352,7 +352,7 @@ func Test_lookUpListByID(t *testing.T) {
 				t.Errorf("client.LookUpListByID() index = %v error = %v, wantErr %v", i, err, tt.wantErr)
 				return
 			}
-			if diff := cmp.Diff(got, tt.want); diff != "" {
+			if diff := cmp.Diff(tt.want, got); diff != "" {
 				t.Errorf("client.LookUpListByID() index = %v mismatch (-want +got):\n%s", i, diff)
 				return
 			}

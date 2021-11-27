@@ -13,6 +13,7 @@ import (
 )
 
 func Test_lookUpSpaces(t *testing.T) {
+	t.Parallel()
 	type args struct {
 		ctx    context.Context
 		client *http.Client
@@ -129,18 +130,18 @@ func Test_lookUpSpaces(t *testing.T) {
 			wantErr: true,
 		},
 	}
-	for i, tt := range tests {
+	for _, tt := range tests {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
 			got, err := c.LookUpSpaces(tt.args.ctx, tt.args.ids, tt.args.opt...)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("LookUpSpaces() index = %v error = %v, wantErr %v", i, err, tt.wantErr)
+				t.Errorf("client.LookUpSpaces() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if diff := cmp.Diff(got, tt.want); diff != "" {
-				t.Errorf("LookUpSpaces() index = %v diff = %v", i, diff)
+				t.Errorf("client.LookUpSpaces() mismatch (-want +got):\n%s", diff)
 				return
 			}
 		})
@@ -148,6 +149,7 @@ func Test_lookUpSpaces(t *testing.T) {
 }
 
 func Test_lookUpSpaceByID(t *testing.T) {
+	t.Parallel()
 	type args struct {
 		ctx    context.Context
 		client *http.Client
@@ -232,18 +234,18 @@ func Test_lookUpSpaceByID(t *testing.T) {
 			wantErr: true,
 		},
 	}
-	for i, tt := range tests {
+	for _, tt := range tests {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
 			got, err := c.LookUpSpaceByID(tt.args.ctx, tt.args.id, tt.args.opt...)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("LookUpSpaceByID() index = %v error = %v, wantErr %v", i, err, tt.wantErr)
+				t.Errorf("client.LookUpSpaceByID() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if diff := cmp.Diff(got, tt.want); diff != "" {
-				t.Errorf("LookUpSpaceByID() index = %v diff = %v", i, diff)
+				t.Errorf("client.LookUpSpaceByID() diff = %v", diff)
 				return
 			}
 		})
@@ -399,18 +401,18 @@ func Test_lookUpUsersWhoPurchasedSpaceTicket(t *testing.T) {
 			wantErr: false,
 		},
 	}
-	for i, tt := range tests {
+	for _, tt := range tests {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
 			got, err := c.LookUpUsersWhoPurchasedSpaceTicket(tt.args.ctx, tt.args.id, tt.args.opt...)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("LookUpSpaceByID() index = %v error = %v, wantErr %v", i, err, tt.wantErr)
+				t.Errorf("client.LookUpUsersWhoPurchasedSpaceTicket() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
-			if diff := cmp.Diff(got, tt.want); diff != "" {
-				t.Errorf("discoverSpacesByUserIDs() mismatch (-want +got):\n%s", diff)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("client.LookUpUsersWhoPurchasedSpaceTicket() mismatch (-want +got):\n%s", diff)
 				return
 			}
 		})

@@ -220,11 +220,11 @@ func Test_lookUpUsersWhoLiked(t *testing.T) {
 			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
 			got, err := c.LookUpUsersWhoLiked(tt.args.ctx, "tweet_id", tt.args.opt...)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("LookUpUsersWhoLiked() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("client.LookUpUsersWhoLiked() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
-			if diff := cmp.Diff(got, tt.want); diff != "" {
-				t.Errorf("LookUpUsersWhoLiked() mismatch (-want +got):\n%s", diff)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("client.LookUpUsersWhoLiked() mismatch (-want +got):\n%s", diff)
 				return
 			}
 		})

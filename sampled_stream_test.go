@@ -12,6 +12,7 @@ import (
 )
 
 func Test_sampledStream(t *testing.T) {
+	t.Parallel()
 	type args struct {
 		ctx    context.Context
 		client *http.Client
@@ -60,13 +61,13 @@ func Test_sampledStream(t *testing.T) {
 			c.SampledStream(tt.args.ctx, ch, errCh, tt.args.opt...)
 			select {
 			case got := <-ch:
-				if diff := cmp.Diff(&got, tt.want); diff != "" {
-					t.Errorf("SampledStream() mismatch (-want +got):\n%s", diff)
+				if diff := cmp.Diff(tt.want, &got); diff != "" {
+					t.Errorf("client.SampledStream() mismatch (-want +got):\n%s", diff)
 					return
 				}
 			case err := <-errCh:
 				if (err != nil) != tt.wantErr {
-					t.Errorf("SampledStream() error = %v, wantErr %v", err, tt.wantErr)
+					t.Errorf("client.SampledStream() error = %v, wantErr %v", err, tt.wantErr)
 					return
 				}
 			}

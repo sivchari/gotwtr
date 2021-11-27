@@ -12,6 +12,7 @@ import (
 )
 
 func Test_lookUpUsers(t *testing.T) {
+	t.Parallel()
 	type args struct {
 		ctx    context.Context
 		client *http.Client
@@ -387,18 +388,18 @@ func Test_lookUpUsers(t *testing.T) {
 			wantErr: true,
 		},
 	}
-	for i, tt := range tests {
+	for _, tt := range tests {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
 			got, err := c.LookUpUsers(tt.args.ctx, tt.args.ids, tt.args.opt...)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("client.LookUpUsers() index = %v error = %v, wantErr %v", i, err, tt.wantErr)
+				t.Errorf("client.LookUpUsers() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
-			if diff := cmp.Diff(got, tt.want); diff != "" {
-				t.Errorf("client.LookUpUsers() index = %v mismatch (-want +got):\n%s", i, diff)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("client.LookUpUsers() mismatch (-want +got):\n%s", diff)
 				return
 			}
 		})
@@ -406,6 +407,7 @@ func Test_lookUpUsers(t *testing.T) {
 }
 
 func Test_lookUpUserByID(t *testing.T) {
+	t.Parallel()
 	type args struct {
 		ctx    context.Context
 		client *http.Client
@@ -552,18 +554,18 @@ func Test_lookUpUserByID(t *testing.T) {
 			wantErr: true,
 		},
 	}
-	for i, tt := range tests {
+	for _, tt := range tests {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
 			got, err := c.LookUpUserByID(tt.args.ctx, tt.args.id, tt.args.opt...)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("client.LookUpUserByID() index = %v error = %v, wantErr %v", i, err, tt.wantErr)
+				t.Errorf("client.LookUpUserByID() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
-			if diff := cmp.Diff(got, tt.want); diff != "" {
-				t.Errorf("client.LookUpUserByID() index = %v mismatch (-want +got):\n%s", i, diff)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("client.LookUpUserByID() mismatch (-want +got):\n%s", diff)
 				return
 			}
 		})
@@ -571,6 +573,7 @@ func Test_lookUpUserByID(t *testing.T) {
 }
 
 func Test_lookUpUserByUserName(t *testing.T) {
+	t.Parallel()
 	type args struct {
 		ctx    context.Context
 		client *http.Client
@@ -942,18 +945,18 @@ func Test_lookUpUsersByUserNames(t *testing.T) {
 			wantErr: true,
 		},
 	}
-	for i, tt := range tests {
+	for _, tt := range tests {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
 			got, err := c.LookUpUsersByUserNames(tt.args.ctx, tt.args.names, tt.args.opt...)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("client.LookUpUsersByUserNames() index = %v error = %v, wantErr %v", i, err, tt.wantErr)
+				t.Errorf("client.LookUpUsersByUserNames() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
-			if diff := cmp.Diff(got, tt.want); diff != "" {
-				t.Errorf("client.LookUpUsersByUserNames() index = %v mismatch (-want +got):\n%s", i, diff)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("client.LookUpUsersByUserNames() mismatch (-want +got):\n%s", diff)
 				return
 			}
 		})

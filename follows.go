@@ -101,16 +101,3 @@ func lookUpFollowers(ctx context.Context, c *client, id string, opt ...*FollowOp
 
 	return &f, nil
 }
-
-// postFollowing does not handled Twitter v2 API, yet.
-// tuid = target_user_id
-func postFollowing(ctx context.Context, c *client, id string, tuid string, opt ...*FollowOption) (*PostFollowingResponse, error) {
-	return nil, nil
-}
-
-// undoFollowing does not handled Twitter v2 API, yet.
-// suid = source_user_id
-// tuid = target_user_id
-func undoFollowing(ctx context.Context, c *client, suid string, tuid string) (*UndoFollowingResponse, error) {
-	return nil, nil
-}

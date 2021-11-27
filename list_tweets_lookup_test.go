@@ -191,7 +191,7 @@ func Test_lookUpListsTweetsByID(t *testing.T) {
 				t.Errorf("client.LookUpListsTweetsByID() index = %v error = %v, wantErr %v", i, err, tt.wantErr)
 				return
 			}
-			if diff := cmp.Diff(got, tt.want); diff != "" {
+			if diff := cmp.Diff(tt.want, got); diff != "" {
 				t.Errorf("client.LookUpListsTweetsByID() index = %v mismatch (-want +got):\n%s", i, diff)
 				return
 			}

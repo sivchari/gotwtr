@@ -12,6 +12,7 @@ import (
 )
 
 func Test_retrieveStreamRules(t *testing.T) {
+	t.Parallel()
 	type args struct {
 		ctx    context.Context
 		client *http.Client
@@ -157,11 +158,11 @@ func Test_retrieveStreamRules(t *testing.T) {
 			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
 			got, err := c.RetrieveStreamRules(tt.args.ctx, tt.args.opt...)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("searchRecentTweets() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("client.RetrieveStreamRules() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if diff := cmp.Diff(got, tt.want); diff != "" {
-				t.Errorf("searchRecentTweets() mismatch (-want +got):\n%s", diff)
+				t.Errorf("client.RetrieveStreamRules() mismatch (-want +got):\n%s", diff)
 				return
 			}
 		})
@@ -405,11 +406,11 @@ func Test_AddOrDeleteRules(t *testing.T) {
 			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
 			got, err := c.AddOrDeleteRules(tt.args.ctx, tt.args.body, tt.args.opt...)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("addOrDelteRules() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("client.AddOrDeleteRules() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
-			if diff := cmp.Diff(got, tt.want); diff != "" {
-				t.Errorf("addOrDelteRules() mismatch (-want +got):\n%s", diff)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("client.AddOrDeleteRules() mismatch (-want +got):\n%s", diff)
 				return
 			}
 		})
@@ -492,13 +493,13 @@ func Test_ConnectToStream(t *testing.T) {
 			c.ConnectToStream(tt.args.ctx, ch, errCh, tt.args.opt...)
 			select {
 			case got := <-ch:
-				if diff := cmp.Diff(&got, tt.want); diff != "" {
-					t.Errorf("ConnectToStream() mismatch (-want +got):\n%s", diff)
+				if diff := cmp.Diff(tt.want, &got); diff != "" {
+					t.Errorf("client.ConnectToStream() mismatch (-want +got):\n%s", diff)
 					return
 				}
 			case err := <-errCh:
 				if (err != nil) != tt.wantErr {
-					t.Errorf("ConnectToStream() error = %v, wantErr %v", err, tt.wantErr)
+					t.Errorf("client.ConnectToStream() error = %v, wantErr %v", err, tt.wantErr)
 					return
 				}
 			}

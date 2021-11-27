@@ -12,6 +12,7 @@ import (
 )
 
 func Test_searchRecentTweets(t *testing.T) {
+	t.Parallel()
 	type args struct {
 		ctx    context.Context
 		client *http.Client
@@ -148,11 +149,11 @@ func Test_searchRecentTweets(t *testing.T) {
 			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
 			got, err := c.SearchRecentTweets(tt.args.ctx, tt.args.query, tt.args.opt...)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("searchRecentTweets() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("client.SearchRecentTweets() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
-			if diff := cmp.Diff(got, tt.want); diff != "" {
-				t.Errorf("searchRecentTweets() mismatch (-want +got):\n%s", diff)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("client.SearchRecentTweets() mismatch (-want +got):\n%s", diff)
 				return
 			}
 		})

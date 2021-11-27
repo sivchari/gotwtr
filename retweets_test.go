@@ -12,6 +12,7 @@ import (
 )
 
 func Test_retweetsLookup(t *testing.T) {
+	t.Parallel()
 	type args struct {
 		ctx    context.Context
 		client *http.Client
@@ -202,18 +203,18 @@ func Test_retweetsLookup(t *testing.T) {
 			wantErr: true,
 		},
 	}
-	for i, tt := range tests {
+	for _, tt := range tests {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
 			got, err := c.RetweetsLookup(tt.args.ctx, tt.args.id, tt.args.opt...)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("RetweetsLookup() index = %v error = %v, wantErr %v", i, err, tt.wantErr)
+				t.Errorf("client.RetweetsLookup() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
-			if diff := cmp.Diff(got, tt.want); diff != "" {
-				t.Errorf("RetweetsLookup() index = %v mismatch (-want +got):\n%s", i, diff)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("client.RetweetsLookup() mismatch (-want +got):\n%s", diff)
 				return
 			}
 		})
