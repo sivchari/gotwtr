@@ -11,9 +11,9 @@ import (
 func main() {
 	client := gotwtr.New("key")
 	// sampled stream
-	ch := make(chan gotwtr.SampledStreamResponse, 5)
+	ch := make(chan gotwtr.VolumeStreamsResponse, 5)
 	errCh := make(chan error)
-	stream := client.SampledStream(context.Background(), ch, errCh)
+	stream := client.VolumeStreams(context.Background(), ch, errCh)
 	fmt.Println("streaming...")
 	done := make(chan struct{})
 	go func(done chan struct{}) {

@@ -10,7 +10,7 @@ import (
 func main() {
 	client := gotwtr.New("key")
 	// look up list followers by id
-	us, err := client.LookUpListFollowersByID(context.Background(), "id")
+	us, err := client.LookUpListFollowers(context.Background(), "id")
 	if err != nil {
 		panic(err)
 	}
@@ -19,7 +19,7 @@ func main() {
 	}
 
 	// look up lists user following by ID
-	ls, err := client.LookUpListsUserFollowingByID(context.Background(), "id")
+	ls, err := client.LookUpAllListsUserFollows(context.Background(), "id")
 	if err != nil {
 		panic(err)
 	}
