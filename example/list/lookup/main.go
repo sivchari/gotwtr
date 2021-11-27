@@ -10,7 +10,7 @@ import (
 func main() {
 	client := gotwtr.New("key")
 	// look up owned lists by id
-	ls, err := client.LookUpOwnedListsByID(context.Background(), "id")
+	ls, err := client.LookUpAllListsOwned(context.Background(), "id")
 	if err != nil {
 		panic(err)
 	}
@@ -19,7 +19,7 @@ func main() {
 	}
 
 	// look up list by ID
-	l, err := client.LookUpListByID(context.Background(), "id")
+	l, err := client.LookUpList(context.Background(), "id")
 	if err != nil {
 		panic(err)
 	}

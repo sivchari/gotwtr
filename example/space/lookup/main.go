@@ -11,7 +11,7 @@ func main() {
 	client := gotwtr.New("key")
 
 	// look up by ID
-	s, err := client.LookUpSpaceByID(context.Background(), "spaceid")
+	s, err := client.LookUpSpace(context.Background(), "spaceid")
 	if err != nil {
 		panic(err)
 	}
@@ -29,7 +29,7 @@ func main() {
 		fmt.Printf("index: %d, val: %v\n", i, s)
 	}
 
-	str, err := client.LookUpUsersWhoPurchasedSpaceTicket(context.Background(), "spaceid")
+	str, err := client.UsersPurchasedSpaceTicket(context.Background(), "spaceid")
 	if err != nil {
 		panic(err)
 	}

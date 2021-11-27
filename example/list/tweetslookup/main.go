@@ -10,7 +10,7 @@ import (
 func main() {
 	client := gotwtr.New("key")
 	// look up lists tweets by id
-	ts, err := client.LookUpListsTweetsByID(context.Background(), "id")
+	ts, err := client.LookUpListTweets(context.Background(), "id")
 	if err != nil {
 		panic(err)
 	}

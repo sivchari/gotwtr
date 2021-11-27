@@ -9,7 +9,7 @@ import (
 
 func main() {
 	client := gotwtr.New("key")
-	tsr, err := client.SearchRecentTweets(context.Background(), "go", &gotwtr.TweetSearchOption{
+	tsr, err := client.SearchRecentTweets(context.Background(), "go", &gotwtr.SearchTweetsOption{
 		TweetFields: []gotwtr.TweetField{
 			gotwtr.TweetFieldAuthorID,
 			gotwtr.TweetFieldAttachments,

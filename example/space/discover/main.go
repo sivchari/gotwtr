@@ -9,7 +9,7 @@ import (
 
 func main() {
 	client := gotwtr.New("key")
-	dsr, err := client.DiscoverSpacesByUserIDs(context.Background(), []string{"id"}, &gotwtr.DiscoverSpacesOption{
+	dsr, err := client.DiscoverSpaces(context.Background(), []string{"id"}, &gotwtr.DiscoverSpacesOption{
 		Expansions: []gotwtr.Expansion{
 			gotwtr.ExpansionHostIDs,
 			gotwtr.ExpansionCreatorID,

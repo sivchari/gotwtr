@@ -10,7 +10,7 @@ import (
 func main() {
 	client := gotwtr.New("key")
 	// get users who liked the tweet that id is "tweet_id"
-	t, err := client.LookUpUsersWhoLiked(context.Background(), "tweet_id")
+	t, err := client.UsersLikingTweet(context.Background(), "tweet_id")
 	if err != nil {
 		panic(err)
 	}
@@ -20,7 +20,7 @@ func main() {
 	}
 
 	// get users who liked the tweet that id is "tweet_id" with option
-	t, err = client.LookUpUsersWhoLiked(context.Background(), "tweet_id", &gotwtr.LookUpUsersWhoLikedOpts{
+	t, err = client.UsersLikingTweet(context.Background(), "tweet_id", &gotwtr.UsersLikingTweetOption{
 		Expansions:  []gotwtr.Expansion{gotwtr.ExpansionPinnedTweetID},
 		UserFields:  []gotwtr.UserField{gotwtr.UserFieldCreatedAt},
 		TweetFields: []gotwtr.TweetField{gotwtr.TweetFieldCreatedAt},
