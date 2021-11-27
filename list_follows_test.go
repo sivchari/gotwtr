@@ -300,7 +300,7 @@ func Test_lookUpListFollowersByID(t *testing.T) {
 				t.Errorf("client.LookUpListFollowersByID() index = %v error = %v, wantErr %v", i, err, tt.wantErr)
 				return
 			}
-			if diff := cmp.Diff(got, tt.want); diff != "" {
+			if diff := cmp.Diff(tt.want, got); diff != "" {
 				t.Errorf("client.LookUpListFollowersByID() index = %v mismatch (-want +got):\n%s", i, diff)
 				return
 			}
@@ -487,7 +487,7 @@ func Test_lookUpListsUserFollowingByID(t *testing.T) {
 				t.Errorf("client.LookUpListsUserFollowingByID() index = %v error = %v, wantErr %v", i, err, tt.wantErr)
 				return
 			}
-			if diff := cmp.Diff(got, tt.want); diff != "" {
+			if diff := cmp.Diff(tt.want, got); diff != "" {
 				t.Errorf("client.LookUpListsUserFollowingByID() index = %v mismatch (-want +got):\n%s", i, diff)
 				return
 			}

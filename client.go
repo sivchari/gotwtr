@@ -45,16 +45,11 @@ type Client interface {
 	LookUpUsersByUserNames(ctx context.Context, names []string, opt ...*UserLookUpOption) (*UsersLookUpByUserNamesResponse, error)
 	LookUpUsersWhoLiked(ctx context.Context, tweetID string, opt ...*LookUpUsersWhoLikedOpts) (*LookUpUsersWhoLikedResponse, error)
 	LookUpUsersWhoPurchasedSpaceTicket(ctx context.Context, id string, opt ...*LookUpUsersWhoPurchasedSpaceTicketOption) (*LookUpUsersWhoPurchasedSpaceTicketResponse, error)
-	// PostFollowing(ctx context.Context, id string, tuid string) (*PostFollowingResponse, error)
-	// PostRetweet(ctx context.Context, uid string, tid string) (*PostRetweetResponse, error)
 	RetrieveStreamRules(ctx context.Context, opt ...*RetrieveStreamRulesOption) (*RetrieveStreamRulesResponse, error)
 	RetweetsLookup(ctx context.Context, id string, opt ...*RetweetsLookupOpts) (*RetweetsLookupResponse, error)
 	SampledStream(ctx context.Context, ch chan<- SampledStreamResponse, errCh chan<- error, opt ...*SampledStreamOpts) *StreamResponse
-	// SearchFullArchiveTweets(ctx context.Context, query string, opt ...*TweetSearchOption) (*TweetSearchResponse, error)
 	SearchRecentTweets(ctx context.Context, query string, opt ...*TweetSearchOption) (*TweetSearchResponse, error)
 	SearchSpaces(ctx context.Context, query string, opt ...*SearchSpacesOption) (*SearchSpacesResponse, error)
-	// UndoFollowing(ctx context.Context, suid string, tuid string) (*UndoFollowingResponse, error)
-	// UndoRetweet(ctx context.Context, id string, stid string) (*UndoRetweetResponse, error)
 	UserMentionTimeline(ctx context.Context, id string, opt ...*UserMentionTimelineOption) (*UserMentionTimelineResponse, error)
 	UserTweetTimeline(ctx context.Context, id string, opt ...*UserTweetTimelineOption) (*UserTweetTimelineResponse, error)
 }
@@ -170,14 +165,6 @@ func (c *client) LookUpUsersWhoLiked(ctx context.Context, tweetID string, opt ..
 	return lookUpUsersWhoLiked(ctx, c, tweetID, opt...)
 }
 
-func (c *client) PostFollowing(ctx context.Context, id string, tuid string) (*PostFollowingResponse, error) {
-	return postFollowing(ctx, c, id, tuid)
-}
-
-func (c *client) PostRetweet(ctx context.Context, uid string, tid string) (*PostRetweetResponse, error) {
-	return postRetweet(ctx, c, uid, tid)
-}
-
 func (c *client) RetrieveStreamRules(ctx context.Context, opt ...*RetrieveStreamRulesOption) (*RetrieveStreamRulesResponse, error) {
 	return retrieveStreamRules(ctx, c, opt...)
 }
@@ -190,24 +177,12 @@ func (c *client) SampledStream(ctx context.Context, ch chan<- SampledStreamRespo
 	return sampledStream(ctx, c, ch, errCh, opt...)
 }
 
-// func (c *client) SearchFullArchiveTweets(ctx context.Context, query string, opt ...*TweetSearchOption) (*TweetSearchResponse, error) {
-// 	return searchFullArchiveTweets(ctx, c, query, opt...)
-// }
-
 func (c *client) SearchRecentTweets(ctx context.Context, query string, opt ...*TweetSearchOption) (*TweetSearchResponse, error) {
 	return searchRecentTweets(ctx, c, query, opt...)
 }
 
 func (c *client) SearchSpaces(ctx context.Context, query string, opt ...*SearchSpacesOption) (*SearchSpacesResponse, error) {
 	return searchSpaces(ctx, c, query, opt...)
-}
-
-func (c *client) UndoFollowing(ctx context.Context, suid string, tuid string) (*UndoFollowingResponse, error) {
-	return undoFollowing(ctx, c, suid, tuid)
-}
-
-func (c *client) UndoRetweet(ctx context.Context, id string, stid string) (*UndoRetweetResponse, error) {
-	return undoRetweet(ctx, c, id, stid)
 }
 
 func (c *client) UserMentionTimeline(ctx context.Context, id string, opt ...*UserMentionTimelineOption) (*UserMentionTimelineResponse, error) {

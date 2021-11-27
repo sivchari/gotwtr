@@ -12,6 +12,7 @@ import (
 )
 
 func Test_discoverSpacesByUserIDs(t *testing.T) {
+	t.Parallel()
 	type args struct {
 		ctx    context.Context
 		client *http.Client
@@ -69,11 +70,11 @@ func Test_discoverSpacesByUserIDs(t *testing.T) {
 			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
 			got, err := c.DiscoverSpacesByUserIDs(tt.args.ctx, tt.args.ids, tt.args.opt...)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("DiscoverSpacesByUserIDs() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("client.DiscoverSpacesByUserIDs() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
-			if diff := cmp.Diff(got, tt.want); diff != "" {
-				t.Errorf("DiscoverSpacesByUserIDs() mismatch (-want +got):\n%s", diff)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("client.DiscoverSpacesByUserIDs() mismatch (-want +got):\n%s", diff)
 				return
 			}
 		})

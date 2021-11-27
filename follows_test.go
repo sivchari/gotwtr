@@ -12,6 +12,7 @@ import (
 )
 
 func Test_followers(t *testing.T) {
+	t.Parallel()
 	type args struct {
 		ctx    context.Context
 		client *http.Client
@@ -724,7 +725,7 @@ func Test_followers(t *testing.T) {
 				t.Errorf("client.Followers() index = %v error = %v, wantErr %v", i, err, tt.wantErr)
 				return
 			}
-			if diff := cmp.Diff(got, tt.want); diff != "" {
+			if diff := cmp.Diff(tt.want, got); diff != "" {
 				t.Errorf("client.Followers() index = %v mismatch (-want +got):\n%s", i, diff)
 				return
 			}
@@ -733,6 +734,7 @@ func Test_followers(t *testing.T) {
 }
 
 func Test_following(t *testing.T) {
+	t.Parallel()
 	type args struct {
 		ctx    context.Context
 		client *http.Client
@@ -1445,7 +1447,7 @@ func Test_following(t *testing.T) {
 				t.Errorf("client.Following() index = %v error = %v, wantErr %v", i, err, tt.wantErr)
 				return
 			}
-			if diff := cmp.Diff(got, tt.want); diff != "" {
+			if diff := cmp.Diff(tt.want, got); diff != "" {
 				t.Errorf("client.Following() index = %v mismatch (-want +got):\n%s", i, diff)
 				return
 			}

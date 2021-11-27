@@ -12,6 +12,7 @@ import (
 )
 
 func Test_searchSpaces(t *testing.T) {
+	t.Parallel()
 	type args struct {
 		ctx    context.Context
 		client *http.Client
@@ -114,18 +115,18 @@ func Test_searchSpaces(t *testing.T) {
 			wantErr: false,
 		},
 	}
-	for i, tt := range tests {
+	for _, tt := range tests {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
 			got, err := c.SearchSpaces(tt.args.ctx, tt.args.query, tt.args.opt...)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("searchSpaces() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("client.SearchSpaces() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
-			if diff := cmp.Diff(got, tt.want); diff != "" {
-				t.Errorf("searchSpaces() index = %v mismatch (-want +got):\n%s", i, diff)
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("client.SearchSpaces() mismatch (-want +got):\n%s", diff)
 				return
 			}
 		})
