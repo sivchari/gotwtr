@@ -35,10 +35,10 @@ type Tweets interface {
 }
 
 type Users interface {
-	RetriveMultipleUsersWithIDs(ctx context.Context, userIDs []string, opt ...*RetriveUserOption) (*UsersResponse, error)
-	RetriveSingleUserWithID(ctx context.Context, userID string, opt ...*RetriveUserOption) (*UserResponse, error)
-	RetriveMultipleUsersWithUserNames(ctx context.Context, userNames []string, opt ...*RetriveUserOption) (*UsersResponse, error)
-	RetriveSingleUserWithUserName(ctx context.Context, userName string, opt ...*RetriveUserOption) (*UserResponse, error)
+	RetriveMultipleUsersWithIDs(ctx context.Context, userIDs []string, opt ...*RetrieveUserOption) (*UsersResponse, error)
+	RetriveSingleUserWithID(ctx context.Context, userID string, opt ...*RetrieveUserOption) (*UserResponse, error)
+	RetriveMultipleUsersWithUserNames(ctx context.Context, userNames []string, opt ...*RetrieveUserOption) (*UsersResponse, error)
+	RetriveSingleUserWithUserName(ctx context.Context, userName string, opt ...*RetrieveUserOption) (*UserResponse, error)
 	Followers(ctx context.Context, userID string, opt ...*FollowOption) (*FollowersResponse, error)
 	Following(ctx context.Context, userID string, opt ...*FollowOption) (*FollowingResponse, error)
 }
@@ -90,11 +90,11 @@ func WithHTTPClient(httpClient *http.Client) ClientOption {
 }
 
 func (c *client) RetriveMultipleTweets(ctx context.Context, tweetIDs []string, opt ...*RetriveTweetOption) (*TweetsResponse, error) {
-	return retriveMultipleTweets(ctx, c, tweetIDs, opt...)
+	return retrieveMultipleTweets(ctx, c, tweetIDs, opt...)
 }
 
 func (c *client) RetriveSingleTweet(ctx context.Context, tweetID string, opt ...*RetriveTweetOption) (*TweetResponse, error) {
-	return retriveSingleTweet(ctx, c, tweetID, opt...)
+	return retrieveSingleTweet(ctx, c, tweetID, opt...)
 }
 
 func (c *client) UserMentionTimeline(ctx context.Context, userID string, opt ...*UserMentionTimelineOption) (*UserMentionTimelineResponse, error) {
@@ -137,20 +137,20 @@ func (c *client) UsersLikingTweet(ctx context.Context, tweetID string, opt ...*U
 	return usersLikingTweet(ctx, c, tweetID, opt...)
 }
 
-func (c *client) RetriveMultipleUsersWithIDs(ctx context.Context, userIDs []string, opt ...*RetriveUserOption) (*UsersResponse, error) {
-	return retriveMultipleUsersWithIDs(ctx, c, userIDs, opt...)
+func (c *client) RetriveMultipleUsersWithIDs(ctx context.Context, userIDs []string, opt ...*RetrieveUserOption) (*UsersResponse, error) {
+	return retrieveMultipleUsersWithIDs(ctx, c, userIDs, opt...)
 }
 
-func (c *client) RetriveSingleUserWithID(ctx context.Context, userID string, opt ...*RetriveUserOption) (*UserResponse, error) {
-	return retriveSingleUserWithID(ctx, c, userID, opt...)
+func (c *client) RetriveSingleUserWithID(ctx context.Context, userID string, opt ...*RetrieveUserOption) (*UserResponse, error) {
+	return retrieveSingleUserWithID(ctx, c, userID, opt...)
 }
 
-func (c *client) RetriveMultipleUsersWithUserNames(ctx context.Context, userNames []string, opt ...*RetriveUserOption) (*UsersResponse, error) {
-	return retriveMultipleUsersWithUserNames(ctx, c, userNames, opt...)
+func (c *client) RetriveMultipleUsersWithUserNames(ctx context.Context, userNames []string, opt ...*RetrieveUserOption) (*UsersResponse, error) {
+	return retrieveMultipleUsersWithUserNames(ctx, c, userNames, opt...)
 }
 
-func (c *client) RetriveSingleUserWithUserName(ctx context.Context, userName string, opt ...*RetriveUserOption) (*UserResponse, error) {
-	return retriveSingleUserWithUserName(ctx, c, userName, opt...)
+func (c *client) RetriveSingleUserWithUserName(ctx context.Context, userName string, opt ...*RetrieveUserOption) (*UserResponse, error) {
+	return retrieveSingleUserWithUserName(ctx, c, userName, opt...)
 }
 
 func (c *client) Followers(ctx context.Context, userID string, opt ...*FollowOption) (*FollowersResponse, error) {
