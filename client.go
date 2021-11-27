@@ -19,11 +19,7 @@ const (
 	userLookUpMaxIDs            = 100
 )
 
-// TODO: Add HideReplies interface
-// HideReplises does not handled Twitter v2 API, yet.
-
 type Client interface {
-	// CountsFullArchiveTweet(ctx context.Context, query string, opt ...*TweetCountsOption) (*TweetCountsResponse, error)
 	AddOrDeleteRules(ctx context.Context, body *AddOrDeleteJSONBody, opt ...*AddOrDeleteRulesOption) (*AddOrDeleteRulesResponse, error)
 	CountsRecentTweet(ctx context.Context, query string, opt ...*TweetCountsOption) (*TweetCountsResponse, error)
 	ConnectToStream(ctx context.Context, ch chan<- ConnectToStreamResponse, errCh chan<- error, opt ...*ConnectToStreamOption) *ConnectToStream
@@ -33,6 +29,7 @@ type Client interface {
 	LookUpListByID(ctx context.Context, id string, opt ...*ListLookUpOption) (*ListLookUpByIDResponse, error)
 	LookUpListFollowersByID(ctx context.Context, id string, opt ...*ListLookUpOption) (*ListFollowersLookUpByIDResponse, error)
 	LookUpListsTweetsByID(ctx context.Context, id string, opt ...*ListLookUpOption) (*ListsTweetsLookUpByIDResponse, error)
+	ListMembers(ctx context.Context, listid string, opt ...*ListMembersOption) (*ListMembersResponse, error)
 	LookUpListsUserFollowingByID(ctx context.Context, id string, opt ...*ListLookUpOption) (*ListsUserFollowingLookUpByIDResponse, error)
 	LookUpOwnedListsByID(ctx context.Context, id string, opt ...*ListLookUpOption) (*OwnedListsLookUpByIDResponse, error)
 	LookUpSpaces(ctx context.Context, ids []string, opt ...*SpaceLookUpOption) (*SpaceLookUpResponse, error)
@@ -77,10 +74,6 @@ func WithHTTPClient(httpClient *http.Client) ClientOption {
 	}
 }
 
-// func (c *client) CountsFullArchiveTweet(ctx context.Context, query string, opt ...*TweetCountsOption) (*TweetCountsResponse, error) {
-// 	return countFullArchiveTweet(ctx, c, query, opt...)
-// }
-
 func (c *client) AddOrDeleteRules(ctx context.Context, body *AddOrDeleteJSONBody, opt ...*AddOrDeleteRulesOption) (*AddOrDeleteRulesResponse, error) {
 	return addOrDeleteRules(ctx, c, body, opt...)
 }
@@ -115,6 +108,10 @@ func (c *client) LookUpListFollowersByID(ctx context.Context, id string, opt ...
 
 func (c *client) LookUpListsTweetsByID(ctx context.Context, id string, opt ...*ListLookUpOption) (*ListsTweetsLookUpByIDResponse, error) {
 	return lookUpListsTweetsByID(ctx, c, id, opt...)
+}
+
+func (c *client) ListMembers(ctx context.Context, listid string, opt ...*ListMembersOption) (*ListMembersResponse, error) {
+	return listMembers(ctx, c, listid, opt...)
 }
 
 func (c *client) LookUpListsUserFollowingByID(ctx context.Context, id string, opt ...*ListLookUpOption) (*ListsUserFollowingLookUpByIDResponse, error) {

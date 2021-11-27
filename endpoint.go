@@ -1,12 +1,13 @@
 package gotwtr
 
 // EndpointURL is the base URL for the Twitter V2 API.
-var (
+const (
 	filteredStream           = "https://api.twitter.com/2/tweets/search/stream"
 	followingLookUp          = "https://api.twitter.com/2/users"
 	followersLookUp          = "https://api.twitter.com/2/users"
 	listLookUp               = "https://api.twitter.com/2/lists"
 	listFollowersLookUp      = "https://api.twitter.com/2/lists"
+	listMembersURL           = "https://api.twitter.com/2/lists/%v/members"
 	listsTweetsLookUp        = "https://api.twitter.com/2/lists"
 	listsUserFollowingLookUp = "https://api.twitter.com/2/users"
 	likesLookUpUsers         = "https://api.twitter.com/2/tweets"
