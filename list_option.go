@@ -15,25 +15,25 @@ type ListLookUpOption struct {
 	UserFields      []UserField
 }
 
-func (t *ListLookUpOption) addQuery(req *http.Request) {
+func (l *ListLookUpOption) addQuery(req *http.Request) {
 	q := req.URL.Query()
-	if len(t.Expansions) > 0 {
-		q.Add("expansions", strings.Join(expansionsToString(t.Expansions), ","))
+	if len(l.Expansions) > 0 {
+		q.Add("expansions", strings.Join(expansionsToString(l.Expansions), ","))
 	}
-	if len(t.ListFields) > 0 {
-		q.Add("list.fields", strings.Join(listFieldsToString(t.ListFields), "."))
+	if len(l.ListFields) > 0 {
+		q.Add("list.fields", strings.Join(listFieldsToString(l.ListFields), "."))
 	}
-	if t.MaxResults > 0 {
-		q.Add("max_results", strconv.Itoa(t.MaxResults))
+	if l.MaxResults > 0 {
+		q.Add("max_results", strconv.Itoa(l.MaxResults))
 	}
-	if len(t.PaginationToken) > 0 {
-		q.Add("pagination_token", t.PaginationToken)
+	if l.PaginationToken != "" {
+		q.Add("pagination_token", l.PaginationToken)
 	}
-	if len(t.TweetFields) > 0 {
-		q.Add("tweet.fields", strings.Join(tweetFieldsToString(t.TweetFields), "."))
+	if len(l.TweetFields) > 0 {
+		q.Add("tweet.fields", strings.Join(tweetFieldsToString(l.TweetFields), "."))
 	}
-	if len(t.UserFields) > 0 {
-		q.Add("user.fields", strings.Join(userFieldsToString(t.UserFields), ","))
+	if len(l.UserFields) > 0 {
+		q.Add("user.fields", strings.Join(userFieldsToString(l.UserFields), ","))
 	}
 	if len(q) > 0 {
 		req.URL.RawQuery = q.Encode()
@@ -46,4 +46,34 @@ func listFieldsToString(lfs []ListField) []string {
 		slice[i] = string(lf)
 	}
 	return slice
+}
+
+type ListMembersOption struct {
+	Expansions      []Expansion
+	MaxResults      int
+	PaginationToken string
+	TweetFields     []TweetField
+	UserFields      []UserField
+}
+
+func (l *ListMembersOption) addQuery(req *http.Request) {
+	q := req.URL.Query()
+	if len(l.Expansions) > 0 {
+		q.Add("expansions", strings.Join(expansionsToString(l.Expansions), ","))
+	}
+	if l.MaxResults > 0 {
+		q.Add("max_results", strconv.Itoa(l.MaxResults))
+	}
+	if l.PaginationToken != "" {
+		q.Add("pagination_token", l.PaginationToken)
+	}
+	if len(l.TweetFields) > 0 {
+		q.Add("tweet.fields", strings.Join(tweetFieldsToString(l.TweetFields), "."))
+	}
+	if len(l.UserFields) > 0 {
+		q.Add("user.fields", strings.Join(userFieldsToString(l.UserFields), ","))
+	}
+	if len(q) > 0 {
+		req.URL.RawQuery = q.Encode()
+	}
 }
