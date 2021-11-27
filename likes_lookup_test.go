@@ -11,17 +11,17 @@ import (
 	"github.com/sivchari/gotwtr"
 )
 
-func Test_lookUpUsersWhoLiked(t *testing.T) {
+func Test_usersLikingTweet(t *testing.T) {
 	t.Parallel()
 	type args struct {
 		ctx    context.Context
 		client *http.Client
-		opt    []*gotwtr.LookUpUsersWhoLikedOpts
+		opt    []*gotwtr.UsersLikingTweetOption
 	}
 	tests := []struct {
 		name    string
 		args    args
-		want    *gotwtr.LookUpUsersWhoLikedResponse
+		want    *gotwtr.UsersLikingTweetResponse
 		wantErr bool
 	}{
 		{
@@ -54,7 +54,7 @@ func Test_lookUpUsersWhoLiked(t *testing.T) {
 					}
 				}),
 			},
-			want: &gotwtr.LookUpUsersWhoLikedResponse{
+			want: &gotwtr.UsersLikingTweetResponse{
 				Users: []*gotwtr.LookUpUsersWhoLiked{
 					{
 						ID:       "1065249714214457345",
@@ -143,7 +143,7 @@ func Test_lookUpUsersWhoLiked(t *testing.T) {
 						Body:       io.NopCloser(strings.NewReader(body)),
 					}
 				}),
-				opt: []*gotwtr.LookUpUsersWhoLikedOpts{
+				opt: []*gotwtr.UsersLikingTweetOption{
 					{
 						Expansions:  []gotwtr.Expansion{gotwtr.ExpansionPinnedTweetID},
 						UserFields:  []gotwtr.UserField{gotwtr.UserFieldCreatedAt},
@@ -151,7 +151,7 @@ func Test_lookUpUsersWhoLiked(t *testing.T) {
 					},
 				},
 			},
-			want: &gotwtr.LookUpUsersWhoLikedResponse{
+			want: &gotwtr.UsersLikingTweetResponse{
 				Users: []*gotwtr.LookUpUsersWhoLiked{
 					{
 						ID:            "1065249714214457345",
@@ -218,13 +218,13 @@ func Test_lookUpUsersWhoLiked(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
-			got, err := c.LookUpUsersWhoLiked(tt.args.ctx, "tweet_id", tt.args.opt...)
+			got, err := c.UsersLikingTweet(tt.args.ctx, "tweet_id", tt.args.opt...)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("client.LookUpUsersWhoLiked() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("client.UsersLikingTweet() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if diff := cmp.Diff(tt.want, got); diff != "" {
-				t.Errorf("client.LookUpUsersWhoLiked() mismatch (-want +got):\n%s", diff)
+				t.Errorf("client.UsersLikingTweet() mismatch (-want +got):\n%s", diff)
 				return
 			}
 		})

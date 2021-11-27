@@ -17,12 +17,12 @@ func Test_retweetsLookup(t *testing.T) {
 		ctx    context.Context
 		client *http.Client
 		id     string
-		opt    []*gotwtr.RetweetsLookupOpts
+		opt    []*gotwtr.RetweetsLookupOption
 	}
 	tests := []struct {
 		name    string
 		args    args
-		want    *gotwtr.RetweetsLookupResponse
+		want    *gotwtr.RetweetsResponse
 		wantErr bool
 	}{
 		{
@@ -98,7 +98,7 @@ func Test_retweetsLookup(t *testing.T) {
 				}),
 				id: "1354143047324299264",
 			},
-			want: &gotwtr.RetweetsLookupResponse{
+			want: &gotwtr.RetweetsResponse{
 				Users: []*gotwtr.User{
 					{
 						ID:            "1065249714214457345",
@@ -186,7 +186,7 @@ func Test_retweetsLookup(t *testing.T) {
 				}),
 				id: "11111111111111111",
 			},
-			want: &gotwtr.RetweetsLookupResponse{
+			want: &gotwtr.RetweetsResponse{
 				Users: nil,
 				Errors: []*gotwtr.APIResponseError{
 					{

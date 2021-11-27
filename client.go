@@ -30,15 +30,15 @@ type Tweets interface {
 	RetrieveStreamRules(ctx context.Context, opt ...*RetrieveStreamRulesOption) (*RetrieveStreamRulesResponse, error)
 	ConnectToStream(ctx context.Context, ch chan<- ConnectToStreamResponse, errCh chan<- error, opt ...*ConnectToStreamOption) *ConnectToStream
 	VolumeStreams(ctx context.Context, ch chan<- VolumeStreamsResponse, errCh chan<- error, opt ...*VolumeStreamsOption) *VolumeStreams
-	RetweetsLookup(ctx context.Context, tweetID string, opt ...*RetweetsLookupOption) (*RetweetsLookupResponse, error)
+	RetweetsLookup(ctx context.Context, tweetID string, opt ...*RetweetsLookupOption) (*RetweetsResponse, error)
 	UsersLikingTweet(ctx context.Context, tweetID string, opt ...*UsersLikingTweetOption) (*UsersLikingTweetResponse, error)
 }
 
 type Users interface {
-	RetriveMultipleUsersWithIDs(ctx context.Context, userIDs []string, opt ...*RetrieveUserOption) (*UsersResponse, error)
-	RetriveSingleUserWithID(ctx context.Context, userID string, opt ...*RetrieveUserOption) (*UserResponse, error)
-	RetriveMultipleUsersWithUserNames(ctx context.Context, userNames []string, opt ...*RetrieveUserOption) (*UsersResponse, error)
-	RetriveSingleUserWithUserName(ctx context.Context, userName string, opt ...*RetrieveUserOption) (*UserResponse, error)
+	RetrieveMultipleUsersWithIDs(ctx context.Context, userIDs []string, opt ...*RetrieveUserOption) (*UsersResponse, error)
+	RetrieveSingleUserWithID(ctx context.Context, userID string, opt ...*RetrieveUserOption) (*UserResponse, error)
+	RetrieveMultipleUsersWithUserNames(ctx context.Context, userNames []string, opt ...*RetrieveUserOption) (*UsersResponse, error)
+	RetrieveSingleUserWithUserName(ctx context.Context, userName string, opt ...*RetrieveUserOption) (*UserResponse, error)
 	Followers(ctx context.Context, userID string, opt ...*FollowOption) (*FollowersResponse, error)
 	Following(ctx context.Context, userID string, opt ...*FollowOption) (*FollowingResponse, error)
 }
@@ -60,12 +60,13 @@ type Lists interface {
 	LookUpAllListsUserFollows(ctx context.Context, userID string, opt ...*ListFollowsOption) (*AllListsUserFollowsResponse, error)
 }
 
-type Client interface{}
+type Client interface {
+	Tweets
+	Users
+	Spaces
+	Lists
+}
 
-var _ Tweets = (*client)(nil)
-var _ Users = (*client)(nil)
-var _ Spaces = (*client)(nil)
-var _ Lists = (*client)(nil)
 var _ Client = (*client)(nil)
 
 type ClientOption func(*client)
@@ -129,7 +130,7 @@ func (c *client) VolumeStreams(ctx context.Context, ch chan<- VolumeStreamsRespo
 	return volumeStreams(ctx, c, ch, errCh, opt...)
 }
 
-func (c *client) RetweetsLookup(ctx context.Context, tweetID string, opt ...*RetweetsLookupOption) (*RetweetsLookupResponse, error) {
+func (c *client) RetweetsLookup(ctx context.Context, tweetID string, opt ...*RetweetsLookupOption) (*RetweetsResponse, error) {
 	return retweetsLookup(ctx, c, tweetID, opt...)
 }
 
@@ -137,19 +138,19 @@ func (c *client) UsersLikingTweet(ctx context.Context, tweetID string, opt ...*U
 	return usersLikingTweet(ctx, c, tweetID, opt...)
 }
 
-func (c *client) RetriveMultipleUsersWithIDs(ctx context.Context, userIDs []string, opt ...*RetrieveUserOption) (*UsersResponse, error) {
+func (c *client) RetrieveMultipleUsersWithIDs(ctx context.Context, userIDs []string, opt ...*RetrieveUserOption) (*UsersResponse, error) {
 	return retrieveMultipleUsersWithIDs(ctx, c, userIDs, opt...)
 }
 
-func (c *client) RetriveSingleUserWithID(ctx context.Context, userID string, opt ...*RetrieveUserOption) (*UserResponse, error) {
+func (c *client) RetrieveSingleUserWithID(ctx context.Context, userID string, opt ...*RetrieveUserOption) (*UserResponse, error) {
 	return retrieveSingleUserWithID(ctx, c, userID, opt...)
 }
 
-func (c *client) RetriveMultipleUsersWithUserNames(ctx context.Context, userNames []string, opt ...*RetrieveUserOption) (*UsersResponse, error) {
+func (c *client) RetrieveMultipleUsersWithUserNames(ctx context.Context, userNames []string, opt ...*RetrieveUserOption) (*UsersResponse, error) {
 	return retrieveMultipleUsersWithUserNames(ctx, c, userNames, opt...)
 }
 
-func (c *client) RetriveSingleUserWithUserName(ctx context.Context, userName string, opt ...*RetrieveUserOption) (*UserResponse, error) {
+func (c *client) RetrieveSingleUserWithUserName(ctx context.Context, userName string, opt ...*RetrieveUserOption) (*UserResponse, error) {
 	return retrieveSingleUserWithUserName(ctx, c, userName, opt...)
 }
 

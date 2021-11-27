@@ -11,18 +11,18 @@ import (
 	"github.com/sivchari/gotwtr"
 )
 
-func Test_lookUpUsers(t *testing.T) {
+func Test_retrieveMultipleUsersWithIDs(t *testing.T) {
 	t.Parallel()
 	type args struct {
 		ctx    context.Context
 		client *http.Client
 		ids    []string
-		opt    []*gotwtr.UserLookUpOption
+		opt    []*gotwtr.RetrieveUserOption
 	}
 	tests := []struct {
 		name    string
 		args    args
-		want    *gotwtr.UserLookUpResponse
+		want    *gotwtr.UsersResponse
 		wantErr bool
 	}{
 		{
@@ -45,9 +45,9 @@ func Test_lookUpUsers(t *testing.T) {
 					}
 				}),
 				ids: []string{"2244994945"},
-				opt: []*gotwtr.UserLookUpOption{},
+				opt: []*gotwtr.RetrieveUserOption{},
 			},
-			want: &gotwtr.UserLookUpResponse{
+			want: &gotwtr.UsersResponse{
 				Users: []*gotwtr.User{
 					{
 						ID:       "2244994945",
@@ -96,7 +96,7 @@ func Test_lookUpUsers(t *testing.T) {
 					}
 				}),
 				ids: []string{"2244994945"},
-				opt: []*gotwtr.UserLookUpOption{
+				opt: []*gotwtr.RetrieveUserOption{
 					{
 						Expansions: []gotwtr.Expansion{gotwtr.ExpansionAuthorID},
 						TweetFields: []gotwtr.TweetField{
@@ -109,7 +109,7 @@ func Test_lookUpUsers(t *testing.T) {
 					},
 				},
 			},
-			want: &gotwtr.UserLookUpResponse{
+			want: &gotwtr.UsersResponse{
 				Users: []*gotwtr.User{
 					{
 						CreatedAt:     "2013-12-14T04:35:55.000Z",
@@ -162,9 +162,9 @@ func Test_lookUpUsers(t *testing.T) {
 					}
 				}),
 				ids: []string{"2244994945", "783214"},
-				opt: []*gotwtr.UserLookUpOption{},
+				opt: []*gotwtr.RetrieveUserOption{},
 			},
-			want: &gotwtr.UserLookUpResponse{
+			want: &gotwtr.UsersResponse{
 				Users: []*gotwtr.User{
 					{
 						ID:       "2244994945",
@@ -225,7 +225,7 @@ func Test_lookUpUsers(t *testing.T) {
 					}
 				}),
 				ids: []string{"2244994945", "783214"},
-				opt: []*gotwtr.UserLookUpOption{
+				opt: []*gotwtr.RetrieveUserOption{
 					{
 						Expansions: []gotwtr.Expansion{gotwtr.ExpansionAuthorID},
 						TweetFields: []gotwtr.TweetField{
@@ -238,7 +238,7 @@ func Test_lookUpUsers(t *testing.T) {
 					},
 				},
 			},
-			want: &gotwtr.UserLookUpResponse{
+			want: &gotwtr.UsersResponse{
 				Users: []*gotwtr.User{
 					{
 						CreatedAt:     "2013-12-14T04:35:55.000Z",
@@ -303,9 +303,9 @@ func Test_lookUpUsers(t *testing.T) {
 					}
 				}),
 				ids: []string{"6253282", "11111111111"},
-				opt: []*gotwtr.UserLookUpOption{},
+				opt: []*gotwtr.RetrieveUserOption{},
 			},
-			want: &gotwtr.UserLookUpResponse{
+			want: &gotwtr.UsersResponse{
 				Users: []*gotwtr.User{
 					{
 						ID:       "6253282",
@@ -360,9 +360,9 @@ func Test_lookUpUsers(t *testing.T) {
 					}
 				}),
 				ids: []string{"11111111111", "22222222222"},
-				opt: []*gotwtr.UserLookUpOption{},
+				opt: []*gotwtr.RetrieveUserOption{},
 			},
-			want: &gotwtr.UserLookUpResponse{
+			want: &gotwtr.UsersResponse{
 				Users: nil,
 				Errors: []*gotwtr.APIResponseError{
 					{
@@ -393,31 +393,31 @@ func Test_lookUpUsers(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
-			got, err := c.LookUpUsers(tt.args.ctx, tt.args.ids, tt.args.opt...)
+			got, err := c.RetrieveMultipleUsersWithIDs(tt.args.ctx, tt.args.ids, tt.args.opt...)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("client.LookUpUsers() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("client.RetriveMultipleUsersWithIDs() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if diff := cmp.Diff(tt.want, got); diff != "" {
-				t.Errorf("client.LookUpUsers() mismatch (-want +got):\n%s", diff)
+				t.Errorf("client.RetriveMultipleUsersWithIDs() mismatch (-want +got):\n%s", diff)
 				return
 			}
 		})
 	}
 }
 
-func Test_lookUpUserByID(t *testing.T) {
+func Test_retrieveSingleUserWithID(t *testing.T) {
 	t.Parallel()
 	type args struct {
 		ctx    context.Context
 		client *http.Client
 		id     string
-		opt    []*gotwtr.UserLookUpOption
+		opt    []*gotwtr.RetrieveUserOption
 	}
 	tests := []struct {
 		name    string
 		args    args
-		want    *gotwtr.UserLookUpByIDResponse
+		want    *gotwtr.UserResponse
 		wantErr bool
 	}{
 		{
@@ -438,9 +438,9 @@ func Test_lookUpUserByID(t *testing.T) {
 					}
 				}),
 				id:  "2244994945",
-				opt: []*gotwtr.UserLookUpOption{},
+				opt: []*gotwtr.RetrieveUserOption{},
 			},
-			want: &gotwtr.UserLookUpByIDResponse{
+			want: &gotwtr.UserResponse{
 				User: &gotwtr.User{
 					ID:       "2244994945",
 					Name:     "Twitter Dev",
@@ -478,7 +478,7 @@ func Test_lookUpUserByID(t *testing.T) {
 					}
 				}),
 				id: "2244994945",
-				opt: []*gotwtr.UserLookUpOption{
+				opt: []*gotwtr.RetrieveUserOption{
 					{
 						Expansions: []gotwtr.Expansion{gotwtr.ExpansionAuthorID},
 						TweetFields: []gotwtr.TweetField{
@@ -491,7 +491,7 @@ func Test_lookUpUserByID(t *testing.T) {
 					},
 				},
 			},
-			want: &gotwtr.UserLookUpByIDResponse{
+			want: &gotwtr.UserResponse{
 				User: &gotwtr.User{
 					UserName:      "TwitterDev",
 					CreatedAt:     "2013-12-14T04:35:55.000Z",
@@ -535,9 +535,9 @@ func Test_lookUpUserByID(t *testing.T) {
 					}
 				}),
 				id:  "11111111111",
-				opt: []*gotwtr.UserLookUpOption{},
+				opt: []*gotwtr.RetrieveUserOption{},
 			},
-			want: &gotwtr.UserLookUpByIDResponse{
+			want: &gotwtr.UserResponse{
 				User: nil,
 				Errors: []*gotwtr.APIResponseError{
 					{
@@ -559,31 +559,31 @@ func Test_lookUpUserByID(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
-			got, err := c.LookUpUserByID(tt.args.ctx, tt.args.id, tt.args.opt...)
+			got, err := c.RetrieveSingleUserWithID(tt.args.ctx, tt.args.id, tt.args.opt...)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("client.LookUpUserByID() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("client.RetriveSingleUserWithID() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if diff := cmp.Diff(tt.want, got); diff != "" {
-				t.Errorf("client.LookUpUserByID() mismatch (-want +got):\n%s", diff)
+				t.Errorf("client.RetriveSingleUserWithID() mismatch (-want +got):\n%s", diff)
 				return
 			}
 		})
 	}
 }
 
-func Test_lookUpUserByUserName(t *testing.T) {
+func Test_retrieveSingleUserWithUserName(t *testing.T) {
 	t.Parallel()
 	type args struct {
 		ctx    context.Context
 		client *http.Client
 		name   string
-		opt    []*gotwtr.UserLookUpOption
+		opt    []*gotwtr.RetrieveUserOption
 	}
 	tests := []struct {
 		name    string
 		args    args
-		want    *gotwtr.UserLookUpByUserNameResponse
+		want    *gotwtr.UserResponse
 		wantErr bool
 	}{
 		{
@@ -604,9 +604,9 @@ func Test_lookUpUserByUserName(t *testing.T) {
 					}
 				}),
 				name: "TwitterDev",
-				opt:  []*gotwtr.UserLookUpOption{},
+				opt:  []*gotwtr.RetrieveUserOption{},
 			},
-			want: &gotwtr.UserLookUpByUserNameResponse{
+			want: &gotwtr.UserResponse{
 				User: &gotwtr.User{
 					ID:       "2244994945",
 					Name:     "Twitter Dev",
@@ -644,7 +644,7 @@ func Test_lookUpUserByUserName(t *testing.T) {
 					}
 				}),
 				name: "TwitterDev",
-				opt: []*gotwtr.UserLookUpOption{
+				opt: []*gotwtr.RetrieveUserOption{
 					{
 						Expansions: []gotwtr.Expansion{gotwtr.ExpansionAuthorID},
 						TweetFields: []gotwtr.TweetField{
@@ -657,7 +657,7 @@ func Test_lookUpUserByUserName(t *testing.T) {
 					},
 				},
 			},
-			want: &gotwtr.UserLookUpByUserNameResponse{
+			want: &gotwtr.UserResponse{
 				User: &gotwtr.User{
 					UserName:      "TwitterDev",
 					CreatedAt:     "2013-12-14T04:35:55.000Z",
@@ -703,9 +703,9 @@ func Test_lookUpUserByUserName(t *testing.T) {
 					}
 				}),
 				name: "aaaaaaaaaaaaaaaaaa",
-				opt:  []*gotwtr.UserLookUpOption{},
+				opt:  []*gotwtr.RetrieveUserOption{},
 			},
-			want: &gotwtr.UserLookUpByUserNameResponse{
+			want: &gotwtr.UserResponse{
 				User: nil,
 				Errors: []*gotwtr.APIResponseError{
 					{
@@ -722,35 +722,35 @@ func Test_lookUpUserByUserName(t *testing.T) {
 			wantErr: true,
 		},
 	}
-	for i, tt := range tests {
+	for _, tt := range tests {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
-			got, err := c.LookUpUserByUserName(tt.args.ctx, tt.args.name, tt.args.opt...)
+			got, err := c.RetrieveSingleUserWithUserName(tt.args.ctx, tt.args.name, tt.args.opt...)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("client.LookUpUserByUserName() index = %v error = %v, wantErr %v", i, err, tt.wantErr)
+				t.Errorf("client.RetrieveSingleUserWithUserName() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if diff := cmp.Diff(got, tt.want); diff != "" {
-				t.Errorf("client.LookUpUserByUserName() index = %v mismatch (-want +got):\n%s", i, diff)
+				t.Errorf("client.RetrieveSingleUserWithUserName() mismatch (-want +got):\n%s", diff)
 				return
 			}
 		})
 	}
 }
 
-func Test_lookUpUsersByUserNames(t *testing.T) {
+func Test_retrieveMultipleUsersWithUserNames(t *testing.T) {
 	type args struct {
 		ctx    context.Context
 		client *http.Client
 		names  []string
-		opt    []*gotwtr.UserLookUpOption
+		opt    []*gotwtr.RetrieveUserOption
 	}
 	tests := []struct {
 		name    string
 		args    args
-		want    *gotwtr.UsersLookUpByUserNamesResponse
+		want    *gotwtr.UsersResponse
 		wantErr bool
 	}{
 		{
@@ -778,9 +778,9 @@ func Test_lookUpUsersByUserNames(t *testing.T) {
 					}
 				}),
 				names: []string{"TwitterDev", "Twitter"},
-				opt:   []*gotwtr.UserLookUpOption{},
+				opt:   []*gotwtr.RetrieveUserOption{},
 			},
-			want: &gotwtr.UsersLookUpByUserNamesResponse{
+			want: &gotwtr.UsersResponse{
 				Users: []*gotwtr.User{
 					{
 						ID:       "2244994945",
@@ -839,7 +839,7 @@ func Test_lookUpUsersByUserNames(t *testing.T) {
 					}
 				}),
 				names: []string{"TwitterDev", "Twitter"},
-				opt: []*gotwtr.UserLookUpOption{
+				opt: []*gotwtr.RetrieveUserOption{
 					{
 						Expansions: []gotwtr.Expansion{gotwtr.ExpansionAuthorID},
 						TweetFields: []gotwtr.TweetField{
@@ -852,7 +852,7 @@ func Test_lookUpUsersByUserNames(t *testing.T) {
 					},
 				},
 			},
-			want: &gotwtr.UsersLookUpByUserNamesResponse{
+			want: &gotwtr.UsersResponse{
 				Users: []*gotwtr.User{
 					{
 						CreatedAt:     "2013-12-14T04:35:55.000Z",
@@ -920,9 +920,9 @@ func Test_lookUpUsersByUserNames(t *testing.T) {
 					}
 				}),
 				names: []string{"aaaaaaaaaaaaaaaaaaaaaa", "bbbbbbbbbbbbbbbbbbbbbbbb"},
-				opt:   []*gotwtr.UserLookUpOption{},
+				opt:   []*gotwtr.RetrieveUserOption{},
 			},
-			want: &gotwtr.UsersLookUpByUserNamesResponse{
+			want: &gotwtr.UsersResponse{
 				Users: nil,
 				Errors: []*gotwtr.APIResponseError{
 					{
@@ -950,13 +950,13 @@ func Test_lookUpUsersByUserNames(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
-			got, err := c.LookUpUsersByUserNames(tt.args.ctx, tt.args.names, tt.args.opt...)
+			got, err := c.RetrieveMultipleUsersWithUserNames(tt.args.ctx, tt.args.names, tt.args.opt...)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("client.LookUpUsersByUserNames() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("client.RetrieveMultipleUsersWithUserNames() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if diff := cmp.Diff(tt.want, got); diff != "" {
-				t.Errorf("client.LookUpUsersByUserNames() mismatch (-want +got):\n%s", diff)
+				t.Errorf("client.RetrieveMultipleUsersWithUserNames() mismatch (-want +got):\n%s", diff)
 				return
 			}
 		})

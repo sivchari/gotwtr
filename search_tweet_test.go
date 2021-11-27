@@ -17,12 +17,12 @@ func Test_searchRecentTweets(t *testing.T) {
 		ctx    context.Context
 		client *http.Client
 		query  string
-		opt    []*gotwtr.TweetSearchOption
+		opt    []*gotwtr.SearchTweetsOption
 	}
 	tests := []struct {
 		name    string
 		args    args
-		want    *gotwtr.TweetSearchResponse
+		want    *gotwtr.SearchTweetsResponse
 		wantErr bool
 	}{
 		{
@@ -86,9 +86,9 @@ func Test_searchRecentTweets(t *testing.T) {
 					}
 				}),
 				query: "nyc",
-				opt:   []*gotwtr.TweetSearchOption{},
+				opt:   []*gotwtr.SearchTweetsOption{},
 			},
-			want: &gotwtr.TweetSearchResponse{
+			want: &gotwtr.SearchTweetsResponse{
 				Tweets: []*gotwtr.Tweet{
 					{
 						ID:   "1444834989024202755",
@@ -131,7 +131,7 @@ func Test_searchRecentTweets(t *testing.T) {
 						Text: "RT @elhammohamud: girlies be like nyc is not ready for us like nyc has never seen 10 harry styles fans in head to toe shein walking around…",
 					},
 				},
-				Meta: &gotwtr.TweetSearchMeta{
+				Meta: &gotwtr.SearchTweetsMeta{
 					NewestID:    "1444834989024202755",
 					OldestID:    "1444834974646116359",
 					ResultCount: 10,

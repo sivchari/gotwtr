@@ -11,18 +11,18 @@ import (
 	"github.com/sivchari/gotwtr"
 )
 
-func Test_lookUpListFollowersByID(t *testing.T) {
+func Test_lookUpListFollowers(t *testing.T) {
 	t.Parallel()
 	type args struct {
 		ctx    context.Context
 		client *http.Client
 		id     string
-		opt    []*gotwtr.ListLookUpOption
+		opt    []*gotwtr.ListFollowersOption
 	}
 	tests := []struct {
 		name    string
 		args    args
-		want    *gotwtr.ListFollowersLookUpByIDResponse
+		want    *gotwtr.ListFollowersResponse
 		wantErr bool
 	}{
 		{
@@ -69,9 +69,9 @@ func Test_lookUpListFollowersByID(t *testing.T) {
 					}
 				}),
 				id:  "84839422",
-				opt: []*gotwtr.ListLookUpOption{},
+				opt: []*gotwtr.ListFollowersOption{},
 			},
-			want: &gotwtr.ListFollowersLookUpByIDResponse{
+			want: &gotwtr.ListFollowersResponse{
 				Users: []*gotwtr.User{
 					{
 						ID:       "1324848235714736129",
@@ -173,7 +173,7 @@ func Test_lookUpListFollowersByID(t *testing.T) {
 					}
 				}),
 				id: "84839422",
-				opt: []*gotwtr.ListLookUpOption{
+				opt: []*gotwtr.ListFollowersOption{
 					{
 						Expansions: []gotwtr.Expansion{
 							gotwtr.ExpansionPinnedTweetID,
@@ -187,7 +187,7 @@ func Test_lookUpListFollowersByID(t *testing.T) {
 					},
 				},
 			},
-			want: &gotwtr.ListFollowersLookUpByIDResponse{
+			want: &gotwtr.ListFollowersResponse{
 				Users: []*gotwtr.User{
 					{
 						UserName:  "alanbenlee",
@@ -270,9 +270,9 @@ func Test_lookUpListFollowersByID(t *testing.T) {
 					}
 				}),
 				id:  "111111111111111111111111111111111111",
-				opt: []*gotwtr.ListLookUpOption{},
+				opt: []*gotwtr.ListFollowersOption{},
 			},
-			want: &gotwtr.ListFollowersLookUpByIDResponse{
+			want: &gotwtr.ListFollowersResponse{
 				Users: nil,
 				Errors: []*gotwtr.APIResponseError{
 					{
@@ -295,7 +295,7 @@ func Test_lookUpListFollowersByID(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
-			got, err := c.LookUpListFollowersByID(tt.args.ctx, tt.args.id, tt.args.opt...)
+			got, err := c.LookUpListFollowers(tt.args.ctx, tt.args.id, tt.args.opt...)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("client.LookUpListFollowersByID() index = %v error = %v, wantErr %v", i, err, tt.wantErr)
 				return
@@ -308,18 +308,18 @@ func Test_lookUpListFollowersByID(t *testing.T) {
 	}
 }
 
-func Test_lookUpListsUserFollowingByID(t *testing.T) {
+func Test_lookUpAllListsUserFollows(t *testing.T) {
 	t.Parallel()
 	type args struct {
 		ctx    context.Context
 		client *http.Client
 		id     string
-		opt    []*gotwtr.ListLookUpOption
+		opt    []*gotwtr.ListFollowsOption
 	}
 	tests := []struct {
 		name    string
 		args    args
-		want    *gotwtr.ListsUserFollowingLookUpByIDResponse
+		want    *gotwtr.AllListsUserFollowsResponse
 		wantErr bool
 	}{
 		{
@@ -344,9 +344,9 @@ func Test_lookUpListsUserFollowingByID(t *testing.T) {
 					}
 				}),
 				id:  "2244994945",
-				opt: []*gotwtr.ListLookUpOption{},
+				opt: []*gotwtr.ListFollowsOption{},
 			},
-			want: &gotwtr.ListsUserFollowingLookUpByIDResponse{
+			want: &gotwtr.AllListsUserFollowsResponse{
 				Lists: []*gotwtr.List{
 					{
 						ID:   "1630685563471",
@@ -393,7 +393,7 @@ func Test_lookUpListsUserFollowingByID(t *testing.T) {
 					}
 				}),
 				id: "2244994945",
-				opt: []*gotwtr.ListLookUpOption{
+				opt: []*gotwtr.ListFollowsOption{
 					{
 						Expansions: []gotwtr.Expansion{
 							gotwtr.ExpansionOwnerID,
@@ -407,7 +407,7 @@ func Test_lookUpListsUserFollowingByID(t *testing.T) {
 					},
 				},
 			},
-			want: &gotwtr.ListsUserFollowingLookUpByIDResponse{
+			want: &gotwtr.AllListsUserFollowsResponse{
 				Lists: []*gotwtr.List{
 					{
 						FollowerCount: 123,
@@ -458,9 +458,9 @@ func Test_lookUpListsUserFollowingByID(t *testing.T) {
 					}
 				}),
 				id:  "111111111111111111111111111111111111111111111111111111",
-				opt: []*gotwtr.ListLookUpOption{},
+				opt: []*gotwtr.ListFollowsOption{},
 			},
-			want: &gotwtr.ListsUserFollowingLookUpByIDResponse{
+			want: &gotwtr.AllListsUserFollowsResponse{
 				Lists: nil,
 				Errors: []*gotwtr.APIResponseError{
 					{
@@ -477,18 +477,18 @@ func Test_lookUpListsUserFollowingByID(t *testing.T) {
 			wantErr: true,
 		},
 	}
-	for i, tt := range tests {
+	for _, tt := range tests {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
-			got, err := c.LookUpListsUserFollowingByID(tt.args.ctx, tt.args.id, tt.args.opt...)
+			got, err := c.LookUpAllListsUserFollows(tt.args.ctx, tt.args.id, tt.args.opt...)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("client.LookUpListsUserFollowingByID() index = %v error = %v, wantErr %v", i, err, tt.wantErr)
+				t.Errorf("client.LookUpAllListsUserFollows() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if diff := cmp.Diff(tt.want, got); diff != "" {
-				t.Errorf("client.LookUpListsUserFollowingByID() index = %v mismatch (-want +got):\n%s", i, diff)
+				t.Errorf("client.LookUpAllListsUserFollows() mismatch (-want +got):\n%s", diff)
 				return
 			}
 		})

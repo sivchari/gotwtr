@@ -9,13 +9,10 @@ import (
 )
 
 func searchRecentTweets(ctx context.Context, c *client, tweet string, opt ...*SearchTweetsOption) (*SearchTweetsResponse, error) {
-	if tweet == "" {
-		return nil, errors.New("search recent tweets: tweet parameter is required")
-	}
 	switch {
 	case tweet == "":
 		return nil, errors.New("search recent tweets: tweet parameter is required")
-	case len(tweet) < searchTweetMaxQueryLength:
+	case len(tweet) > searchTweetMaxQueryLength:
 		return nil, errors.New("search recent tweets: tweet parameter must be less than or equal to 512 characters")
 	}
 

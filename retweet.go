@@ -8,7 +8,7 @@ import (
 	"net/http"
 )
 
-func retweetsLookup(ctx context.Context, c *client, tweetID string, opt ...*RetweetsLookupOption) (*RetweetsLookupResponse, error) {
+func retweetsLookup(ctx context.Context, c *client, tweetID string, opt ...*RetweetsLookupOption) (*RetweetsResponse, error) {
 	if tweetID == "" {
 		return nil, errors.New("retweets lookup: tweet id parameter is required")
 	}
@@ -37,7 +37,7 @@ func retweetsLookup(ctx context.Context, c *client, tweetID string, opt ...*Retw
 	}
 	defer resp.Body.Close()
 
-	var retweetsLookup RetweetsLookupResponse
+	var retweetsLookup RetweetsResponse
 	if err := json.NewDecoder(resp.Body).Decode(&retweetsLookup); err != nil {
 		return nil, fmt.Errorf("retweets lookup decode: %w", err)
 	}

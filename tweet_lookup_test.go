@@ -16,18 +16,18 @@ import (
 // Twitter look up API's response may be changed. Need to check the response.
 // The sample response now definitely exists.
 // A few might have been added.
-func Test_lookUp(t *testing.T) {
+func Test_retriveMultipleTweets(t *testing.T) {
 	t.Parallel()
 	type args struct {
 		ctx    context.Context
 		client *http.Client
 		ids    []string
-		opt    []*gotwtr.TweetLookUpOption
+		opt    []*gotwtr.RetriveTweetOption
 	}
 	tests := []struct {
 		name    string
 		args    args
-		want    *gotwtr.TweetLookUpResponse
+		want    *gotwtr.TweetsResponse
 		wantErr bool
 	}{
 		{
@@ -49,9 +49,9 @@ func Test_lookUp(t *testing.T) {
 					}
 				}),
 				ids: []string{"123456789"},
-				opt: []*gotwtr.TweetLookUpOption{},
+				opt: []*gotwtr.RetriveTweetOption{},
 			},
-			want: &gotwtr.TweetLookUpResponse{
+			want: &gotwtr.TweetsResponse{
 				Tweets: []*gotwtr.Tweet{
 					{
 						ID:   "123456789",
@@ -94,7 +94,7 @@ func Test_lookUp(t *testing.T) {
 					}
 				}),
 				ids: []string{"123456789"},
-				opt: []*gotwtr.TweetLookUpOption{
+				opt: []*gotwtr.RetriveTweetOption{
 					{
 						Expansions: []gotwtr.Expansion{gotwtr.ExpansionAuthorID},
 						TweetFields: []gotwtr.TweetField{
@@ -107,7 +107,7 @@ func Test_lookUp(t *testing.T) {
 					},
 				},
 			},
-			want: &gotwtr.TweetLookUpResponse{
+			want: &gotwtr.TweetsResponse{
 				Tweets: []*gotwtr.Tweet{
 					{
 						AuthorID:  "11111111",
@@ -153,9 +153,9 @@ func Test_lookUp(t *testing.T) {
 					}
 				}),
 				ids: []string{"123456789", "987654321"},
-				opt: []*gotwtr.TweetLookUpOption{},
+				opt: []*gotwtr.RetriveTweetOption{},
 			},
-			want: &gotwtr.TweetLookUpResponse{
+			want: &gotwtr.TweetsResponse{
 				Tweets: []*gotwtr.Tweet{
 					{
 						ID:   "123456789",
@@ -214,7 +214,7 @@ func Test_lookUp(t *testing.T) {
 					}
 				}),
 				ids: []string{"123456789", "987654321"},
-				opt: []*gotwtr.TweetLookUpOption{
+				opt: []*gotwtr.RetriveTweetOption{
 					{
 						Expansions: []gotwtr.Expansion{gotwtr.ExpansionAuthorID},
 						TweetFields: []gotwtr.TweetField{
@@ -227,7 +227,7 @@ func Test_lookUp(t *testing.T) {
 					},
 				},
 			},
-			want: &gotwtr.TweetLookUpResponse{
+			want: &gotwtr.TweetsResponse{
 				Tweets: []*gotwtr.Tweet{
 					{
 						AuthorID:  "11111111",
@@ -290,9 +290,9 @@ func Test_lookUp(t *testing.T) {
 					}
 				}),
 				ids: []string{"20", "1276230436478386177"},
-				opt: []*gotwtr.TweetLookUpOption{},
+				opt: []*gotwtr.RetriveTweetOption{},
 			},
-			want: &gotwtr.TweetLookUpResponse{
+			want: &gotwtr.TweetsResponse{
 				Tweets: []*gotwtr.Tweet{
 					{
 						ID:   "20",
@@ -339,9 +339,9 @@ func Test_lookUp(t *testing.T) {
 					}
 				}),
 				ids: []string{"123456789"},
-				opt: []*gotwtr.TweetLookUpOption{},
+				opt: []*gotwtr.RetriveTweetOption{},
 			},
-			want: &gotwtr.TweetLookUpResponse{
+			want: &gotwtr.TweetsResponse{
 				Tweets: nil,
 				Errors: []*gotwtr.APIResponseError{
 					{
@@ -363,13 +363,13 @@ func Test_lookUp(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
-			got, err := c.LookUpTweets(tt.args.ctx, tt.args.ids, tt.args.opt...)
+			got, err := c.RetriveMultipleTweets(tt.args.ctx, tt.args.ids, tt.args.opt...)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("client.LookUpTweets() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("client.RetriveMultipleTweets() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if diff := cmp.Diff(tt.want, got); diff != "" {
-				t.Errorf("client.LookUpTweets() mismatch (-want +got):\n%s", diff)
+				t.Errorf("client.RetriveMultipleTweets() mismatch (-want +got):\n%s", diff)
 				return
 			}
 		})
@@ -382,12 +382,12 @@ func Test_lookUpByID(t *testing.T) {
 		ctx    context.Context
 		client *http.Client
 		id     string
-		opt    []*gotwtr.TweetLookUpOption
+		opt    []*gotwtr.RetriveTweetOption
 	}
 	tests := []struct {
 		name    string
 		args    args
-		want    *gotwtr.TweetLookUpByIDResponse
+		want    *gotwtr.TweetResponse
 		wantErr bool
 	}{
 		{
@@ -407,9 +407,9 @@ func Test_lookUpByID(t *testing.T) {
 					}
 				}),
 				id:  "20",
-				opt: []*gotwtr.TweetLookUpOption{},
+				opt: []*gotwtr.RetriveTweetOption{},
 			},
-			want: &gotwtr.TweetLookUpByIDResponse{
+			want: &gotwtr.TweetResponse{
 				Tweet: &gotwtr.Tweet{
 					ID:   "20",
 					Text: "just setting up my twttr",
@@ -489,7 +489,7 @@ func Test_lookUpByID(t *testing.T) {
 					}
 				}),
 				id: "1275828087666679809",
-				opt: []*gotwtr.TweetLookUpOption{
+				opt: []*gotwtr.RetriveTweetOption{
 					{
 						TweetFields: []gotwtr.TweetField{
 							gotwtr.TweetFieldAttachments,
@@ -509,7 +509,7 @@ func Test_lookUpByID(t *testing.T) {
 					},
 				},
 			},
-			want: &gotwtr.TweetLookUpByIDResponse{
+			want: &gotwtr.TweetResponse{
 				Tweet: &gotwtr.Tweet{
 					AuthorID:  "2244994945",
 					CreatedAt: "2020-06-24T16:28:14.000Z",
@@ -596,7 +596,7 @@ func Test_lookUpByID(t *testing.T) {
 					}
 				}),
 				id: "1276230436478386177",
-				opt: []*gotwtr.TweetLookUpOption{
+				opt: []*gotwtr.RetriveTweetOption{
 					{
 						TweetFields: []gotwtr.TweetField{
 							gotwtr.TweetFieldAttachments,
@@ -616,7 +616,7 @@ func Test_lookUpByID(t *testing.T) {
 					},
 				},
 			},
-			want: &gotwtr.TweetLookUpByIDResponse{
+			want: &gotwtr.TweetResponse{
 				Errors: []*gotwtr.APIResponseError{
 					{
 						Value:        "1276230436478386177",
@@ -673,7 +673,7 @@ func Test_lookUpByID(t *testing.T) {
 					}
 				}),
 				id: "1136017751028449283",
-				opt: []*gotwtr.TweetLookUpOption{
+				opt: []*gotwtr.RetriveTweetOption{
 					{
 						Expansions: []gotwtr.Expansion{
 							gotwtr.ExpansionGeoPlaceID,
@@ -691,7 +691,7 @@ func Test_lookUpByID(t *testing.T) {
 					},
 				},
 			},
-			want: &gotwtr.TweetLookUpByIDResponse{
+			want: &gotwtr.TweetResponse{
 				Tweet: &gotwtr.Tweet{
 					Geo: &gotwtr.TweetGeo{
 						PlaceID: "01a9a39529b27f36",
@@ -767,7 +767,7 @@ func Test_lookUpByID(t *testing.T) {
 					}
 				}),
 				id: "1199786642791452673",
-				opt: []*gotwtr.TweetLookUpOption{
+				opt: []*gotwtr.RetriveTweetOption{
 					{
 						Expansions: []gotwtr.Expansion{
 							gotwtr.ExpansionAttachmentsPollIDs,
@@ -782,7 +782,7 @@ func Test_lookUpByID(t *testing.T) {
 					},
 				},
 			},
-			want: &gotwtr.TweetLookUpByIDResponse{
+			want: &gotwtr.TweetResponse{
 				Tweet: &gotwtr.Tweet{
 					Attachments: &gotwtr.TweetAttachment{
 						PollIDs: []string{
@@ -870,7 +870,7 @@ func Test_lookUpByID(t *testing.T) {
 					}
 				}),
 				id: "1263145271946551300",
-				opt: []*gotwtr.TweetLookUpOption{
+				opt: []*gotwtr.RetriveTweetOption{
 					{
 						TweetFields: []gotwtr.TweetField{
 							gotwtr.TweetFieldAttachments,
@@ -903,7 +903,7 @@ func Test_lookUpByID(t *testing.T) {
 					},
 				},
 			},
-			want: &gotwtr.TweetLookUpByIDResponse{
+			want: &gotwtr.TweetResponse{
 				Tweet: &gotwtr.Tweet{
 					Attachments: &gotwtr.TweetAttachment{
 						MediaKeys: []string{
@@ -952,13 +952,13 @@ func Test_lookUpByID(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
-			got, err := c.LookUpTweetByID(tt.args.ctx, tt.args.id, tt.args.opt...)
+			got, err := c.RetriveSingleTweet(tt.args.ctx, tt.args.id, tt.args.opt...)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("client.LookUpTweetByID() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("client.RetriveSingleTweet() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if diff := cmp.Diff(tt.want, got); diff != "" {
-				t.Errorf("client.LookUpTweetByID() mismatch (-want +got):\n%s", diff)
+				t.Errorf("client.RetriveSingleTweet() mismatch (-want +got):\n%s", diff)
 				return
 			}
 		})

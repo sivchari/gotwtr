@@ -18,12 +18,12 @@ func Test_lookUpSpaces(t *testing.T) {
 		ctx    context.Context
 		client *http.Client
 		ids    []string
-		opt    []*gotwtr.SpaceLookUpOption
+		opt    []*gotwtr.SpaceOption
 	}
 	tests := []struct {
 		name    string
 		args    args
-		want    *gotwtr.SpaceLookUpResponse
+		want    *gotwtr.SpacesResponse
 		wantErr bool
 	}{
 		{
@@ -52,9 +52,9 @@ func Test_lookUpSpaces(t *testing.T) {
 					"12345",
 					"67890",
 				},
-				opt: []*gotwtr.SpaceLookUpOption{},
+				opt: []*gotwtr.SpaceOption{},
 			},
-			want: &gotwtr.SpaceLookUpResponse{
+			want: &gotwtr.SpacesResponse{
 				Spaces: []*gotwtr.Space{
 					{
 						ID:    "12345",
@@ -106,9 +106,9 @@ func Test_lookUpSpaces(t *testing.T) {
 					"1234567890",
 					"0987654321",
 				},
-				opt: []*gotwtr.SpaceLookUpOption{},
+				opt: []*gotwtr.SpaceOption{},
 			},
-			want: &gotwtr.SpaceLookUpResponse{
+			want: &gotwtr.SpacesResponse{
 				Errors: []*gotwtr.APIResponseError{
 					{
 						Parameters: gotwtr.Parameter{
@@ -148,18 +148,18 @@ func Test_lookUpSpaces(t *testing.T) {
 	}
 }
 
-func Test_lookUpSpaceByID(t *testing.T) {
+func Test_lookUpSpace(t *testing.T) {
 	t.Parallel()
 	type args struct {
 		ctx    context.Context
 		client *http.Client
 		id     string
-		opt    []*gotwtr.SpaceLookUpOption
+		opt    []*gotwtr.SpaceOption
 	}
 	tests := []struct {
 		name    string
 		args    args
-		want    *gotwtr.SpaceLookUpByIDResponse
+		want    *gotwtr.SpaceResponse
 		wantErr bool
 	}{
 		{
@@ -179,9 +179,9 @@ func Test_lookUpSpaceByID(t *testing.T) {
 					}
 				}),
 				id:  "12345",
-				opt: []*gotwtr.SpaceLookUpOption{},
+				opt: []*gotwtr.SpaceOption{},
 			},
-			want: &gotwtr.SpaceLookUpByIDResponse{
+			want: &gotwtr.SpaceResponse{
 				Space: &gotwtr.Space{
 					ID:    "12345",
 					State: "ended",
@@ -216,9 +216,9 @@ func Test_lookUpSpaceByID(t *testing.T) {
 					}
 				}),
 				id:  "111111111111111",
-				opt: []*gotwtr.SpaceLookUpOption{},
+				opt: []*gotwtr.SpaceOption{},
 			},
-			want: &gotwtr.SpaceLookUpByIDResponse{
+			want: &gotwtr.SpaceResponse{
 				Errors: []*gotwtr.APIResponseError{
 					{
 						Parameters: gotwtr.Parameter{
@@ -239,31 +239,31 @@ func Test_lookUpSpaceByID(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
-			got, err := c.LookUpSpaceByID(tt.args.ctx, tt.args.id, tt.args.opt...)
+			got, err := c.LookUpSpace(tt.args.ctx, tt.args.id, tt.args.opt...)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("client.LookUpSpaceByID() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("client.LookUpSpace() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if diff := cmp.Diff(got, tt.want); diff != "" {
-				t.Errorf("client.LookUpSpaceByID() diff = %v", diff)
+				t.Errorf("client.LookUpSpace() diff = %v", diff)
 				return
 			}
 		})
 	}
 }
 
-func Test_lookUpUsersWhoPurchasedSpaceTicket(t *testing.T) {
+func Test_usersPurchasedSpaceTicket(t *testing.T) {
 	t.Parallel()
 	type args struct {
 		ctx    context.Context
 		client *http.Client
 		id     string
-		opt    []*gotwtr.LookUpUsersWhoPurchasedSpaceTicketOption
+		opt    []*gotwtr.UsersPurchasedSpaceTicketOption
 	}
 	tests := []struct {
 		name    string
 		args    args
-		want    *gotwtr.LookUpUsersWhoPurchasedSpaceTicketResponse
+		want    *gotwtr.UsersPurchasedSpaceTicketResponse
 		wantErr bool
 	}{
 		{
@@ -291,9 +291,9 @@ func Test_lookUpUsersWhoPurchasedSpaceTicket(t *testing.T) {
 					}
 				}),
 				id:  "1DXxyRYNejbKM",
-				opt: []*gotwtr.LookUpUsersWhoPurchasedSpaceTicketOption{},
+				opt: []*gotwtr.UsersPurchasedSpaceTicketOption{},
 			},
-			want: &gotwtr.LookUpUsersWhoPurchasedSpaceTicketResponse{
+			want: &gotwtr.UsersPurchasedSpaceTicketResponse{
 				Users: []*gotwtr.User{
 					{
 						ID:       "2244994945",
@@ -352,7 +352,7 @@ func Test_lookUpUsersWhoPurchasedSpaceTicket(t *testing.T) {
 					}
 				}),
 				id: "1DXxyRYNejbKM",
-				opt: []*gotwtr.LookUpUsersWhoPurchasedSpaceTicketOption{
+				opt: []*gotwtr.UsersPurchasedSpaceTicketOption{
 					{
 						Expansions: []gotwtr.Expansion{
 							gotwtr.ExpansionPinnedTweetID,
@@ -366,7 +366,7 @@ func Test_lookUpUsersWhoPurchasedSpaceTicket(t *testing.T) {
 					},
 				},
 			},
-			want: &gotwtr.LookUpUsersWhoPurchasedSpaceTicketResponse{
+			want: &gotwtr.UsersPurchasedSpaceTicketResponse{
 				Users: []*gotwtr.User{
 					{
 						ID:            "2244994945",
@@ -406,13 +406,13 @@ func Test_lookUpUsersWhoPurchasedSpaceTicket(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
-			got, err := c.LookUpUsersWhoPurchasedSpaceTicket(tt.args.ctx, tt.args.id, tt.args.opt...)
+			got, err := c.UsersPurchasedSpaceTicket(tt.args.ctx, tt.args.id, tt.args.opt...)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("client.LookUpUsersWhoPurchasedSpaceTicket() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("client.UsersPurchasedSpaceTicket() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if diff := cmp.Diff(tt.want, got); diff != "" {
-				t.Errorf("client.LookUpUsersWhoPurchasedSpaceTicket() mismatch (-want +got):\n%s", diff)
+				t.Errorf("client.UsersPurchasedSpaceTicket() mismatch (-want +got):\n%s", diff)
 				return
 			}
 		})
