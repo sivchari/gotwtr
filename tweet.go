@@ -560,13 +560,13 @@ type TweetsUserLikedPublicMetrics struct {
 
 type TweetsUserLikedNonPublicMetrics struct {
 	ImpressionCount   int `json:"impression_count"`
-	UrlLinkClicks     int `json:"url_link_clicks"`
+	URLLinkClicks     int `json:"url_link_clicks"`
 	UserProfileClicks int `json:"user_profile_clicks"`
 }
 
 type TweetsUserLikedOrganicMetrics struct {
 	ImpressionCount   int `json:"impression_count"`    // requires the use of OAuth 1.0a User Context authentication.
-	UrlLinkClicks     int `json:"url_link_clicks"`     // requires the use of OAuth 1.0a User Context authentication.
+	URLLinkClicks     int `json:"url_link_clicks"`     // requires the use of OAuth 1.0a User Context authentication.
 	UserProfileClicks int `json:"user_profile_clicks"` // requires the use of OAuth 1.0a User Context authentication.
 	RetweetCount      int `json:"retweet_count"`
 	ReplyCount        int `json:"reply_count"`
@@ -575,7 +575,7 @@ type TweetsUserLikedOrganicMetrics struct {
 
 type TweetsUserLikedPromotedMetrics struct {
 	ImpressionCount   int `json:"impression_count"`    // requires the use of OAuth 1.0a User Context authentication.
-	UrlLinkClicks     int `json:"url_link_clicks"`     // requires the use of OAuth 1.0a User Context authentication.
+	URLLinkClicks     int `json:"url_link_clicks"`     // requires the use of OAuth 1.0a User Context authentication.
 	UserProfileClicks int `json:"user_profile_clicks"` // requires the use of OAuth 1.0a User Context authentication.
 	RetweetCount      int `json:"retweet_count"`
 	ReplyCount        int `json:"reply_count"`
@@ -591,7 +591,5 @@ type TweetsUserLikedResponse struct {
 
 type TweetsUserLikedMeta struct {
 	ResultCount int    `json:"result_count"`
-	NewestID    string `json:"newest_id"`
-	OldestID    string `json:"oldest_id"`
 	NextToken   string `json:"next_token"`
 }
