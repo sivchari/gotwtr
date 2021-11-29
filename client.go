@@ -31,6 +31,7 @@ type Tweets interface {
 	ConnectToStream(ctx context.Context, ch chan<- ConnectToStreamResponse, errCh chan<- error, opt ...*ConnectToStreamOption) *ConnectToStream
 	VolumeStreams(ctx context.Context, ch chan<- VolumeStreamsResponse, errCh chan<- error, opt ...*VolumeStreamsOption) *VolumeStreams
 	RetweetsLookup(ctx context.Context, tweetID string, opt ...*RetweetsLookupOption) (*RetweetsResponse, error)
+	TweetsUserLiked(ctx context.Context, userID string, opt ...*TweetsUserLikedOpts) (*TweetsUserLikedResponse, error)
 	UsersLikingTweet(ctx context.Context, tweetID string, opt ...*UsersLikingTweetOption) (*UsersLikingTweetResponse, error)
 }
 
@@ -132,6 +133,10 @@ func (c *client) VolumeStreams(ctx context.Context, ch chan<- VolumeStreamsRespo
 
 func (c *client) RetweetsLookup(ctx context.Context, tweetID string, opt ...*RetweetsLookupOption) (*RetweetsResponse, error) {
 	return retweetsLookup(ctx, c, tweetID, opt...)
+}
+
+func (c *client) TweetsUserLiked(ctx context.Context, userID string, opt ...*TweetsUserLikedOpts) (*TweetsUserLikedResponse, error) {
+	return tweetsUserLiked(ctx, c, userID, opt...)
 }
 
 func (c *client) UsersLikingTweet(ctx context.Context, tweetID string, opt ...*UsersLikingTweetOption) (*UsersLikingTweetResponse, error) {

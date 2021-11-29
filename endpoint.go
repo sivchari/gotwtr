@@ -14,6 +14,7 @@ const (
 	volumeStreamsURL          = "https://api.twitter.com/2/tweets/sample/stream"
 	retweetsLookupURL         = "https://api.twitter.com/2/tweets/%v/retweeted_by"
 	usersLikingTweetURL       = "https://api.twitter.com/2/tweets/%v/liking_users"
+	tweetsUserLikedURL        = "https://api.twitter.com/2/users/%v/liked_tweets"
 )
 
 const (
