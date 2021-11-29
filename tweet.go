@@ -441,3 +441,157 @@ type LookUpUsersWhoLikedIncludes struct {
 type LookUpUsersWhoLikedMeta struct {
 	ResultCount int `json:"result_count"`
 }
+
+type TweetsUserLiked struct {
+	ID                 string                               `json:"id"`
+	Text               string                               `json:"text"`
+	CreatedAt          string                               `json:"created_at,omitempty"`
+	AuthorID           string                               `json:"author_id,omitempty"`
+	ConversationID     string                               `json:"conversation_id,omitempty"`
+	InReplyToUserID    string                               `json:"in_reply_to_user_id,omitempty"`
+	ReferencedTweets   []*TweetsUserLikedReferencedTweets   `json:"referenced_tweets,omitempty"`
+	Attachments        *TweetsUserLikedAttachments          `json:"attachments,omitempty"`
+	Geo                *TweetsUserLikedGeo                  `json:"geo,omitempty"`
+	ContextAnnotations []*TweetsUserLikedContextAnnotations `json:"context_annotations,omitempty"`
+	Entities           *TweetsUserLikedEntities             `json:"entities,omitempty"`
+	Withheld           *TweetsUserLikedWithheld             `json:"withheld,omitempty"`
+	PublicMetrics      *TweetsUserLikedPublicMetrics        `json:"public_metrics,omitempty"`
+	NonPublicMetrics   *TweetsUserLikedNonPublicMetrics     `json:"non_public_metrics,omitempty"` // requires the use of OAuth 1.0a User Context authentication.
+	OrganicMetrics     *TweetsUserLikedOrganicMetrics       `json:"organic_metrics,omitempty"`    // requires user context authentication.
+	PromotedMetrics    *TweetsUserLikedPromotedMetrics      `json:"promoted_metrics,omitempty"`   // requires user context authentication.
+	PossiblySensitive  bool                                 `json:"possibly_sensitive,omitempty"`
+	Lang               string                               `json:"lang,omitempty"`
+	ReplySettings      string                               `json:"reply_settings,omitempty"`
+	Source             string                               `json:"source,omitempty"`
+}
+
+type TweetsUserLikedReferencedTweets struct {
+	Type string `json:"type"`
+	ID   string `json:"id"`
+}
+
+type TweetsUserLikedAttachments struct {
+	MediaKeys []string `json:"media_keys"`
+	PollIDs   []string `json:"poll_ids"`
+}
+
+type TweetsUserLikedGeo struct {
+	Coordinates *TweetsUserLikedGeoCoordinates `json:"coordinates"`
+	PlaceID     string                         `json:"place_id"`
+}
+
+type TweetsUserLikedGeoCoordinates struct {
+	Type        string    `json:"type"`
+	Coordinates []float64 `json:"coordinates"`
+}
+
+type TweetsUserLikedContextAnnotations struct {
+	Domain *TweetsUserLikedContextAnnotationsDomain `json:"domain"`
+	Entity *TweetsUserLikedContextAnnotationsEntity `json:"entity"`
+}
+
+type TweetsUserLikedContextAnnotationsDomain struct {
+	ID          string `json:"id"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+}
+
+type TweetsUserLikedContextAnnotationsEntity struct {
+	ID          string `json:"id"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+}
+
+type TweetsUserLikedEntities struct {
+	Annotations []*TweetsUserLikedEntitiesAnnotation `json:"annotations"`
+	URLs        []*TweetsUserLikedEntitiesURLContent `json:"urls"`
+	HashTags    []*TweetsUserLikedEntitiesHashTag    `json:"hashtags"`
+	Mentions    []*TweetsUserLikedEntitiesMention    `json:"mentions"`
+	CashTags    []*TweetsUserLikedEntitiesCashTag    `json:"cashtags"`
+}
+
+type TweetsUserLikedEntitiesAnnotation struct {
+	Start          int    `json:"start"`
+	End            int    `json:"end"`
+	Probability    int    `json:"probability"`
+	Type           string `json:"type"`
+	NormalizedText string `json:"normalized_text"`
+}
+
+type TweetsUserLikedEntitiesURLContent struct {
+	Start       int    `json:"start"`
+	End         int    `json:"end"`
+	URL         string `json:"url"`
+	ExpandedURL string `json:"expanded_url"`
+	DisplayURL  string `json:"display_url"`
+	UnwoundURL  string `json:"unwound_url"`
+}
+
+type TweetsUserLikedEntitiesHashTag struct {
+	Start int    `json:"start"`
+	End   int    `json:"end"`
+	Tag   string `json:"tag"`
+}
+
+type TweetsUserLikedEntitiesMention struct {
+	Start    int    `json:"start"`
+	End      int    `json:"end"`
+	UserName string `json:"username"`
+}
+
+type TweetsUserLikedEntitiesCashTag struct {
+	Start int    `json:"start"`
+	End   int    `json:"end"`
+	Tag   string `json:"tag"`
+}
+
+type TweetsUserLikedWithheld struct {
+	Copyright    bool     `json:"copyright"`
+	CountryCodes []string `json:"country_codes"`
+	Scope        string   `json:"scope"`
+}
+
+type TweetsUserLikedPublicMetrics struct {
+	RetweetCount int `json:"retweet_count"`
+	ReplyCount   int `json:"reply_count"`
+	LikeCount    int `json:"like_count"`
+	QuoteCount   int `json:"quote_count"`
+}
+
+type TweetsUserLikedNonPublicMetrics struct {
+	ImpressionCount   int `json:"impression_count"`
+	UrlLinkClicks     int `json:"url_link_clicks"`
+	UserProfileClicks int `json:"user_profile_clicks"`
+}
+
+type TweetsUserLikedOrganicMetrics struct {
+	ImpressionCount   int `json:"impression_count"`    // requires the use of OAuth 1.0a User Context authentication.
+	UrlLinkClicks     int `json:"url_link_clicks"`     // requires the use of OAuth 1.0a User Context authentication.
+	UserProfileClicks int `json:"user_profile_clicks"` // requires the use of OAuth 1.0a User Context authentication.
+	RetweetCount      int `json:"retweet_count"`
+	ReplyCount        int `json:"reply_count"`
+	LikeCount         int `json:"like_count"`
+}
+
+type TweetsUserLikedPromotedMetrics struct {
+	ImpressionCount   int `json:"impression_count"`    // requires the use of OAuth 1.0a User Context authentication.
+	UrlLinkClicks     int `json:"url_link_clicks"`     // requires the use of OAuth 1.0a User Context authentication.
+	UserProfileClicks int `json:"user_profile_clicks"` // requires the use of OAuth 1.0a User Context authentication.
+	RetweetCount      int `json:"retweet_count"`
+	ReplyCount        int `json:"reply_count"`
+	LikeCount         int `json:"like_count"`
+}
+
+type TweetsUserLikedResponse struct {
+	Tweets   []*TweetsUserLiked   `json:"data"`
+	Includes *TweetIncludes       `json:"includes,omitempty"`
+	Meta     *TweetsUserLikedMeta `json:"meta"`
+	Errors   []*APIResponseError  `json:"errors,omitempty"`
+}
+
+type TweetsUserLikedMeta struct {
+	ResultCount int    `json:"result_count"`
+	NewestID    string `json:"newest_id"`
+	OldestID    string `json:"oldest_id"`
+	NextToken   string `json:"next_token"`
+}
