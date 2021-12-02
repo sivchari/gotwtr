@@ -448,7 +448,7 @@ func (t *TweetsUserLikedOpts) addQuery(req *http.Request) {
 	if len(t.UserFields) > 0 {
 		q.Add("user.fields", strings.Join(userFieldsToString(t.UserFields), ","))
 	}
-	if 10 <= t.MaxResults && t.MaxResults <= 100 {
+	if t.MaxResults > 0 {
 		q.Add("max_results", strconv.Itoa(t.MaxResults))
 	}
 	if len(t.PaginationToken) > 0 {

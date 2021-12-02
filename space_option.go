@@ -2,13 +2,11 @@ package gotwtr
 
 import (
 	"net/http"
-	"strconv"
 	"strings"
 )
 
 type SearchSpacesOption struct {
 	Expansions  []Expansion
-	MaxResults  int
 	SpaceFields []SpaceField
 	State       []StateOption
 	TopicFields []TopicField
@@ -19,9 +17,6 @@ func (s *SearchSpacesOption) addQuery(req *http.Request) {
 	q := req.URL.Query()
 	if len(s.Expansions) > 0 {
 		q.Add("expansions", strings.Join(expansionsToString(s.Expansions), ","))
-	}
-	if s.MaxResults > 0 {
-		q.Add("max_results", strconv.Itoa(s.MaxResults))
 	}
 	if len(s.SpaceFields) > 0 {
 		q.Add("space.fields", strings.Join(spaceFieldsToString(s.SpaceFields), ","))

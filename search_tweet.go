@@ -33,6 +33,17 @@ func searchRecentTweets(ctx context.Context, c *client, tweet string, opt ...*Se
 	default:
 		return nil, errors.New("search recent tweets: only one option is allowed")
 	}
+	const (
+		minimumMaxResults = 10
+		maximumMaxResults = 100
+		defaultMaxResults = 10
+	)
+	if sopt.MaxResults == 0 {
+		sopt.MaxResults = defaultMaxResults
+	}
+	if sopt.MaxResults < minimumMaxResults || sopt.MaxResults > maximumMaxResults {
+		return nil, fmt.Errorf("search recent tweets: max results must be between %d and %d", minimumMaxResults, maximumMaxResults)
+	}
 	sopt.addQuery(req)
 
 	resp, err := c.client.Do(req)

@@ -30,6 +30,17 @@ func lookUpListTweets(ctx context.Context, c *client, listID string, opt ...*Lis
 	default:
 		return nil, errors.New("look up list tweets: only one option is allowed")
 	}
+	const (
+		minimumMaxResults = 1
+		maximumMaxResults = 100
+		defaultMaxResults = 100
+	)
+	if lopt.MaxResults == 0 {
+		lopt.MaxResults = defaultMaxResults
+	}
+	if lopt.MaxResults < minimumMaxResults || lopt.MaxResults > maximumMaxResults {
+		return nil, fmt.Errorf("look up list tweets: max results must be between %d and %d", minimumMaxResults, maximumMaxResults)
+	}
 	lopt.addQuery(req)
 
 	resp, err := c.client.Do(req)

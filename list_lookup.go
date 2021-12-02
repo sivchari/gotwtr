@@ -74,6 +74,17 @@ func lookUpAllListsOwned(ctx context.Context, c *client, userID string, opt ...*
 	default:
 		return nil, errors.New("look up all lists owned: only one option is allowed")
 	}
+	const (
+		minimumMaxResults = 1
+		maximumMaxResults = 100
+		defaultMaxResults = 100
+	)
+	if aopt.MaxResults == 0 {
+		aopt.MaxResults = defaultMaxResults
+	}
+	if aopt.MaxResults < minimumMaxResults || aopt.MaxResults > maximumMaxResults {
+		return nil, fmt.Errorf("look up all lists owned: max results must be between %d and %d", minimumMaxResults, maximumMaxResults)
+	}
 	aopt.addQuery(req)
 
 	resp, err := c.client.Do(req)

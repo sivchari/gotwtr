@@ -30,6 +30,17 @@ func lookUpListFollowers(ctx context.Context, c *client, listID string, opt ...*
 	default:
 		return nil, errors.New("look up list followers: only one option is allowed")
 	}
+	const (
+		minimumMaxResults = 1
+		maximumMaxResults = 100
+		defaultMaxResults = 100
+	)
+	if lopt.MaxResults == 0 {
+		lopt.MaxResults = defaultMaxResults
+	}
+	if lopt.MaxResults < minimumMaxResults || lopt.MaxResults > maximumMaxResults {
+		return nil, fmt.Errorf("look up list followers: max results must be between %d and %d", minimumMaxResults, maximumMaxResults)
+	}
 	lopt.addQuery(req)
 
 	resp, err := c.client.Do(req)
@@ -73,6 +84,17 @@ func lookUpAllListsUserFollows(ctx context.Context, c *client, userID string, op
 		lopt = *opt[0]
 	default:
 		return nil, errors.New("look up all lists user follows: only one option is allowed")
+	}
+	const (
+		minimumMaxResults = 1
+		maximumMaxResults = 100
+		defaultMaxResults = 100
+	)
+	if lopt.MaxResults == 0 {
+		lopt.MaxResults = defaultMaxResults
+	}
+	if lopt.MaxResults < minimumMaxResults || lopt.MaxResults > maximumMaxResults {
+		return nil, fmt.Errorf("look up all lists user follows: max results must be between %d and %d", minimumMaxResults, maximumMaxResults)
 	}
 	lopt.addQuery(req)
 
