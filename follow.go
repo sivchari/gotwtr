@@ -30,6 +30,17 @@ func followers(ctx context.Context, c *client, userID string, opt ...*FollowOpti
 	default:
 		return nil, errors.New("followers: only one option is allowed")
 	}
+	const (
+		minimumMaxResults = 1
+		maximumMaxResults = 1000
+		defaultMaxResults = 100
+	)
+	if fopt.MaxResults == 0 {
+		fopt.MaxResults = defaultMaxResults
+	}
+	if fopt.MaxResults < minimumMaxResults || fopt.MaxResults > maximumMaxResults {
+		return nil, fmt.Errorf("followers: maxResults must be between %d and %d", minimumMaxResults, maximumMaxResults)
+	}
 	fopt.addQuery(req)
 
 	resp, err := c.client.Do(req)
@@ -75,6 +86,17 @@ func following(ctx context.Context, c *client, userID string, opt ...*FollowOpti
 		fopt = *opt[0]
 	default:
 		return nil, errors.New("following: only one option is allowed")
+	}
+	const (
+		minimumMaxResults = 1
+		maximumMaxResults = 1000
+		defaultMaxResults = 100
+	)
+	if fopt.MaxResults == 0 {
+		fopt.MaxResults = defaultMaxResults
+	}
+	if fopt.MaxResults < minimumMaxResults || fopt.MaxResults > maximumMaxResults {
+		return nil, fmt.Errorf("following: maxResults must be between %d and %d", minimumMaxResults, maximumMaxResults)
 	}
 	fopt.addQuery(req)
 

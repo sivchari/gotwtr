@@ -73,6 +73,17 @@ func tweetsUserLiked(ctx context.Context, c *client, userID string, opt ...*Twee
 	default:
 		return nil, errors.New("tweets user liked: only one option is allowed")
 	}
+	const (
+		minimumMaxResults = 10
+		maximumMaxResults = 100
+		defaultMaxResults = 100
+	)
+	if topt.MaxResults == 0 {
+		topt.MaxResults = defaultMaxResults
+	}
+	if topt.MaxResults < minimumMaxResults || topt.MaxResults > maximumMaxResults {
+		return nil, fmt.Errorf("tweets user liked: max results must be between %d and %d", minimumMaxResults, maximumMaxResults)
+	}
 	topt.addQuery(req)
 
 	resp, err := c.client.Do(req)
