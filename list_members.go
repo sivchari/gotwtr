@@ -64,3 +64,50 @@ func listMembers(ctx context.Context, c *client, listid string, opt ...*ListMemb
 
 	return &lmr, nil
 }
+
+func listSpecifiedUserMemberOf(ctx context.Context, c *client, userid string, opt ...*ListSpecifiedUserMemberOfOption) (*ListSpecifiedUserMemberOfResponse, error) {
+	if userid == "" {
+		return nil, errors.New("lists a specified user is a member of: id parameter is required")
+	}
+
+	lm := fmt.Sprintf(listSpecifiedUserMemberOfURL, userid)
+
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, lm, nil)
+	if err != nil {
+		return nil, fmt.Errorf("lists a specified user is a member of: %w", err)
+	}
+
+	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.bearerToken))
+
+	var lopt ListSpecifiedUserMemberOfOption
+	switch len(opt) {
+	case 0:
+		// do nothing
+	case 1:
+		lopt = *opt[0]
+	default:
+		return nil, errors.New("lists a specified user is a member of: only one option is allowed")
+	}
+	lopt.addQuery(req)
+
+	resp, err := c.client.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("lists a specified user is a member of: %w", err)
+	}
+
+	defer resp.Body.Close()
+
+	var lmr ListSpecifiedUserMemberOfResponse
+	if err := json.NewDecoder(resp.Body).Decode(&lmr); err != nil {
+		return nil, fmt.Errorf("lists a specified user is a member of: %w", err)
+	}
+	if resp.StatusCode != http.StatusOK {
+		return &lmr, &HTTPError{
+			APIName: "lists a specified user is a member of",
+			Status:  resp.Status,
+			URL:     req.URL.String(),
+		}
+	}
+
+	return &lmr, nil
+}
