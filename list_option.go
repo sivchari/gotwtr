@@ -189,13 +189,6 @@ type ListSpecifiedUserOption struct {
 func (l *ListSpecifiedUserOption) addQuery(req *http.Request) {
 	q := req.URL.Query()
 	if len(l.Expansions) > 0 {
-		/*
-		for _, expansion := range l.Expansions {
-			if expansion != "list.owner_id" {
-				panic("lists a specified user is a member of: Only owner_id is allowed")
-			}
-		}
-		*/
 		q.Add("expansions", strings.Join(expansionsToString(l.Expansions), ","))
 	}
 	if len(l.ListFields) > 0 {
