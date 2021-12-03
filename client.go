@@ -57,7 +57,7 @@ type Lists interface {
 	LookUpAllListsOwned(ctx context.Context, userID string, opt ...*AllListsOwnedOption) (*AllListsOwnedResponse, error)
 	LookUpListTweets(ctx context.Context, listID string, opt ...*ListTweetsOption) (*ListTweetsResponse, error)
 	ListMembers(ctx context.Context, listID string, opt ...*ListMembersOption) (*ListMembersResponse, error)
-	ListSpecifiedUserMemberOf(ctx context.Context, userid string, opt ...*ListSpecifiedUserMemberOfOption) (*ListSpecifiedUserMemberOfResponse, error)
+	ListSpecifiedUser(ctx context.Context, userID string, opt ...*ListSpecifiedUserOption) (*ListSpecifiedUserResponse, error)
 	LookUpListFollowers(ctx context.Context, listID string, opt ...*ListFollowersOption) (*ListFollowersResponse, error)
 	LookUpAllListsUserFollows(ctx context.Context, userID string, opt ...*ListFollowsOption) (*AllListsUserFollowsResponse, error)
 }
@@ -199,8 +199,8 @@ func (c *client) LookUpListTweets(ctx context.Context, listID string, opt ...*Li
 	return lookUpListTweets(ctx, c, listID, opt...)
 }
 
-func (c *client) ListSpecifiedUserMemberOf(ctx context.Context, userid string, opt ...*ListSpecifiedUserMemberOfOption) (*ListSpecifiedUserMemberOfResponse, error) {
-	return listSpecifiedUserMemberOf(ctx, c, userid, opt...)
+func (c *client) ListSpecifiedUser(ctx context.Context, userid string, opt ...*ListSpecifiedUserOption) (*ListSpecifiedUserResponse, error) {
+	return listSpecifiedUser(ctx, c, userid, opt...)
 }
 
 func (c *client) ListMembers(ctx context.Context, listid string, opt ...*ListMembersOption) (*ListMembersResponse, error) {

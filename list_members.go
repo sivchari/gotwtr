@@ -65,12 +65,12 @@ func listMembers(ctx context.Context, c *client, listid string, opt ...*ListMemb
 	return &lmr, nil
 }
 
-func listSpecifiedUserMemberOf(ctx context.Context, c *client, userid string, opt ...*ListSpecifiedUserMemberOfOption) (*ListSpecifiedUserMemberOfResponse, error) {
-	if userid == "" {
-		return nil, errors.New("lists a specified user is a member of: id parameter is required")
+func listSpecifiedUser(ctx context.Context, c *client, userID string, opt ...*ListSpecifiedUserOption) (*ListSpecifiedUserResponse, error) {
+	if userID == "" {
+		return nil, errors.New("lists a specified user: userID parameter is required")
 	}
 
-	lm := fmt.Sprintf(listSpecifiedUserMemberOfURL, userid)
+	lm := fmt.Sprintf(listSpecifiedUserURL, userID)
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, lm, nil)
 	if err != nil {
@@ -79,7 +79,7 @@ func listSpecifiedUserMemberOf(ctx context.Context, c *client, userid string, op
 
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.bearerToken))
 
-	var lopt ListSpecifiedUserMemberOfOption
+	var lopt ListSpecifiedUserOption
 	switch len(opt) {
 	case 0:
 		// do nothing
@@ -87,6 +87,17 @@ func listSpecifiedUserMemberOf(ctx context.Context, c *client, userid string, op
 		lopt = *opt[0]
 	default:
 		return nil, errors.New("lists a specified user is a member of: only one option is allowed")
+	}
+	const (
+		minimumMaxResults = 1
+		maximumMaxResults = 100
+		defaultMaxResults = 100
+	)
+	if lopt.MaxResults == 0 {
+		lopt.MaxResults = defaultMaxResults
+	}
+	if lopt.MaxResults < minimumMaxResults || lopt.MaxResults > maximumMaxResults {
+		return nil, fmt.Errorf("ists a specified user is a member of: max results must be between %d and %d", minimumMaxResults, maximumMaxResults)
 	}
 	lopt.addQuery(req)
 
@@ -97,7 +108,7 @@ func listSpecifiedUserMemberOf(ctx context.Context, c *client, userid string, op
 
 	defer resp.Body.Close()
 
-	var lmr ListSpecifiedUserMemberOfResponse
+	var lmr ListSpecifiedUserResponse
 	if err := json.NewDecoder(resp.Body).Decode(&lmr); err != nil {
 		return nil, fmt.Errorf("lists a specified user is a member of: %w", err)
 	}

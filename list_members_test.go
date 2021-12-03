@@ -127,18 +127,18 @@ func Test_listMembers(t *testing.T) {
 	}
 }
 
-func Test_ListSpecifiedUserMemberOf(t *testing.T) {
+func Test_ListSpecifiedUser(t *testing.T) {
 	t.Parallel()
 	type args struct {
 		ctx    context.Context
 		client *http.Client
 		id     string
-		opt    []*gotwtr.ListSpecifiedUserMemberOfOption
+		opt    []*gotwtr.ListSpecifiedUserOption
 	}
 	tests := []struct {
 		name    string
 		args    args
-		want    *gotwtr.ListSpecifiedUserMemberOfResponse
+		want    *gotwtr.ListSpecifiedUserResponse
 		wantErr bool
 	}{
 		{
@@ -171,9 +171,9 @@ func Test_ListSpecifiedUserMemberOf(t *testing.T) {
 					}
 				}),
 				id:  "84839422",
-				opt: []*gotwtr.ListSpecifiedUserMemberOfOption{},
+				opt: []*gotwtr.ListSpecifiedUserOption{},
 			},
-			want: &gotwtr.ListSpecifiedUserMemberOfResponse{
+			want: &gotwtr.ListSpecifiedUserResponse{
 				Lists: []*gotwtr.List{
 					{
 						ID:   "1451951974291689472",
@@ -228,9 +228,9 @@ func Test_ListSpecifiedUserMemberOf(t *testing.T) {
 					}
 				}),
 				id:  "84839422",
-				opt: []*gotwtr.ListSpecifiedUserMemberOfOption{},
+				opt: []*gotwtr.ListSpecifiedUserOption{},
 			},
-			want: &gotwtr.ListSpecifiedUserMemberOfResponse{
+			want: &gotwtr.ListSpecifiedUserResponse{
 				Lists: []*gotwtr.List{
 					{
 						ID:            "1451951974291689472",
@@ -279,9 +279,9 @@ func Test_ListSpecifiedUserMemberOf(t *testing.T) {
 					}
 				}),
 				id:  "849422",
-				opt: []*gotwtr.ListSpecifiedUserMemberOfOption{},
+				opt: []*gotwtr.ListSpecifiedUserOption{},
 			},
-			want: &gotwtr.ListSpecifiedUserMemberOfResponse{
+			want: &gotwtr.ListSpecifiedUserResponse{
 				Errors: []*gotwtr.APIResponseError{
 					{
 						Value:        "849422",
@@ -320,9 +320,9 @@ func Test_ListSpecifiedUserMemberOf(t *testing.T) {
 					}
 				}),
 				id:  "8488877666666666666666666666666622839422",
-				opt: []*gotwtr.ListSpecifiedUserMemberOfOption{},
+				opt: []*gotwtr.ListSpecifiedUserOption{},
 			},
-			want: &gotwtr.ListSpecifiedUserMemberOfResponse{
+			want: &gotwtr.ListSpecifiedUserResponse{
 				Errors: []*gotwtr.APIResponseError{
 					{
 						Parameters: gotwtr.Parameter{
@@ -343,13 +343,13 @@ func Test_ListSpecifiedUserMemberOf(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
-			got, err := c.ListSpecifiedUserMemberOf(tt.args.ctx, tt.args.id, tt.args.opt...)
+			got, err := c.ListSpecifiedUser(tt.args.ctx, tt.args.id, tt.args.opt...)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("client.ListSpecifiedUserMemberOf() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("client.ListSpecifiedUser() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if diff := cmp.Diff(tt.want, got); diff != "" {
-				t.Errorf("client.ListSpecifiedUserMemberOf() mismatch (-want +got):\n%s", diff)
+				t.Errorf("client.ListSpecifiedUser() mismatch (-want +got):\n%s", diff)
 				return
 			}
 		})
