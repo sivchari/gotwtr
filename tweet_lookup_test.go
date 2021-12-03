@@ -363,13 +363,13 @@ func Test_retriveMultipleTweets(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
-			got, err := c.RetriveMultipleTweets(tt.args.ctx, tt.args.ids, tt.args.opt...)
+			got, err := c.RetrieveMultipleTweets(tt.args.ctx, tt.args.ids, tt.args.opt...)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("client.RetriveMultipleTweets() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("client.RetrieveMultipleTweets() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if diff := cmp.Diff(tt.want, got); diff != "" {
-				t.Errorf("client.RetriveMultipleTweets() mismatch (-want +got):\n%s", diff)
+				t.Errorf("client.RetrieveMultipleTweets() mismatch (-want +got):\n%s", diff)
 				return
 			}
 		})
@@ -952,9 +952,9 @@ func Test_lookUpByID(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
-			got, err := c.RetriveSingleTweet(tt.args.ctx, tt.args.id, tt.args.opt...)
+			got, err := c.RetrieveSingleTweet(tt.args.ctx, tt.args.id, tt.args.opt...)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("client.RetriveSingleTweet() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("client.RetrieveSingleTweet() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if diff := cmp.Diff(tt.want, got); diff != "" {
