@@ -135,7 +135,6 @@ func (c *client) RetrieveStreamRules(ctx context.Context, opt ...*RetrieveStream
 	return retrieveStreamRules(ctx, c, opt...)
 }
 
-
 // ConnectToStream streams Tweets in real-time based on a specific set of filter rules.
 func (c *client) ConnectToStream(ctx context.Context, ch chan<- ConnectToStreamResponse, errCh chan<- error, opt ...*ConnectToStreamOption) *ConnectToStream {
 	return connectToStream(ctx, c, ch, errCh, opt...)
