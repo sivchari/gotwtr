@@ -2,6 +2,7 @@ package gotwtr_test
 
 import (
 	"context"
+	"fmt"
 	"io"
 	"net/http"
 	"strings"
@@ -300,19 +301,20 @@ func Test_ListSpecifiedUserMemberOf(t *testing.T) {
 			args: args{
 				ctx: context.Background(),
 				client: mockHTTPClient(func(request *http.Request) *http.Response {
-					data := `{
+					id := "`id`"
+					data := fmt.Sprintf(`{
 						"errors":[
 							{
 								"parameters":{
 									"id": ["8488877666666666666666666666666622839422"]
 								},
-								"message":"The 'id' query parameter value [8488877666666666666666666666666622839422] is not valid"
+								"message":"The %v query parameter value [8488877666666666666666666666666622839422] is not valid"
 							}
 						],
 						"title":"Invalid Request",
 						"detail":"One or more parameters to your request was invalid.",
 						"type":"https://api.twitter.com/2/problems/invalid-request"
-					}`
+					}`, id)
 					return &http.Response{
 						StatusCode: http.StatusBadRequest,
 						Body:       io.NopCloser(strings.NewReader(data)),
@@ -327,7 +329,7 @@ func Test_ListSpecifiedUserMemberOf(t *testing.T) {
 						Parameters: gotwtr.Parameter{
 							ID: []string{"8488877666666666666666666666666622839422"},
 						},
-						Message: "The 'id' query parameter value [8488877666666666666666666666666622839422] is not valid",
+						Message: "The `id` query parameter value [8488877666666666666666666666666622839422] is not valid",
 					},
 				},
 				Title:  "Invalid Request",
