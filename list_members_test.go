@@ -301,7 +301,6 @@ func Test_ListSpecifiedUserMemberOf(t *testing.T) {
 			args: args{
 				ctx: context.Background(),
 				client: mockHTTPClient(func(request *http.Request) *http.Response {
-					id := "`id`"
 					data := fmt.Sprintf(`{
 						"errors":[
 							{
@@ -314,7 +313,7 @@ func Test_ListSpecifiedUserMemberOf(t *testing.T) {
 						"title":"Invalid Request",
 						"detail":"One or more parameters to your request was invalid.",
 						"type":"https://api.twitter.com/2/problems/invalid-request"
-					}`, id)
+					}`, "`id`")
 					return &http.Response{
 						StatusCode: http.StatusBadRequest,
 						Body:       io.NopCloser(strings.NewReader(data)),
