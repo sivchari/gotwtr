@@ -199,8 +199,8 @@ func (c *client) LookUpListTweets(ctx context.Context, listID string, opt ...*Li
 	return lookUpListTweets(ctx, c, listID, opt...)
 }
 
-func (c *client) ListSpecifiedUser(ctx context.Context, userid string, opt ...*ListSpecifiedUserOption) (*ListSpecifiedUserResponse, error) {
-	return listSpecifiedUser(ctx, c, userid, opt...)
+func (c *client) ListSpecifiedUser(ctx context.Context, userID string, opt ...*ListSpecifiedUserOption) (*ListSpecifiedUserResponse, error) {
+	return listSpecifiedUser(ctx, c, userID, opt...)
 }
 
 func (c *client) ListMembers(ctx context.Context, listid string, opt ...*ListMembersOption) (*ListMembersResponse, error) {

@@ -67,14 +67,14 @@ func listMembers(ctx context.Context, c *client, listid string, opt ...*ListMemb
 
 func listSpecifiedUser(ctx context.Context, c *client, userID string, opt ...*ListSpecifiedUserOption) (*ListSpecifiedUserResponse, error) {
 	if userID == "" {
-		return nil, errors.New("lists a specified user: userID parameter is required")
+		return nil, errors.New("lists specified user: userID parameter is required")
 	}
 
 	lm := fmt.Sprintf(listSpecifiedUserURL, userID)
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, lm, nil)
 	if err != nil {
-		return nil, fmt.Errorf("lists a specified user is a member of: %w", err)
+		return nil, fmt.Errorf("lists specified user : %w", err)
 	}
 
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.bearerToken))
@@ -86,7 +86,7 @@ func listSpecifiedUser(ctx context.Context, c *client, userID string, opt ...*Li
 	case 1:
 		lopt = *opt[0]
 	default:
-		return nil, errors.New("lists a specified user is a member of: only one option is allowed")
+		return nil, errors.New("lists specified user: only one option is allowed")
 	}
 	const (
 		minimumMaxResults = 1
@@ -97,24 +97,24 @@ func listSpecifiedUser(ctx context.Context, c *client, userID string, opt ...*Li
 		lopt.MaxResults = defaultMaxResults
 	}
 	if lopt.MaxResults < minimumMaxResults || lopt.MaxResults > maximumMaxResults {
-		return nil, fmt.Errorf("ists a specified user is a member of: max results must be between %d and %d", minimumMaxResults, maximumMaxResults)
+		return nil, fmt.Errorf("ists specified user: max results must be between %d and %d", minimumMaxResults, maximumMaxResults)
 	}
 	lopt.addQuery(req)
 
 	resp, err := c.client.Do(req)
 	if err != nil {
-		return nil, fmt.Errorf("lists a specified user is a member of: %w", err)
+		return nil, fmt.Errorf("lists specified user: %w", err)
 	}
 
 	defer resp.Body.Close()
 
 	var lmr ListSpecifiedUserResponse
 	if err := json.NewDecoder(resp.Body).Decode(&lmr); err != nil {
-		return nil, fmt.Errorf("lists a specified user is a member of: %w", err)
+		return nil, fmt.Errorf("lists specified user: %w", err)
 	}
 	if resp.StatusCode != http.StatusOK {
 		return &lmr, &HTTPError{
-			APIName: "lists a specified user is a member of",
+			APIName: "lists specified user",
 			Status:  resp.Status,
 			URL:     req.URL.String(),
 		}
