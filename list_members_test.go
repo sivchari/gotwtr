@@ -133,12 +133,12 @@ func Test_ListSpecifiedUser(t *testing.T) {
 		ctx    context.Context
 		client *http.Client
 		id     string
-		opt    []*gotwtr.ListSpecifiedUserOption
+		opt    []*gotwtr.ListsSpecifiedUserOption
 	}
 	tests := []struct {
 		name    string
 		args    args
-		want    *gotwtr.ListSpecifiedUserResponse
+		want    *gotwtr.ListsSpecifiedUserResponse
 		wantErr bool
 	}{
 		{
@@ -171,9 +171,9 @@ func Test_ListSpecifiedUser(t *testing.T) {
 					}
 				}),
 				id:  "84839422",
-				opt: []*gotwtr.ListSpecifiedUserOption{},
+				opt: []*gotwtr.ListsSpecifiedUserOption{},
 			},
-			want: &gotwtr.ListSpecifiedUserResponse{
+			want: &gotwtr.ListsSpecifiedUserResponse{
 				Lists: []*gotwtr.List{
 					{
 						ID:   "1451951974291689472",
@@ -228,9 +228,9 @@ func Test_ListSpecifiedUser(t *testing.T) {
 					}
 				}),
 				id:  "84839422",
-				opt: []*gotwtr.ListSpecifiedUserOption{},
+				opt: []*gotwtr.ListsSpecifiedUserOption{},
 			},
-			want: &gotwtr.ListSpecifiedUserResponse{
+			want: &gotwtr.ListsSpecifiedUserResponse{
 				Lists: []*gotwtr.List{
 					{
 						ID:            "1451951974291689472",
@@ -279,9 +279,9 @@ func Test_ListSpecifiedUser(t *testing.T) {
 					}
 				}),
 				id:  "849422",
-				opt: []*gotwtr.ListSpecifiedUserOption{},
+				opt: []*gotwtr.ListsSpecifiedUserOption{},
 			},
-			want: &gotwtr.ListSpecifiedUserResponse{
+			want: &gotwtr.ListsSpecifiedUserResponse{
 				Errors: []*gotwtr.APIResponseError{
 					{
 						Value:        "849422",
@@ -320,9 +320,9 @@ func Test_ListSpecifiedUser(t *testing.T) {
 					}
 				}),
 				id:  "8488877666666666666666666666666622839422",
-				opt: []*gotwtr.ListSpecifiedUserOption{},
+				opt: []*gotwtr.ListsSpecifiedUserOption{},
 			},
-			want: &gotwtr.ListSpecifiedUserResponse{
+			want: &gotwtr.ListsSpecifiedUserResponse{
 				Errors: []*gotwtr.APIResponseError{
 					{
 						Parameters: gotwtr.Parameter{
@@ -343,7 +343,7 @@ func Test_ListSpecifiedUser(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
-			got, err := c.ListSpecifiedUser(tt.args.ctx, tt.args.id, tt.args.opt...)
+			got, err := c.ListsSpecifiedUser(tt.args.ctx, tt.args.id, tt.args.opt...)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("client.ListSpecifiedUser() error = %v, wantErr %v", err, tt.wantErr)
 				return

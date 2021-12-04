@@ -65,12 +65,12 @@ func listMembers(ctx context.Context, c *client, listid string, opt ...*ListMemb
 	return &lmr, nil
 }
 
-func listSpecifiedUser(ctx context.Context, c *client, userID string, opt ...*ListSpecifiedUserOption) (*ListSpecifiedUserResponse, error) {
+func listsSpecifiedUser(ctx context.Context, c *client, userID string, opt ...*ListsSpecifiedUserOption) (*ListsSpecifiedUserResponse, error) {
 	if userID == "" {
 		return nil, errors.New("lists specified user: userID parameter is required")
 	}
 
-	lm := fmt.Sprintf(listSpecifiedUserURL, userID)
+	lm := fmt.Sprintf(listsSpecifiedUserURL, userID)
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, lm, nil)
 	if err != nil {
@@ -79,7 +79,7 @@ func listSpecifiedUser(ctx context.Context, c *client, userID string, opt ...*Li
 
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.bearerToken))
 
-	var lopt ListSpecifiedUserOption
+	var lopt ListsSpecifiedUserOption
 	switch len(opt) {
 	case 0:
 		// do nothing
@@ -108,7 +108,7 @@ func listSpecifiedUser(ctx context.Context, c *client, userID string, opt ...*Li
 
 	defer resp.Body.Close()
 
-	var lmr ListSpecifiedUserResponse
+	var lmr ListsSpecifiedUserResponse
 	if err := json.NewDecoder(resp.Body).Decode(&lmr); err != nil {
 		return nil, fmt.Errorf("lists specified user: %w", err)
 	}

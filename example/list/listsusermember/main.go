@@ -9,7 +9,7 @@ import (
 
 func main() {
 	client := gotwtr.New("key")
-	lmr, err := client.ListSpecifiedUser(context.Background(), "84839422")
+	lmr, err := client.ListsSpecifiedUser(context.Background(), "84839422")
 	if err != nil {
 		panic(err)
 	}
