@@ -92,7 +92,7 @@ type ListMembersResponse struct {
 	Type     string              `json:"type,omitempty"`
 }
 
-type ListSpecifiedUserResponse struct {
+type ListsSpecifiedUserResponse struct {
 	Lists    []*List             `json:"data"`
 	Includes *ListIncludes       `json:"includes,omitempty"`
 	Errors   []*APIResponseError `json:"errors,omitempty"`
