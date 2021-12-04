@@ -97,7 +97,7 @@ func listsSpecifiedUser(ctx context.Context, c *client, userID string, opt ...*L
 		lopt.MaxResults = defaultMaxResults
 	}
 	if lopt.MaxResults < minimumMaxResults || lopt.MaxResults > maximumMaxResults {
-		return nil, fmt.Errorf("ists specified user: max results must be between %d and %d", minimumMaxResults, maximumMaxResults)
+		return nil, fmt.Errorf("lists specified user: max results must be between %d and %d", minimumMaxResults, maximumMaxResults)
 	}
 	lopt.addQuery(req)
 
