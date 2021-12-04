@@ -74,7 +74,7 @@ func listSpecifiedUser(ctx context.Context, c *client, userID string, opt ...*Li
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, lm, nil)
 	if err != nil {
-		return nil, fmt.Errorf("lists specified user : %w", err)
+		return nil, fmt.Errorf("lists specified user: %w", err)
 	}
 
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.bearerToken))
