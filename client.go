@@ -57,6 +57,7 @@ type Lists interface {
 	LookUpAllListsOwned(ctx context.Context, userID string, opt ...*AllListsOwnedOption) (*AllListsOwnedResponse, error)
 	LookUpListTweets(ctx context.Context, listID string, opt ...*ListTweetsOption) (*ListTweetsResponse, error)
 	ListMembers(ctx context.Context, listID string, opt ...*ListMembersOption) (*ListMembersResponse, error)
+	ListsSpecifiedUser(ctx context.Context, userID string, opt ...*ListsSpecifiedUserOption) (*ListsSpecifiedUserResponse, error)
 	LookUpListFollowers(ctx context.Context, listID string, opt ...*ListFollowersOption) (*ListFollowersResponse, error)
 	LookUpAllListsUserFollows(ctx context.Context, userID string, opt ...*ListFollowsOption) (*AllListsUserFollowsResponse, error)
 }
@@ -233,6 +234,11 @@ func (c *client) LookUpAllListsOwned(ctx context.Context, userID string, opt ...
 // LookUpListTweets returns a list of Tweets from the specified List.
 func (c *client) LookUpListTweets(ctx context.Context, listID string, opt ...*ListTweetsOption) (*ListTweetsResponse, error) {
 	return lookUpListTweets(ctx, c, listID, opt...)
+}
+
+// ListsSpecifiedUser returns all Lists a specified user is a member of that.
+func (c *client) ListsSpecifiedUser(ctx context.Context, userID string, opt ...*ListsSpecifiedUserOption) (*ListsSpecifiedUserResponse, error) {
+	return listsSpecifiedUser(ctx, c, userID, opt...)
 }
 
 // ListMembers returns a list of users who are members of the specified List.
