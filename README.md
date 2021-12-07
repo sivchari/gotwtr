@@ -20,7 +20,7 @@ We will had worked on it, when new one is be handled OAuth 2.0.
  - Timelines
  - Search Tweets
  - Tweet Counts
- - Filterd Stream
+ - Filtered Stream
  - Volume Streams
  - Retweets
  - Likes
@@ -84,7 +84,7 @@ func main() {
 
 If you wanna more example, please see examples dir.
 
-Thease are covered all code gotwtr provides Twitter v2 API interface.
+These are covered all code gotwtr provides Twitter v2 API interface.
 
 ## Contributing
 
