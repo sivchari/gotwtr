@@ -11,8 +11,7 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
-
-      - name: reviewdog / added
+      - name: golangci-lint with review dog
         uses: reviewdog/action-golangci-lint@v2
         with:
           golangci_lint_flags: "--config=.golangci.yml"
