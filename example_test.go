@@ -186,9 +186,56 @@ func ExampleClient_RetweetsLookup() {
 	}
 	fmt.Println(t)
 }
-func ExampleClient_TweetsUserLiked() {
-
+func ExampleClient_TweetsUserLiked_noOption() {
+	client := gotwtr.New("key")
+	tulr, err := client.TweetsUserLiked(context.Background(), "user_id")
+	if err != nil {
+		log.Println(err)
+	}
+	for _, tweet := range tulr.Tweets {
+		fmt.Printf("id: %s, text: %s\n", tweet.ID, tweet.Text)
+	}
 }
-func ExampleClient_UsersLikingTweet() {
+func ExampleClient_TweetsUserLiked_option() {
+	client := gotwtr.New("key")
+	tulr, err := client.TweetsUserLiked(context.Background(), "user_id", &gotwtr.TweetsUserLikedOpts{
+		TweetFields: []gotwtr.TweetField{gotwtr.TweetFieldCreatedAt, gotwtr.TweetFieldSource},
+		MaxResults:  10,
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, tweet := range tulr.Tweets {
+		fmt.Printf("id: %s, text: %s, created_at: %s, source: %s\n", tweet.ID, tweet.Text, tweet.CreatedAt, tweet.Source)
+	}
+}
+func ExampleClient_UsersLikingTweet_noOption() {
+	client := gotwtr.New("key")
+	ultr, err := client.UsersLikingTweet(context.Background(), "tweet_id")
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, user := range ultr.Users {
+		fmt.Printf("id: %s, name: %s\n", user.ID, user.UserName)
+	}
+}
 
+func ExampleClient_UsersLikingTweet_option() {
+	client := gotwtr.New("key")
+	ultr, err := client.UsersLikingTweet(context.Background(), "tweet_id", &gotwtr.UsersLikingTweetOption{
+		Expansions:  []gotwtr.Expansion{gotwtr.ExpansionPinnedTweetID},
+		UserFields:  []gotwtr.UserField{gotwtr.UserFieldCreatedAt},
+		TweetFields: []gotwtr.TweetField{gotwtr.TweetFieldCreatedAt},
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, user := range ultr.Users {
+		fmt.Printf("id: %s, name: %s, created_at: %v\n", user.ID, user.UserName, user.CreatedAt)
+	}
+	if ultr.Includes != nil {
+		for _, tweet := range ultr.Includes.Tweets {
+			fmt.Printf("tweet_id: %s, created_at: %v\n", tweet.ID, tweet.CreatedAt)
+		}
+	}
 }
