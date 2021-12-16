@@ -68,7 +68,15 @@ func ExampleClient_SearchRecentTweets() {
 
 }
 func ExampleClient_CountsRecentTweet() {
-
+	client := gotwtr.New("key")
+	ts, err := client.CountsRecentTweet(context.Background(), "from:TwitterDev")
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(ts.Meta.TotalTweetCount)
+	for _, t := range ts.Counts {
+		fmt.Println(t)
+	}
 }
 func ExampleClient_AddOrDeleteRules() {
 
