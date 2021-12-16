@@ -179,7 +179,12 @@ func ExampleClient_VolumeStreams() {
 	fmt.Println("done")
 }
 func ExampleClient_RetweetsLookup() {
-
+	client := gotwtr.New("key")
+	t, err := client.RetweetsLookup(context.Background(), "id")
+	if err != nil {
+		log.Println(err)
+	}
+	fmt.Println(t)
 }
 func ExampleClient_TweetsUserLiked() {
 
