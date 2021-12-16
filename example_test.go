@@ -19,6 +19,7 @@ func ExampleClient_RetrieveMultipleTweets() {
 		fmt.Println(t)
 	}
 }
+
 func ExampleClient_RetrieveSingleTweet() {
 	client := gotwtr.New("key")
 	t, err := client.RetrieveSingleTweet(context.Background(), "id")
@@ -27,6 +28,7 @@ func ExampleClient_RetrieveSingleTweet() {
 	}
 	fmt.Println(*t.Tweet)
 }
+
 func ExampleClient_UserMentionTimeline() {
 	client := gotwtr.New("key")
 	tws, err := client.UserMentionTimeline(context.Background(), "id")
@@ -37,6 +39,7 @@ func ExampleClient_UserMentionTimeline() {
 		fmt.Println(tw)
 	}
 }
+
 func ExampleClient_UserTweetTimeline() {
 	client := gotwtr.New("key")
 	ts, err := client.UserTweetTimeline(context.Background(), "id")
@@ -47,6 +50,7 @@ func ExampleClient_UserTweetTimeline() {
 		fmt.Println(t)
 	}
 }
+
 func ExampleClient_SearchRecentTweets() {
 	client := gotwtr.New("key")
 	tsr, err := client.SearchRecentTweets(context.Background(), "go", &gotwtr.SearchTweetsOption{
@@ -68,6 +72,7 @@ func ExampleClient_SearchRecentTweets() {
 	fmt.Println(tsr.Meta)
 
 }
+
 func ExampleClient_CountsRecentTweet() {
 	client := gotwtr.New("key")
 	ts, err := client.CountsRecentTweet(context.Background(), "from:TwitterDev")
@@ -79,6 +84,7 @@ func ExampleClient_CountsRecentTweet() {
 		fmt.Println(t)
 	}
 }
+
 func ExampleClient_AddOrDeleteRules_add() {
 	client := gotwtr.New("key")
 	_, err := client.AddOrDeleteRules(context.Background(), &gotwtr.AddOrDeleteJSONBody{
@@ -120,6 +126,7 @@ func ExampleClient_AddOrDeleteRules_delete() {
 		panic(err)
 	}
 }
+
 func ExampleClient_RetrieveStreamRules() {
 	client := gotwtr.New("key")
 	ts, err := client.RetrieveStreamRules(context.Background())
@@ -130,6 +137,7 @@ func ExampleClient_RetrieveStreamRules() {
 		fmt.Println(t)
 	}
 }
+
 func ExampleClient_ConnectToStream() {
 	client := gotwtr.New("key")
 	ch := make(chan gotwtr.ConnectToStreamResponse, 5)
@@ -145,7 +153,7 @@ func ExampleClient_ConnectToStream() {
 			case err := <-errCh:
 				fmt.Println(err)
 			case <-ctx.Done():
-				break
+				return
 			}
 		}
 	}(ctx)
@@ -154,6 +162,7 @@ func ExampleClient_ConnectToStream() {
 	stream.Stop()
 	fmt.Println("done")
 }
+
 func ExampleClient_VolumeStreams() {
 	client := gotwtr.New("key")
 	ch := make(chan gotwtr.VolumeStreamsResponse, 5)
@@ -169,7 +178,7 @@ func ExampleClient_VolumeStreams() {
 			case err := <-errCh:
 				fmt.Println(err)
 			case <-done:
-				break
+				return
 			}
 		}
 	}(done)
@@ -178,6 +187,7 @@ func ExampleClient_VolumeStreams() {
 	stream.Stop()
 	fmt.Println("done")
 }
+
 func ExampleClient_RetweetsLookup() {
 	client := gotwtr.New("key")
 	t, err := client.RetweetsLookup(context.Background(), "id")
@@ -186,6 +196,7 @@ func ExampleClient_RetweetsLookup() {
 	}
 	fmt.Println(t)
 }
+
 func ExampleClient_TweetsUserLiked_noOption() {
 	client := gotwtr.New("key")
 	tulr, err := client.TweetsUserLiked(context.Background(), "user_id")
@@ -196,6 +207,7 @@ func ExampleClient_TweetsUserLiked_noOption() {
 		fmt.Printf("id: %s, text: %s\n", tweet.ID, tweet.Text)
 	}
 }
+
 func ExampleClient_TweetsUserLiked_option() {
 	client := gotwtr.New("key")
 	tulr, err := client.TweetsUserLiked(context.Background(), "user_id", &gotwtr.TweetsUserLikedOpts{
@@ -209,6 +221,7 @@ func ExampleClient_TweetsUserLiked_option() {
 		fmt.Printf("id: %s, text: %s, created_at: %s, source: %s\n", tweet.ID, tweet.Text, tweet.CreatedAt, tweet.Source)
 	}
 }
+
 func ExampleClient_UsersLikingTweet_noOption() {
 	client := gotwtr.New("key")
 	ultr, err := client.UsersLikingTweet(context.Background(), "tweet_id")
