@@ -47,6 +47,24 @@ func ExampleClient_UserTweetTimeline() {
 	}
 }
 func ExampleClient_SearchRecentTweets() {
+	client := gotwtr.New("key")
+	tsr, err := client.SearchRecentTweets(context.Background(), "go", &gotwtr.SearchTweetsOption{
+		TweetFields: []gotwtr.TweetField{
+			gotwtr.TweetFieldAuthorID,
+			gotwtr.TweetFieldAttachments,
+		},
+		MaxResults: 10,
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, t := range tsr.Tweets {
+		fmt.Println("---")
+		fmt.Println(t.Text)
+	}
+
+	fmt.Println("---meta---")
+	fmt.Println(tsr.Meta)
 
 }
 func ExampleClient_CountsRecentTweet() {
