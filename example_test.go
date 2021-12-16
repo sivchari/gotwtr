@@ -27,10 +27,24 @@ func ExampleClient_RetrieveSingleTweet() {
 	fmt.Println(*t.Tweet)
 }
 func ExampleClient_UserMentionTimeline() {
-
+	client := gotwtr.New("key")
+	tws, err := client.UserMentionTimeline(context.Background(), "id")
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, tw := range tws.Tweets {
+		fmt.Println(tw)
+	}
 }
 func ExampleClient_UserTweetTimeline() {
-
+	client := gotwtr.New("key")
+	ts, err := client.UserTweetTimeline(context.Background(), "id")
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, t := range ts.Tweets {
+		fmt.Println(t)
+	}
 }
 func ExampleClient_SearchRecentTweets() {
 
