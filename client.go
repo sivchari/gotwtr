@@ -37,6 +37,9 @@ type Users interface {
 	RetrieveSingleUserWithUserName(ctx context.Context, userName string, opt ...*RetrieveUserOption) (*UserResponse, error)
 	Followers(ctx context.Context, userID string, opt ...*FollowOption) (*FollowersResponse, error)
 	Following(ctx context.Context, userID string, opt ...*FollowOption) (*FollowingResponse, error)
+	Blocking(ctx context.Context, userID string, opt ...*BlockOption) (*BlockingResponse, error)
+	PostBlocking(ctx context.Context, userID string, tuid string) (*PostBlockingResponse, error)
+	UndoBlocking(ctx context.Context, suid string, tuid string) (*UndoBlockingResponse, error)
 }
 
 type Spaces interface {
@@ -196,6 +199,22 @@ func (c *Client) Followers(ctx context.Context, userID string, opt ...*FollowOpt
 // Following returns a list of users the specified userID is following.
 func (c *Client) Following(ctx context.Context, userID string, opt ...*FollowOption) (*FollowingResponse, error) {
 	return following(ctx, c.client, userID, opt...)
+}
+
+// Blocking returns a list of users who are blocked by the specified user ID.
+func (c *Client) Blocking(ctx context.Context, userID string, opt ...*BlockOption) (*BlockingResponse, error) {
+	return blocking(ctx, c.client, userID, opt...)
+}
+
+// PostBlocking causes the user (in the path) to block the target user.
+// The user (in the path) must match the user Access Tokens being used to authorize the request.
+func (c *Client) PostBlocking(ctx context.Context, userID string, tuid string) (*PostBlockingResponse, error) {
+	return postBlocking(ctx, c.client, userID, tuid)
+}
+
+// UndoBlocking allows a user or authenticated user ID to unblock another user.
+func (c *Client) UndoBlocking(ctx context.Context, suid string, tuid string) (*UndoBlockingResponse, error) {
+	return undoBlocking(ctx, c.client, suid, tuid)
 }
 
 // LookUpSpace returns a variety of information about a single Space specified by the requested ID.

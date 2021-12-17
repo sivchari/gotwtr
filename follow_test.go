@@ -149,7 +149,7 @@ func Test_followers(t *testing.T) {
 						UserName: "TwitterData",
 					},
 				},
-				Meta: gotwtr.FollowsMeta{
+				Meta: &gotwtr.FollowsMeta{
 					ResultCount: 10,
 					NextToken:   "DFEDBNRFT3MHCZZZ",
 				},
@@ -871,7 +871,7 @@ func Test_following(t *testing.T) {
 						UserName: "TwitterData",
 					},
 				},
-				Meta: gotwtr.FollowsMeta{
+				Meta: &gotwtr.FollowsMeta{
 					ResultCount: 10,
 					NextToken:   "DFEDBNRFT3MHCZZZ",
 				},

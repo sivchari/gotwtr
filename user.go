@@ -125,7 +125,7 @@ type FollowingResponse struct {
 	Users    []*User             `json:"data"`
 	Includes *UserIncludes       `json:"includes,omitempty"`
 	Errors   []*APIResponseError `json:"errors,omitempty"`
-	Meta     FollowsMeta         `json:"meta"`
+	Meta     *FollowsMeta        `json:"meta"`
 	Title    string              `json:"title,omitempty"`
 	Detail   string              `json:"detail,omitempty"`
 	Type     string              `json:"type,omitempty"`
@@ -135,7 +135,7 @@ type FollowersResponse struct {
 	Users    []*User             `json:"data"`
 	Includes *UserIncludes       `json:"includes,omitempty"`
 	Errors   []*APIResponseError `json:"errors,omitempty"`
-	Meta     FollowsMeta         `json:"meta"`
+	Meta     *FollowsMeta        `json:"meta"`
 	Title    string              `json:"title,omitempty"`
 	Detail   string              `json:"detail,omitempty"`
 	Type     string              `json:"type,omitempty"`
@@ -163,5 +163,32 @@ type FollowsMeta struct {
 }
 
 type FollowingBody struct {
+	TargetUserID string `json:"target_user_id"`
+}
+
+type BlockingResponse struct {
+	Users    []*User             `json:"data"`
+	Includes *UserIncludes       `json:"includes,omitempty"`
+	Errors   []*APIResponseError `json:"errors,omitempty"`
+	Meta     *BlocksMeta         `json:"meta"`
+}
+
+type PostBlockingResponse struct {
+	Blocking bool                `json:"data"`
+	Errors   []*APIResponseError `json:"errors,omitempty"`
+}
+
+type UndoBlockingResponse struct {
+	Blocking bool                `json:"data"`
+	Errors   []*APIResponseError `json:"errors,omitempty"`
+}
+
+type BlocksMeta struct {
+	ResultCount   int    `json:"result_count"`
+	PreviousToken string `json:"previous_token,omitempty"`
+	NextToken     string `json:"next_token,omitempty"`
+}
+
+type BlockingBody struct {
 	TargetUserID string `json:"target_user_id"`
 }

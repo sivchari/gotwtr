@@ -24,6 +24,9 @@ const (
 	retrieveSingleUserWithUserNameURL     = "https://api.twitter.com/2/users/by/username/%v"
 	followingURL                          = "https://api.twitter.com/2/users/%v/following"
 	followersURL                          = "https://api.twitter.com/2/users/%v/followers"
+	blockingURL                           = "https://api.twitter.com/2/users/%v/blocking"
+	postBlockingURL                       = "https://api.twitter.com/2/users/%v/blocking"
+	undoBlockingURL                       = "https://api.twitter.com/2/users/%v/blocking/%v"
 )
 
 const (
