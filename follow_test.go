@@ -1454,3 +1454,215 @@ func Test_following(t *testing.T) {
 		})
 	}
 }
+
+func Test_postFollowing(t *testing.T) {
+	t.Parallel()
+	type args struct {
+		ctx    context.Context
+		client *http.Client
+		id     string
+		tuid   string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    *gotwtr.PostFollowingResponse
+		wantErr bool
+	}{
+		{
+			name: "200 success public user",
+			args: args{
+				ctx: context.Background(),
+				client: mockHTTPClient(func(req *http.Request) *http.Response {
+					if req.Method != http.MethodPost {
+						t.Fatalf("the method is not correct got %s want %s", req.Method, http.MethodPost)
+					}
+					body := `{
+						"data": {
+							"following": true,
+							"pending_follow": false
+						}
+					}`
+					return &http.Response{
+						StatusCode: http.StatusOK,
+						Body:       io.NopCloser(strings.NewReader(body)),
+					}
+				}),
+				id:   "6253282",
+				tuid: "2244994945",
+			},
+			want: &gotwtr.PostFollowingResponse{
+				Following: &gotwtr.Following{
+					Following:     true,
+					PendingFollow: false,
+				},
+			},
+			wantErr: false,
+		},
+		{
+			name: "200 success protected user",
+			args: args{
+				ctx: context.Background(),
+				client: mockHTTPClient(func(req *http.Request) *http.Response {
+					if req.Method != http.MethodPost {
+						t.Fatalf("the method is not correct got %s want %s", req.Method, http.MethodPost)
+					}
+					body := `{
+						"data": {
+							"following": false,
+							"pending_follow": true
+						}
+					}`
+					return &http.Response{
+						StatusCode: http.StatusOK,
+						Body:       io.NopCloser(strings.NewReader(body)),
+					}
+				}),
+				id:   "6253282",
+				tuid: "2244994945",
+			},
+			want: &gotwtr.PostFollowingResponse{
+				Following: &gotwtr.Following{
+					Following:     false,
+					PendingFollow: true,
+				},
+			},
+			wantErr: false,
+		},
+		{
+			name: "400 request failed",
+			args: args{
+				ctx: context.Background(),
+				client: mockHTTPClient(func(req *http.Request) *http.Response {
+					body := `{
+						"errors": [
+							{
+								"message":"Sorry, that page does not exist, code:34"
+							}
+						]
+					}`
+					return &http.Response{
+						StatusCode: http.StatusBadRequest,
+						Body:       io.NopCloser(strings.NewReader(body)),
+					}
+				}),
+				id:   "2244994945",
+				tuid: "1228393702244134912",
+			},
+			want: &gotwtr.PostFollowingResponse{
+				Errors: []*gotwtr.APIResponseError{
+					{
+						Message: "Sorry, that page does not exist, code:34",
+					},
+				},
+			},
+			wantErr: true,
+		},
+	}
+	for i, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
+			got, err := c.PostFollowing(tt.args.ctx, tt.args.id, tt.args.tuid)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("PostFollowing() index = %v error = %v, wantErr %v", i, err, tt.wantErr)
+				return
+			}
+			if diff := cmp.Diff(got, tt.want); diff != "" {
+				t.Errorf("PostFollowing() index = %v mismatch (-want +got):\n%s", i, diff)
+				return
+			}
+		})
+	}
+}
+
+func Test_undoFollowing(t *testing.T) {
+	t.Parallel()
+	type args struct {
+		ctx    context.Context
+		client *http.Client
+		suid   string
+		tuid   string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    *gotwtr.UndoFollowingResponse
+		wantErr bool
+	}{
+		{
+			name: "200 success",
+			args: args{
+				ctx: context.Background(),
+				client: mockHTTPClient(func(req *http.Request) *http.Response {
+					if req.Method != http.MethodDelete {
+						t.Fatalf("the method is not correct got %s want %s", req.Method, http.MethodDelete)
+					}
+					body := `{
+						"data": {
+							"following": false
+						}
+					}`
+					return &http.Response{
+						StatusCode: http.StatusOK,
+						Body:       io.NopCloser(strings.NewReader(body)),
+					}
+				}),
+				suid: "2244994945",
+				tuid: "6253282",
+			},
+			want: &gotwtr.UndoFollowingResponse{
+				Following: &gotwtr.Following{
+					Following: false,
+				},
+			},
+			wantErr: false,
+		},
+		{
+			name: "400 request failed",
+			args: args{
+				ctx: context.Background(),
+				client: mockHTTPClient(func(req *http.Request) *http.Response {
+					body := `{
+						"errors": [
+							{
+								"message":"Sorry, that page does not exist, code:34"
+							}
+						]
+					}`
+					return &http.Response{
+						StatusCode: http.StatusBadRequest,
+						Body:       io.NopCloser(strings.NewReader(body)),
+					}
+				}),
+				suid: "2244994945",
+				tuid: "1228393702244134912",
+			},
+			want: &gotwtr.UndoFollowingResponse{
+				Errors: []*gotwtr.APIResponseError{
+					{
+						Message: "Sorry, that page does not exist, code:34",
+					},
+				},
+			},
+			wantErr: true,
+		},
+	}
+	for i, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
+			got, err := c.UndoFollowing(tt.args.ctx, tt.args.suid, tt.args.tuid)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("UndoFollowing() index = %v error = %v, wantErr %v", i, err, tt.wantErr)
+				return
+			}
+			if diff := cmp.Diff(got, tt.want); diff != "" {
+				t.Errorf("UndoFollowing() index = %v mismatch (-want +got):\n%s", i, diff)
+				return
+			}
+		})
+	}
+}
