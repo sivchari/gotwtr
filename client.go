@@ -159,10 +159,12 @@ func (c *Client) RetweetsLookup(ctx context.Context, tweetID string, opt ...*Ret
 	return retweetsLookup(ctx, c.client, tweetID, opt...)
 }
 
+// PostRetweet causes the user ID identified in the path parameter to Retweet the target Tweet.
 func (c *client) PostRetweet(ctx context.Context, uid string, tid string) (*PostRetweetResponse, error) {
 	return postRetweet(ctx, c, uid, tid)
 }
 
+// UndoRetweet allows a user or authenticated user ID to remove the Retweet of a Tweet.
 func (c *client) UndoRetweet(ctx context.Context, id string, stid string) (*UndoRetweetResponse, error) {
 	return undoRetweet(ctx, c, id, stid)
 }
