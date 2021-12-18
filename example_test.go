@@ -23,16 +23,16 @@ func ExampleClient_GenerateAppOnlyBearerToken() {
 	}
 }
 
-func ExampleClient_InvalidatingBearerToken() {
-	client := gotwtr.New("key")
-	b, err := client.InvalidatingBearerToken(context.Background())
-	if err != nil {
-		log.Fatal(err)
-	}
-	if !b {
-		log.Fatal("failed to invalidate bearer token")
-	}
-}
+// func ExampleClient_InvalidatingBearerToken() {
+// 	client := gotwtr.New("key")
+// 	b, err := client.InvalidatingBearerToken(context.Background())
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
+// 	if !b {
+// 		log.Fatal("failed to invalidate bearer token")
+// 	}
+// }
 
 func ExampleClient_RetrieveMultipleTweets() {
 	client := gotwtr.New("key")

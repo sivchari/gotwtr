@@ -3,7 +3,7 @@ package gotwtr
 // EndpointURL is the base URL for the Twitter V2 API.
 const (
 	generateAppOnlyBearerTokenURL = "https://api.twitter.com/oauth2/token?grant_type=client_credentials"
-	invalidatingBearerTokenURL    = "https://api.twitter.com/oauth2/invalidate_token?access_token=%v"
+	// invalidatingBearerTokenURL    = "https://api.twitter.com/oauth2/invalidate_token?access_token=%v"
 )
 
 const (
