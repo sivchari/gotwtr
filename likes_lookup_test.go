@@ -217,7 +217,7 @@ func Test_usersLikingTweet(t *testing.T) {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
+			c := gotwtr.New(gotwtr.WithBearerToken("key"), gotwtr.WithHTTPClient(tt.args.client))
 			got, err := c.UsersLikingTweet(tt.args.ctx, "tweet_id", tt.args.opt...)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("client.UsersLikingTweet() error = %v, wantErr %v", err, tt.wantErr)
@@ -397,7 +397,7 @@ func Test_tweetsUserLiked(t *testing.T) {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
+			c := gotwtr.New(gotwtr.WithBearerToken("key"), gotwtr.WithHTTPClient(tt.args.client))
 			got, err := c.TweetsUserLiked(tt.args.ctx, "user_id", tt.args.opt...)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("clientTweetsUserLiked(). error = %v, wantErr %v", err, tt.wantErr)
