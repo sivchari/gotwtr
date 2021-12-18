@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	client := gotwtr.New(gotwtr.WithBearerToken("key"))
+	client := gotwtr.New("key")
 	// look up by ID
 	s, err := client.LookUpSpace(context.Background(), "spaceid")
 	if err != nil {

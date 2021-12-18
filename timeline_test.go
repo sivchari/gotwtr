@@ -261,7 +261,7 @@ func Test_userTweetTimeline(t *testing.T) {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			c := gotwtr.New(gotwtr.WithBearerToken("key"), gotwtr.WithHTTPClient(tt.args.client))
+			c := gotwtr.New("key", gotwtr.WithHTTPClient(tt.args.client))
 			got, err := c.UserTweetTimeline(tt.args.ctx, tt.args.id, tt.args.opt...)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("client.UserTweetTimeline() error = %v, wantErr %v", err, tt.wantErr)
@@ -693,7 +693,7 @@ func Test_userMentionTimeline(t *testing.T) {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			c := gotwtr.New(gotwtr.WithBearerToken("key"), gotwtr.WithHTTPClient(tt.args.client))
+			c := gotwtr.New("key", gotwtr.WithHTTPClient(tt.args.client))
 			got, err := c.UserMentionTimeline(tt.args.ctx, tt.args.id, tt.args.opt...)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("client.UserMentionTimeline() error = %v, wantErr %v", err, tt.wantErr)

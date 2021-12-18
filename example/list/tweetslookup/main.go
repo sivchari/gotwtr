@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	client := gotwtr.New(gotwtr.WithBearerToken("key"))
+	client := gotwtr.New("keuy")
 	// look up lists tweets by id
 	ts, err := client.LookUpListTweets(context.Background(), "id")
 	if err != nil {

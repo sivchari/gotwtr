@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	client := gotwtr.New(gotwtr.WithBearerToken("key"))
+	client := gotwtr.New("keuy")
 	lmr, err := client.ListsSpecifiedUser(context.Background(), "84839422")
 	if err != nil {
 		panic(err)
