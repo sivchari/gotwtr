@@ -16,17 +16,18 @@ type oauth struct {
 	errors      []*APIResponseError
 }
 
-func (o *oauth) UnmarshalJSON(b io.ReadCloser) error {
-	var data struct {
+func (o *oauth) unmarshalJSON(b io.ReadCloser) error {
+	var d struct {
 		TokenType   string              `json:"token_type,omitempty"`
 		AccessToken string              `json:"access_token,omitempty"`
 		Errors      []*APIResponseError `json:"errors,omitempty"`
 	}
-	if err := json.NewDecoder(b).Decode(&data); err != nil {
+	if err := json.NewDecoder(b).Decode(&d); err != nil {
 		return err
 	}
-	o.tokenType = data.TokenType
-	o.accessToken = data.AccessToken
+	o.tokenType = d.TokenType
+	o.accessToken = d.AccessToken
+	o.errors = d.Errors
 	return nil
 }
 
@@ -63,7 +64,7 @@ func generateAppOnlyBearerToken(ctx context.Context, c *client) (bool, error) {
 	}
 
 	var o oauth
-	err = o.UnmarshalJSON(resp.Body)
+	err = o.unmarshalJSON(resp.Body)
 	if err != nil {
 		return false, err
 	}

@@ -101,23 +101,17 @@ func WithConsumerSecret(consumerSecret string) ClientOption {
 	}
 }
 
-func WithBearerToken(bearerToken string) ClientOption {
-	return func(c *client) {
-		c.bearerToken = bearerToken
-	}
-}
-
 func WithHTTPClient(httpClient *http.Client) ClientOption {
 	return func(c *client) {
 		c.client = httpClient
 	}
 }
 
-func New(opts ...ClientOption) *Client {
+func New(bearerToken string, opts ...ClientOption) *Client {
 	c := &client{
 		consumerKey:    "",
 		consumerSecret: "",
-		bearerToken:    "",
+		bearerToken:    bearerToken,
 		client:         http.DefaultClient,
 	}
 	for _, opt := range opts {

@@ -9,7 +9,7 @@ import (
 	"github.com/sivchari/gotwtr"
 )
 
-func ExampleCliemt_GenerateAppOnlyBearerToken() {
+func ExampleClient_GenerateAppOnlyBearerToken() {
 	c := gotwtr.New(
 		gotwtr.WithConsumerKey("key"),
 		gotwtr.WithConsumerSecret("sec"),
