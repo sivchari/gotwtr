@@ -134,7 +134,7 @@ func Test_lookUpSpaces(t *testing.T) {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
+			c := gotwtr.New(gotwtr.WithBearerToken("key"), gotwtr.WithHTTPClient(tt.args.client))
 			got, err := c.LookUpSpaces(tt.args.ctx, tt.args.ids, tt.args.opt...)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("client.LookUpSpaces() error = %v, wantErr %v", err, tt.wantErr)
@@ -238,7 +238,7 @@ func Test_lookUpSpace(t *testing.T) {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
+			c := gotwtr.New(gotwtr.WithBearerToken("key"), gotwtr.WithHTTPClient(tt.args.client))
 			got, err := c.LookUpSpace(tt.args.ctx, tt.args.id, tt.args.opt...)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("client.LookUpSpace() error = %v, wantErr %v", err, tt.wantErr)
@@ -405,7 +405,7 @@ func Test_usersPurchasedSpaceTicket(t *testing.T) {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
+			c := gotwtr.New(gotwtr.WithBearerToken("key"), gotwtr.WithHTTPClient(tt.args.client))
 			got, err := c.UsersPurchasedSpaceTicket(tt.args.ctx, tt.args.id, tt.args.opt...)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("client.UsersPurchasedSpaceTicket() error = %v, wantErr %v", err, tt.wantErr)

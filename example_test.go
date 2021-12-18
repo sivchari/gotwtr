@@ -9,8 +9,33 @@ import (
 	"github.com/sivchari/gotwtr"
 )
 
+func ExampleCliemt_GenerateAppOnlyBearerToken() {
+	c := gotwtr.New(
+		gotwtr.WithConsumerKey("key"),
+		gotwtr.WithConsumerSecret("sec"),
+	)
+	b, err := c.GenerateAppOnlyBearerToken(context.Background())
+	if err != nil {
+		log.Fatal(err)
+	}
+	if !b {
+		log.Fatal("failed to generate bearer token")
+	}
+}
+
+func ExampleClient_InvalidatingBearerToken() {
+	client := gotwtr.New(gotwtr.WithBearerToken("key"))
+	b, err := client.InvalidatingBearerToken(context.Background())
+	if err != nil {
+		log.Fatal(err)
+	}
+	if !b {
+		log.Fatal("failed to invalidate bearer token")
+	}
+}
+
 func ExampleClient_RetrieveMultipleTweets() {
-	client := gotwtr.New("key")
+	client := gotwtr.New(gotwtr.WithBearerToken("key"))
 	ts, err := client.RetrieveMultipleTweets(context.Background(), []string{"id", "id2"})
 	if err != nil {
 		log.Fatal(err)
@@ -21,7 +46,7 @@ func ExampleClient_RetrieveMultipleTweets() {
 }
 
 func ExampleClient_RetrieveSingleTweet() {
-	client := gotwtr.New("key")
+	client := gotwtr.New(gotwtr.WithBearerToken("key"))
 	t, err := client.RetrieveSingleTweet(context.Background(), "id")
 	if err != nil {
 		log.Fatal(err)
@@ -30,7 +55,7 @@ func ExampleClient_RetrieveSingleTweet() {
 }
 
 func ExampleClient_UserMentionTimeline() {
-	client := gotwtr.New("key")
+	client := gotwtr.New(gotwtr.WithBearerToken("key"))
 	tws, err := client.UserMentionTimeline(context.Background(), "id")
 	if err != nil {
 		log.Fatal(err)
@@ -41,7 +66,7 @@ func ExampleClient_UserMentionTimeline() {
 }
 
 func ExampleClient_UserTweetTimeline() {
-	client := gotwtr.New("key")
+	client := gotwtr.New(gotwtr.WithBearerToken("key"))
 	ts, err := client.UserTweetTimeline(context.Background(), "id")
 	if err != nil {
 		log.Fatal(err)
@@ -52,7 +77,7 @@ func ExampleClient_UserTweetTimeline() {
 }
 
 func ExampleClient_SearchRecentTweets() {
-	client := gotwtr.New("key")
+	client := gotwtr.New(gotwtr.WithBearerToken("key"))
 	tsr, err := client.SearchRecentTweets(context.Background(), "go", &gotwtr.SearchTweetsOption{
 		TweetFields: []gotwtr.TweetField{
 			gotwtr.TweetFieldAuthorID,
@@ -74,7 +99,7 @@ func ExampleClient_SearchRecentTweets() {
 }
 
 func ExampleClient_CountsRecentTweet() {
-	client := gotwtr.New("key")
+	client := gotwtr.New(gotwtr.WithBearerToken("key"))
 	ts, err := client.CountsRecentTweet(context.Background(), "from:TwitterDev")
 	if err != nil {
 		log.Fatal(err)
@@ -86,7 +111,7 @@ func ExampleClient_CountsRecentTweet() {
 }
 
 func ExampleClient_AddOrDeleteRules_add() {
-	client := gotwtr.New("key")
+	client := gotwtr.New(gotwtr.WithBearerToken("key"))
 	_, err := client.AddOrDeleteRules(context.Background(), &gotwtr.AddOrDeleteJSONBody{
 		Add: []*gotwtr.AddRule{
 			{
@@ -104,7 +129,7 @@ func ExampleClient_AddOrDeleteRules_add() {
 }
 
 func ExampleClient_AddOrDeleteRules_delete() {
-	client := gotwtr.New("key")
+	client := gotwtr.New(gotwtr.WithBearerToken("key"))
 	// retrieve Stream rules
 	ts, err := client.RetrieveStreamRules(context.Background())
 	if err != nil {
@@ -128,7 +153,7 @@ func ExampleClient_AddOrDeleteRules_delete() {
 }
 
 func ExampleClient_RetrieveStreamRules() {
-	client := gotwtr.New("key")
+	client := gotwtr.New(gotwtr.WithBearerToken("key"))
 	ts, err := client.RetrieveStreamRules(context.Background())
 	if err != nil {
 		log.Fatal(err)
@@ -139,7 +164,7 @@ func ExampleClient_RetrieveStreamRules() {
 }
 
 func ExampleClient_ConnectToStream() {
-	client := gotwtr.New("key")
+	client := gotwtr.New(gotwtr.WithBearerToken("key"))
 	ch := make(chan gotwtr.ConnectToStreamResponse, 5)
 	errCh := make(chan error)
 	stream := client.ConnectToStream(context.Background(), ch, errCh)
@@ -164,7 +189,7 @@ func ExampleClient_ConnectToStream() {
 }
 
 func ExampleClient_VolumeStreams() {
-	client := gotwtr.New("key")
+	client := gotwtr.New(gotwtr.WithBearerToken("key"))
 	ch := make(chan gotwtr.VolumeStreamsResponse, 5)
 	errCh := make(chan error)
 	stream := client.VolumeStreams(context.Background(), ch, errCh)
@@ -189,7 +214,7 @@ func ExampleClient_VolumeStreams() {
 }
 
 func ExampleClient_RetweetsLookup() {
-	client := gotwtr.New("key")
+	client := gotwtr.New(gotwtr.WithBearerToken("key"))
 	t, err := client.RetweetsLookup(context.Background(), "id")
 	if err != nil {
 		log.Println(err)
@@ -198,7 +223,7 @@ func ExampleClient_RetweetsLookup() {
 }
 
 func ExampleClient_TweetsUserLiked_noOption() {
-	client := gotwtr.New("key")
+	client := gotwtr.New(gotwtr.WithBearerToken("key"))
 	tulr, err := client.TweetsUserLiked(context.Background(), "user_id")
 	if err != nil {
 		log.Println(err)
@@ -209,7 +234,7 @@ func ExampleClient_TweetsUserLiked_noOption() {
 }
 
 func ExampleClient_TweetsUserLiked_option() {
-	client := gotwtr.New("key")
+	client := gotwtr.New(gotwtr.WithBearerToken("key"))
 	tulr, err := client.TweetsUserLiked(context.Background(), "user_id", &gotwtr.TweetsUserLikedOpts{
 		TweetFields: []gotwtr.TweetField{gotwtr.TweetFieldCreatedAt, gotwtr.TweetFieldSource},
 		MaxResults:  10,
@@ -223,7 +248,7 @@ func ExampleClient_TweetsUserLiked_option() {
 }
 
 func ExampleClient_UsersLikingTweet_noOption() {
-	client := gotwtr.New("key")
+	client := gotwtr.New(gotwtr.WithBearerToken("key"))
 	ultr, err := client.UsersLikingTweet(context.Background(), "tweet_id")
 	if err != nil {
 		log.Fatal(err)
@@ -234,7 +259,7 @@ func ExampleClient_UsersLikingTweet_noOption() {
 }
 
 func ExampleClient_UsersLikingTweet_option() {
-	client := gotwtr.New("key")
+	client := gotwtr.New(gotwtr.WithBearerToken("key"))
 	ultr, err := client.UsersLikingTweet(context.Background(), "tweet_id", &gotwtr.UsersLikingTweetOption{
 		Expansions:  []gotwtr.Expansion{gotwtr.ExpansionPinnedTweetID},
 		UserFields:  []gotwtr.UserField{gotwtr.UserFieldCreatedAt},

@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	client := gotwtr.New("key")
+	client := gotwtr.New(gotwtr.WithBearerToken("key"))
 	ssr, err := client.SearchSpaces(context.Background(), "hello", &gotwtr.SearchSpacesOption{
 		SpaceFields: []gotwtr.SpaceField{
 			gotwtr.SpaceFieldHostIDs,
