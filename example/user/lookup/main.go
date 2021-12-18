@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	client := gotwtr.New("key")
+	client := gotwtr.New(gotwtr.WithBearerToken("key"))
 	// look up users
 	us, err := client.RetrieveMultipleUsersWithIDs(context.Background(), []string{"id", "id2"})
 	if err != nil {
