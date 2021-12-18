@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	client := gotwtr.New(gotwtr.WithBearerToken("key"))
+	client := gotwtr.New("key")
 	followingUsers, err := client.Following(context.Background(), "id", &gotwtr.FollowOption{
 		MaxResults: 10,
 	})
