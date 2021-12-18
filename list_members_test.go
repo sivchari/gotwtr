@@ -113,7 +113,7 @@ func Test_listMembers(t *testing.T) {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			c := gotwtr.New(gotwtr.WithBearerToken("key"), gotwtr.WithHTTPClient(tt.args.client))
+			c := gotwtr.New("key", gotwtr.WithHTTPClient(tt.args.client))
 			got, err := c.ListMembers(tt.args.ctx, tt.args.id, tt.args.opt...)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("client.ListMembers() error = %v, wantErr %v", err, tt.wantErr)
@@ -342,7 +342,7 @@ func Test_ListSpecifiedUser(t *testing.T) {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			c := gotwtr.New(gotwtr.WithBearerToken("key"), gotwtr.WithHTTPClient(tt.args.client))
+			c := gotwtr.New("key", gotwtr.WithHTTPClient(tt.args.client))
 			got, err := c.ListsSpecifiedUser(tt.args.ctx, tt.args.id, tt.args.opt...)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("client.ListSpecifiedUser() error = %v, wantErr %v", err, tt.wantErr)

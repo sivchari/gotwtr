@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	client := gotwtr.New(gotwtr.WithBearerToken("key"))
+	client := gotwtr.New("keuy")
 	lms, err := client.ListMembers(context.Background(), "listid")
 	if err != nil {
 		panic(err)

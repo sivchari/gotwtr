@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	client := gotwtr.New(gotwtr.WithBearerToken("key"))
+	client := gotwtr.New("key")
 	dsr, err := client.DiscoverSpaces(context.Background(), []string{"id"}, &gotwtr.DiscoverSpacesOption{
 		Expansions: []gotwtr.Expansion{
 			gotwtr.ExpansionHostIDs,

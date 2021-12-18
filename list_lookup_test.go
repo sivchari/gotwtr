@@ -185,7 +185,7 @@ func Test_lookUpAllListsOwned(t *testing.T) {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			c := gotwtr.New(gotwtr.WithBearerToken("key"), gotwtr.WithHTTPClient(tt.args.client))
+			c := gotwtr.New("key", gotwtr.WithHTTPClient(tt.args.client))
 			got, err := c.LookUpAllListsOwned(tt.args.ctx, tt.args.id, tt.args.opt...)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("client.LookUpOwnedListsByID() index = %v error = %v, wantErr %v", i, err, tt.wantErr)
@@ -346,7 +346,7 @@ func Test_lookUpList(t *testing.T) {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			c := gotwtr.New(gotwtr.WithBearerToken("key"), gotwtr.WithHTTPClient(tt.args.client))
+			c := gotwtr.New("key", gotwtr.WithHTTPClient(tt.args.client))
 			got, err := c.LookUpList(tt.args.ctx, tt.args.id, tt.args.opt...)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("client.LookUpListByID() index = %v error = %v, wantErr %v", i, err, tt.wantErr)

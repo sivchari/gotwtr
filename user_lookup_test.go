@@ -392,7 +392,7 @@ func Test_retrieveMultipleUsersWithIDs(t *testing.T) {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			c := gotwtr.New(gotwtr.WithBearerToken("key"), gotwtr.WithHTTPClient(tt.args.client))
+			c := gotwtr.New("key", gotwtr.WithHTTPClient(tt.args.client))
 			got, err := c.RetrieveMultipleUsersWithIDs(tt.args.ctx, tt.args.ids, tt.args.opt...)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("client.RetriveMultipleUsersWithIDs() error = %v, wantErr %v", err, tt.wantErr)
@@ -558,7 +558,7 @@ func Test_retrieveSingleUserWithID(t *testing.T) {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			c := gotwtr.New(gotwtr.WithBearerToken("key"), gotwtr.WithHTTPClient(tt.args.client))
+			c := gotwtr.New("key", gotwtr.WithHTTPClient(tt.args.client))
 			got, err := c.RetrieveSingleUserWithID(tt.args.ctx, tt.args.id, tt.args.opt...)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("client.RetriveSingleUserWithID() error = %v, wantErr %v", err, tt.wantErr)
@@ -726,7 +726,7 @@ func Test_retrieveSingleUserWithUserName(t *testing.T) {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			c := gotwtr.New(gotwtr.WithBearerToken("key"), gotwtr.WithHTTPClient(tt.args.client))
+			c := gotwtr.New("key", gotwtr.WithHTTPClient(tt.args.client))
 			got, err := c.RetrieveSingleUserWithUserName(tt.args.ctx, tt.args.name, tt.args.opt...)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("client.RetrieveSingleUserWithUserName() error = %v, wantErr %v", err, tt.wantErr)
@@ -949,7 +949,7 @@ func Test_retrieveMultipleUsersWithUserNames(t *testing.T) {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			c := gotwtr.New(gotwtr.WithBearerToken("key"), gotwtr.WithHTTPClient(tt.args.client))
+			c := gotwtr.New("key", gotwtr.WithHTTPClient(tt.args.client))
 			got, err := c.RetrieveMultipleUsersWithUserNames(tt.args.ctx, tt.args.names, tt.args.opt...)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("client.RetrieveMultipleUsersWithUserNames() error = %v, wantErr %v", err, tt.wantErr)
