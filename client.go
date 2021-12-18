@@ -16,7 +16,7 @@ const (
 
 type OAuth interface {
 	GenerateAppOnlyBearerToken(ctx context.Context) (bool, error)
-	InvalidatingBearerToken(ctx context.Context) (bool, error)
+	// InvalidatingBearerToken(ctx context.Context) (bool, error)
 	// RefreshToken() (string, error)
 	// RevokeToken() (bool, error)
 }
@@ -127,9 +127,9 @@ func (c *client) GenerateAppOnlyBearerToken(ctx context.Context) (bool, error) {
 	return generateAppOnlyBearerToken(ctx, c)
 }
 
-func (c *client) InvalidatingBearerToken(ctx context.Context) (bool, error) {
-	return invalidatingBearerToken(ctx, c)
-}
+// func (c *client) InvalidatingBearerToken(ctx context.Context) (bool, error) {
+// 	return invalidatingBearerToken(ctx, c)
+// }
 
 // RetrieveMultipleTweets returns a variety of information about the Tweet specified by the requested ID or list of IDs.
 func (c *Client) RetrieveMultipleTweets(ctx context.Context, tweetIDs []string, opt ...*RetriveTweetOption) (*TweetsResponse, error) {
