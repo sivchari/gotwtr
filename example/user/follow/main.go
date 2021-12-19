@@ -9,7 +9,6 @@ import (
 
 func main() {
 	client := gotwtr.New("key")
-
 	// lookup followings
 	followingUsers, err := client.Following(context.Background(), "id", &gotwtr.FollowOption{
 		MaxResults: 10,
