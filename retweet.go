@@ -53,7 +53,6 @@ func retweetsLookup(ctx context.Context, c *client, tweetID string, opt ...*Retw
 	return &retweetsLookup, nil
 }
 
-// uid = "user_id" tid = "tweet_id"
 func postRetweet(ctx context.Context, c *client, userID string, tweetID string) (*PostRetweetResponse, error) {
 	if userID == "" {
 		return nil, errors.New("post retweet by userID: userID parameter is required")
@@ -99,7 +98,6 @@ func postRetweet(ctx context.Context, c *client, userID string, tweetID string) 
 	return &postRetweet, nil
 }
 
-// stid = "source_tweet_id"
 func undoRetweet(ctx context.Context, c *client, userID string, sourceTweetID string) (*UndoRetweetResponse, error) {
 	if userID == "" {
 		return nil, errors.New("undo retweet by userID: userID parameter is required")
