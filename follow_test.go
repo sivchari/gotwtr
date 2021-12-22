@@ -16,7 +16,7 @@ func Test_followers(t *testing.T) {
 	type args struct {
 		ctx    context.Context
 		client *http.Client
-		userID     string
+		userID string
 		opt    []*gotwtr.FollowOption
 	}
 	tests := []struct {
@@ -93,8 +93,8 @@ func Test_followers(t *testing.T) {
 						Body:       io.NopCloser(strings.NewReader(body)),
 					}
 				}),
-				userID:  "2244994945",
-				opt: []*gotwtr.FollowOption{},
+				userID: "2244994945",
+				opt:    []*gotwtr.FollowOption{},
 			},
 			want: &gotwtr.FollowersResponse{
 				Users: []*gotwtr.User{
@@ -695,8 +695,8 @@ func Test_followers(t *testing.T) {
 						Body:       io.NopCloser(strings.NewReader(body)),
 					}
 				}),
-				userID:  "1111111111111111111111",
-				opt: []*gotwtr.FollowOption{},
+				userID: "1111111111111111111111",
+				opt:    []*gotwtr.FollowOption{},
 			},
 			want: &gotwtr.FollowersResponse{
 				Users: nil,
@@ -738,7 +738,7 @@ func Test_following(t *testing.T) {
 	type args struct {
 		ctx    context.Context
 		client *http.Client
-		userID     string
+		userID string
 		opt    []*gotwtr.FollowOption
 	}
 	tests := []struct {
@@ -815,8 +815,8 @@ func Test_following(t *testing.T) {
 						Body:       io.NopCloser(strings.NewReader(body)),
 					}
 				}),
-				userID:  "2244994945",
-				opt: []*gotwtr.FollowOption{},
+				userID: "2244994945",
+				opt:    []*gotwtr.FollowOption{},
 			},
 			want: &gotwtr.FollowingResponse{
 				Users: []*gotwtr.User{
@@ -1417,8 +1417,8 @@ func Test_following(t *testing.T) {
 						Body:       io.NopCloser(strings.NewReader(body)),
 					}
 				}),
-				userID:  "1111111111111111111111",
-				opt: []*gotwtr.FollowOption{},
+				userID: "1111111111111111111111",
+				opt:    []*gotwtr.FollowOption{},
 			},
 			want: &gotwtr.FollowingResponse{
 				Users: nil,
@@ -1458,10 +1458,10 @@ func Test_following(t *testing.T) {
 func Test_postFollowing(t *testing.T) {
 	t.Parallel()
 	type args struct {
-		ctx    context.Context
-		client *http.Client
-		userID     string
-		targetUserID   string
+		ctx          context.Context
+		client       *http.Client
+		userID       string
+		targetUserID string
 	}
 	tests := []struct {
 		name    string
@@ -1488,7 +1488,7 @@ func Test_postFollowing(t *testing.T) {
 						Body:       io.NopCloser(strings.NewReader(body)),
 					}
 				}),
-				userID:   "6253282",
+				userID:       "6253282",
 				targetUserID: "2244994945",
 			},
 			want: &gotwtr.PostFollowingResponse{
@@ -1518,7 +1518,7 @@ func Test_postFollowing(t *testing.T) {
 						Body:       io.NopCloser(strings.NewReader(body)),
 					}
 				}),
-				userID:   "6253282",
+				userID:       "6253282",
 				targetUserID: "2244994945",
 			},
 			want: &gotwtr.PostFollowingResponse{
@@ -1546,7 +1546,7 @@ func Test_postFollowing(t *testing.T) {
 						Body:       io.NopCloser(strings.NewReader(body)),
 					}
 				}),
-				userID:   "2244994945",
+				userID:       "2244994945",
 				targetUserID: "1228393702244134912",
 			},
 			want: &gotwtr.PostFollowingResponse{
@@ -1580,10 +1580,10 @@ func Test_postFollowing(t *testing.T) {
 func Test_undoFollowing(t *testing.T) {
 	t.Parallel()
 	type args struct {
-		ctx    context.Context
-		client *http.Client
-		sourceUserID   string
-		targetUserID   string
+		ctx          context.Context
+		client       *http.Client
+		sourceUserID string
+		targetUserID string
 	}
 	tests := []struct {
 		name    string
