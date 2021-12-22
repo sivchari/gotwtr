@@ -14,10 +14,10 @@ import (
 func Test_retweetsLookup(t *testing.T) {
 	t.Parallel()
 	type args struct {
-		ctx    context.Context
-		client *http.Client
-		id     string
-		opt    []*gotwtr.RetweetsLookupOption
+		ctx     context.Context
+		client  *http.Client
+		tweetID string
+		opt     []*gotwtr.RetweetsLookupOption
 	}
 	tests := []struct {
 		name    string
@@ -96,7 +96,7 @@ func Test_retweetsLookup(t *testing.T) {
 						Body:       io.NopCloser(strings.NewReader(body)),
 					}
 				}),
-				id: "1354143047324299264",
+				tweetID: "1354143047324299264",
 			},
 			want: &gotwtr.RetweetsResponse{
 				Users: []*gotwtr.User{
@@ -184,7 +184,7 @@ func Test_retweetsLookup(t *testing.T) {
 						Body:       io.NopCloser(strings.NewReader(body)),
 					}
 				}),
-				id: "11111111111111111",
+				tweetID: "11111111111111111",
 			},
 			want: &gotwtr.RetweetsResponse{
 				Users: nil,
@@ -208,7 +208,7 @@ func Test_retweetsLookup(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
-			got, err := c.RetweetsLookup(tt.args.ctx, tt.args.id, tt.args.opt...)
+			got, err := c.RetweetsLookup(tt.args.ctx, tt.args.tweetID, tt.args.opt...)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("client.RetweetsLookup() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -224,10 +224,10 @@ func Test_retweetsLookup(t *testing.T) {
 func Test_postRetweet(t *testing.T) {
 	t.Parallel()
 	type args struct {
-		ctx    context.Context
-		client *http.Client
-		uid    string
-		tid    string
+		ctx     context.Context
+		client  *http.Client
+		userID  string
+		tweetID string
 	}
 	tests := []struct {
 		name    string
@@ -253,8 +253,8 @@ func Test_postRetweet(t *testing.T) {
 						Body:       io.NopCloser(strings.NewReader(body)),
 					}
 				}),
-				uid: "2244994945",
-				tid: "1228393702244134912",
+				userID:  "2244994945",
+				tweetID: "1228393702244134912",
 			},
 			want: &gotwtr.PostRetweetResponse{
 				Retweeted: &gotwtr.Retweeted{
@@ -280,8 +280,8 @@ func Test_postRetweet(t *testing.T) {
 						Body:       io.NopCloser(strings.NewReader(body)),
 					}
 				}),
-				uid: "2244994945",
-				tid: "1228393702244134912",
+				userID:  "2244994945",
+				tweetID: "1228393702244134912",
 			},
 			want: &gotwtr.PostRetweetResponse{
 				Errors: []*gotwtr.APIResponseError{
@@ -298,7 +298,7 @@ func Test_postRetweet(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
-			got, err := c.PostRetweet(tt.args.ctx, tt.args.uid, tt.args.tid)
+			got, err := c.PostRetweet(tt.args.ctx, tt.args.userID, tt.args.tweetID)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("PostRetweet() index = %v error = %v, wantErr %v", i, err, tt.wantErr)
 				return
@@ -314,10 +314,10 @@ func Test_postRetweet(t *testing.T) {
 func Test_undoRetweet(t *testing.T) {
 	t.Parallel()
 	type args struct {
-		ctx    context.Context
-		client *http.Client
-		id     string
-		stid   string
+		ctx           context.Context
+		client        *http.Client
+		userID        string
+		sourceTweetID string
 	}
 	tests := []struct {
 		name    string
@@ -343,8 +343,8 @@ func Test_undoRetweet(t *testing.T) {
 						Body:       io.NopCloser(strings.NewReader(body)),
 					}
 				}),
-				id:   "2244994945",
-				stid: "1228393702244134912",
+				userID:        "2244994945",
+				sourceTweetID: "1228393702244134912",
 			},
 			want: &gotwtr.UndoRetweetResponse{
 				Retweeted: &gotwtr.Retweeted{
@@ -370,8 +370,8 @@ func Test_undoRetweet(t *testing.T) {
 						Body:       io.NopCloser(strings.NewReader(body)),
 					}
 				}),
-				id:   "2244994945",
-				stid: "1228393702244134912",
+				userID:        "2244994945",
+				sourceTweetID: "1228393702244134912",
 			},
 			want: &gotwtr.UndoRetweetResponse{
 				Errors: []*gotwtr.APIResponseError{
@@ -388,7 +388,7 @@ func Test_undoRetweet(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
-			got, err := c.UndoRetweet(tt.args.ctx, tt.args.id, tt.args.stid)
+			got, err := c.UndoRetweet(tt.args.ctx, tt.args.userID, tt.args.sourceTweetID)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("UndoRetweet() index = %v error = %v, wantErr %v", i, err, tt.wantErr)
 				return

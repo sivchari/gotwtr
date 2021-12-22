@@ -11,7 +11,7 @@ import (
 
 func retweetsLookup(ctx context.Context, c *client, tweetID string, opt ...*RetweetsLookupOption) (*RetweetsResponse, error) {
 	if tweetID == "" {
-		return nil, errors.New("retweets lookup: tweet id parameter is required")
+		return nil, errors.New("retweets lookup by tweetID: tweetID parameter is required")
 	}
 	ep := fmt.Sprintf(retweetsLookupURL, tweetID)
 
@@ -54,17 +54,17 @@ func retweetsLookup(ctx context.Context, c *client, tweetID string, opt ...*Retw
 }
 
 // uid = "user_id" tid = "tweet_id"
-func postRetweet(ctx context.Context, c *client, uid string, tid string) (*PostRetweetResponse, error) {
-	if uid == "" {
-		return nil, errors.New("post retweet by uid: uid parameter is required")
+func postRetweet(ctx context.Context, c *client, userID string, tweetID string) (*PostRetweetResponse, error) {
+	if userID == "" {
+		return nil, errors.New("post retweet by userID: userID parameter is required")
 	}
-	ep := fmt.Sprintf(postRetweetURL, uid)
+	ep := fmt.Sprintf(postRetweetURL, userID)
 
-	if tid == "" {
-		return nil, errors.New("post retweet by tid: tid parameter is required")
+	if tweetID == "" {
+		return nil, errors.New("post retweet by tweetID: tweetID parameter is required")
 	}
 	body := &TweetBody{
-		TweetID: tid,
+		TweetID: tweetID,
 	}
 	jsonStr, err := json.Marshal(body)
 	if err != nil {
@@ -100,14 +100,14 @@ func postRetweet(ctx context.Context, c *client, uid string, tid string) (*PostR
 }
 
 // stid = "source_tweet_id"
-func undoRetweet(ctx context.Context, c *client, id string, stid string) (*UndoRetweetResponse, error) {
-	if id == "" {
-		return nil, errors.New("undo retweet by id: id parameter is required")
+func undoRetweet(ctx context.Context, c *client, userID string, sourceTweetID string) (*UndoRetweetResponse, error) {
+	if userID == "" {
+		return nil, errors.New("undo retweet by userID: userID parameter is required")
 	}
-	if stid == "" {
-		return nil, errors.New("undo retweet by source_tweet_id: source_tweet_id parameter is required")
+	if sourceTweetID == "" {
+		return nil, errors.New("undo retweet by sourceTweetID: sourceTweetID parameter is required")
 	}
-	ep := fmt.Sprintf(undoRetweetURL, id, stid)
+	ep := fmt.Sprintf(undoRetweetURL, userID, sourceTweetID)
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodDelete, ep, nil)
 	if err != nil {
