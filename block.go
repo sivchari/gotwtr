@@ -11,7 +11,7 @@ import (
 
 func blocking(ctx context.Context, c *client, userID string, opt ...*BlockOption) (*BlockingResponse, error) {
 	if userID == "" {
-		return nil, errors.New("blocking: tweet id parameter is required")
+		return nil, errors.New("blocking: userID parameter is required")
 	}
 	ep := fmt.Sprintf(blockingURL, userID)
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, ep, nil)
@@ -49,18 +49,17 @@ func blocking(ctx context.Context, c *client, userID string, opt ...*BlockOption
 	return &blocking, nil
 }
 
-// tuid = "target_user_id"
-func postBlocking(ctx context.Context, c *client, userID string, tuid string) (*PostBlockingResponse, error) {
+func postBlocking(ctx context.Context, c *client, userID string, targetUserID string) (*PostBlockingResponse, error) {
 	if userID == "" {
 		return nil, errors.New("post blocking by userID: userID parameter is required")
 	}
 	ep := fmt.Sprintf(postBlockingURL, userID)
 
-	if tuid == "" {
-		return nil, errors.New("post blocking by tuid: tuid parameter is required")
+	if targetUserID == "" {
+		return nil, errors.New("post blocking by targetUserID: targetUserID parameter is required")
 	}
 	body := &BlockingBody{
-		TargetUserID: tuid,
+		TargetUserID: targetUserID,
 	}
 	jsonStr, err := json.Marshal(body)
 	if err != nil {
@@ -96,14 +95,14 @@ func postBlocking(ctx context.Context, c *client, userID string, tuid string) (*
 }
 
 // suid = "source_user_id" tuid = "target_user_id"
-func undoBlocking(ctx context.Context, c *client, suid string, tuid string) (*UndoBlockingResponse, error) {
-	if suid == "" {
-		return nil, errors.New("undo blocking by suid: suid parameter is required")
+func undoBlocking(ctx context.Context, c *client, sourceUserID string, targetUserID string) (*UndoBlockingResponse, error) {
+	if sourceUserID == "" {
+		return nil, errors.New("undo blocking by sourceUserID: sourceUserID parameter is required")
 	}
-	if tuid == "" {
-		return nil, errors.New("undo blocking by tuid: tuid parameter is required")
+	if targetUserID == "" {
+		return nil, errors.New("undo blocking by targetUserID: targetUserID parameter is required")
 	}
-	ep := fmt.Sprintf(undoBlockingURL, suid, tuid)
+	ep := fmt.Sprintf(undoBlockingURL, sourceUserID, targetUserID)
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodDelete, ep, nil)
 	if err != nil {

@@ -171,6 +171,9 @@ type BlockingResponse struct {
 	Includes *UserIncludes       `json:"includes,omitempty"`
 	Errors   []*APIResponseError `json:"errors,omitempty"`
 	Meta     *BlocksMeta         `json:"meta"`
+	Title    string              `json:"title,omitempty"`
+	Detail   string              `json:"detail,omitempty"`
+	Type     string              `json:"type,omitempty"`
 }
 
 type PostBlockingResponse struct {
