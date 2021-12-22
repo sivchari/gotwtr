@@ -37,8 +37,8 @@ type Users interface {
 	RetrieveSingleUserWithUserName(ctx context.Context, userName string, opt ...*RetrieveUserOption) (*UserResponse, error)
 	Followers(ctx context.Context, userID string, opt ...*FollowOption) (*FollowersResponse, error)
 	Following(ctx context.Context, userID string, opt ...*FollowOption) (*FollowingResponse, error)
-	PostFollowing(ctx context.Context, id string, tuid string) (*PostFollowingResponse, error)
-	UndoFollowing(ctx context.Context, suid string, tuid string) (*UndoFollowingResponse, error)
+	PostFollowing(ctx context.Context, userID string, targetUserID string) (*PostFollowingResponse, error)
+	UndoFollowing(ctx context.Context, sourceUserID string, targetUserID string) (*UndoFollowingResponse, error)
 }
 
 type Spaces interface {
@@ -202,13 +202,13 @@ func (c *Client) Following(ctx context.Context, userID string, opt ...*FollowOpt
 
 // PostFollowing allows a user ID to follow another user.
 // If the target user does not have public Tweets, this method will send a follow request.
-func (c *Client) PostFollowing(ctx context.Context, id string, tuid string) (*PostFollowingResponse, error) {
-	return postFollowing(ctx, c.client, id, tuid)
+func (c *Client) PostFollowing(ctx context.Context, userID string, targetUserID string) (*PostFollowingResponse, error) {
+	return postFollowing(ctx, c.client, userID, targetUserID)
 }
 
 // UndoFollowing allows a user ID to unfollow another user.
-func (c *Client) UndoFollowing(ctx context.Context, suid string, tuid string) (*UndoFollowingResponse, error) {
-	return undoFollowing(ctx, c.client, suid, tuid)
+func (c *Client) UndoFollowing(ctx context.Context, sourceUserID string, targetUserID string) (*UndoFollowingResponse, error) {
+	return undoFollowing(ctx, c.client, sourceUserID, targetUserID)
 }
 
 // LookUpSpace returns a variety of information about a single Space specified by the requested ID.

@@ -16,7 +16,7 @@ func Test_followers(t *testing.T) {
 	type args struct {
 		ctx    context.Context
 		client *http.Client
-		id     string
+		userID     string
 		opt    []*gotwtr.FollowOption
 	}
 	tests := []struct {
@@ -93,7 +93,7 @@ func Test_followers(t *testing.T) {
 						Body:       io.NopCloser(strings.NewReader(body)),
 					}
 				}),
-				id:  "2244994945",
+				userID:  "2244994945",
 				opt: []*gotwtr.FollowOption{},
 			},
 			want: &gotwtr.FollowersResponse{
@@ -415,7 +415,7 @@ func Test_followers(t *testing.T) {
 						Body:       io.NopCloser(strings.NewReader(body)),
 					}
 				}),
-				id: "2244994945",
+				userID: "2244994945",
 				opt: []*gotwtr.FollowOption{
 					{
 						Expansions: []gotwtr.Expansion{gotwtr.ExpansionPinnedTweetID, gotwtr.ExpansionContextAnnotations},
@@ -695,7 +695,7 @@ func Test_followers(t *testing.T) {
 						Body:       io.NopCloser(strings.NewReader(body)),
 					}
 				}),
-				id:  "1111111111111111111111",
+				userID:  "1111111111111111111111",
 				opt: []*gotwtr.FollowOption{},
 			},
 			want: &gotwtr.FollowersResponse{
@@ -720,7 +720,7 @@ func Test_followers(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
-			got, err := c.Followers(tt.args.ctx, tt.args.id, tt.args.opt...)
+			got, err := c.Followers(tt.args.ctx, tt.args.userID, tt.args.opt...)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("client.Followers() index = %v error = %v, wantErr %v", i, err, tt.wantErr)
 				return
@@ -738,7 +738,7 @@ func Test_following(t *testing.T) {
 	type args struct {
 		ctx    context.Context
 		client *http.Client
-		id     string
+		userID     string
 		opt    []*gotwtr.FollowOption
 	}
 	tests := []struct {
@@ -815,7 +815,7 @@ func Test_following(t *testing.T) {
 						Body:       io.NopCloser(strings.NewReader(body)),
 					}
 				}),
-				id:  "2244994945",
+				userID:  "2244994945",
 				opt: []*gotwtr.FollowOption{},
 			},
 			want: &gotwtr.FollowingResponse{
@@ -1137,7 +1137,7 @@ func Test_following(t *testing.T) {
 						Body:       io.NopCloser(strings.NewReader(body)),
 					}
 				}),
-				id: "2244994945",
+				userID: "2244994945",
 				opt: []*gotwtr.FollowOption{
 					{
 						Expansions: []gotwtr.Expansion{gotwtr.ExpansionPinnedTweetID, gotwtr.ExpansionContextAnnotations},
@@ -1417,7 +1417,7 @@ func Test_following(t *testing.T) {
 						Body:       io.NopCloser(strings.NewReader(body)),
 					}
 				}),
-				id:  "1111111111111111111111",
+				userID:  "1111111111111111111111",
 				opt: []*gotwtr.FollowOption{},
 			},
 			want: &gotwtr.FollowingResponse{
@@ -1442,7 +1442,7 @@ func Test_following(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
-			got, err := c.Following(tt.args.ctx, tt.args.id, tt.args.opt...)
+			got, err := c.Following(tt.args.ctx, tt.args.userID, tt.args.opt...)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("client.Following() index = %v error = %v, wantErr %v", i, err, tt.wantErr)
 				return
@@ -1460,8 +1460,8 @@ func Test_postFollowing(t *testing.T) {
 	type args struct {
 		ctx    context.Context
 		client *http.Client
-		id     string
-		tuid   string
+		userID     string
+		targetUserID   string
 	}
 	tests := []struct {
 		name    string
@@ -1488,8 +1488,8 @@ func Test_postFollowing(t *testing.T) {
 						Body:       io.NopCloser(strings.NewReader(body)),
 					}
 				}),
-				id:   "6253282",
-				tuid: "2244994945",
+				userID:   "6253282",
+				targetUserID: "2244994945",
 			},
 			want: &gotwtr.PostFollowingResponse{
 				Following: &gotwtr.Following{
@@ -1518,8 +1518,8 @@ func Test_postFollowing(t *testing.T) {
 						Body:       io.NopCloser(strings.NewReader(body)),
 					}
 				}),
-				id:   "6253282",
-				tuid: "2244994945",
+				userID:   "6253282",
+				targetUserID: "2244994945",
 			},
 			want: &gotwtr.PostFollowingResponse{
 				Following: &gotwtr.Following{
@@ -1546,8 +1546,8 @@ func Test_postFollowing(t *testing.T) {
 						Body:       io.NopCloser(strings.NewReader(body)),
 					}
 				}),
-				id:   "2244994945",
-				tuid: "1228393702244134912",
+				userID:   "2244994945",
+				targetUserID: "1228393702244134912",
 			},
 			want: &gotwtr.PostFollowingResponse{
 				Errors: []*gotwtr.APIResponseError{
@@ -1564,7 +1564,7 @@ func Test_postFollowing(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
-			got, err := c.PostFollowing(tt.args.ctx, tt.args.id, tt.args.tuid)
+			got, err := c.PostFollowing(tt.args.ctx, tt.args.userID, tt.args.targetUserID)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("PostFollowing() index = %v error = %v, wantErr %v", i, err, tt.wantErr)
 				return
@@ -1582,8 +1582,8 @@ func Test_undoFollowing(t *testing.T) {
 	type args struct {
 		ctx    context.Context
 		client *http.Client
-		suid   string
-		tuid   string
+		sourceUserID   string
+		targetUserID   string
 	}
 	tests := []struct {
 		name    string
@@ -1609,8 +1609,8 @@ func Test_undoFollowing(t *testing.T) {
 						Body:       io.NopCloser(strings.NewReader(body)),
 					}
 				}),
-				suid: "2244994945",
-				tuid: "6253282",
+				sourceUserID: "2244994945",
+				targetUserID: "6253282",
 			},
 			want: &gotwtr.UndoFollowingResponse{
 				Following: &gotwtr.Following{
@@ -1636,8 +1636,8 @@ func Test_undoFollowing(t *testing.T) {
 						Body:       io.NopCloser(strings.NewReader(body)),
 					}
 				}),
-				suid: "2244994945",
-				tuid: "1228393702244134912",
+				sourceUserID: "2244994945",
+				targetUserID: "1228393702244134912",
 			},
 			want: &gotwtr.UndoFollowingResponse{
 				Errors: []*gotwtr.APIResponseError{
@@ -1654,7 +1654,7 @@ func Test_undoFollowing(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
-			got, err := c.UndoFollowing(tt.args.ctx, tt.args.suid, tt.args.tuid)
+			got, err := c.UndoFollowing(tt.args.ctx, tt.args.sourceUserID, tt.args.targetUserID)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("UndoFollowing() index = %v error = %v, wantErr %v", i, err, tt.wantErr)
 				return

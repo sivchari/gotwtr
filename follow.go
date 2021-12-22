@@ -123,18 +123,17 @@ func following(ctx context.Context, c *client, userID string, opt ...*FollowOpti
 	return &f, nil
 }
 
-// tuid = target_user_id
-func postFollowing(ctx context.Context, c *client, id string, tuid string) (*PostFollowingResponse, error) {
-	if id == "" {
-		return nil, errors.New("post following by id: id parameter is required")
+func postFollowing(ctx context.Context, c *client, userID string, targetUserID string) (*PostFollowingResponse, error) {
+	if userID == "" {
+		return nil, errors.New("post following by userID: userID parameter is required")
 	}
-	ep := fmt.Sprintf(postFollowingURL, id)
+	ep := fmt.Sprintf(postFollowingURL, userID)
 
-	if tuid == "" {
-		return nil, errors.New("post following by tuid: tuid parameter is required")
+	if targetUserID == "" {
+		return nil, errors.New("post following by targetUserID: targetUserID parameter is required")
 	}
 	body := &FollowingBody{
-		TargetUserID: tuid,
+		TargetUserID: targetUserID,
 	}
 	jsonStr, err := json.Marshal(body)
 	if err != nil {
@@ -169,15 +168,14 @@ func postFollowing(ctx context.Context, c *client, id string, tuid string) (*Pos
 	return &postFollowing, nil
 }
 
-// suid = source_user_id tuid = target_user_id
-func undoFollowing(ctx context.Context, c *client, suid string, tuid string) (*UndoFollowingResponse, error) {
-	if suid == "" {
-		return nil, errors.New("undo following by suid: suid parameter is required")
+func undoFollowing(ctx context.Context, c *client, sourceUserID string, targetUserID string) (*UndoFollowingResponse, error) {
+	if sourceUserID == "" {
+		return nil, errors.New("undo following by sourceUserID: sourceUserID parameter is required")
 	}
-	if tuid == "" {
-		return nil, errors.New("undo following by tuid: tuid parameter is required")
+	if targetUserID == "" {
+		return nil, errors.New("undo following by targetUserID: targetUserID parameter is required")
 	}
-	ep := fmt.Sprintf(undoFollowingURL, suid, tuid)
+	ep := fmt.Sprintf(undoFollowingURL, sourceUserID, targetUserID)
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodDelete, ep, nil)
 	if err != nil {
