@@ -14,6 +14,13 @@ const (
 	userLookUpMaxIDs            = 100
 )
 
+type OAuth interface {
+	GenerateAppOnlyBearerToken(ctx context.Context) (bool, error)
+	// InvalidatingBearerToken(ctx context.Context) (bool, error)
+	// RefreshToken() (string, error)
+	// RevokeToken() (bool, error)
+}
+
 type Tweets interface {
 	RetrieveMultipleTweets(ctx context.Context, tweetIDs []string, opt ...*RetriveTweetOption) (*TweetsResponse, error)
 	RetrieveSingleTweet(ctx context.Context, tweetID string, opt ...*RetriveTweetOption) (*TweetResponse, error)
@@ -61,6 +68,7 @@ type Lists interface {
 
 // Twtr is a main interface for all Twitter API calls.
 type Twtr interface {
+	OAuth
 	Tweets
 	Users
 	Spaces
@@ -68,8 +76,10 @@ type Twtr interface {
 }
 
 type client struct {
-	bearerToken string
-	client      *http.Client
+	consumerKey    string
+	consumerSecret string
+	bearerToken    string
+	client         *http.Client
 }
 
 // Client is an API client for Twitter v2 API.
@@ -81,6 +91,18 @@ var _ Twtr = (*Client)(nil)
 
 type ClientOption func(*client)
 
+func WithConsumerKey(consumerKey string) ClientOption {
+	return func(c *client) {
+		c.consumerKey = consumerKey
+	}
+}
+
+func WithConsumerSecret(consumerSecret string) ClientOption {
+	return func(c *client) {
+		c.consumerSecret = consumerSecret
+	}
+}
+
 func WithHTTPClient(httpClient *http.Client) ClientOption {
 	return func(c *client) {
 		c.client = httpClient
@@ -89,8 +111,10 @@ func WithHTTPClient(httpClient *http.Client) ClientOption {
 
 func New(bearerToken string, opts ...ClientOption) *Client {
 	c := &client{
-		bearerToken: bearerToken,
-		client:      http.DefaultClient,
+		consumerKey:    "",
+		consumerSecret: "",
+		bearerToken:    bearerToken,
+		client:         http.DefaultClient,
 	}
 	for _, opt := range opts {
 		opt(c)
@@ -99,6 +123,15 @@ func New(bearerToken string, opts ...ClientOption) *Client {
 		client: c,
 	}
 }
+
+// GenerateAppOnlyBearerToken generates a bearer token for app-only auth.
+func (c *client) GenerateAppOnlyBearerToken(ctx context.Context) (bool, error) {
+	return generateAppOnlyBearerToken(ctx, c)
+}
+
+// func (c *client) InvalidatingBearerToken(ctx context.Context) (bool, error) {
+// 	return invalidatingBearerToken(ctx, c)
+// }
 
 // RetrieveMultipleTweets returns a variety of information about the Tweet specified by the requested ID or list of IDs.
 func (c *Client) RetrieveMultipleTweets(ctx context.Context, tweetIDs []string, opt ...*RetriveTweetOption) (*TweetsResponse, error) {

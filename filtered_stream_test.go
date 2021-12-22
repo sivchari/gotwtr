@@ -155,7 +155,7 @@ func Test_retrieveStreamRules(t *testing.T) {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
+			c := gotwtr.New("key", gotwtr.WithHTTPClient(tt.args.client))
 			got, err := c.RetrieveStreamRules(tt.args.ctx, tt.args.opt...)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("client.RetrieveStreamRules() error = %v, wantErr %v", err, tt.wantErr)
@@ -403,7 +403,7 @@ func Test_AddOrDeleteRules(t *testing.T) {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
+			c := gotwtr.New("key", gotwtr.WithHTTPClient(tt.args.client))
 			got, err := c.AddOrDeleteRules(tt.args.ctx, tt.args.body, tt.args.opt...)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("client.AddOrDeleteRules() error = %v, wantErr %v", err, tt.wantErr)
@@ -489,7 +489,7 @@ func Test_ConnectToStream(t *testing.T) {
 			t.Parallel()
 			ch := make(chan gotwtr.ConnectToStreamResponse)
 			errCh := make(chan error)
-			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
+			c := gotwtr.New("key", gotwtr.WithHTTPClient(tt.args.client))
 			c.ConnectToStream(tt.args.ctx, ch, errCh, tt.args.opt...)
 			select {
 			case got := <-ch:
