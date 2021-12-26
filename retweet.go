@@ -11,7 +11,7 @@ import (
 
 func retweetsLookup(ctx context.Context, c *client, tweetID string, opt ...*RetweetsLookupOption) (*RetweetsResponse, error) {
 	if tweetID == "" {
-		return nil, errors.New("retweets lookup by tweetID: tweetID parameter is required")
+		return nil, errors.New("retweets lookup: tweetID parameter is required")
 	}
 	ep := fmt.Sprintf(retweetsLookupURL, tweetID)
 
@@ -55,12 +55,12 @@ func retweetsLookup(ctx context.Context, c *client, tweetID string, opt ...*Retw
 
 func postRetweet(ctx context.Context, c *client, userID string, tweetID string) (*PostRetweetResponse, error) {
 	if userID == "" {
-		return nil, errors.New("post retweet by userID: userID parameter is required")
+		return nil, errors.New("post retweet: userID parameter is required")
 	}
 	ep := fmt.Sprintf(postRetweetURL, userID)
 
 	if tweetID == "" {
-		return nil, errors.New("post retweet by tweetID: tweetID parameter is required")
+		return nil, errors.New("post retweet: tweetID parameter is required")
 	}
 	body := &TweetBody{
 		TweetID: tweetID,
@@ -100,10 +100,10 @@ func postRetweet(ctx context.Context, c *client, userID string, tweetID string) 
 
 func undoRetweet(ctx context.Context, c *client, userID string, sourceTweetID string) (*UndoRetweetResponse, error) {
 	if userID == "" {
-		return nil, errors.New("undo retweet by userID: userID parameter is required")
+		return nil, errors.New("undo retweet: userID parameter is required")
 	}
 	if sourceTweetID == "" {
-		return nil, errors.New("undo retweet by sourceTweetID: sourceTweetID parameter is required")
+		return nil, errors.New("undo retweet: sourceTweetID parameter is required")
 	}
 	ep := fmt.Sprintf(undoRetweetURL, userID, sourceTweetID)
 
