@@ -1558,6 +1558,84 @@ func Test_postFollowing(t *testing.T) {
 			},
 			wantErr: true,
 		},
+		{
+			name: "403 authentication error",
+			args: args{
+				ctx: context.Background(),
+				client: mockHTTPClient(func(req *http.Request) *http.Response {
+					body := `{
+						"errors": [
+							{
+								"title": "Unsupported Authentication",
+								"detail": "Authenticating with OAuth 2.0 Application-Only is forbidden for this endpoint.  Supported authentication types are [OAuth 1.0a User Context, OAuth 2.0 User Context].",
+								"type": "https://api.twitter.com/2/problems/unsupported-authentication",
+								"status": 403
+							}
+						]
+					}`
+					return &http.Response{
+						StatusCode: http.StatusBadRequest,
+						Body:       io.NopCloser(strings.NewReader(body)),
+					}
+				}),
+				userID:  "111111111",
+				targetUserID: "1228393702244134912",
+			},
+			want: &gotwtr.PostFollowingResponse{
+				Following: nil,
+				Errors: []*gotwtr.APIResponseError{
+					{
+						Title:  "Unsupported Authentication",
+						Detail: "Authenticating with OAuth 2.0 Application-Only is forbidden for this endpoint.  Supported authentication types are [OAuth 1.0a User Context, OAuth 2.0 User Context].",
+						Type:   "https://api.twitter.com/2/problems/unsupported-authentication",
+						Status: 403,
+					},
+				},
+			},
+			wantErr: true,
+		},
+		{
+			name: "404 not found, invalid userID",
+			args: args{
+				ctx: context.Background(),
+				client: mockHTTPClient(func(req *http.Request) *http.Response {
+					body := `{
+						"errors":[
+							{
+								"value":"1111111111",
+								"detail":"Could not find user with id: [1111111111].",
+								"title":"Not Found Error",
+								"resource_type":"user",
+								"parameter":"id",
+								"resource_id":"1111111111",
+								"type":"https://api.twitter.com/2/problems/resource-not-found"
+							}
+						]
+					}`
+					return &http.Response{
+						StatusCode: http.StatusNotFound,
+						Body:       io.NopCloser(strings.NewReader(body)),
+					}
+				}),
+				userID:  "1111111111",
+				targetUserID: "1228393702244134912",
+			},
+			want: &gotwtr.PostFollowingResponse{
+				Following: nil,
+				Errors: []*gotwtr.APIResponseError{
+					{
+						Value:        "1111111111",
+						Detail:       "Could not find user with id: [1111111111].",
+						Title:        "Not Found Error",
+						ResourceType: "user",
+						Parameter:    "id",
+						ResourceID:   "1111111111",
+						Type:         "https://api.twitter.com/2/problems/resource-not-found",
+					},
+				},
+			},
+			wantErr: true,
+		},
 	}
 	for i, tt := range tests {
 		tt := tt
@@ -1643,6 +1721,84 @@ func Test_undoFollowing(t *testing.T) {
 				Errors: []*gotwtr.APIResponseError{
 					{
 						Message: "Sorry, that page does not exist, code:34",
+					},
+				},
+			},
+			wantErr: true,
+		},
+		{
+			name: "403 authentication error",
+			args: args{
+				ctx: context.Background(),
+				client: mockHTTPClient(func(req *http.Request) *http.Response {
+					body := `{
+						"errors": [
+							{
+								"title": "Unsupported Authentication",
+								"detail": "Authenticating with OAuth 2.0 Application-Only is forbidden for this endpoint.  Supported authentication types are [OAuth 1.0a User Context, OAuth 2.0 User Context].",
+								"type": "https://api.twitter.com/2/problems/unsupported-authentication",
+								"status": 403
+							}
+						]
+					}`
+					return &http.Response{
+						StatusCode: http.StatusBadRequest,
+						Body:       io.NopCloser(strings.NewReader(body)),
+					}
+				}),
+				sourceUserID:  "111111111",
+				targetUserID: "1228393702244134912",
+			},
+			want: &gotwtr.UndoFollowingResponse{
+				Following: nil,
+				Errors: []*gotwtr.APIResponseError{
+					{
+						Title:  "Unsupported Authentication",
+						Detail: "Authenticating with OAuth 2.0 Application-Only is forbidden for this endpoint.  Supported authentication types are [OAuth 1.0a User Context, OAuth 2.0 User Context].",
+						Type:   "https://api.twitter.com/2/problems/unsupported-authentication",
+						Status: 403,
+					},
+				},
+			},
+			wantErr: true,
+		},
+		{
+			name: "404 not found, invalid userID",
+			args: args{
+				ctx: context.Background(),
+				client: mockHTTPClient(func(req *http.Request) *http.Response {
+					body := `{
+						"errors":[
+							{
+								"value":"1111111111",
+								"detail":"Could not find user with id: [1111111111].",
+								"title":"Not Found Error",
+								"resource_type":"user",
+								"parameter":"id",
+								"resource_id":"1111111111",
+								"type":"https://api.twitter.com/2/problems/resource-not-found"
+							}
+						]
+					}`
+					return &http.Response{
+						StatusCode: http.StatusNotFound,
+						Body:       io.NopCloser(strings.NewReader(body)),
+					}
+				}),
+				sourceUserID:  "1111111111",
+				targetUserID: "1228393702244134912",
+			},
+			want: &gotwtr.UndoFollowingResponse{
+				Following: nil,
+				Errors: []*gotwtr.APIResponseError{
+					{
+						Value:        "1111111111",
+						Detail:       "Could not find user with id: [1111111111].",
+						Title:        "Not Found Error",
+						ResourceType: "user",
+						Parameter:    "id",
+						ResourceID:   "1111111111",
+						Type:         "https://api.twitter.com/2/problems/resource-not-found",
 					},
 				},
 			},

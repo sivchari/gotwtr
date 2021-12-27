@@ -125,12 +125,12 @@ func following(ctx context.Context, c *client, userID string, opt ...*FollowOpti
 
 func postFollowing(ctx context.Context, c *client, userID string, targetUserID string) (*PostFollowingResponse, error) {
 	if userID == "" {
-		return nil, errors.New("post following by userID: userID parameter is required")
+		return nil, errors.New("post following: userID parameter is required")
 	}
 	ep := fmt.Sprintf(postFollowingURL, userID)
 
 	if targetUserID == "" {
-		return nil, errors.New("post following by targetUserID: targetUserID parameter is required")
+		return nil, errors.New("post following: targetUserID parameter is required")
 	}
 	body := &FollowingBody{
 		TargetUserID: targetUserID,
@@ -170,10 +170,10 @@ func postFollowing(ctx context.Context, c *client, userID string, targetUserID s
 
 func undoFollowing(ctx context.Context, c *client, sourceUserID string, targetUserID string) (*UndoFollowingResponse, error) {
 	if sourceUserID == "" {
-		return nil, errors.New("undo following by sourceUserID: sourceUserID parameter is required")
+		return nil, errors.New("undo following: sourceUserID parameter is required")
 	}
 	if targetUserID == "" {
-		return nil, errors.New("undo following by targetUserID: targetUserID parameter is required")
+		return nil, errors.New("undo following: targetUserID parameter is required")
 	}
 	ep := fmt.Sprintf(undoFollowingURL, sourceUserID, targetUserID)
 
