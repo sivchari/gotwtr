@@ -9,6 +9,31 @@ import (
 	"github.com/sivchari/gotwtr"
 )
 
+func ExampleClient_GenerateAppOnlyBearerToken() {
+	c := gotwtr.New(
+		"key",
+		gotwtr.WithConsumerSecret("sec"),
+	)
+	b, err := c.GenerateAppOnlyBearerToken(context.Background())
+	if err != nil {
+		log.Fatal(err)
+	}
+	if !b {
+		log.Fatal("failed to generate bearer token")
+	}
+}
+
+// func ExampleClient_InvalidatingBearerToken() {
+// 	client := gotwtr.New("key")
+// 	b, err := client.InvalidatingBearerToken(context.Background())
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
+// 	if !b {
+// 		log.Fatal("failed to invalidate bearer token")
+// 	}
+// }
+
 func ExampleClient_RetrieveMultipleTweets() {
 	client := gotwtr.New("key")
 	ts, err := client.RetrieveMultipleTweets(context.Background(), []string{"id", "id2"})
