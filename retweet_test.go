@@ -284,9 +284,130 @@ func Test_postRetweet(t *testing.T) {
 				tweetID: "1228393702244134912",
 			},
 			want: &gotwtr.PostRetweetResponse{
+				Retweeted: nil,
 				Errors: []*gotwtr.APIResponseError{
 					{
 						Message: "Sorry, that page does not exist, code:34",
+					},
+				},
+			},
+			wantErr: true,
+		},
+		{
+			name: "403 authentication error",
+			args: args{
+				ctx: context.Background(),
+				client: mockHTTPClient(func(req *http.Request) *http.Response {
+					body := `{
+						"errors": [
+							{
+								"title": "Unsupported Authentication",
+								"detail": "Authenticating with OAuth 2.0 Application-Only is forbidden for this endpoint.  Supported authentication types are [OAuth 1.0a User Context, OAuth 2.0 User Context].",
+								"type": "https://api.twitter.com/2/problems/unsupported-authentication",
+								"status": 403
+							}
+						]
+					}`
+					return &http.Response{
+						StatusCode: http.StatusBadRequest,
+						Body:       io.NopCloser(strings.NewReader(body)),
+					}
+				}),
+				userID:  "111111111",
+				tweetID: "1228393702244134912",
+			},
+			want: &gotwtr.PostRetweetResponse{
+				Retweeted: nil,
+				Errors: []*gotwtr.APIResponseError{
+					{
+						Title:  "Unsupported Authentication",
+						Detail: "Authenticating with OAuth 2.0 Application-Only is forbidden for this endpoint.  Supported authentication types are [OAuth 1.0a User Context, OAuth 2.0 User Context].",
+						Type:   "https://api.twitter.com/2/problems/unsupported-authentication",
+						Status: 403,
+					},
+				},
+			},
+			wantErr: true,
+		},
+		{
+			name: "404 not found, invalid tweetID",
+			args: args{
+				ctx: context.Background(),
+				client: mockHTTPClient(func(req *http.Request) *http.Response {
+					body := `{
+						"errors":[
+							{
+								"value":"111111111111111",
+								"detail":"Could not find tweet with id: [111111111111111].",
+								"title":"Not Found Error",
+								"resource_type":"tweet",
+								"parameter":"id",
+								"resource_id":"111111111111111",
+								"type":"https://api.twitter.com/2/problems/resource-not-found"
+							}
+						]
+					}`
+					return &http.Response{
+						StatusCode: http.StatusNotFound,
+						Body:       io.NopCloser(strings.NewReader(body)),
+					}
+				}),
+				userID:  "2244994945",
+				tweetID: "111111111111111",
+			},
+			want: &gotwtr.PostRetweetResponse{
+				Retweeted: nil,
+				Errors: []*gotwtr.APIResponseError{
+					{
+						Value:        "111111111111111",
+						Detail:       "Could not find tweet with id: [111111111111111].",
+						Title:        "Not Found Error",
+						ResourceType: "tweet",
+						Parameter:    "id",
+						ResourceID:   "111111111111111",
+						Type:         "https://api.twitter.com/2/problems/resource-not-found",
+					},
+				},
+			},
+			wantErr: true,
+		},
+		{
+			name: "404 not found, invalid userID",
+			args: args{
+				ctx: context.Background(),
+				client: mockHTTPClient(func(req *http.Request) *http.Response {
+					body := `{
+						"errors":[
+							{
+								"value":"1111111111",
+								"detail":"Could not find user with id: [1111111111].",
+								"title":"Not Found Error",
+								"resource_type":"user",
+								"parameter":"id",
+								"resource_id":"1111111111",
+								"type":"https://api.twitter.com/2/problems/resource-not-found"
+							}
+						]
+					}`
+					return &http.Response{
+						StatusCode: http.StatusNotFound,
+						Body:       io.NopCloser(strings.NewReader(body)),
+					}
+				}),
+				userID:  "1111111111",
+				tweetID: "1228393702244134912",
+			},
+			want: &gotwtr.PostRetweetResponse{
+				Retweeted: nil,
+				Errors: []*gotwtr.APIResponseError{
+					{
+						Value:        "1111111111",
+						Detail:       "Could not find user with id: [1111111111].",
+						Title:        "Not Found Error",
+						ResourceType: "user",
+						Parameter:    "id",
+						ResourceID:   "1111111111",
+						Type:         "https://api.twitter.com/2/problems/resource-not-found",
 					},
 				},
 			},
@@ -374,9 +495,130 @@ func Test_undoRetweet(t *testing.T) {
 				sourceTweetID: "1228393702244134912",
 			},
 			want: &gotwtr.UndoRetweetResponse{
+				Retweeted: nil,
 				Errors: []*gotwtr.APIResponseError{
 					{
 						Message: "Sorry, that page does not exist, code:34",
+					},
+				},
+			},
+			wantErr: true,
+		},
+		{
+			name: "403 authentication error",
+			args: args{
+				ctx: context.Background(),
+				client: mockHTTPClient(func(req *http.Request) *http.Response {
+					body := `{
+						"errors": [
+							{
+								"title": "Unsupported Authentication",
+								"detail": "Authenticating with OAuth 2.0 Application-Only is forbidden for this endpoint.  Supported authentication types are [OAuth 1.0a User Context, OAuth 2.0 User Context].",
+								"type": "https://api.twitter.com/2/problems/unsupported-authentication",
+								"status": 403
+							}
+						]
+					}`
+					return &http.Response{
+						StatusCode: http.StatusBadRequest,
+						Body:       io.NopCloser(strings.NewReader(body)),
+					}
+				}),
+				userID:        "111111111",
+				sourceTweetID: "1228393702244134912",
+			},
+			want: &gotwtr.UndoRetweetResponse{
+				Retweeted: nil,
+				Errors: []*gotwtr.APIResponseError{
+					{
+						Title:  "Unsupported Authentication",
+						Detail: "Authenticating with OAuth 2.0 Application-Only is forbidden for this endpoint.  Supported authentication types are [OAuth 1.0a User Context, OAuth 2.0 User Context].",
+						Type:   "https://api.twitter.com/2/problems/unsupported-authentication",
+						Status: 403,
+					},
+				},
+			},
+			wantErr: true,
+		},
+		{
+			name: "404 not found, invalid tweetID",
+			args: args{
+				ctx: context.Background(),
+				client: mockHTTPClient(func(req *http.Request) *http.Response {
+					body := `{
+						"errors":[
+							{
+								"value":"11111111111111111",
+								"detail":"Could not find tweet with id: [11111111111111111].",
+								"title":"Not Found Error",
+								"resource_type":"tweet",
+								"parameter":"id",
+								"resource_id":"11111111111111111",
+								"type":"https://api.twitter.com/2/problems/resource-not-found"
+							}
+						]
+					}`
+					return &http.Response{
+						StatusCode: http.StatusNotFound,
+						Body:       io.NopCloser(strings.NewReader(body)),
+					}
+				}),
+				userID:        "2244994945",
+				sourceTweetID: "11111111111111111",
+			},
+			want: &gotwtr.UndoRetweetResponse{
+				Retweeted: nil,
+				Errors: []*gotwtr.APIResponseError{
+					{
+						Value:        "11111111111111111",
+						Detail:       "Could not find tweet with id: [11111111111111111].",
+						Title:        "Not Found Error",
+						ResourceType: "tweet",
+						Parameter:    "id",
+						ResourceID:   "11111111111111111",
+						Type:         "https://api.twitter.com/2/problems/resource-not-found",
+					},
+				},
+			},
+			wantErr: true,
+		},
+		{
+			name: "404 not found, invalid userID",
+			args: args{
+				ctx: context.Background(),
+				client: mockHTTPClient(func(req *http.Request) *http.Response {
+					body := `{
+						"errors":[
+							{
+								"value":"1111111111",
+								"detail":"Could not find user with id: [1111111111].",
+								"title":"Not Found Error",
+								"resource_type":"user",
+								"parameter":"id",
+								"resource_id":"1111111111",
+								"type":"https://api.twitter.com/2/problems/resource-not-found"
+							}
+						]
+					}`
+					return &http.Response{
+						StatusCode: http.StatusNotFound,
+						Body:       io.NopCloser(strings.NewReader(body)),
+					}
+				}),
+				userID:        "1111111111",
+				sourceTweetID: "1228393702244134912",
+			},
+			want: &gotwtr.UndoRetweetResponse{
+				Retweeted: nil,
+				Errors: []*gotwtr.APIResponseError{
+					{
+						Value:        "1111111111",
+						Detail:       "Could not find user with id: [1111111111].",
+						Title:        "Not Found Error",
+						ResourceType: "user",
+						Parameter:    "id",
+						ResourceID:   "1111111111",
+						Type:         "https://api.twitter.com/2/problems/resource-not-found",
 					},
 				},
 			},
