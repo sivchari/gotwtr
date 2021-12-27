@@ -252,3 +252,67 @@ func ExampleClient_UsersLikingTweet_option() {
 		}
 	}
 }
+
+func ExampleClient_RetriveMultipleUsersWithIDs() {
+	client := gotwtr.New("key")
+	us, err := client.RetrieveMultipleUsersWithIDs(context.Background(), []string{"id", "id2"})
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, u := range us.Users {
+		fmt.Println(u)
+	}
+}
+
+func ExampleClient_RetriveMultipleUsersWithUserNames() {
+	client := gotwtr.New("key")
+	uns, err := client.RetrieveMultipleUsersWithUserNames(context.Background(), []string{"username", "username2"})
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, un := range uns.Users {
+		fmt.Println(un)
+	}
+}
+
+func ExampleClient_RetriveSingleUserWithID() {
+	client := gotwtr.New("key")
+	u, err := client.RetrieveSingleUserWithID(context.Background(), "id")
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(*u.User)
+}
+
+func ExampleClient_RetriveSingleUserWithUserName() {
+	client := gotwtr.New("key")
+	un, err := client.RetrieveSingleUserWithUserName(context.Background(), "username")
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(*un.User)
+}
+
+func ExampleClient_Following() {
+	client := gotwtr.New("key")
+	followingUsers, err := client.Following(context.Background(), "id", &gotwtr.FollowOption{
+		MaxResults: 10,
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, u := range followingUsers.Users {
+		fmt.Println(u)
+	}
+}
+
+func ExampleClient_Followers() {
+	client := gotwtr.New("key")
+	followerUsers, err := client.Followers(context.Background(), "id")
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, u := range followerUsers.Users {
+		fmt.Println(u)
+	}
+}
