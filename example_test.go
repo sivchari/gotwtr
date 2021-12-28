@@ -317,7 +317,7 @@ func ExampleClient_Followers() {
 	}
 }
 
-func ExampleClient_LookUpAllListsOwned () {
+func ExampleClient_LookUpAllListsOwned() {
 	client := gotwtr.New("key")
 	ls, err := client.LookUpAllListsOwned(context.Background(), "id")
 	if err != nil {
@@ -328,7 +328,7 @@ func ExampleClient_LookUpAllListsOwned () {
 	}
 }
 
-func ExampleClient_LookUpList () {
+func ExampleClient_LookUpList() {
 	client := gotwtr.New("key")
 	l, err := client.LookUpList(context.Background(), "id")
 	if err != nil {
@@ -337,7 +337,7 @@ func ExampleClient_LookUpList () {
 	fmt.Println(*l.List)
 }
 
-func ExampleClient_LookUpListFollowers () {
+func ExampleClient_LookUpListFollowers() {
 	client := gotwtr.New("key")
 	us, err := client.LookUpListFollowers(context.Background(), "id")
 	if err != nil {
@@ -348,7 +348,7 @@ func ExampleClient_LookUpListFollowers () {
 	}
 }
 
-func ExampleClient_LookUpAllListsUserFollows () {
+func ExampleClient_LookUpAllListsUserFollows() {
 	client := gotwtr.New("key")
 	ls, err := client.LookUpAllListsUserFollows(context.Background(), "id")
 	if err != nil {
@@ -359,7 +359,7 @@ func ExampleClient_LookUpAllListsUserFollows () {
 	}
 }
 
-func ExampleClient_ListsSpecifiedUser () {
+func ExampleClient_ListsSpecifiedUser() {
 	client := gotwtr.New("key")
 	lmr, err := client.ListsSpecifiedUser(context.Background(), "84839422")
 	if err != nil {
@@ -370,7 +370,7 @@ func ExampleClient_ListsSpecifiedUser () {
 	}
 }
 
-func ExampleClient_ListMembers () {
+func ExampleClient_ListMembers() {
 	client := gotwtr.New("key")
 	lms, err := client.ListMembers(context.Background(), "listid")
 	if err != nil {
@@ -380,7 +380,7 @@ func ExampleClient_ListMembers () {
 		fmt.Println(lm)
 	}
 }
-func ExampleClient_LookUpListTweets () {
+func ExampleClient_LookUpListTweets() {
 	client := gotwtr.New("key")
 	ts, err := client.LookUpListTweets(context.Background(), "id")
 	if err != nil {
@@ -391,57 +391,133 @@ func ExampleClient_LookUpListTweets () {
 	}
 }
 
-func ExampleClient_ () {
+func ExampleClient_DiscoverSpaces_option() {
 	client := gotwtr.New("key")
+	dsr, err := client.DiscoverSpaces(context.Background(), []string{"id"}, &gotwtr.DiscoverSpacesOption{
+		Expansions: []gotwtr.Expansion{
+			gotwtr.ExpansionHostIDs,
+			gotwtr.ExpansionCreatorID,
+			gotwtr.ExpansionInvitedUserIDs,
+			gotwtr.ExpansionSpeakerIDs,
+		},
+		TopicFields: []gotwtr.TopicField{
+			gotwtr.TopicFieldName,
+			gotwtr.TopicFieldID,
+			gotwtr.TopicFieldDescription,
+		},
+		UserFields: []gotwtr.UserField{
+			gotwtr.UserFieldCreatedAt,
+			gotwtr.UserFieldDescription,
+			gotwtr.UserFieldEntities,
+			gotwtr.UserFieldID,
+			gotwtr.UserFieldLocation,
+			gotwtr.UserFieldName,
+			gotwtr.UserFieldPinnedTweetID,
+			gotwtr.UserFieldProfileImageURL,
+			gotwtr.UserFieldProtected,
+			gotwtr.UserFieldPublicMetrics,
+			gotwtr.UserFieldURL,
+			gotwtr.UserFieldUserName,
+			gotwtr.UserFieldVerified,
+			gotwtr.UserFieldWithHeld,
+		},
+	})
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println("---")
+	for _, t := range dsr.Spaces {
+		fmt.Println(t)
+	}
+	fmt.Println("---")
+	for _, t := range dsr.Includes.Topics {
+		fmt.Println(t)
+	}
+	fmt.Println("---")
+	for _, t := range dsr.Includes.Users {
+		fmt.Println(t)
+	}
 }
-func ExampleClient_ () {
+
+func ExampleClient_DiscoverSpaces_noOption() {
 	client := gotwtr.New("key")
+	dsr, err := client.DiscoverSpaces(context.Background(), []string{"id"})
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, t := range dsr.Spaces {
+		fmt.Println(t)
+	}
 }
-func ExampleClient_ () {
+
+func ExampleClient_LookUpSpace() {
 	client := gotwtr.New("key")
+	s, err := client.LookUpSpace(context.Background(), "spaceid")
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(s.Space)
 }
-func ExampleClient_ () {
+
+func ExampleClient_LookUpSpaces() {
 	client := gotwtr.New("key")
+	ss, err := client.LookUpSpaces(context.Background(), []string{
+		"spaceid1",
+		"spaceid2",
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+	for i, s := range ss.Spaces {
+		fmt.Printf("index: %d, val: %v\n", i, s)
+	}
 }
-func ExampleClient_ () {
+
+func ExampleClient_UsersPurchasedSpaceTicket() {
 	client := gotwtr.New("key")
+	str, err := client.UsersPurchasedSpaceTicket(context.Background(), "spaceid")
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(str)
 }
-func ExampleClient_ () {
+
+func ExampleClient_SearchSpaces_option() {
 	client := gotwtr.New("key")
+	ssr, err := client.SearchSpaces(context.Background(), "hello", &gotwtr.SearchSpacesOption{
+		SpaceFields: []gotwtr.SpaceField{
+			gotwtr.SpaceFieldHostIDs,
+			gotwtr.SpaceFieldCreatedAt,
+			gotwtr.SpaceFieldCreatorID,
+			gotwtr.SpaceFieldID,
+			gotwtr.SpaceFieldLanguage,
+			gotwtr.SpaceFieldInvittedUserIDs,
+			gotwtr.SpaceFieldParticipantCount,
+			gotwtr.SpaceFieldSpeakerIDs,
+			gotwtr.SpaceFieldStartedAt,
+			gotwtr.SpaceFieldState,
+			gotwtr.SpaceFieldTitle,
+			gotwtr.SpaceFieldUpdatedAt,
+			gotwtr.SpaceFieldScheduledStart,
+			gotwtr.SpaceFieldIsTicketed,
+		},
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, s := range ssr.Spaces {
+		fmt.Println(s)
+	}
+	fmt.Println(ssr.Meta.ResultCount)
 }
-func ExampleClient_ () {
+
+func ExampleClient_SearchSpaces_noOption() {
 	client := gotwtr.New("key")
-}
-func ExampleClient_ () {
-	client := gotwtr.New("key")
-}
-func ExampleClient_ () {
-	client := gotwtr.New("key")
-}
-func ExampleClient_ () {
-	client := gotwtr.New("key")
-}
-func ExampleClient_ () {
-	client := gotwtr.New("key")
-}
-func ExampleClient_ () {
-	client := gotwtr.New("key")
-}
-func ExampleClient_ () {
-	client := gotwtr.New("key")
-}
-func ExampleClient_ () {
-	client := gotwtr.New("key")
-}
-func ExampleClient_ () {
-	client := gotwtr.New("key")
-}
-func ExampleClient_ () {
-	client := gotwtr.New("key")
-}
-func ExampleClient_ () {
-	client := gotwtr.New("key")
-}
-func ExampleClient_ () {
-	client := gotwtr.New("key")
+	ssr, err := client.SearchSpaces(context.Background(), "hello")
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, s := range ssr.Spaces {
+		fmt.Println(s)
+	}
 }
