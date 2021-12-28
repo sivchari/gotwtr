@@ -253,7 +253,7 @@ func ExampleClient_UsersLikingTweet_option() {
 	}
 }
 
-func ExampleClient_RetriveMultipleUsersWithIDs() {
+func ExampleClient_RetrieveMultipleUsersWithIDs() {
 	client := gotwtr.New("key")
 	us, err := client.RetrieveMultipleUsersWithIDs(context.Background(), []string{"id", "id2"})
 	if err != nil {
@@ -264,7 +264,7 @@ func ExampleClient_RetriveMultipleUsersWithIDs() {
 	}
 }
 
-func ExampleClient_RetriveMultipleUsersWithUserNames() {
+func ExampleClient_RetrieveMultipleUsersWithUserNames() {
 	client := gotwtr.New("key")
 	uns, err := client.RetrieveMultipleUsersWithUserNames(context.Background(), []string{"username", "username2"})
 	if err != nil {
@@ -275,7 +275,7 @@ func ExampleClient_RetriveMultipleUsersWithUserNames() {
 	}
 }
 
-func ExampleClient_RetriveSingleUserWithID() {
+func ExampleClient_RetrieveSingleUserWithID() {
 	client := gotwtr.New("key")
 	u, err := client.RetrieveSingleUserWithID(context.Background(), "id")
 	if err != nil {
@@ -284,7 +284,7 @@ func ExampleClient_RetriveSingleUserWithID() {
 	fmt.Println(*u.User)
 }
 
-func ExampleClient_RetriveSingleUserWithUserName() {
+func ExampleClient_RetrieveSingleUserWithUserName() {
 	client := gotwtr.New("key")
 	un, err := client.RetrieveSingleUserWithUserName(context.Background(), "username")
 	if err != nil {
