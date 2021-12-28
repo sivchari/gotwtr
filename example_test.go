@@ -108,7 +108,7 @@ func ExampleClient_AddOrDeleteRules_delete() {
 	// retrieve Stream rules
 	ts, err := client.RetrieveStreamRules(context.Background())
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 	var ids []string
 	for _, t := range ts.Rules {
@@ -123,7 +123,7 @@ func ExampleClient_AddOrDeleteRules_delete() {
 		},
 	})
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 }
 
@@ -423,7 +423,7 @@ func ExampleClient_DiscoverSpaces_option() {
 		},
 	})
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 	fmt.Println("---")
 	for _, t := range dsr.Spaces {
