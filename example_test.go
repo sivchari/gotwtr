@@ -316,3 +316,132 @@ func ExampleClient_Followers() {
 		fmt.Println(u)
 	}
 }
+
+func ExampleClient_LookUpAllListsOwned () {
+	client := gotwtr.New("key")
+	ls, err := client.LookUpAllListsOwned(context.Background(), "id")
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, l := range ls.Lists {
+		fmt.Println(l)
+	}
+}
+
+func ExampleClient_LookUpList () {
+	client := gotwtr.New("key")
+	l, err := client.LookUpList(context.Background(), "id")
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(*l.List)
+}
+
+func ExampleClient_LookUpListFollowers () {
+	client := gotwtr.New("key")
+	us, err := client.LookUpListFollowers(context.Background(), "id")
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, u := range us.Users {
+		fmt.Println(u)
+	}
+}
+
+func ExampleClient_LookUpAllListsUserFollows () {
+	client := gotwtr.New("key")
+	ls, err := client.LookUpAllListsUserFollows(context.Background(), "id")
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, l := range ls.Lists {
+		fmt.Println(l)
+	}
+}
+
+func ExampleClient_ListsSpecifiedUser () {
+	client := gotwtr.New("key")
+	lmr, err := client.ListsSpecifiedUser(context.Background(), "84839422")
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, lm := range lmr.Lists {
+		fmt.Println(lm)
+	}
+}
+
+func ExampleClient_ListMembers () {
+	client := gotwtr.New("key")
+	lms, err := client.ListMembers(context.Background(), "listid")
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, lm := range lms.Users {
+		fmt.Println(lm)
+	}
+}
+func ExampleClient_LookUpListTweets () {
+	client := gotwtr.New("key")
+	ts, err := client.LookUpListTweets(context.Background(), "id")
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, t := range ts.Tweets {
+		fmt.Println(t)
+	}
+}
+
+func ExampleClient_ () {
+	client := gotwtr.New("key")
+}
+func ExampleClient_ () {
+	client := gotwtr.New("key")
+}
+func ExampleClient_ () {
+	client := gotwtr.New("key")
+}
+func ExampleClient_ () {
+	client := gotwtr.New("key")
+}
+func ExampleClient_ () {
+	client := gotwtr.New("key")
+}
+func ExampleClient_ () {
+	client := gotwtr.New("key")
+}
+func ExampleClient_ () {
+	client := gotwtr.New("key")
+}
+func ExampleClient_ () {
+	client := gotwtr.New("key")
+}
+func ExampleClient_ () {
+	client := gotwtr.New("key")
+}
+func ExampleClient_ () {
+	client := gotwtr.New("key")
+}
+func ExampleClient_ () {
+	client := gotwtr.New("key")
+}
+func ExampleClient_ () {
+	client := gotwtr.New("key")
+}
+func ExampleClient_ () {
+	client := gotwtr.New("key")
+}
+func ExampleClient_ () {
+	client := gotwtr.New("key")
+}
+func ExampleClient_ () {
+	client := gotwtr.New("key")
+}
+func ExampleClient_ () {
+	client := gotwtr.New("key")
+}
+func ExampleClient_ () {
+	client := gotwtr.New("key")
+}
+func ExampleClient_ () {
+	client := gotwtr.New("key")
+}
