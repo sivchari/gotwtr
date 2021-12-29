@@ -309,7 +309,7 @@ func Test_postRetweet(t *testing.T) {
 						]
 					}`
 					return &http.Response{
-						StatusCode: http.StatusBadRequest,
+						StatusCode: http.StatusForbidden,
 						Body:       io.NopCloser(strings.NewReader(body)),
 					}
 				}),
@@ -520,7 +520,7 @@ func Test_undoRetweet(t *testing.T) {
 						]
 					}`
 					return &http.Response{
-						StatusCode: http.StatusBadRequest,
+						StatusCode: http.StatusForbidden,
 						Body:       io.NopCloser(strings.NewReader(body)),
 					}
 				}),
