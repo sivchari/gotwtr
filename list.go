@@ -101,3 +101,28 @@ type ListsSpecifiedUserResponse struct {
 	Detail   string              `json:"detail,omitempty"`
 	Type     string              `json:"type,omitempty"`
 }
+
+type CreateNewListResponse struct {
+	Data CreateNewListData `json:"data"`
+}
+
+type CreateNewListData struct {
+	ID   string `json:"id"`
+	Name string `json:"name"`
+}
+
+type DeleteListResponse struct {
+	Data DeleteListData `json:"data"`
+}
+
+type DeleteListData struct {
+	Deleted bool `json:"deleted"`
+}
+
+type UpdateMetaDataForListResponse struct {
+	Data UpdateMetaDataForListData `json:"data"`
+}
+
+type UpdateMetaDataForListData struct {
+	Updated bool `json:"updated"`
+}

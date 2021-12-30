@@ -208,6 +208,46 @@ func (l *ListsSpecifiedUserOption) addQuery(req *http.Request) {
 	}
 }
 
+type CreateNewListOption struct {
+	Description string
+	Private     string
+}
+
+func (l *CreateNewListOption) addQuery(req *http.Request) {
+	q := req.URL.Query()
+	if l.Description != "" {
+		q.Add("description", l.Description)
+	}
+	if l.Private != "" {
+		q.Add("private", l.Private)
+	}
+	if len(q) > 0 {
+		req.URL.RawQuery = q.Encode()
+	}
+}
+
+type UpdateMetaDataForListOption struct {
+	Description string
+	Name        string
+	Private     string
+}
+
+func (l *UpdateMetaDataForListOption) addQuery(req *http.Request) {
+	q := req.URL.Query()
+	if l.Description != "" {
+		q.Add("description", l.Description)
+	}
+	if l.Name != "" {
+		q.Add("name", l.Name)
+	}
+	if l.Private != "" {
+		q.Add("private", l.Private)
+	}
+	if len(q) > 0 {
+		req.URL.RawQuery = q.Encode()
+	}
+}
+
 func listFieldsToString(lfs []ListField) []string {
 	slice := make([]string, len(lfs))
 	for i, lf := range lfs {

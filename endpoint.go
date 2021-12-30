@@ -40,6 +40,7 @@ const (
 	lookUpListTweetsURL          = "https://api.twitter.com/2/lists/%v/tweets"
 	listsSpecifiedUserURL        = "https://api.twitter.com/2/users/%v/list_memberships"
 	listMembersURL               = "https://api.twitter.com/2/lists/%v/members"
+	listURL                      = "https://api.twitter.com/2/lists"
 	lookUpListFollowersURL       = "https://api.twitter.com/2/lists/%v/followers"
 	lookUpAllListsUserFollowsURL = "https://api.twitter.com/2/users/%v/followed_lists"
 )

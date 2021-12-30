@@ -48,6 +48,8 @@ type Spaces interface {
 }
 
 type Lists interface {
+	CreateNewList(ctx context.Context, listName string, opt ...*CreateNewListOption) (*CreateNewListResponse, error)
+	DeleteList(ctx context.Context, listID string) (*DeleteListResponse, error)
 	LookUpList(ctx context.Context, listID string, opt ...*LookUpListOption) (*ListResponse, error)
 	LookUpAllListsOwned(ctx context.Context, userID string, opt ...*AllListsOwnedOption) (*AllListsOwnedResponse, error)
 	LookUpListTweets(ctx context.Context, listID string, opt ...*ListTweetsOption) (*ListTweetsResponse, error)
@@ -55,6 +57,7 @@ type Lists interface {
 	ListsSpecifiedUser(ctx context.Context, userID string, opt ...*ListsSpecifiedUserOption) (*ListsSpecifiedUserResponse, error)
 	LookUpListFollowers(ctx context.Context, listID string, opt ...*ListFollowersOption) (*ListFollowersResponse, error)
 	LookUpAllListsUserFollows(ctx context.Context, userID string, opt ...*ListFollowsOption) (*AllListsUserFollowsResponse, error)
+	UpdateMetaDataForList(ctx context.Context, listID string, opt ...*UpdateMetaDataForListOption) (*UpdateMetaDataForListResponse, error)
 }
 
 // Twtr is a main interface for all Twitter API calls.
@@ -227,6 +230,16 @@ func (c *Client) SearchSpaces(ctx context.Context, searchTerm string, opt ...*Se
 	return searchSpaces(ctx, c.client, searchTerm, opt...)
 }
 
+// Enables the authenticated user to create a List.
+func (c *Client) CreateNewList(ctx context.Context, listName string, opt ...*CreateNewListOption) (*CreateNewListResponse, error) {
+	return createNewList(ctx, c.client, listName, opt...)
+}
+
+// DeleteList enables the authenticated user to delete a List that they own.
+func (c *Client) DeleteList(ctx context.Context, listID string) (*DeleteListResponse, error) {
+	return deleteList(ctx, c.client, listID)
+}
+
 // LookUpList returns the details of a specified List.
 func (c *Client) LookUpList(ctx context.Context, listID string, opt ...*LookUpListOption) (*ListResponse, error) {
 	return lookUpList(ctx, c.client, listID, opt...)
@@ -260,4 +273,9 @@ func (c *Client) LookUpListFollowers(ctx context.Context, listID string, opt ...
 // LookUpAllListsUserFollows returns all Lists a specified user follows.
 func (c *Client) LookUpAllListsUserFollows(ctx context.Context, userID string, opt ...*ListFollowsOption) (*AllListsUserFollowsResponse, error) {
 	return lookUpAllListsUserFollows(ctx, c.client, userID, opt...)
+}
+
+// Enables the authenticated user to update the meta data of a specified List that they own.
+func (c *Client) UpdateMetaDataForList(ctx context.Context, listID string, opt ...*UpdateMetaDataForListOption) (*UpdateMetaDataForListResponse, error) {
+	return updateMetaDataForList(ctx, c.client, listID, opt...)
 }
