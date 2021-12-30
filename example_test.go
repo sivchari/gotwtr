@@ -305,3 +305,56 @@ func ExampleClient_Followers() {
 		fmt.Println(user)
 	}
 }
+
+func ExampleClient_LookUpSpace() {
+	client := gotwtr.New("key")
+	s, err := client.LookUpSpace(context.Background(), "id")
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(s)
+}
+
+func ExampleClient_LookUpSpaces() {
+	client := gotwtr.New("key")
+	ss, err := client.LookUpSpaces(context.Background(), []string{"id", "id2"})
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, s := range ss.Spaces {
+		fmt.Println(s)
+	}
+}
+
+func ExampleClient_UsersPurchasedSpaceTicket() {
+	client := gotwtr.New("key")
+	tickets, err := client.UsersPurchasedSpaceTicket(context.Background(), "id")
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, user := range tickets.Users {
+		fmt.Println(user)
+	}
+}
+
+func ExampleClient_DiscoverSpaces() {
+	client := gotwtr.New("key")
+	discover, err := client.DiscoverSpaces(context.Background(), []string{"id", "id2"})
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, space := range discover.Spaces {
+		fmt.Println(space)
+	}
+}
+
+func ExampleClient_SearchSpaces() {
+	client := gotwtr.New("key")
+	spaces, err := client.SearchSpaces(context.Background(), "query")
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, space := range spaces.Spaces {
+		fmt.Println(space)
+	}
+}
