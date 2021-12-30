@@ -358,3 +358,78 @@ func ExampleClient_SearchSpaces() {
 		fmt.Println(space)
 	}
 }
+
+func ExampleClient_LookUpList() {
+	client := gotwtr.New("key")
+	l, err := client.LookUpList(context.Background(), "id")
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(l)
+}
+
+func ExampleClient_LookUpAllListsOwned() {
+	client := gotwtr.New("key")
+	lists, err := client.LookUpAllListsOwned(context.Background(), "id")
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, list := range lists.Lists {
+		fmt.Println(list)
+	}
+}
+
+func ExampleClient_LookUpListTweets() {
+	client := gotwtr.New("key")
+	lt, err := client.LookUpListTweets(context.Background(), "id")
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, tweet := range lt.Tweets {
+		fmt.Println(tweet)
+	}
+}
+
+func ExampleClient_ListMembers() {
+	client := gotwtr.New("key")
+	members, err := client.ListMembers(context.Background(), "id")
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, member := range members.Users {
+		fmt.Println(member)
+	}
+}
+
+func ExampleClient_ListsSpecifiedUser() {
+	client := gotwtr.New("key")
+	lists, err := client.ListsSpecifiedUser(context.Background(), "id")
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, list := range lists.Lists {
+		fmt.Println(list)
+	}
+}
+
+func ExampleClient_LookUpListFollowers() {
+	client := gotwtr.New("key")
+	followers, err := client.LookUpListFollowers(context.Background(), "id")
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, user := range followers.Users {
+		fmt.Println(user)
+	}
+}
+
+func ExampleClient_LookUpAllListsUserFollows() {
+	client := gotwtr.New("key")
+	lists, err := client.LookUpAllListsUserFollows(context.Background(), "id")
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, list := range lists.Lists {
+		fmt.Println(list)
+	}
+}
