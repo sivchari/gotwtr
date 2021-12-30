@@ -222,7 +222,7 @@ func ExampleClient_RetweetsLookup() {
 	fmt.Println(t)
 }
 
-func ExampleClient_TweetsUserLiked_noOption() {
+func ExampleClient_TweetsUserLiked() {
 	client := gotwtr.New("key")
 	tulr, err := client.TweetsUserLiked(context.Background(), "user_id")
 	if err != nil {
@@ -232,22 +232,7 @@ func ExampleClient_TweetsUserLiked_noOption() {
 		fmt.Printf("id: %s, text: %s\n", tweet.ID, tweet.Text)
 	}
 }
-
-func ExampleClient_TweetsUserLiked_option() {
-	client := gotwtr.New("key")
-	tulr, err := client.TweetsUserLiked(context.Background(), "user_id", &gotwtr.TweetsUserLikedOpts{
-		TweetFields: []gotwtr.TweetField{gotwtr.TweetFieldCreatedAt, gotwtr.TweetFieldSource},
-		MaxResults:  10,
-	})
-	if err != nil {
-		log.Fatal(err)
-	}
-	for _, tweet := range tulr.Tweets {
-		fmt.Printf("id: %s, text: %s, created_at: %s, source: %s\n", tweet.ID, tweet.Text, tweet.CreatedAt, tweet.Source)
-	}
-}
-
-func ExampleClient_UsersLikingTweet_noOption() {
+func ExampleClient_UsersLikingTweet() {
 	client := gotwtr.New("key")
 	ultr, err := client.UsersLikingTweet(context.Background(), "tweet_id")
 	if err != nil {
@@ -258,22 +243,65 @@ func ExampleClient_UsersLikingTweet_noOption() {
 	}
 }
 
-func ExampleClient_UsersLikingTweet_option() {
+func ExampleClient_RetrieveMultipleUsersWithIDs() {
 	client := gotwtr.New("key")
-	ultr, err := client.UsersLikingTweet(context.Background(), "tweet_id", &gotwtr.UsersLikingTweetOption{
-		Expansions:  []gotwtr.Expansion{gotwtr.ExpansionPinnedTweetID},
-		UserFields:  []gotwtr.UserField{gotwtr.UserFieldCreatedAt},
-		TweetFields: []gotwtr.TweetField{gotwtr.TweetFieldCreatedAt},
-	})
+	// look up users
+	us, err := client.RetrieveMultipleUsersWithIDs(context.Background(), []string{"id", "id2"})
 	if err != nil {
 		log.Fatal(err)
 	}
-	for _, user := range ultr.Users {
-		fmt.Printf("id: %s, name: %s, created_at: %v\n", user.ID, user.UserName, user.CreatedAt)
+	for _, u := range us.Users {
+		fmt.Println(u)
 	}
-	if ultr.Includes != nil {
-		for _, tweet := range ultr.Includes.Tweets {
-			fmt.Printf("tweet_id: %s, created_at: %v\n", tweet.ID, tweet.CreatedAt)
-		}
+}
+
+func ExampleClient_RetrieveSingleUserWithID() {
+	client := gotwtr.New("key")
+	u, err := client.RetrieveSingleUserWithID(context.Background(), "id")
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(u)
+}
+
+func ExampleClient_RetrieveMultipleUsersWithUserNames() {
+	client := gotwtr.New("key")
+	uns, err := client.RetrieveMultipleUsersWithUserNames(context.Background(), []string{"username", "username2"})
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, un := range uns.Users {
+		fmt.Println(un)
+	}
+}
+
+func ExampleClient_RetrieveSingleUserWithUserName() {
+	client := gotwtr.New("key")
+	un, err := client.RetrieveSingleUserWithUserName(context.Background(), "username")
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(un)
+}
+
+func ExampleClient_Following() {
+	client := gotwtr.New("key")
+	f, err := client.Following(context.Background(), "id")
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, user := range f.Users {
+		fmt.Println(user)
+	}
+}
+
+func ExampleClient_Followers() {
+	client := gotwtr.New("key")
+	f, err := client.Followers(context.Background(), "id")
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, user := range f.Users {
+		fmt.Println(user)
 	}
 }
