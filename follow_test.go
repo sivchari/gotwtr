@@ -1578,7 +1578,7 @@ func Test_postFollowing(t *testing.T) {
 						Body:       io.NopCloser(strings.NewReader(body)),
 					}
 				}),
-				userID:  "111111111",
+				userID:       "111111111",
 				targetUserID: "1228393702244134912",
 			},
 			want: &gotwtr.PostFollowingResponse{
@@ -1617,7 +1617,7 @@ func Test_postFollowing(t *testing.T) {
 						Body:       io.NopCloser(strings.NewReader(body)),
 					}
 				}),
-				userID:  "1111111111",
+				userID:       "1111111111",
 				targetUserID: "1228393702244134912",
 			},
 			want: &gotwtr.PostFollowingResponse{
@@ -1746,7 +1746,7 @@ func Test_undoFollowing(t *testing.T) {
 						Body:       io.NopCloser(strings.NewReader(body)),
 					}
 				}),
-				sourceUserID:  "111111111",
+				sourceUserID: "111111111",
 				targetUserID: "1228393702244134912",
 			},
 			want: &gotwtr.UndoFollowingResponse{
@@ -1785,7 +1785,7 @@ func Test_undoFollowing(t *testing.T) {
 						Body:       io.NopCloser(strings.NewReader(body)),
 					}
 				}),
-				sourceUserID:  "1111111111",
+				sourceUserID: "1111111111",
 				targetUserID: "1228393702244134912",
 			},
 			want: &gotwtr.UndoFollowingResponse{
