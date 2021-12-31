@@ -1574,7 +1574,7 @@ func Test_postFollowing(t *testing.T) {
 						]
 					}`
 					return &http.Response{
-						StatusCode: http.StatusBadRequest,
+						StatusCode: http.StatusForbidden,
 						Body:       io.NopCloser(strings.NewReader(body)),
 					}
 				}),
@@ -1742,7 +1742,7 @@ func Test_undoFollowing(t *testing.T) {
 						]
 					}`
 					return &http.Response{
-						StatusCode: http.StatusBadRequest,
+						StatusCode: http.StatusForbidden,
 						Body:       io.NopCloser(strings.NewReader(body)),
 					}
 				}),
