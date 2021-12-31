@@ -111,6 +111,12 @@ type CreateNewListData struct {
 	Name string `json:"name"`
 }
 
+type CreateNewListBody struct {
+	Name        string `json:"name"`
+	Description string `json:"description,omitempty"`
+	Private     string `json:"private,omitempty"`
+}
+
 type DeleteListResponse struct {
 	Data DeleteListData `json:"data"`
 }
@@ -125,4 +131,10 @@ type UpdateMetaDataForListResponse struct {
 
 type UpdateMetaDataForListData struct {
 	Updated bool `json:"updated"`
+}
+
+type UpdateMetaDataForListBody struct {
+	Description string `json:"description,omitempty"`
+	Name        string `json:"name,omitempty"`
+	Private     string `json:"private,omitempty"`
 }

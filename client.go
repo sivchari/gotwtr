@@ -48,7 +48,7 @@ type Spaces interface {
 }
 
 type Lists interface {
-	CreateNewList(ctx context.Context, listName string, opt ...*CreateNewListOption) (*CreateNewListResponse, error)
+	CreateNewList(ctx context.Context, body *CreateNewListBody) (*CreateNewListResponse, error)
 	DeleteList(ctx context.Context, listID string) (*DeleteListResponse, error)
 	LookUpList(ctx context.Context, listID string, opt ...*LookUpListOption) (*ListResponse, error)
 	LookUpAllListsOwned(ctx context.Context, userID string, opt ...*AllListsOwnedOption) (*AllListsOwnedResponse, error)
@@ -57,7 +57,7 @@ type Lists interface {
 	ListsSpecifiedUser(ctx context.Context, userID string, opt ...*ListsSpecifiedUserOption) (*ListsSpecifiedUserResponse, error)
 	LookUpListFollowers(ctx context.Context, listID string, opt ...*ListFollowersOption) (*ListFollowersResponse, error)
 	LookUpAllListsUserFollows(ctx context.Context, userID string, opt ...*ListFollowsOption) (*AllListsUserFollowsResponse, error)
-	UpdateMetaDataForList(ctx context.Context, listID string, opt ...*UpdateMetaDataForListOption) (*UpdateMetaDataForListResponse, error)
+	UpdateMetaDataForList(ctx context.Context, listID string, body ...*UpdateMetaDataForListBody) (*UpdateMetaDataForListResponse, error)
 }
 
 // Twtr is a main interface for all Twitter API calls.
@@ -231,8 +231,8 @@ func (c *Client) SearchSpaces(ctx context.Context, searchTerm string, opt ...*Se
 }
 
 // Enables the authenticated user to create a List.
-func (c *Client) CreateNewList(ctx context.Context, listName string, opt ...*CreateNewListOption) (*CreateNewListResponse, error) {
-	return createNewList(ctx, c.client, listName, opt...)
+func (c *Client) CreateNewList(ctx context.Context, body *CreateNewListBody) (*CreateNewListResponse, error) {
+	return createNewList(ctx, c.client, body)
 }
 
 // DeleteList enables the authenticated user to delete a List that they own.
@@ -276,6 +276,6 @@ func (c *Client) LookUpAllListsUserFollows(ctx context.Context, userID string, o
 }
 
 // Enables the authenticated user to update the meta data of a specified List that they own.
-func (c *Client) UpdateMetaDataForList(ctx context.Context, listID string, opt ...*UpdateMetaDataForListOption) (*UpdateMetaDataForListResponse, error) {
-	return updateMetaDataForList(ctx, c.client, listID, opt...)
+func (c *Client) UpdateMetaDataForList(ctx context.Context, listID string, body ...*UpdateMetaDataForListBody) (*UpdateMetaDataForListResponse, error) {
+	return updateMetaDataForList(ctx, c.client, listID, body...)
 }

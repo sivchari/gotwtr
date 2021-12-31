@@ -1,6 +1,7 @@
 package gotwtr
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"errors"
@@ -9,28 +10,17 @@ import (
 )
 
 //https://developer.twitter.com/en/docs/twitter-api/lists/manage-lists/api-reference/post-lists
-func createNewList(ctx context.Context, c *client, listName string, opt ...*CreateNewListOption) (*CreateNewListResponse, error) {
-	if listName == "" {
-		return nil, errors.New("create new list: tweet id parameter is required")
+func createNewList(ctx context.Context, c *client, body *CreateNewListBody) (*CreateNewListResponse, error) {
+	jsonStr, err := json.Marshal(body)
+	if err != nil {
+		return nil, errors.New("create new list : can not marshal")
 	}
-	ep := fmt.Sprintf(listURL, listName)
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodPost, ep, nil)
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, listURL, bytes.NewBuffer(jsonStr))
 	if err != nil {
 		return nil, fmt.Errorf("create new list new request with ctx: %w", err)
 	}
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.bearerToken))
-
-	var copt CreateNewListOption
-	switch len(opt) {
-	case 0:
-		// do nothing
-	case 1:
-		copt = *opt[0]
-	default:
-		return nil, errors.New("create new list: only one option is allowed")
-	}
-	copt.addQuery(req)
 
 	resp, err := c.client.Do(req)
 	if err != nil {
@@ -88,28 +78,32 @@ func deleteList(ctx context.Context, c *client, listID string) (*DeleteListRespo
 }
 
 //https://developer.twitter.com/en/docs/twitter-api/lists/manage-lists/api-reference/put-lists-id
-func updateMetaDataForList(ctx context.Context, c *client, listName string, opt ...*UpdateMetaDataForListOption) (*UpdateMetaDataForListResponse, error) {
+func updateMetaDataForList(ctx context.Context, c *client, listName string, body ...*UpdateMetaDataForListBody) (*UpdateMetaDataForListResponse, error) {
 	if listName == "" {
 		return nil, errors.New("update meta data for list: tweet id parameter is required")
 	}
 	ep := fmt.Sprintf(lookUpListURL, listName)
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodPut, ep, nil)
+	var ubody UpdateMetaDataForListBody
+	switch len(body) {
+	case 0:
+		// do nothing
+	case 1:
+		ubody = *body[0]
+	default:
+		return nil, errors.New("update meta data for list: only one option is allowed")
+	}
+
+	jsonStr, err := json.Marshal(ubody)
+	if err != nil {
+		return nil, errors.New("create new list : can not marshal")
+	}
+
+	req, err := http.NewRequestWithContext(ctx, http.MethodPut, ep, bytes.NewBuffer(jsonStr))
 	if err != nil {
 		return nil, fmt.Errorf("update meta data for list new request with ctx: %w", err)
 	}
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.bearerToken))
-
-	var copt UpdateMetaDataForListOption
-	switch len(opt) {
-	case 0:
-		// do nothing
-	case 1:
-		copt = *opt[0]
-	default:
-		return nil, errors.New("update meta data for list: only one option is allowed")
-	}
-	copt.addQuery(req)
 
 	resp, err := c.client.Do(req)
 	if err != nil {
