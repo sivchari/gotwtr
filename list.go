@@ -103,7 +103,7 @@ type ListsSpecifiedUserResponse struct {
 }
 
 type CreateNewListResponse struct {
-	Data CreateNewListData `json:"data"`
+	Data *CreateNewListData `json:"data"`
 }
 
 type CreateNewListData struct {
@@ -114,11 +114,11 @@ type CreateNewListData struct {
 type CreateNewListBody struct {
 	Name        string `json:"name"`
 	Description string `json:"description,omitempty"`
-	Private     string `json:"private,omitempty"`
+	Private     bool   `json:"private,omitempty"`
 }
 
 type DeleteListResponse struct {
-	Data DeleteListData `json:"data"`
+	Data *DeleteListData `json:"data"`
 }
 
 type DeleteListData struct {
@@ -126,7 +126,7 @@ type DeleteListData struct {
 }
 
 type UpdateMetaDataForListResponse struct {
-	Data UpdateMetaDataForListData `json:"data"`
+	Data *UpdateMetaDataForListData `json:"data"`
 }
 
 type UpdateMetaDataForListData struct {

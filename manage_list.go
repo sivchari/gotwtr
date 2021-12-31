@@ -78,11 +78,11 @@ func deleteList(ctx context.Context, c *client, listID string) (*DeleteListRespo
 }
 
 //https://developer.twitter.com/en/docs/twitter-api/lists/manage-lists/api-reference/put-lists-id
-func updateMetaDataForList(ctx context.Context, c *client, listName string, body ...*UpdateMetaDataForListBody) (*UpdateMetaDataForListResponse, error) {
-	if listName == "" {
+func updateMetaDataForList(ctx context.Context, c *client, listID string, body ...*UpdateMetaDataForListBody) (*UpdateMetaDataForListResponse, error) {
+	if listID == "" {
 		return nil, errors.New("update meta data for list: tweet id parameter is required")
 	}
-	ep := fmt.Sprintf(lookUpListURL, listName)
+	ep := fmt.Sprintf(lookUpListURL, listID)
 
 	var ubody UpdateMetaDataForListBody
 	switch len(body) {
