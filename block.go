@@ -51,12 +51,12 @@ func blocking(ctx context.Context, c *client, userID string, opt ...*BlockOption
 
 func postBlocking(ctx context.Context, c *client, userID string, targetUserID string) (*PostBlockingResponse, error) {
 	if userID == "" {
-		return nil, errors.New("post blocking by userID: userID parameter is required")
+		return nil, errors.New("post blocking: userID parameter is required")
 	}
 	ep := fmt.Sprintf(postBlockingURL, userID)
 
 	if targetUserID == "" {
-		return nil, errors.New("post blocking by targetUserID: targetUserID parameter is required")
+		return nil, errors.New("post blocking: targetUserID parameter is required")
 	}
 	body := &BlockingBody{
 		TargetUserID: targetUserID,
@@ -94,13 +94,12 @@ func postBlocking(ctx context.Context, c *client, userID string, targetUserID st
 	return &postBlocking, nil
 }
 
-// suid = "source_user_id" tuid = "target_user_id"
 func undoBlocking(ctx context.Context, c *client, sourceUserID string, targetUserID string) (*UndoBlockingResponse, error) {
 	if sourceUserID == "" {
-		return nil, errors.New("undo blocking by sourceUserID: sourceUserID parameter is required")
+		return nil, errors.New("undo blocking: sourceUserID parameter is required")
 	}
 	if targetUserID == "" {
-		return nil, errors.New("undo blocking by targetUserID: targetUserID parameter is required")
+		return nil, errors.New("undo blocking: targetUserID parameter is required")
 	}
 	ep := fmt.Sprintf(undoBlockingURL, sourceUserID, targetUserID)
 

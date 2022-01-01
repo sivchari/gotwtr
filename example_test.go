@@ -306,6 +306,35 @@ func ExampleClient_Followers() {
 	}
 }
 
+func ExampleClient_Blocking() {
+	client := gotwtr.New("key")
+	b, err := client.Blocking(context.Background(), "user_id")
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, user := range b.Users {
+		fmt.Println(user)
+	}
+}
+
+func ExampleClient_PostBlocking() {
+	client := gotwtr.New("key")
+	pb, err := client.PostBlocking(context.Background(), "user_id", "target_user_id")
+	if err != nil {
+		log.Println(err)
+	}
+	fmt.Println(pb)
+}
+
+func ExampleClient_UndoBlocking() {
+	client := gotwtr.New("key")
+	ub, err := client.UndoBlocking(context.Background(), "source_user_id", "target_user_id")
+	if err != nil {
+		log.Println(err)
+	}
+	fmt.Println(ub)
+}
+
 func ExampleClient_LookUpSpace() {
 	client := gotwtr.New("key")
 	s, err := client.LookUpSpace(context.Background(), "id")

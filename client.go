@@ -45,8 +45,8 @@ type Users interface {
 	Followers(ctx context.Context, userID string, opt ...*FollowOption) (*FollowersResponse, error)
 	Following(ctx context.Context, userID string, opt ...*FollowOption) (*FollowingResponse, error)
 	Blocking(ctx context.Context, userID string, opt ...*BlockOption) (*BlockingResponse, error)
-	PostBlocking(ctx context.Context, userID string, tuid string) (*PostBlockingResponse, error)
-	UndoBlocking(ctx context.Context, suid string, tuid string) (*UndoBlockingResponse, error)
+	PostBlocking(ctx context.Context, userID string, targetUserID string) (*PostBlockingResponse, error)
+	UndoBlocking(ctx context.Context, sourceUserID string, targetUserID string) (*UndoBlockingResponse, error)
 }
 
 type Spaces interface {
