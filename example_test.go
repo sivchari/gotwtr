@@ -324,6 +324,24 @@ func ExampleClient_Followers() {
 	}
 }
 
+func ExampleClient_PostFollowing() {
+	client := gotwtr.New("key")
+	pf, err := client.PostFollowing(context.Background(), "user_id", "target_user_id")
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(pf)
+}
+
+func ExampleClient_UndoFollowing() {
+	client := gotwtr.New("key")
+	uf, err := client.UndoFollowing(context.Background(), "source_user_id", "target_user_id")
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(uf)
+}
+
 func ExampleClient_LookUpSpace() {
 	client := gotwtr.New("key")
 	s, err := client.LookUpSpace(context.Background(), "id")
