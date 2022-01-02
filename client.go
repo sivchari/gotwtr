@@ -47,6 +47,8 @@ type Users interface {
 	RetrieveSingleUserWithUserName(ctx context.Context, userName string, opt ...*RetrieveUserOption) (*UserResponse, error)
 	Followers(ctx context.Context, userID string, opt ...*FollowOption) (*FollowersResponse, error)
 	Following(ctx context.Context, userID string, opt ...*FollowOption) (*FollowingResponse, error)
+	PostFollowing(ctx context.Context, userID string, targetUserID string) (*PostFollowingResponse, error)
+	UndoFollowing(ctx context.Context, sourceUserID string, targetUserID string) (*UndoFollowingResponse, error)
 }
 
 type Spaces interface {
@@ -248,6 +250,17 @@ func (c *Client) Followers(ctx context.Context, userID string, opt ...*FollowOpt
 // Following returns a list of users the specified userID is following.
 func (c *Client) Following(ctx context.Context, userID string, opt ...*FollowOption) (*FollowingResponse, error) {
 	return following(ctx, c.client, userID, opt...)
+}
+
+// PostFollowing allows a user ID to follow another user.
+// If the target user does not have public Tweets, this method will send a follow request.
+func (c *Client) PostFollowing(ctx context.Context, userID string, targetUserID string) (*PostFollowingResponse, error) {
+	return postFollowing(ctx, c.client, userID, targetUserID)
+}
+
+// UndoFollowing allows a user ID to unfollow another user.
+func (c *Client) UndoFollowing(ctx context.Context, sourceUserID string, targetUserID string) (*UndoFollowingResponse, error) {
+	return undoFollowing(ctx, c.client, sourceUserID, targetUserID)
 }
 
 // LookUpSpace returns a variety of information about a single Space specified by the requested ID.

@@ -1,6 +1,7 @@
 package gotwtr
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"errors"
@@ -120,4 +121,85 @@ func following(ctx context.Context, c *client, userID string, opt ...*FollowOpti
 	}
 
 	return &f, nil
+}
+
+func postFollowing(ctx context.Context, c *client, userID string, targetUserID string) (*PostFollowingResponse, error) {
+	if userID == "" {
+		return nil, errors.New("post following: userID parameter is required")
+	}
+	ep := fmt.Sprintf(postFollowingURL, userID)
+
+	if targetUserID == "" {
+		return nil, errors.New("post following: targetUserID parameter is required")
+	}
+	body := &FollowingBody{
+		TargetUserID: targetUserID,
+	}
+	jsonStr, err := json.Marshal(body)
+	if err != nil {
+		return nil, errors.New("post following: can not marshal")
+	}
+
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, ep, bytes.NewBuffer(jsonStr))
+	if err != nil {
+		return nil, fmt.Errorf("post following new request with ctx: %w", err)
+	}
+	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.bearerToken))
+	req.Header.Set("Content-Type", "application/json")
+
+	resp, err := c.client.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("post following response: %w", err)
+	}
+	defer resp.Body.Close()
+
+	var postFollowing PostFollowingResponse
+	if err := json.NewDecoder(resp.Body).Decode(&postFollowing); err != nil {
+		return nil, fmt.Errorf("post following decode: %w", err)
+	}
+	if resp.StatusCode != http.StatusOK {
+		return &postFollowing, &HTTPError{
+			APIName: "post following",
+			Status:  resp.Status,
+			URL:     req.URL.String(),
+		}
+	}
+
+	return &postFollowing, nil
+}
+
+func undoFollowing(ctx context.Context, c *client, sourceUserID string, targetUserID string) (*UndoFollowingResponse, error) {
+	if sourceUserID == "" {
+		return nil, errors.New("undo following: sourceUserID parameter is required")
+	}
+	if targetUserID == "" {
+		return nil, errors.New("undo following: targetUserID parameter is required")
+	}
+	ep := fmt.Sprintf(undoFollowingURL, sourceUserID, targetUserID)
+
+	req, err := http.NewRequestWithContext(ctx, http.MethodDelete, ep, nil)
+	if err != nil {
+		return nil, fmt.Errorf("undo following new request with ctx: %w", err)
+	}
+	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.bearerToken))
+
+	resp, err := c.client.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("undo following response: %w", err)
+	}
+	defer resp.Body.Close()
+
+	var undoFollowing UndoFollowingResponse
+	if err := json.NewDecoder(resp.Body).Decode(&undoFollowing); err != nil {
+		return nil, fmt.Errorf("undo following decode: %w", err)
+	}
+	if resp.StatusCode != http.StatusOK {
+		return &undoFollowing, &HTTPError{
+			APIName: "undo following",
+			Status:  resp.Status,
+			URL:     req.URL.String(),
+		}
+	}
+
+	return &undoFollowing, nil
 }
