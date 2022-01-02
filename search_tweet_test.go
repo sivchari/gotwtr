@@ -300,7 +300,32 @@ func Test_searchAllTweets(t *testing.T) {
 			want:    nil,
 			wantErr: true,
 		},
-		// TODO: Add test cases with request fieds (tweet, user, etc.)
+		{
+			name: "invalid case over character length",
+			args: args{
+				ctx:    context.Background(),
+				client: nil,
+				query:  strings.Repeat("q", 513),
+				opt:    []*gotwtr.SearchTweetsOption{},
+			},
+			want:    nil,
+			wantErr: true,
+		},
+		{
+			name: "invalid case max result over 500",
+			args: args{
+				ctx:    context.Background(),
+				client: nil,
+				query:  "nyc",
+				opt: []*gotwtr.SearchTweetsOption{
+					{
+						MaxResults: 501,
+					},
+				},
+			},
+			want:    nil,
+			wantErr: true,
+		},
 	}
 
 	for _, tt := range tests {
