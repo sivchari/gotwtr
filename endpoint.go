@@ -18,6 +18,8 @@ const (
 	connectToStreamURL        = "https://api.twitter.com/2/tweets/search/stream"
 	volumeStreamsURL          = "https://api.twitter.com/2/tweets/sample/stream"
 	retweetsLookupURL         = "https://api.twitter.com/2/tweets/%v/retweeted_by"
+	postRetweetURL            = "https://api.twitter.com/2/users/%v/retweets"
+	undoRetweetURL            = "https://api.twitter.com/2/users/%v/retweets/%v"
 	usersLikingTweetURL       = "https://api.twitter.com/2/tweets/%v/liking_users"
 	tweetsUserLikedURL        = "https://api.twitter.com/2/users/%v/liked_tweets"
 	searchAllTweetsURL        = "https://api.twitter.com/2/tweets/search/all?query=%v"

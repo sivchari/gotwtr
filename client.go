@@ -33,6 +33,8 @@ type Tweets interface {
 	ConnectToStream(ctx context.Context, ch chan<- ConnectToStreamResponse, errCh chan<- error, opt ...*ConnectToStreamOption) *ConnectToStream
 	VolumeStreams(ctx context.Context, ch chan<- VolumeStreamsResponse, errCh chan<- error, opt ...*VolumeStreamsOption) *VolumeStreams
 	RetweetsLookup(ctx context.Context, tweetID string, opt ...*RetweetsLookupOption) (*RetweetsResponse, error)
+	PostRetweet(ctx context.Context, userID string, tweetID string) (*PostRetweetResponse, error)
+	UndoRetweet(ctx context.Context, userID string, sourceTweetID string) (*UndoRetweetResponse, error)
 	TweetsUserLiked(ctx context.Context, userID string, opt ...*TweetsUserLikedOpts) (*TweetsUserLikedResponse, error)
 	UsersLikingTweet(ctx context.Context, tweetID string, opt ...*UsersLikingTweetOption) (*UsersLikingTweetResponse, error)
 	SearchAllTweets(ctx context.Context, tweet string, opt ...*SearchTweetsOption) (*SearchTweetsResponse, error)
@@ -195,6 +197,16 @@ func (c *Client) VolumeStreams(ctx context.Context, ch chan<- VolumeStreamsRespo
 // RetweetsLookup allows you to get information about who has Retweeted a Tweet.
 func (c *Client) RetweetsLookup(ctx context.Context, tweetID string, opt ...*RetweetsLookupOption) (*RetweetsResponse, error) {
 	return retweetsLookup(ctx, c.client, tweetID, opt...)
+}
+
+// PostRetweet causes the user ID identified in the path parameter to Retweet the target Tweet.
+func (c *client) PostRetweet(ctx context.Context, userID string, tweetID string) (*PostRetweetResponse, error) {
+	return postRetweet(ctx, c, userID, tweetID)
+}
+
+// UndoRetweet allows a user or authenticated user ID to remove the Retweet of a Tweet.
+func (c *client) UndoRetweet(ctx context.Context, userID string, sourceTweetID string) (*UndoRetweetResponse, error) {
+	return undoRetweet(ctx, c, userID, sourceTweetID)
 }
 
 // TweetsUserLiked allows you to get information about a Tweet’s liking users.

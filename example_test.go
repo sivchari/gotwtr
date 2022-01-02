@@ -222,6 +222,24 @@ func ExampleClient_RetweetsLookup() {
 	fmt.Println(t)
 }
 
+func ExampleClient_PostRetweet() {
+	client := gotwtr.New("key")
+	pr, err := client.PostRetweet(context.Background(), "uid", "tid")
+	if err != nil {
+		log.Println(err)
+	}
+	fmt.Println(pr)
+}
+
+func ExampleClient_UndoRetweet() {
+	client := gotwtr.New("key")
+	ur, err := client.UndoRetweet(context.Background(), "id", "stid")
+	if err != nil {
+		log.Println(err)
+	}
+	fmt.Println(ur)
+}
+
 func ExampleClient_TweetsUserLiked() {
 	client := gotwtr.New("key")
 	tulr, err := client.TweetsUserLiked(context.Background(), "user_id")
