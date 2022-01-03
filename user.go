@@ -177,13 +177,17 @@ type BlockingResponse struct {
 }
 
 type PostBlockingResponse struct {
-	Blocking bool                `json:"data"`
+	Blocking *Blocking           `json:"data"`
 	Errors   []*APIResponseError `json:"errors,omitempty"`
 }
 
 type UndoBlockingResponse struct {
-	Blocking bool                `json:"data"`
+	Blocking *Blocking           `json:"data"`
 	Errors   []*APIResponseError `json:"errors,omitempty"`
+}
+
+type Blocking struct {
+	Blocking bool `json:"blocking"`
 }
 
 type BlocksMeta struct {

@@ -748,7 +748,7 @@ func Test_postBlocking(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name: "200 success public user",
+			name: "200 success",
 			args: args{
 				ctx: context.Background(),
 				client: mockHTTPClient(func(req *http.Request) *http.Response {
@@ -757,8 +757,7 @@ func Test_postBlocking(t *testing.T) {
 					}
 					body := `{
 						"data": {
-							"following": true,
-							"pending_follow": false
+							"blocking": true
 						}
 					}`
 					return &http.Response{
@@ -770,34 +769,9 @@ func Test_postBlocking(t *testing.T) {
 				targetUserID: "2244994945",
 			},
 			want: &gotwtr.PostBlockingResponse{
-				Blocking: false,
-			},
-			wantErr: false,
-		},
-		{
-			name: "200 success protected user",
-			args: args{
-				ctx: context.Background(),
-				client: mockHTTPClient(func(req *http.Request) *http.Response {
-					if req.Method != http.MethodPost {
-						t.Fatalf("the method is not correct got %s want %s", req.Method, http.MethodPost)
-					}
-					body := `{
-						"data": {
-							"following": false,
-							"pending_follow": true
-						}
-					}`
-					return &http.Response{
-						StatusCode: http.StatusOK,
-						Body:       io.NopCloser(strings.NewReader(body)),
-					}
-				}),
-				userID:       "6253282",
-				targetUserID: "2244994945",
-			},
-			want: &gotwtr.PostBlockingResponse{
-				Blocking: false,
+				Blocking: &gotwtr.Blocking{
+					Blocking: true,
+				},
 			},
 			wantErr: false,
 		},
@@ -854,7 +828,6 @@ func Test_postBlocking(t *testing.T) {
 				targetUserID: "1228393702244134912",
 			},
 			want: &gotwtr.PostBlockingResponse{
-				Blocking: nil,
 				Errors: []*gotwtr.APIResponseError{
 					{
 						Title:  "Unsupported Authentication",
@@ -893,7 +866,6 @@ func Test_postBlocking(t *testing.T) {
 				targetUserID: "1228393702244134912",
 			},
 			want: &gotwtr.PostBlockingResponse{
-				Blocking: nil,
 				Errors: []*gotwtr.APIResponseError{
 					{
 						Value:        "1111111111",
@@ -951,7 +923,7 @@ func Test_undoBlocking(t *testing.T) {
 					}
 					body := `{
 						"data": {
-							"following": false
+							"blocking": false
 						}
 					}`
 					return &http.Response{
@@ -963,7 +935,9 @@ func Test_undoBlocking(t *testing.T) {
 				targetUserID: "6253282",
 			},
 			want: &gotwtr.UndoBlockingResponse{
-				Blocking: false,
+				Blocking: &gotwtr.Blocking{
+					Blocking: false,
+				},
 			},
 			wantErr: false,
 		},
@@ -1020,7 +994,6 @@ func Test_undoBlocking(t *testing.T) {
 				targetUserID: "1228393702244134912",
 			},
 			want: &gotwtr.UndoBlockingResponse{
-				Blocking: nil,
 				Errors: []*gotwtr.APIResponseError{
 					{
 						Title:  "Unsupported Authentication",
@@ -1059,7 +1032,6 @@ func Test_undoBlocking(t *testing.T) {
 				targetUserID: "1228393702244134912",
 			},
 			want: &gotwtr.UndoBlockingResponse{
-				Blocking: nil,
 				Errors: []*gotwtr.APIResponseError{
 					{
 						Value:        "1111111111",
