@@ -18,8 +18,11 @@ const (
 	connectToStreamURL        = "https://api.twitter.com/2/tweets/search/stream"
 	volumeStreamsURL          = "https://api.twitter.com/2/tweets/sample/stream"
 	retweetsLookupURL         = "https://api.twitter.com/2/tweets/%v/retweeted_by"
+	postRetweetURL            = "https://api.twitter.com/2/users/%v/retweets"
+	undoRetweetURL            = "https://api.twitter.com/2/users/%v/retweets/%v"
 	usersLikingTweetURL       = "https://api.twitter.com/2/tweets/%v/liking_users"
 	tweetsUserLikedURL        = "https://api.twitter.com/2/users/%v/liked_tweets"
+	searchAllTweetsURL        = "https://api.twitter.com/2/tweets/search/all?query=%v"
 )
 
 const (
@@ -29,6 +32,8 @@ const (
 	retrieveSingleUserWithUserNameURL     = "https://api.twitter.com/2/users/by/username/%v"
 	followingURL                          = "https://api.twitter.com/2/users/%v/following"
 	followersURL                          = "https://api.twitter.com/2/users/%v/followers"
+	postFollowingURL                      = "https://api.twitter.com/2/users/%v/following"
+	undoFollowingURL                      = "https://api.twitter.com/2/users/%v/following/%v"
 	blockingURL                           = "https://api.twitter.com/2/users/%v/blocking"
 	postBlockingURL                       = "https://api.twitter.com/2/users/%v/blocking"
 	undoBlockingURL                       = "https://api.twitter.com/2/users/%v/blocking/%v"

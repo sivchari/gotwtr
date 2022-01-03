@@ -222,6 +222,24 @@ func ExampleClient_RetweetsLookup() {
 	fmt.Println(t)
 }
 
+func ExampleClient_PostRetweet() {
+	client := gotwtr.New("key")
+	pr, err := client.PostRetweet(context.Background(), "uid", "tid")
+	if err != nil {
+		log.Println(err)
+	}
+	fmt.Println(pr)
+}
+
+func ExampleClient_UndoRetweet() {
+	client := gotwtr.New("key")
+	ur, err := client.UndoRetweet(context.Background(), "id", "stid")
+	if err != nil {
+		log.Println(err)
+	}
+	fmt.Println(ur)
+}
+
 func ExampleClient_TweetsUserLiked() {
 	client := gotwtr.New("key")
 	tulr, err := client.TweetsUserLiked(context.Background(), "user_id")
@@ -304,6 +322,24 @@ func ExampleClient_Followers() {
 	for _, user := range f.Users {
 		fmt.Println(user)
 	}
+}
+
+func ExampleClient_PostFollowing() {
+	client := gotwtr.New("key")
+	pf, err := client.PostFollowing(context.Background(), "user_id", "target_user_id")
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(pf)
+}
+
+func ExampleClient_UndoFollowing() {
+	client := gotwtr.New("key")
+	uf, err := client.UndoFollowing(context.Background(), "source_user_id", "target_user_id")
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(uf)
 }
 
 func ExampleClient_Blocking() {

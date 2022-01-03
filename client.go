@@ -33,8 +33,11 @@ type Tweets interface {
 	ConnectToStream(ctx context.Context, ch chan<- ConnectToStreamResponse, errCh chan<- error, opt ...*ConnectToStreamOption) *ConnectToStream
 	VolumeStreams(ctx context.Context, ch chan<- VolumeStreamsResponse, errCh chan<- error, opt ...*VolumeStreamsOption) *VolumeStreams
 	RetweetsLookup(ctx context.Context, tweetID string, opt ...*RetweetsLookupOption) (*RetweetsResponse, error)
+	PostRetweet(ctx context.Context, userID string, tweetID string) (*PostRetweetResponse, error)
+	UndoRetweet(ctx context.Context, userID string, sourceTweetID string) (*UndoRetweetResponse, error)
 	TweetsUserLiked(ctx context.Context, userID string, opt ...*TweetsUserLikedOpts) (*TweetsUserLikedResponse, error)
 	UsersLikingTweet(ctx context.Context, tweetID string, opt ...*UsersLikingTweetOption) (*UsersLikingTweetResponse, error)
+	SearchAllTweets(ctx context.Context, tweet string, opt ...*SearchTweetsOption) (*SearchTweetsResponse, error)
 }
 
 type Users interface {
@@ -44,9 +47,14 @@ type Users interface {
 	RetrieveSingleUserWithUserName(ctx context.Context, userName string, opt ...*RetrieveUserOption) (*UserResponse, error)
 	Followers(ctx context.Context, userID string, opt ...*FollowOption) (*FollowersResponse, error)
 	Following(ctx context.Context, userID string, opt ...*FollowOption) (*FollowingResponse, error)
+<<<<<<< HEAD
 	Blocking(ctx context.Context, userID string, opt ...*BlockOption) (*BlockingResponse, error)
 	PostBlocking(ctx context.Context, userID string, targetUserID string) (*PostBlockingResponse, error)
 	UndoBlocking(ctx context.Context, sourceUserID string, targetUserID string) (*UndoBlockingResponse, error)
+=======
+	PostFollowing(ctx context.Context, userID string, targetUserID string) (*PostFollowingResponse, error)
+	UndoFollowing(ctx context.Context, sourceUserID string, targetUserID string) (*UndoFollowingResponse, error)
+>>>>>>> 246619d7cfed5d6e434958600f3e06d584645df8
 }
 
 type Spaces interface {
@@ -162,6 +170,12 @@ func (c *Client) SearchRecentTweets(ctx context.Context, tweet string, opt ...*S
 	return searchRecentTweets(ctx, c.client, tweet, opt...)
 }
 
+// SearchAllTweets returns Tweets since the first Tweet was created on March 26, 2006.
+// This endpoint is only available to those users who have been approved for Academic Research access.
+func (c *client) SearchAllTweets(ctx context.Context, tweet string, opt ...*SearchTweetsOption) (*SearchTweetsResponse, error) {
+	return searchAllTweets(ctx, c, tweet, opt...)
+}
+
 // CountsRecentTweet returns count of Tweets from the last seven days that match a query.
 func (c *Client) CountsRecentTweet(ctx context.Context, tweet string, opt ...*TweetCountsOption) (*TweetCountsResponse, error) {
 	return countsRecentTweet(ctx, c.client, tweet, opt...)
@@ -191,6 +205,16 @@ func (c *Client) VolumeStreams(ctx context.Context, ch chan<- VolumeStreamsRespo
 // RetweetsLookup allows you to get information about who has Retweeted a Tweet.
 func (c *Client) RetweetsLookup(ctx context.Context, tweetID string, opt ...*RetweetsLookupOption) (*RetweetsResponse, error) {
 	return retweetsLookup(ctx, c.client, tweetID, opt...)
+}
+
+// PostRetweet causes the user ID identified in the path parameter to Retweet the target Tweet.
+func (c *client) PostRetweet(ctx context.Context, userID string, tweetID string) (*PostRetweetResponse, error) {
+	return postRetweet(ctx, c, userID, tweetID)
+}
+
+// UndoRetweet allows a user or authenticated user ID to remove the Retweet of a Tweet.
+func (c *client) UndoRetweet(ctx context.Context, userID string, sourceTweetID string) (*UndoRetweetResponse, error) {
+	return undoRetweet(ctx, c, userID, sourceTweetID)
 }
 
 // TweetsUserLiked allows you to get information about a Tweet’s liking users.
@@ -234,6 +258,17 @@ func (c *Client) Following(ctx context.Context, userID string, opt ...*FollowOpt
 	return following(ctx, c.client, userID, opt...)
 }
 
+// PostFollowing allows a user ID to follow another user.
+// If the target user does not have public Tweets, this method will send a follow request.
+func (c *Client) PostFollowing(ctx context.Context, userID string, targetUserID string) (*PostFollowingResponse, error) {
+	return postFollowing(ctx, c.client, userID, targetUserID)
+}
+
+// UndoFollowing allows a user ID to unfollow another user.
+func (c *Client) UndoFollowing(ctx context.Context, sourceUserID string, targetUserID string) (*UndoFollowingResponse, error) {
+	return undoFollowing(ctx, c.client, sourceUserID, targetUserID)
+}
+
 // Blocking returns a list of users who are blocked by the specified user ID.
 func (c *Client) Blocking(ctx context.Context, userID string, opt ...*BlockOption) (*BlockingResponse, error) {
 	return blocking(ctx, c.client, userID, opt...)
@@ -241,13 +276,13 @@ func (c *Client) Blocking(ctx context.Context, userID string, opt ...*BlockOptio
 
 // PostBlocking causes the user (in the path) to block the target user.
 // The user (in the path) must match the user Access Tokens being used to authorize the request.
-func (c *Client) PostBlocking(ctx context.Context, userID string, tuid string) (*PostBlockingResponse, error) {
-	return postBlocking(ctx, c.client, userID, tuid)
+func (c *Client) PostBlocking(ctx context.Context, userID string, targetUserID string) (*PostBlockingResponse, error) {
+	return postBlocking(ctx, c.client, userID, targetUserID)
 }
 
 // UndoBlocking allows a user or authenticated user ID to unblock another user.
-func (c *Client) UndoBlocking(ctx context.Context, suid string, tuid string) (*UndoBlockingResponse, error) {
-	return undoBlocking(ctx, c.client, suid, tuid)
+func (c *Client) UndoBlocking(ctx context.Context, sourceUserID string, targetUserID string) (*UndoBlockingResponse, error) {
+	return undoBlocking(ctx, c.client, sourceUserID, targetUserID)
 }
 
 // LookUpSpace returns a variety of information about a single Space specified by the requested ID.
