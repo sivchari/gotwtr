@@ -33,7 +33,7 @@ func Test_blocking(t *testing.T) {
 					body := `{
 						"data": [
 							{
-								"id": "6253282",
+								"id": "625328",
 								"name": "Twitter API",
 								"username": "TwitterAPI"
 							},
@@ -99,7 +99,7 @@ func Test_blocking(t *testing.T) {
 			want: &gotwtr.BlockingResponse{
 				Users: []*gotwtr.User{
 					{
-						ID:       "6253282",
+						ID:       "625328",
 						Name:     "Twitter API",
 						UserName: "TwitterAPI",
 					},
@@ -166,7 +166,7 @@ func Test_blocking(t *testing.T) {
 					body := `{
 						"data": [
 							{
-								"pinned_tweet_id": "1293595870563381249",
+								"pinned_tweet_id": "129359587056338124",
 								"id": "6253282",
 								"username": "TwitterAPI",
 								"name": "Twitter API"
@@ -429,7 +429,7 @@ func Test_blocking(t *testing.T) {
 			want: &gotwtr.BlockingResponse{
 				Users: []*gotwtr.User{
 					{
-						PinnedTweetID: "1293595870563381249",
+						PinnedTweetID: "129359587056338124",
 						ID:            "6253282",
 						UserName:      "TwitterAPI",
 						Name:          "Twitter API",
@@ -680,10 +680,10 @@ func Test_blocking(t *testing.T) {
 							{
 								"parameters":{
 									"id":[
-										"1111111111111111111111"
+										"11111111111111111111111122"
 									]
 								},
-								"message":"The id query parameter value [1111111111111111111111] is not valid"
+								"message":"The id query parameter value [11111111111111111111111122] is not valid"
 							}
 						],
 						"title":"Invalid Request",
@@ -695,7 +695,7 @@ func Test_blocking(t *testing.T) {
 						Body:       io.NopCloser(strings.NewReader(body)),
 					}
 				}),
-				userID: "1111111111111111111111",
+				userID: "11111111111111111111111122",
 				opt:    []*gotwtr.BlockOption{},
 			},
 			want: &gotwtr.BlockingResponse{
@@ -703,9 +703,9 @@ func Test_blocking(t *testing.T) {
 				Errors: []*gotwtr.APIResponseError{
 					{
 						Parameters: gotwtr.Parameter{
-							ID: []string{"1111111111111111111111"},
+							ID: []string{"11111111111111111111111122"},
 						},
-						Message: "The id query parameter value [1111111111111111111111] is not valid",
+						Message: "The id query parameter value [11111111111111111111111122] is not valid",
 					},
 				},
 				Title:  "Invalid Request",
@@ -776,70 +776,6 @@ func Test_postBlocking(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name: "400 request failed",
-			args: args{
-				ctx: context.Background(),
-				client: mockHTTPClient(func(req *http.Request) *http.Response {
-					body := `{
-						"errors": [
-							{
-								"message":"Sorry, that page does not exist, code:34"
-							}
-						]
-					}`
-					return &http.Response{
-						StatusCode: http.StatusBadRequest,
-						Body:       io.NopCloser(strings.NewReader(body)),
-					}
-				}),
-				userID:       "2244994945",
-				targetUserID: "1228393702244134912",
-			},
-			want: &gotwtr.PostBlockingResponse{
-				Errors: []*gotwtr.APIResponseError{
-					{
-						Message: "Sorry, that page does not exist, code:34",
-					},
-				},
-			},
-			wantErr: true,
-		},
-		{
-			name: "403 authentication error",
-			args: args{
-				ctx: context.Background(),
-				client: mockHTTPClient(func(req *http.Request) *http.Response {
-					body := `{
-						"errors": [
-							{
-								"title": "Unsupported Authentication",
-								"detail": "Authenticating with OAuth 2.0 Application-Only is forbidden for this endpoint.  Supported authentication types are [OAuth 1.0a User Context, OAuth 2.0 User Context].",
-								"type": "https://api.twitter.com/2/problems/unsupported-authentication",
-								"status": 403
-							}
-						]
-					}`
-					return &http.Response{
-						StatusCode: http.StatusForbidden,
-						Body:       io.NopCloser(strings.NewReader(body)),
-					}
-				}),
-				userID:       "111111111",
-				targetUserID: "1228393702244134912",
-			},
-			want: &gotwtr.PostBlockingResponse{
-				Errors: []*gotwtr.APIResponseError{
-					{
-						Title:  "Unsupported Authentication",
-						Detail: "Authenticating with OAuth 2.0 Application-Only is forbidden for this endpoint.  Supported authentication types are [OAuth 1.0a User Context, OAuth 2.0 User Context].",
-						Type:   "https://api.twitter.com/2/problems/unsupported-authentication",
-						Status: 403,
-					},
-				},
-			},
-			wantErr: true,
-		},
-		{
 			name: "404 not found, invalid userID",
 			args: args{
 				ctx: context.Background(),
@@ -847,12 +783,12 @@ func Test_postBlocking(t *testing.T) {
 					body := `{
 						"errors":[
 							{
-								"value":"1111111111",
-								"detail":"Could not find user with id: [1111111111].",
+								"value":"11111111111",
+								"detail":"Could not find user with id: [11111111111].",
 								"title":"Not Found Error",
 								"resource_type":"user",
 								"parameter":"id",
-								"resource_id":"1111111111",
+								"resource_id":"11111111111",
 								"type":"https://api.twitter.com/2/problems/resource-not-found"
 							}
 						]
@@ -862,18 +798,18 @@ func Test_postBlocking(t *testing.T) {
 						Body:       io.NopCloser(strings.NewReader(body)),
 					}
 				}),
-				userID:       "1111111111",
+				userID:       "11111111111",
 				targetUserID: "1228393702244134912",
 			},
 			want: &gotwtr.PostBlockingResponse{
 				Errors: []*gotwtr.APIResponseError{
 					{
-						Value:        "1111111111",
-						Detail:       "Could not find user with id: [1111111111].",
+						Value:        "11111111111",
+						Detail:       "Could not find user with id: [11111111111].",
 						Title:        "Not Found Error",
 						ResourceType: "user",
 						Parameter:    "id",
-						ResourceID:   "1111111111",
+						ResourceID:   "11111111111",
 						Type:         "https://api.twitter.com/2/problems/resource-not-found",
 					},
 				},
@@ -942,70 +878,6 @@ func Test_undoBlocking(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name: "400 request failed",
-			args: args{
-				ctx: context.Background(),
-				client: mockHTTPClient(func(req *http.Request) *http.Response {
-					body := `{
-						"errors": [
-							{
-								"message":"Sorry, that page does not exist, code:34"
-							}
-						]
-					}`
-					return &http.Response{
-						StatusCode: http.StatusBadRequest,
-						Body:       io.NopCloser(strings.NewReader(body)),
-					}
-				}),
-				sourceUserID: "2244994945",
-				targetUserID: "1228393702244134912",
-			},
-			want: &gotwtr.UndoBlockingResponse{
-				Errors: []*gotwtr.APIResponseError{
-					{
-						Message: "Sorry, that page does not exist, code:34",
-					},
-				},
-			},
-			wantErr: true,
-		},
-		{
-			name: "403 authentication error",
-			args: args{
-				ctx: context.Background(),
-				client: mockHTTPClient(func(req *http.Request) *http.Response {
-					body := `{
-						"errors": [
-							{
-								"title": "Unsupported Authentication",
-								"detail": "Authenticating with OAuth 2.0 Application-Only is forbidden for this endpoint.  Supported authentication types are [OAuth 1.0a User Context, OAuth 2.0 User Context].",
-								"type": "https://api.twitter.com/2/problems/unsupported-authentication",
-								"status": 403
-							}
-						]
-					}`
-					return &http.Response{
-						StatusCode: http.StatusForbidden,
-						Body:       io.NopCloser(strings.NewReader(body)),
-					}
-				}),
-				sourceUserID: "111111111",
-				targetUserID: "1228393702244134912",
-			},
-			want: &gotwtr.UndoBlockingResponse{
-				Errors: []*gotwtr.APIResponseError{
-					{
-						Title:  "Unsupported Authentication",
-						Detail: "Authenticating with OAuth 2.0 Application-Only is forbidden for this endpoint.  Supported authentication types are [OAuth 1.0a User Context, OAuth 2.0 User Context].",
-						Type:   "https://api.twitter.com/2/problems/unsupported-authentication",
-						Status: 403,
-					},
-				},
-			},
-			wantErr: true,
-		},
-		{
 			name: "404 not found, invalid userID",
 			args: args{
 				ctx: context.Background(),
@@ -1013,12 +885,12 @@ func Test_undoBlocking(t *testing.T) {
 					body := `{
 						"errors":[
 							{
-								"value":"1111111111",
-								"detail":"Could not find user with id: [1111111111].",
+								"value":"2222222222",
+								"detail":"Could not find user with id: [2222222222].",
 								"title":"Not Found Error",
 								"resource_type":"user",
 								"parameter":"id",
-								"resource_id":"1111111111",
+								"resource_id":"2222222222",
 								"type":"https://api.twitter.com/2/problems/resource-not-found"
 							}
 						]
@@ -1028,18 +900,18 @@ func Test_undoBlocking(t *testing.T) {
 						Body:       io.NopCloser(strings.NewReader(body)),
 					}
 				}),
-				sourceUserID: "1111111111",
+				sourceUserID: "2222222222",
 				targetUserID: "1228393702244134912",
 			},
 			want: &gotwtr.UndoBlockingResponse{
 				Errors: []*gotwtr.APIResponseError{
 					{
-						Value:        "1111111111",
-						Detail:       "Could not find user with id: [1111111111].",
+						Value:        "2222222222",
+						Detail:       "Could not find user with id: [2222222222].",
 						Title:        "Not Found Error",
 						ResourceType: "user",
 						Parameter:    "id",
-						ResourceID:   "1111111111",
+						ResourceID:   "2222222222",
 						Type:         "https://api.twitter.com/2/problems/resource-not-found",
 					},
 				},

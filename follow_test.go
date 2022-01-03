@@ -1537,7 +1537,7 @@ func Test_postFollowing(t *testing.T) {
 					body := `{
 						"errors": [
 							{
-								"message":"Sorry, that page does not exist, code:34"
+								"message":"Sorry, that page does not exist, code:34."
 							}
 						]
 					}`
@@ -1552,7 +1552,7 @@ func Test_postFollowing(t *testing.T) {
 			want: &gotwtr.PostFollowingResponse{
 				Errors: []*gotwtr.APIResponseError{
 					{
-						Message: "Sorry, that page does not exist, code:34",
+						Message: "Sorry, that page does not exist, code:34.",
 					},
 				},
 			},
@@ -1567,7 +1567,7 @@ func Test_postFollowing(t *testing.T) {
 						"errors": [
 							{
 								"title": "Unsupported Authentication",
-								"detail": "Authenticating with OAuth 2.0 Application-Only is forbidden for this endpoint.  Supported authentication types are [OAuth 1.0a User Context, OAuth 2.0 User Context].",
+								"detail": "Authenticating with OAuth 2.0 Application-Only is forbidden for this endpoint. Supported authentication types are [OAuth 1.0a User Context, OAuth 2.0 User Context].",
 								"type": "https://api.twitter.com/2/problems/unsupported-authentication",
 								"status": 403
 							}
@@ -1586,7 +1586,7 @@ func Test_postFollowing(t *testing.T) {
 				Errors: []*gotwtr.APIResponseError{
 					{
 						Title:  "Unsupported Authentication",
-						Detail: "Authenticating with OAuth 2.0 Application-Only is forbidden for this endpoint.  Supported authentication types are [OAuth 1.0a User Context, OAuth 2.0 User Context].",
+						Detail: "Authenticating with OAuth 2.0 Application-Only is forbidden for this endpoint. Supported authentication types are [OAuth 1.0a User Context, OAuth 2.0 User Context].",
 						Type:   "https://api.twitter.com/2/problems/unsupported-authentication",
 						Status: 403,
 					},
@@ -1602,12 +1602,12 @@ func Test_postFollowing(t *testing.T) {
 					body := `{
 						"errors":[
 							{
-								"value":"1111111111",
-								"detail":"Could not find user with id: [1111111111].",
+								"value":"111111111122",
+								"detail":"Could not find user with id: [111111111122].",
 								"title":"Not Found Error",
 								"resource_type":"user",
 								"parameter":"id",
-								"resource_id":"1111111111",
+								"resource_id":"111111111122",
 								"type":"https://api.twitter.com/2/problems/resource-not-found"
 							}
 						]
@@ -1617,19 +1617,19 @@ func Test_postFollowing(t *testing.T) {
 						Body:       io.NopCloser(strings.NewReader(body)),
 					}
 				}),
-				userID:       "1111111111",
+				userID:       "111111111122",
 				targetUserID: "1228393702244134912",
 			},
 			want: &gotwtr.PostFollowingResponse{
 				Following: nil,
 				Errors: []*gotwtr.APIResponseError{
 					{
-						Value:        "1111111111",
-						Detail:       "Could not find user with id: [1111111111].",
+						Value:        "111111111122",
+						Detail:       "Could not find user with id: [111111111122].",
 						Title:        "Not Found Error",
 						ResourceType: "user",
 						Parameter:    "id",
-						ResourceID:   "1111111111",
+						ResourceID:   "111111111122",
 						Type:         "https://api.twitter.com/2/problems/resource-not-found",
 					},
 				},
@@ -1705,7 +1705,7 @@ func Test_undoFollowing(t *testing.T) {
 					body := `{
 						"errors": [
 							{
-								"message":"Sorry, that page does not exist, code:34"
+								"message":"Sorry, that page does not exist,   code:34"
 							}
 						]
 					}`
@@ -1720,7 +1720,7 @@ func Test_undoFollowing(t *testing.T) {
 			want: &gotwtr.UndoFollowingResponse{
 				Errors: []*gotwtr.APIResponseError{
 					{
-						Message: "Sorry, that page does not exist, code:34",
+						Message: "Sorry, that page does not exist,   code:34",
 					},
 				},
 			},
@@ -1735,7 +1735,7 @@ func Test_undoFollowing(t *testing.T) {
 						"errors": [
 							{
 								"title": "Unsupported Authentication",
-								"detail": "Authenticating with OAuth 2.0 Application-Only is forbidden for this endpoint.  Supported authentication types are [OAuth 1.0a User Context, OAuth 2.0 User Context].",
+								"detail": "Authenticating with OAuth 2.0 Application-Only is forbidden for this endpoint.   Supported authentication types are [OAuth 1.0a User Context, OAuth 2.0 User Context].",
 								"type": "https://api.twitter.com/2/problems/unsupported-authentication",
 								"status": 403
 							}
@@ -1754,7 +1754,7 @@ func Test_undoFollowing(t *testing.T) {
 				Errors: []*gotwtr.APIResponseError{
 					{
 						Title:  "Unsupported Authentication",
-						Detail: "Authenticating with OAuth 2.0 Application-Only is forbidden for this endpoint.  Supported authentication types are [OAuth 1.0a User Context, OAuth 2.0 User Context].",
+						Detail: "Authenticating with OAuth 2.0 Application-Only is forbidden for this endpoint.   Supported authentication types are [OAuth 1.0a User Context, OAuth 2.0 User Context].",
 						Type:   "https://api.twitter.com/2/problems/unsupported-authentication",
 						Status: 403,
 					},
@@ -1770,12 +1770,12 @@ func Test_undoFollowing(t *testing.T) {
 					body := `{
 						"errors":[
 							{
-								"value":"1111111111",
-								"detail":"Could not find user with id: [1111111111].",
+								"value":"111111111133",
+								"detail":"Could not find user with id: [111111111133].",
 								"title":"Not Found Error",
 								"resource_type":"user",
 								"parameter":"id",
-								"resource_id":"1111111111",
+								"resource_id":"111111111133",
 								"type":"https://api.twitter.com/2/problems/resource-not-found"
 							}
 						]
@@ -1785,19 +1785,19 @@ func Test_undoFollowing(t *testing.T) {
 						Body:       io.NopCloser(strings.NewReader(body)),
 					}
 				}),
-				sourceUserID: "1111111111",
+				sourceUserID: "111111111133",
 				targetUserID: "1228393702244134912",
 			},
 			want: &gotwtr.UndoFollowingResponse{
 				Following: nil,
 				Errors: []*gotwtr.APIResponseError{
 					{
-						Value:        "1111111111",
-						Detail:       "Could not find user with id: [1111111111].",
+						Value:        "111111111133",
+						Detail:       "Could not find user with id: [111111111133].",
 						Title:        "Not Found Error",
 						ResourceType: "user",
 						Parameter:    "id",
-						ResourceID:   "1111111111",
+						ResourceID:   "111111111133",
 						Type:         "https://api.twitter.com/2/problems/resource-not-found",
 					},
 				},

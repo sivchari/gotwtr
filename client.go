@@ -47,14 +47,11 @@ type Users interface {
 	RetrieveSingleUserWithUserName(ctx context.Context, userName string, opt ...*RetrieveUserOption) (*UserResponse, error)
 	Followers(ctx context.Context, userID string, opt ...*FollowOption) (*FollowersResponse, error)
 	Following(ctx context.Context, userID string, opt ...*FollowOption) (*FollowingResponse, error)
-<<<<<<< HEAD
+	PostFollowing(ctx context.Context, userID string, targetUserID string) (*PostFollowingResponse, error)
+	UndoFollowing(ctx context.Context, sourceUserID string, targetUserID string) (*UndoFollowingResponse, error)
 	Blocking(ctx context.Context, userID string, opt ...*BlockOption) (*BlockingResponse, error)
 	PostBlocking(ctx context.Context, userID string, targetUserID string) (*PostBlockingResponse, error)
 	UndoBlocking(ctx context.Context, sourceUserID string, targetUserID string) (*UndoBlockingResponse, error)
-=======
-	PostFollowing(ctx context.Context, userID string, targetUserID string) (*PostFollowingResponse, error)
-	UndoFollowing(ctx context.Context, sourceUserID string, targetUserID string) (*UndoFollowingResponse, error)
->>>>>>> 246619d7cfed5d6e434958600f3e06d584645df8
 }
 
 type Spaces interface {
