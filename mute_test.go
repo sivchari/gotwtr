@@ -129,6 +129,9 @@ func Test_muting(t *testing.T) {
 						},
 					},
 				},
+				Meta: gotwtr.MutesMeta{
+					ResultCount: 1,
+				},
 			},
 		},
 		{
