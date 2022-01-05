@@ -58,6 +58,36 @@ func (t FollowOption) addQuery(req *http.Request) {
 	}
 }
 
+type MuteOption struct {
+	Expansions      []Expansion
+	MaxResults      int
+	PaginationToken string
+	TweetFields     []TweetField
+	UserFields      []UserField
+}
+
+func (m *MuteOption) addQuery(req *http.Request) {
+	q := req.URL.Query()
+	if len(m.Expansions) > 0 {
+		q.Add("expansions", strings.Join(expansionsToString(m.Expansions), ","))
+	}
+	if m.MaxResults > 0 {
+		q.Add("max_results", strconv.Itoa(m.MaxResults))
+	}
+	if len(m.PaginationToken) > 0 {
+		q.Add("pagination_token", m.PaginationToken)
+	}
+	if len(m.TweetFields) > 0 {
+		q.Add("tweet.fields", strings.Join(tweetFieldsToString(m.TweetFields), ","))
+	}
+	if len(m.UserFields) > 0 {
+		q.Add("user.fields", strings.Join(userFieldsToString(m.UserFields), ","))
+	}
+	if len(q) > 0 {
+		req.URL.RawQuery = q.Encode()
+	}
+}
+
 func userFieldsToString(ufs []UserField) []string {
 	slice := make([]string, len(ufs))
 	for i, uf := range ufs {
