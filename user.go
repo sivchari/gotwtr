@@ -170,7 +170,7 @@ type MutingResponse struct {
 	Users    []*User             `json:"data"`
 	Includes *UserIncludes       `json:"includes,omitempty"`
 	Errors   []*APIResponseError `json:"errors,omitempty"`
-	Meta     *MutesMeta           `json:"meta"`
+	Meta     *MutesMeta          `json:"meta"`
 	Title    string              `json:"title,omitempty"`
 	Detail   string              `json:"detail,omitempty"`
 	Type     string              `json:"type,omitempty"`
