@@ -58,7 +58,7 @@ func Test_muting(t *testing.T) {
 						UserName: "TwitterDev",
 					},
 				},
-				Meta: gotwtr.MutesMeta{
+				Meta: &gotwtr.MutesMeta{
 					ResultCount: 1,
 				},
 				Includes: nil,
@@ -129,7 +129,7 @@ func Test_muting(t *testing.T) {
 						},
 					},
 				},
-				Meta: gotwtr.MutesMeta{
+				Meta: &gotwtr.MutesMeta{
 					ResultCount: 1,
 				},
 			},
