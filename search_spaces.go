@@ -12,9 +12,8 @@ func searchSpaces(ctx context.Context, c *client, searchTerm string, opt ...*Sea
 	if searchTerm == "" {
 		return nil, errors.New("search spaces: searchTerm parameter is required")
 	}
-	ep := fmt.Sprintf(searchSpacesURL, searchTerm)
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, ep, nil)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, searchSpacesURL, nil)
 	if err != nil {
 		return nil, fmt.Errorf("search spaces new request with ctx: %w", err)
 	}
@@ -29,7 +28,7 @@ func searchSpaces(ctx context.Context, c *client, searchTerm string, opt ...*Sea
 	default:
 		return nil, errors.New("search spaces: too many options")
 	}
-	sopt.addQuery(req)
+	sopt.addQuery(req, searchTerm)
 
 	resp, err := c.client.Do(req)
 	if err != nil {

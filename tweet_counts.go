@@ -12,9 +12,8 @@ func countsRecentTweet(ctx context.Context, c *client, tweet string, opt ...*Twe
 	if tweet == "" {
 		return nil, errors.New("counts recent tweets: tweet parameter is required")
 	}
-	ep := fmt.Sprintf(countsRecentTweetsURL, tweet)
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, ep, nil)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, countsRecentTweetsURL, nil)
 	if err != nil {
 		return nil, fmt.Errorf("counts recent tweets new request with ctx: %w", err)
 	}
@@ -29,7 +28,7 @@ func countsRecentTweet(ctx context.Context, c *client, tweet string, opt ...*Twe
 	default:
 		return nil, errors.New("counts recent tweets: only one option is allowed")
 	}
-	topt.addQuery(req)
+	topt.addQuery(req, tweet)
 
 	resp, err := c.client.Do(req)
 	if err != nil {
