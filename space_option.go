@@ -13,8 +13,9 @@ type SearchSpacesOption struct {
 	UserFields  []UserField
 }
 
-func (s *SearchSpacesOption) addQuery(req *http.Request) {
+func (s *SearchSpacesOption) addQuery(req *http.Request, searchTerm string) {
 	q := req.URL.Query()
+	q.Add("query", searchTerm)
 	if len(s.Expansions) > 0 {
 		q.Add("expansions", strings.Join(expansionsToString(s.Expansions), ","))
 	}

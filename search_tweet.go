@@ -16,9 +16,7 @@ func searchRecentTweets(ctx context.Context, c *client, tweet string, opt ...*Se
 		return nil, errors.New("search recent tweets: tweet parameter must be less than or equal to 512 characters")
 	}
 
-	ep := fmt.Sprintf(searchRecentTweetsURL, tweet)
-
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, ep, nil)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, searchRecentTweetsURL, nil)
 	if err != nil {
 		return nil, fmt.Errorf("search recent tweets new request with ctx: %w", err)
 	}
@@ -44,7 +42,7 @@ func searchRecentTweets(ctx context.Context, c *client, tweet string, opt ...*Se
 	if sopt.MaxResults < minimumMaxResults || sopt.MaxResults > maximumMaxResults {
 		return nil, fmt.Errorf("search recent tweets: max results must be between %d and %d", minimumMaxResults, maximumMaxResults)
 	}
-	sopt.addQuery(req)
+	sopt.addQuery(req, tweet)
 
 	resp, err := c.client.Do(req)
 	if err != nil {

@@ -6,8 +6,8 @@ const (
 	retrieveSingleTweetURL    = "https://api.twitter.com/2/tweets/%v"
 	userTweetTimelineURL      = "https://api.twitter.com/2/users/%v/tweets"
 	userMentionTimelineURL    = "https://api.twitter.com/2/users/%v/mentions"
-	searchRecentTweetsURL     = "https://api.twitter.com/2/tweets/search/recent?query=%v"
-	countsRecentTweetsURL     = "https://api.twitter.com/2/tweets/counts/recent?query=%v"
+	searchRecentTweetsURL     = "https://api.twitter.com/2/tweets/search/recent"
+	countsRecentTweetsURL     = "https://api.twitter.com/2/tweets/counts/recent"
 	addOrDeleteRulesURL       = "https://api.twitter.com/2/tweets/search/stream/rules"
 	retrieveStreamRulesURL    = "https://api.twitter.com/2/tweets/search/stream/rules"
 	connectToStreamURL        = "https://api.twitter.com/2/tweets/search/stream"
@@ -31,7 +31,7 @@ const (
 	spacesURL                    = "https://api.twitter.com/2/spaces?ids="
 	usersPurchasedSpaceTicketURL = "https://api.twitter.com/2/spaces/%v/buyers"
 	discoverSpacesURL            = "https://api.twitter.com/2/spaces/by/creator_ids?user_ids="
-	searchSpacesURL              = "https://api.twitter.com/2/spaces/search?query=%v"
+	searchSpacesURL              = "https://api.twitter.com/2/spaces/search"
 )
 
 const (
