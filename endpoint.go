@@ -34,6 +34,9 @@ const (
 	followersURL                          = "https://api.twitter.com/2/users/%v/followers"
 	postFollowingURL                      = "https://api.twitter.com/2/users/%v/following"
 	undoFollowingURL                      = "https://api.twitter.com/2/users/%v/following/%v"
+	mutingURL                             = "https://api.twitter.com/2/users/%v/muting"
+	postMutingURL                         = "https://api.twitter.com/2/users/%v/muting"
+	undoMutingURL                         = "https://api.twitter.com/2/users/%v/muting/%v"
 )
 
 const (
