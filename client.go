@@ -49,6 +49,9 @@ type Users interface {
 	Following(ctx context.Context, userID string, opt ...*FollowOption) (*FollowingResponse, error)
 	PostFollowing(ctx context.Context, userID string, targetUserID string) (*PostFollowingResponse, error)
 	UndoFollowing(ctx context.Context, sourceUserID string, targetUserID string) (*UndoFollowingResponse, error)
+	Muting(ctx context.Context, userID string, opt ...*MuteOption) (*MutingResponse, error)
+	PostMuting(ctx context.Context, userID string, targetUserID string) (*PostMutingResponse, error)
+	UndoMuting(ctx context.Context, sourceUserID string, targetUserID string) (*UndoMutingResponse, error)
 }
 
 type Spaces interface {
@@ -261,6 +264,21 @@ func (c *Client) PostFollowing(ctx context.Context, userID string, targetUserID 
 // UndoFollowing allows a user ID to unfollow another user.
 func (c *Client) UndoFollowing(ctx context.Context, sourceUserID string, targetUserID string) (*UndoFollowingResponse, error) {
 	return undoFollowing(ctx, c.client, sourceUserID, targetUserID)
+}
+
+// Muting returns a list of users who are muted by the specified user ID.
+func (c *Client) Muting(ctx context.Context, userID string, opt ...*MuteOption) (*MutingResponse, error) {
+	return muting(ctx, c.client, userID, opt...)
+}
+
+// PostMuting allows an authenticated user ID to mute the target user.
+func (c *Client) PostMuting(ctx context.Context, userID string, targetUserID string) (*PostMutingResponse, error) {
+	return postMuting(ctx, c.client, userID, targetUserID)
+}
+
+// UndoMuting allows an authenticated user ID to unmute the target user.
+func (c *Client) UndoMuting(ctx context.Context, sourceUserID string, targetUserID string) (*UndoMutingResponse, error) {
+	return undoMuting(ctx, c.client, sourceUserID, targetUserID)
 }
 
 // LookUpSpace returns a variety of information about a single Space specified by the requested ID.
