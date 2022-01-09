@@ -410,3 +410,209 @@ func Test_tweetsUserLiked(t *testing.T) {
 		})
 	}
 }
+
+func Test_postUsersLikingTweet(t *testing.T) {
+	t.Parallel()
+	type args struct {
+		ctx     context.Context
+		client  *http.Client
+		userID  string
+		tweetID string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    *gotwtr.PostUsersLikingTweetResponse
+		wantErr bool
+	}{
+		{
+			name: "200 success",
+			args: args{
+				ctx: context.Background(),
+				client: mockHTTPClient(func(req *http.Request) *http.Response {
+					if req.Method != http.MethodPost {
+						t.Fatalf("the method is not correct got %s want %s", req.Method, http.MethodPost)
+					}
+					body := `{
+						"data": {
+							"liked": true
+						}
+					}`
+					return &http.Response{
+						StatusCode: http.StatusOK,
+						Body:       io.NopCloser(strings.NewReader(body)),
+					}
+				}),
+				userID:  "6253282",
+				tweetID: "2244994945",
+			},
+			want: &gotwtr.PostUsersLikingTweetResponse{
+				Liked: &gotwtr.Liked{
+					Liked: true,
+				},
+			},
+			wantErr: false,
+		},
+		{
+			name: "404 not found, invalid userID",
+			args: args{
+				ctx: context.Background(),
+				client: mockHTTPClient(func(req *http.Request) *http.Response {
+					body := `{
+						"errors":[
+							{
+								"value":"1111111111",
+								"detail":"Could not find user with id: [1111111111].",
+								"title":"Not Found Error",
+								"resource_type":"user",
+								"parameter":"id",
+								"resource_id":"1111111111",
+								"type":"https://api.twitter.com/2/problems/resource-not-found"
+							}
+						]
+					}`
+					return &http.Response{
+						StatusCode: http.StatusNotFound,
+						Body:       io.NopCloser(strings.NewReader(body)),
+					}
+				}),
+				userID:  "1111111111",
+				tweetID: "1228393702244134912",
+			},
+			want: &gotwtr.PostUsersLikingTweetResponse{
+				Liked: nil,
+				Errors: []*gotwtr.APIResponseError{
+					{
+						Value:        "1111111111",
+						Detail:       "Could not find user with id: [1111111111].",
+						Title:        "Not Found Error",
+						ResourceType: "user",
+						Parameter:    "id",
+						ResourceID:   "1111111111",
+						Type:         "https://api.twitter.com/2/problems/resource-not-found",
+					},
+				},
+			},
+			wantErr: true,
+		},
+	}
+	for i, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
+			got, err := c.PostUsersLikingTweet(tt.args.ctx, tt.args.userID, tt.args.tweetID)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("PostUsersLikingTweet() index = %v error = %v, wantErr %v", i, err, tt.wantErr)
+				return
+			}
+			if diff := cmp.Diff(got, tt.want); diff != "" {
+				t.Errorf("PostUsersLikingTweet() index = %v mismatch (-want +got):\n%s", i, diff)
+				return
+			}
+		})
+	}
+}
+
+func Test_undoUsersLikingTweet(t *testing.T) {
+	t.Parallel()
+	type args struct {
+		ctx     context.Context
+		client  *http.Client
+		userID  string
+		tweetID string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    *gotwtr.UndoUsersLikingTweetResponse
+		wantErr bool
+	}{
+		{
+			name: "200 success",
+			args: args{
+				ctx: context.Background(),
+				client: mockHTTPClient(func(req *http.Request) *http.Response {
+					if req.Method != http.MethodDelete {
+						t.Fatalf("the method is not correct got %s want %s", req.Method, http.MethodDelete)
+					}
+					body := `{
+						"data": {
+							"liked": false
+						}
+					}`
+					return &http.Response{
+						StatusCode: http.StatusOK,
+						Body:       io.NopCloser(strings.NewReader(body)),
+					}
+				}),
+				userID:  "2244994945",
+				tweetID: "6253282",
+			},
+			want: &gotwtr.UndoUsersLikingTweetResponse{
+				Liked: &gotwtr.Liked{
+					Liked: false,
+				},
+			},
+			wantErr: false,
+		},
+		{
+			name: "404 not found, invalid userID",
+			args: args{
+				ctx: context.Background(),
+				client: mockHTTPClient(func(req *http.Request) *http.Response {
+					body := `{
+						"errors":[
+							{
+								"value":"1111111111",
+								"detail":"Could not find user with id: [1111111111].",
+								"title":"Not Found Error",
+								"resource_type":"user",
+								"parameter":"id",
+								"resource_id":"1111111111",
+								"type":"https://api.twitter.com/2/problems/resource-not-found"
+							}
+						]
+					}`
+					return &http.Response{
+						StatusCode: http.StatusNotFound,
+						Body:       io.NopCloser(strings.NewReader(body)),
+					}
+				}),
+				userID:  "1111111111",
+				tweetID: "1228393702244134912",
+			},
+			want: &gotwtr.UndoUsersLikingTweetResponse{
+				Liked: nil,
+				Errors: []*gotwtr.APIResponseError{
+					{
+						Value:        "1111111111",
+						Detail:       "Could not find user with id: [1111111111].",
+						Title:        "Not Found Error",
+						ResourceType: "user",
+						Parameter:    "id",
+						ResourceID:   "1111111111",
+						Type:         "https://api.twitter.com/2/problems/resource-not-found",
+					},
+				},
+			},
+			wantErr: true,
+		},
+	}
+	for i, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
+			got, err := c.UndoUsersLikingTweet(tt.args.ctx, tt.args.userID, tt.args.tweetID)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("UndoUsersLikingTweet() index = %v error = %v, wantErr %v", i, err, tt.wantErr)
+				return
+			}
+			if diff := cmp.Diff(got, tt.want); diff != "" {
+				t.Errorf("UndoUsersLikingTweet() index = %v mismatch (-want +got):\n%s", i, diff)
+				return
+			}
+		})
+	}
+}

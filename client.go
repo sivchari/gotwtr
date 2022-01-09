@@ -37,6 +37,8 @@ type Tweets interface {
 	UndoRetweet(ctx context.Context, userID string, sourceTweetID string) (*UndoRetweetResponse, error)
 	TweetsUserLiked(ctx context.Context, userID string, opt ...*TweetsUserLikedOpts) (*TweetsUserLikedResponse, error)
 	UsersLikingTweet(ctx context.Context, tweetID string, opt ...*UsersLikingTweetOption) (*UsersLikingTweetResponse, error)
+	PostUsersLikingTweet(ctx context.Context, userID string, tweetID string) (*PostUsersLikingTweetResponse, error)
+	UndoUsersLikingTweet(ctx context.Context, userID string, tweetID string) (*UndoUsersLikingTweetResponse, error)
 	SearchAllTweets(ctx context.Context, tweet string, opt ...*SearchTweetsOption) (*SearchTweetsResponse, error)
 }
 
@@ -223,6 +225,17 @@ func (c *Client) TweetsUserLiked(ctx context.Context, userID string, opt ...*Twe
 // UsersLikingTweet allows you to get information about a user’s liked Tweets.
 func (c *Client) UsersLikingTweet(ctx context.Context, tweetID string, opt ...*UsersLikingTweetOption) (*UsersLikingTweetResponse, error) {
 	return usersLikingTweet(ctx, c.client, tweetID, opt...)
+}
+
+// PostUsersLikingTweet causes the user ID identified in the path parameter to Like the target Tweet.
+func (c *client) PostUsersLikingTweet(ctx context.Context, userID string, tweetID string) (*PostUsersLikingTweetResponse, error) {
+	return postUsersLikingTweet(ctx, c, userID, tweetID)
+}
+
+// UndoUsersLikingTweet allows a user or authenticated user ID to unlike a Tweet.
+// The request succeeds with no action when the user sends a request to a user they're not liking the Tweet or have already unliked the Tweet.
+func (c *client) UndoUsersLikingTweet(ctx context.Context, userID string, tweetID string) (*UndoUsersLikingTweetResponse, error) {
+	return undoUsersLikingTweet(ctx, c, userID, tweetID)
 }
 
 // RetrieveMultipleUsersWithIDs returns a variety of information about one or more users specified by the requested userIDs.
