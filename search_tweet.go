@@ -73,9 +73,7 @@ func searchAllTweets(ctx context.Context, c *client, tweet string, opt ...*Searc
 		return nil, errors.New("search all tweets: tweet parameter must be less than or equal to 512 characters")
 	}
 
-	ep := fmt.Sprintf(searchAllTweetsURL)
-
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, ep, nil)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, searchAllTweetsURL, nil)
 	if err != nil {
 		return nil, fmt.Errorf("search all tweets new request with ctx: %w", err)
 	}
