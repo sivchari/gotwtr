@@ -1,6 +1,7 @@
 package gotwtr
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"errors"
@@ -105,4 +106,85 @@ func tweetsUserLiked(ctx context.Context, c *client, userID string, opt ...*Twee
 	}
 
 	return &tulr, nil
+}
+
+func postUsersLikingTweet(ctx context.Context, c *client, userID string, tweetID string) (*PostUsersLikingTweetResponse, error) {
+	if userID == "" {
+		return nil, errors.New("post users liking tweet: userID parameter is required")
+	}
+	ep := fmt.Sprintf(postUsersLikingTweetURL, userID)
+
+	if tweetID == "" {
+		return nil, errors.New("post users liking tweet: tweetID parameter is required")
+	}
+	body := &UsersLikingBody{
+		TweetID: tweetID,
+	}
+	jsonStr, err := json.Marshal(body)
+	if err != nil {
+		return nil, errors.New("post users liking tweet: can not marshal")
+	}
+
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, ep, bytes.NewBuffer(jsonStr))
+	if err != nil {
+		return nil, fmt.Errorf("post users liking tweet new request with ctx: %w", err)
+	}
+	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.bearerToken))
+	req.Header.Set("Content-Type", "application/json")
+
+	resp, err := c.client.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("post users liking tweet response: %w", err)
+	}
+	defer resp.Body.Close()
+
+	var postUsersLikingTweet PostUsersLikingTweetResponse
+	if err := json.NewDecoder(resp.Body).Decode(&postUsersLikingTweet); err != nil {
+		return nil, fmt.Errorf("post users liking tweet decode: %w", err)
+	}
+	if resp.StatusCode != http.StatusOK {
+		return &postUsersLikingTweet, &HTTPError{
+			APIName: "post users liking tweet",
+			Status:  resp.Status,
+			URL:     req.URL.String(),
+		}
+	}
+
+	return &postUsersLikingTweet, nil
+}
+
+func undoUsersLikingTweet(ctx context.Context, c *client, userID string, tweetID string) (*UndoUsersLikingTweetResponse, error) {
+	if userID == "" {
+		return nil, errors.New("undo users liking tweet: userID parameter is required")
+	}
+	if tweetID == "" {
+		return nil, errors.New("undo users liking tweet: tweetID parameter is required")
+	}
+	ep := fmt.Sprintf(undoUsersLikingTweetURL, userID, tweetID)
+
+	req, err := http.NewRequestWithContext(ctx, http.MethodDelete, ep, nil)
+	if err != nil {
+		return nil, fmt.Errorf("undo users liking tweet new request with ctx: %w", err)
+	}
+	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.bearerToken))
+
+	resp, err := c.client.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("undo users liking tweet response: %w", err)
+	}
+	defer resp.Body.Close()
+
+	var undoUsersLikingTweet UndoUsersLikingTweetResponse
+	if err := json.NewDecoder(resp.Body).Decode(&undoUsersLikingTweet); err != nil {
+		return nil, fmt.Errorf("undo users liking tweet decode: %w", err)
+	}
+	if resp.StatusCode != http.StatusOK {
+		return &undoUsersLikingTweet, &HTTPError{
+			APIName: "undo users liking tweet",
+			Status:  resp.Status,
+			URL:     req.URL.String(),
+		}
+	}
+
+	return &undoUsersLikingTweet, nil
 }

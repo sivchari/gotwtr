@@ -434,6 +434,24 @@ type UsersLikingTweetResponse struct {
 	Errors   []*APIResponseError          `json:"errors,omitempty"`
 }
 
+type PostUsersLikingTweetResponse struct {
+	Liked  *Liked              `json:"data"`
+	Errors []*APIResponseError `json:"errors,omitempty"`
+}
+
+type UndoUsersLikingTweetResponse struct {
+	Liked  *Liked              `json:"data"`
+	Errors []*APIResponseError `json:"errors,omitempty"`
+}
+
+type Liked struct {
+	Liked bool `json:"liked"`
+}
+
+type UsersLikingBody struct {
+	TweetID string `json:"tweet_id"`
+}
+
 type LookUpUsersWhoLikedIncludes struct {
 	Tweets []*Tweet `json:"tweets"`
 }

@@ -261,6 +261,24 @@ func ExampleClient_UsersLikingTweet() {
 	}
 }
 
+func ExampleClient_PostUsersLikingTweet() {
+	client := gotwtr.New("key")
+	pult, err := client.PostUsersLikingTweet(context.Background(), "user_id", "tweet_id")
+	if err != nil {
+		log.Println(err)
+	}
+	fmt.Println(pult)
+}
+
+func ExampleClient_UndoUsersLikingTweet() {
+	client := gotwtr.New("key")
+	uult, err := client.UndoUsersLikingTweet(context.Background(), "user_id", "tweet_id")
+	if err != nil {
+		log.Println(err)
+	}
+	fmt.Println(uult)
+}
+
 func ExampleClient_RetrieveMultipleUsersWithIDs() {
 	client := gotwtr.New("key")
 	// look up users
