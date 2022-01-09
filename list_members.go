@@ -8,11 +8,11 @@ import (
 	"net/http"
 )
 
-func listMembers(ctx context.Context, c *client, listid string, opt ...*ListMembersOption) (*ListMembersResponse, error) {
-	if listid == "" {
+func listMembers(ctx context.Context, c *client, listID string, opt ...*ListMembersOption) (*ListMembersResponse, error) {
+	if listID == "" {
 		return nil, errors.New("look up list members: id parameter is required")
 	}
-	lm := fmt.Sprintf(listMembersURL, listid)
+	lm := fmt.Sprintf(listMembersURL, listID)
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, lm, nil)
 	if err != nil {

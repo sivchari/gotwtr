@@ -332,8 +332,8 @@ func (c *Client) ListsSpecifiedUser(ctx context.Context, userID string, opt ...*
 }
 
 // ListMembers returns a list of users who are members of the specified List.
-func (c *Client) ListMembers(ctx context.Context, listid string, opt ...*ListMembersOption) (*ListMembersResponse, error) {
-	return listMembers(ctx, c.client, listid, opt...)
+func (c *Client) ListMembers(ctx context.Context, listID string, opt ...*ListMembersOption) (*ListMembersResponse, error) {
+	return listMembers(ctx, c.client, listID, opt...)
 }
 
 // LookUpListFollowers returns a list of users who are followers of the specified List.
