@@ -176,8 +176,9 @@ type SearchTweetsOption struct {
 	UserFields  []UserField
 }
 
-func (t SearchTweetsOption) addQuery(req *http.Request) {
+func (t SearchTweetsOption) addQuery(req *http.Request, tweet string) {
 	q := req.URL.Query()
+	q.Add("query", tweet)
 	if !t.EndTime.IsZero() {
 		q.Add("end_time", t.EndTime.Format(time.RFC3339))
 	}
