@@ -51,6 +51,9 @@ type Users interface {
 	Following(ctx context.Context, userID string, opt ...*FollowOption) (*FollowingResponse, error)
 	PostFollowing(ctx context.Context, userID string, targetUserID string) (*PostFollowingResponse, error)
 	UndoFollowing(ctx context.Context, sourceUserID string, targetUserID string) (*UndoFollowingResponse, error)
+	Blocking(ctx context.Context, userID string, opt ...*BlockOption) (*BlockingResponse, error)
+	PostBlocking(ctx context.Context, userID string, targetUserID string) (*PostBlockingResponse, error)
+	UndoBlocking(ctx context.Context, sourceUserID string, targetUserID string) (*UndoBlockingResponse, error)
 	Muting(ctx context.Context, userID string, opt ...*MuteOption) (*MutingResponse, error)
 	PostMuting(ctx context.Context, userID string, targetUserID string) (*PostMutingResponse, error)
 	UndoMuting(ctx context.Context, sourceUserID string, targetUserID string) (*UndoMutingResponse, error)
@@ -279,6 +282,22 @@ func (c *Client) UndoFollowing(ctx context.Context, sourceUserID string, targetU
 	return undoFollowing(ctx, c.client, sourceUserID, targetUserID)
 }
 
+// Blocking returns a list of users who are blocked by the specified user ID.
+func (c *Client) Blocking(ctx context.Context, userID string, opt ...*BlockOption) (*BlockingResponse, error) {
+	return blocking(ctx, c.client, userID, opt...)
+}
+
+// PostBlocking causes the user (in the path) to block the target user.
+// The user (in the path) must match the user Access Tokens being used to authorize the request.
+func (c *Client) PostBlocking(ctx context.Context, userID string, targetUserID string) (*PostBlockingResponse, error) {
+	return postBlocking(ctx, c.client, userID, targetUserID)
+}
+
+// UndoBlocking allows a user or authenticated user ID to unblock another user.
+func (c *Client) UndoBlocking(ctx context.Context, sourceUserID string, targetUserID string) (*UndoBlockingResponse, error) {
+	return undoBlocking(ctx, c.client, sourceUserID, targetUserID)
+}
+
 // Muting returns a list of users who are muted by the specified user ID.
 func (c *Client) Muting(ctx context.Context, userID string, opt ...*MuteOption) (*MutingResponse, error) {
 	return muting(ctx, c.client, userID, opt...)
@@ -344,8 +363,8 @@ func (c *Client) ListsSpecifiedUser(ctx context.Context, userID string, opt ...*
 }
 
 // ListMembers returns a list of users who are members of the specified List.
-func (c *Client) ListMembers(ctx context.Context, listid string, opt ...*ListMembersOption) (*ListMembersResponse, error) {
-	return listMembers(ctx, c.client, listid, opt...)
+func (c *Client) ListMembers(ctx context.Context, listID string, opt ...*ListMembersOption) (*ListMembersResponse, error) {
+	return listMembers(ctx, c.client, listID, opt...)
 }
 
 // LookUpListFollowers returns a list of users who are followers of the specified List.

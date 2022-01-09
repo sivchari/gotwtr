@@ -36,7 +36,7 @@ func ExampleClient_GenerateAppOnlyBearerToken() {
 
 func ExampleClient_RetrieveMultipleTweets() {
 	client := gotwtr.New("key")
-	ts, err := client.RetrieveMultipleTweets(context.Background(), []string{"id", "id2"})
+	ts, err := client.RetrieveMultipleTweets(context.Background(), []string{"tweet_id", "tweet_id2"})
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -47,7 +47,7 @@ func ExampleClient_RetrieveMultipleTweets() {
 
 func ExampleClient_RetrieveSingleTweet() {
 	client := gotwtr.New("key")
-	t, err := client.RetrieveSingleTweet(context.Background(), "id")
+	t, err := client.RetrieveSingleTweet(context.Background(), "tweet_id")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -56,7 +56,7 @@ func ExampleClient_RetrieveSingleTweet() {
 
 func ExampleClient_UserMentionTimeline() {
 	client := gotwtr.New("key")
-	tws, err := client.UserMentionTimeline(context.Background(), "id")
+	tws, err := client.UserMentionTimeline(context.Background(), "user_id")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -67,7 +67,7 @@ func ExampleClient_UserMentionTimeline() {
 
 func ExampleClient_UserTweetTimeline() {
 	client := gotwtr.New("key")
-	ts, err := client.UserTweetTimeline(context.Background(), "id")
+	ts, err := client.UserTweetTimeline(context.Background(), "user_id")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -215,7 +215,7 @@ func ExampleClient_VolumeStreams() {
 
 func ExampleClient_RetweetsLookup() {
 	client := gotwtr.New("key")
-	t, err := client.RetweetsLookup(context.Background(), "id")
+	t, err := client.RetweetsLookup(context.Background(), "tweet_id")
 	if err != nil {
 		log.Println(err)
 	}
@@ -224,7 +224,7 @@ func ExampleClient_RetweetsLookup() {
 
 func ExampleClient_PostRetweet() {
 	client := gotwtr.New("key")
-	pr, err := client.PostRetweet(context.Background(), "uid", "tid")
+	pr, err := client.PostRetweet(context.Background(), "user_id", "tweet_id")
 	if err != nil {
 		log.Println(err)
 	}
@@ -233,7 +233,7 @@ func ExampleClient_PostRetweet() {
 
 func ExampleClient_UndoRetweet() {
 	client := gotwtr.New("key")
-	ur, err := client.UndoRetweet(context.Background(), "id", "stid")
+	ur, err := client.UndoRetweet(context.Background(), "user_id", "source_tweet_id")
 	if err != nil {
 		log.Println(err)
 	}
@@ -282,7 +282,7 @@ func ExampleClient_UndoUsersLikingTweet() {
 func ExampleClient_RetrieveMultipleUsersWithIDs() {
 	client := gotwtr.New("key")
 	// look up users
-	us, err := client.RetrieveMultipleUsersWithIDs(context.Background(), []string{"id", "id2"})
+	us, err := client.RetrieveMultipleUsersWithIDs(context.Background(), []string{"user_id", "user_id2"})
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -293,7 +293,7 @@ func ExampleClient_RetrieveMultipleUsersWithIDs() {
 
 func ExampleClient_RetrieveSingleUserWithID() {
 	client := gotwtr.New("key")
-	u, err := client.RetrieveSingleUserWithID(context.Background(), "id")
+	u, err := client.RetrieveSingleUserWithID(context.Background(), "user_id")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -322,7 +322,7 @@ func ExampleClient_RetrieveSingleUserWithUserName() {
 
 func ExampleClient_Following() {
 	client := gotwtr.New("key")
-	f, err := client.Following(context.Background(), "id")
+	f, err := client.Following(context.Background(), "user_id")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -333,7 +333,7 @@ func ExampleClient_Following() {
 
 func ExampleClient_Followers() {
 	client := gotwtr.New("key")
-	f, err := client.Followers(context.Background(), "id")
+	f, err := client.Followers(context.Background(), "user_id")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -358,6 +358,35 @@ func ExampleClient_UndoFollowing() {
 		panic(err)
 	}
 	fmt.Println(uf)
+}
+
+func ExampleClient_Blocking() {
+	client := gotwtr.New("key")
+	b, err := client.Blocking(context.Background(), "user_id")
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, user := range b.Users {
+		fmt.Println(user)
+	}
+}
+
+func ExampleClient_PostBlocking() {
+	client := gotwtr.New("key")
+	pb, err := client.PostBlocking(context.Background(), "user_id", "target_user_id")
+	if err != nil {
+		log.Println(err)
+	}
+	fmt.Println(pb)
+}
+
+func ExampleClient_UndoBlocking() {
+	client := gotwtr.New("key")
+	ub, err := client.UndoBlocking(context.Background(), "source_user_id", "target_user_id")
+	if err != nil {
+		log.Println(err)
+	}
+	fmt.Println(ub)
 }
 
 func ExampleClient_Muting() {
@@ -391,7 +420,7 @@ func ExampleClient_UndoMuting() {
 
 func ExampleClient_LookUpSpace() {
 	client := gotwtr.New("key")
-	s, err := client.LookUpSpace(context.Background(), "id")
+	s, err := client.LookUpSpace(context.Background(), "space_id")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -400,7 +429,7 @@ func ExampleClient_LookUpSpace() {
 
 func ExampleClient_LookUpSpaces() {
 	client := gotwtr.New("key")
-	ss, err := client.LookUpSpaces(context.Background(), []string{"id", "id2"})
+	ss, err := client.LookUpSpaces(context.Background(), []string{"space_id", "space_id2"})
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -411,7 +440,7 @@ func ExampleClient_LookUpSpaces() {
 
 func ExampleClient_UsersPurchasedSpaceTicket() {
 	client := gotwtr.New("key")
-	tickets, err := client.UsersPurchasedSpaceTicket(context.Background(), "id")
+	tickets, err := client.UsersPurchasedSpaceTicket(context.Background(), "space_id")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -422,7 +451,7 @@ func ExampleClient_UsersPurchasedSpaceTicket() {
 
 func ExampleClient_DiscoverSpaces() {
 	client := gotwtr.New("key")
-	discover, err := client.DiscoverSpaces(context.Background(), []string{"id", "id2"})
+	discover, err := client.DiscoverSpaces(context.Background(), []string{"user_id", "user_id2"})
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -444,7 +473,7 @@ func ExampleClient_SearchSpaces() {
 
 func ExampleClient_LookUpList() {
 	client := gotwtr.New("key")
-	l, err := client.LookUpList(context.Background(), "id")
+	l, err := client.LookUpList(context.Background(), "list_id")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -453,7 +482,7 @@ func ExampleClient_LookUpList() {
 
 func ExampleClient_LookUpAllListsOwned() {
 	client := gotwtr.New("key")
-	lists, err := client.LookUpAllListsOwned(context.Background(), "id")
+	lists, err := client.LookUpAllListsOwned(context.Background(), "user_id")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -464,7 +493,7 @@ func ExampleClient_LookUpAllListsOwned() {
 
 func ExampleClient_LookUpListTweets() {
 	client := gotwtr.New("key")
-	lt, err := client.LookUpListTweets(context.Background(), "id")
+	lt, err := client.LookUpListTweets(context.Background(), "list_id")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -475,7 +504,7 @@ func ExampleClient_LookUpListTweets() {
 
 func ExampleClient_ListMembers() {
 	client := gotwtr.New("key")
-	members, err := client.ListMembers(context.Background(), "id")
+	members, err := client.ListMembers(context.Background(), "list_id")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -486,7 +515,7 @@ func ExampleClient_ListMembers() {
 
 func ExampleClient_ListsSpecifiedUser() {
 	client := gotwtr.New("key")
-	lists, err := client.ListsSpecifiedUser(context.Background(), "id")
+	lists, err := client.ListsSpecifiedUser(context.Background(), "user_id")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -497,7 +526,7 @@ func ExampleClient_ListsSpecifiedUser() {
 
 func ExampleClient_LookUpListFollowers() {
 	client := gotwtr.New("key")
-	followers, err := client.LookUpListFollowers(context.Background(), "id")
+	followers, err := client.LookUpListFollowers(context.Background(), "list_id")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -508,7 +537,7 @@ func ExampleClient_LookUpListFollowers() {
 
 func ExampleClient_LookUpAllListsUserFollows() {
 	client := gotwtr.New("key")
-	lists, err := client.LookUpAllListsUserFollows(context.Background(), "id")
+	lists, err := client.LookUpAllListsUserFollows(context.Background(), "user_id")
 	if err != nil {
 		log.Fatal(err)
 	}
