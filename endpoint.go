@@ -37,6 +37,9 @@ const (
 	blockingURL                           = "https://api.twitter.com/2/users/%v/blocking"
 	postBlockingURL                       = "https://api.twitter.com/2/users/%v/blocking"
 	undoBlockingURL                       = "https://api.twitter.com/2/users/%v/blocking/%v"
+	mutingURL                             = "https://api.twitter.com/2/users/%v/muting"
+	postMutingURL                         = "https://api.twitter.com/2/users/%v/muting"
+	undoMutingURL                         = "https://api.twitter.com/2/users/%v/muting/%v"
 )
 
 const (

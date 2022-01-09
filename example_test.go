@@ -371,6 +371,35 @@ func ExampleClient_UndoBlocking() {
 	fmt.Println(ub)
 }
 
+func ExampleClient_Muting() {
+	client := gotwtr.New("key")
+	m, err := client.Muting(context.Background(), "user_id")
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, user := range m.Users {
+		fmt.Println(user)
+	}
+}
+
+func ExampleClient_PostMuting() {
+	client := gotwtr.New("key")
+	pm, err := client.PostMuting(context.Background(), "user_id", "target_user_id")
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(pm)
+}
+
+func ExampleClient_UndoMuting() {
+	client := gotwtr.New("key")
+	um, err := client.UndoMuting(context.Background(), "source_user_id", "target_user_id")
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(um)
+}
+
 func ExampleClient_LookUpSpace() {
 	client := gotwtr.New("key")
 	s, err := client.LookUpSpace(context.Background(), "space_id")
