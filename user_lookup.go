@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"strings"
 )
 
 func retrieveMultipleUsersWithIDs(ctx context.Context, c *client, userIDs []string, opt ...*RetrieveUserOption) (*UsersResponse, error) {
@@ -16,14 +17,7 @@ func retrieveMultipleUsersWithIDs(ctx context.Context, c *client, userIDs []stri
 		return nil, errors.New("retrieve multiple users with ids: ids parameter must be less than or equal to 100")
 	default:
 	}
-	ep := retrieveMultipleUsersWithIDsURL
-	for i, uid := range userIDs {
-		if i+1 < len(userIDs) {
-			ep += fmt.Sprintf("%s,", uid)
-		} else {
-			ep += uid
-		}
-	}
+	ep := retrieveMultipleUsersWithIDsURL + strings.Join(userIDs, ",")
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, ep, nil)
 	if err != nil {
@@ -117,14 +111,7 @@ func retrieveMultipleUsersWithUserNames(ctx context.Context, c *client, userName
 		return nil, errors.New("retrieve multiple users with user names: user names parameter must be less than or equal to 100")
 	default:
 	}
-	ep := retrieveMultipleUsersWithUserNamesURL
-	for i, un := range userNames {
-		if i+1 < len(userNames) {
-			ep += fmt.Sprintf("%s,", un)
-		} else {
-			ep += un
-		}
-	}
+	ep := retrieveMultipleUsersWithUserNamesURL + strings.Join(userNames, ",")
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, ep, nil)
 	if err != nil {
