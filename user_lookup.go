@@ -119,7 +119,7 @@ func retrieveMultipleUsersWithUserNames(ctx context.Context, c *client, userName
 	}
 	ep := retrieveMultipleUsersWithUserNamesURL
 	for i, un := range userNames {
-		if i+1 < len(un) {
+		if i+1 < len(userNames) {
 			ep += fmt.Sprintf("%s,", un)
 		} else {
 			ep += un
