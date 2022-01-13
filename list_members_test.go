@@ -133,12 +133,12 @@ func Test_ListSpecifiedUser(t *testing.T) {
 		ctx    context.Context
 		client *http.Client
 		id     string
-		opt    []*gotwtr.ListsSpecifiedUserOption
+		opt    []*gotwtr.ListMembershipsOption
 	}
 	tests := []struct {
 		name    string
 		args    args
-		want    *gotwtr.ListsSpecifiedUserResponse
+		want    *gotwtr.ListMembershipsResponse
 		wantErr bool
 	}{
 		{
@@ -148,20 +148,20 @@ func Test_ListSpecifiedUser(t *testing.T) {
 				client: mockHTTPClient(func(request *http.Request) *http.Response {
 					data := `{
 						"data": [
-							   {
-							     "id": "1451951974291689472",
-							     "name": "Twitter"
-							   },
-							   {
-							     "id": "1451812298184540161",
-							     "name": "Updates"
-							   },
-							   {
-							     "id": "1450519480132509697",
-							     "name": "Twitter"
-							   }
-                        ],
-					    "meta": {
+							{
+								"id": "1451951974291689472",
+								"name": "Twitter"
+							},
+							{
+								"id": "1451812298184540161",
+								"name": "Updates"
+							},
+							{
+								"id": "1450519480132509697",
+								"name": "Twitter"
+							}
+						],
+						"meta": {
 							"result_count": 3
 						}
 					}`
@@ -171,9 +171,9 @@ func Test_ListSpecifiedUser(t *testing.T) {
 					}
 				}),
 				id:  "84839422",
-				opt: []*gotwtr.ListsSpecifiedUserOption{},
+				opt: []*gotwtr.ListMembershipsOption{},
 			},
-			want: &gotwtr.ListsSpecifiedUserResponse{
+			want: &gotwtr.ListMembershipsResponse{
 				Lists: []*gotwtr.List{
 					{
 						ID:   "1451951974291689472",
@@ -228,9 +228,9 @@ func Test_ListSpecifiedUser(t *testing.T) {
 					}
 				}),
 				id:  "84839422",
-				opt: []*gotwtr.ListsSpecifiedUserOption{},
+				opt: []*gotwtr.ListMembershipsOption{},
 			},
-			want: &gotwtr.ListsSpecifiedUserResponse{
+			want: &gotwtr.ListMembershipsResponse{
 				Lists: []*gotwtr.List{
 					{
 						ID:            "1451951974291689472",
@@ -279,9 +279,9 @@ func Test_ListSpecifiedUser(t *testing.T) {
 					}
 				}),
 				id:  "849422",
-				opt: []*gotwtr.ListsSpecifiedUserOption{},
+				opt: []*gotwtr.ListMembershipsOption{},
 			},
-			want: &gotwtr.ListsSpecifiedUserResponse{
+			want: &gotwtr.ListMembershipsResponse{
 				Errors: []*gotwtr.APIResponseError{
 					{
 						Value:        "849422",
@@ -320,9 +320,9 @@ func Test_ListSpecifiedUser(t *testing.T) {
 					}
 				}),
 				id:  "8488877666666666666666666666666622839422",
-				opt: []*gotwtr.ListsSpecifiedUserOption{},
+				opt: []*gotwtr.ListMembershipsOption{},
 			},
-			want: &gotwtr.ListsSpecifiedUserResponse{
+			want: &gotwtr.ListMembershipsResponse{
 				Errors: []*gotwtr.APIResponseError{
 					{
 						Parameters: gotwtr.Parameter{
@@ -343,13 +343,303 @@ func Test_ListSpecifiedUser(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			c := gotwtr.New("key", gotwtr.WithHTTPClient(tt.args.client))
-			got, err := c.ListsSpecifiedUser(tt.args.ctx, tt.args.id, tt.args.opt...)
+			got, err := c.ListMemberships(tt.args.ctx, tt.args.id, tt.args.opt...)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("client.ListSpecifiedUser() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("client.ListMemberships() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if diff := cmp.Diff(tt.want, got); diff != "" {
-				t.Errorf("client.ListSpecifiedUser() mismatch (-want +got):\n%s", diff)
+				t.Errorf("client.ListMemberships() mismatch (-want +got):\n%s", diff)
+				return
+			}
+		})
+	}
+}
+
+func Test_postListMembers(t *testing.T) {
+	t.Parallel()
+	type args struct {
+		ctx    context.Context
+		client *http.Client
+		listID string
+		userID string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    *gotwtr.PostListMembersResponse
+		wantErr bool
+	}{
+		{
+			name: "200 success",
+			args: args{
+				ctx: context.Background(),
+				client: mockHTTPClient(func(req *http.Request) *http.Response {
+					if req.Method != http.MethodPost {
+						t.Fatalf("the method is not correct got %s want %s", req.Method, http.MethodPost)
+					}
+					body := `{
+						"data": {
+							"is_member": true
+						}
+					}`
+					return &http.Response{
+						StatusCode: http.StatusOK,
+						Body:       io.NopCloser(strings.NewReader(body)),
+					}
+				}),
+				listID: "6253282",
+				userID: "2244994945",
+			},
+			want: &gotwtr.PostListMembersResponse{
+				IsMember: &gotwtr.IsMember{
+					IsMember: true,
+				},
+			},
+			wantErr: false,
+		},
+		{
+			name: "404 not found, invalid listID",
+			args: args{
+				ctx: context.Background(),
+				client: mockHTTPClient(func(req *http.Request) *http.Response {
+					body := `{
+						"errors":[
+							{
+								"value":"111111111122",
+								"detail":"Could not find list with id: [111111111122].",
+								"title":"Not Found Error",
+								"resource_type":"list",
+								"parameter":"id",
+								"resource_id":"111111111122",
+								"type":"https://api.twitter.com/2/problems/resource-not-found"
+							}
+						]
+					}`
+					return &http.Response{
+						StatusCode: http.StatusNotFound,
+						Body:       io.NopCloser(strings.NewReader(body)),
+					}
+				}),
+				listID: "111111111122",
+				userID: "1228393702244134912",
+			},
+			want: &gotwtr.PostListMembersResponse{
+				IsMember: nil,
+				Errors: []*gotwtr.APIResponseError{
+					{
+						Value:        "111111111122",
+						Detail:       "Could not find list with id: [111111111122].",
+						Title:        "Not Found Error",
+						ResourceType: "list",
+						Parameter:    "id",
+						ResourceID:   "111111111122",
+						Type:         "https://api.twitter.com/2/problems/resource-not-found",
+					},
+				},
+			},
+			wantErr: true,
+		},
+		{
+			name: "404 not found, invalid userID",
+			args: args{
+				ctx: context.Background(),
+				client: mockHTTPClient(func(req *http.Request) *http.Response {
+					body := `{
+						"errors":[
+							{
+								"value":"1228393702244134912",
+								"detail":"Could not find user with id: [1228393702244134912].",
+								"title":"Not Found Error",
+								"resource_type":"user",
+								"parameter":"id",
+								"resource_id":"1228393702244134912",
+								"type":"https://api.twitter.com/2/problems/resource-not-found"
+							}
+						]
+					}`
+					return &http.Response{
+						StatusCode: http.StatusNotFound,
+						Body:       io.NopCloser(strings.NewReader(body)),
+					}
+				}),
+				listID: "111111111122",
+				userID: "1228393702244134912",
+			},
+			want: &gotwtr.PostListMembersResponse{
+				IsMember: nil,
+				Errors: []*gotwtr.APIResponseError{
+					{
+						Value:        "1228393702244134912",
+						Detail:       "Could not find user with id: [1228393702244134912].",
+						Title:        "Not Found Error",
+						ResourceType: "user",
+						Parameter:    "id",
+						ResourceID:   "1228393702244134912",
+						Type:         "https://api.twitter.com/2/problems/resource-not-found",
+					},
+				},
+			},
+			wantErr: true,
+		},
+	}
+	for i, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
+			got, err := c.PostListMembers(tt.args.ctx, tt.args.listID, tt.args.userID)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("PostListMembers() index = %v error = %v, wantErr %v", i, err, tt.wantErr)
+				return
+			}
+			if diff := cmp.Diff(got, tt.want); diff != "" {
+				t.Errorf("PostListMembers() index = %v mismatch (-want +got):\n%s", i, diff)
+				return
+			}
+		})
+	}
+}
+
+func Test_undoListMembers(t *testing.T) {
+	t.Parallel()
+	type args struct {
+		ctx    context.Context
+		client *http.Client
+		listID string
+		userID string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    *gotwtr.UndoListMembersResponse
+		wantErr bool
+	}{
+		{
+			name: "200 success",
+			args: args{
+				ctx: context.Background(),
+				client: mockHTTPClient(func(req *http.Request) *http.Response {
+					if req.Method != http.MethodDelete {
+						t.Fatalf("the method is not correct got %s want %s", req.Method, http.MethodDelete)
+					}
+					body := `{
+						"data": {
+							"following": false
+						}
+					}`
+					return &http.Response{
+						StatusCode: http.StatusOK,
+						Body:       io.NopCloser(strings.NewReader(body)),
+					}
+				}),
+				listID: "2244994945",
+				userID: "6253282",
+			},
+			want: &gotwtr.UndoListMembersResponse{
+				IsMember: &gotwtr.IsMember{
+					IsMember: false,
+				},
+			},
+			wantErr: false,
+		},
+		{
+			name: "404 not found, invalid listID",
+			args: args{
+				ctx: context.Background(),
+				client: mockHTTPClient(func(req *http.Request) *http.Response {
+					body := `{
+						"errors":[
+							{
+								"value":"111111111122",
+								"detail":"Could not find list with id: [111111111122].",
+								"title":"Not Found Error",
+								"resource_type":"list",
+								"parameter":"id",
+								"resource_id":"111111111122",
+								"type":"https://api.twitter.com/2/problems/resource-not-found"
+							}
+						]
+					}`
+					return &http.Response{
+						StatusCode: http.StatusNotFound,
+						Body:       io.NopCloser(strings.NewReader(body)),
+					}
+				}),
+				listID: "111111111122",
+				userID: "1228393702244134912",
+			},
+			want: &gotwtr.UndoListMembersResponse{
+				IsMember: nil,
+				Errors: []*gotwtr.APIResponseError{
+					{
+						Value:        "111111111122",
+						Detail:       "Could not find list with id: [111111111122].",
+						Title:        "Not Found Error",
+						ResourceType: "list",
+						Parameter:    "id",
+						ResourceID:   "111111111122",
+						Type:         "https://api.twitter.com/2/problems/resource-not-found",
+					},
+				},
+			},
+			wantErr: true,
+		},
+		{
+			name: "404 not found, invalid userID",
+			args: args{
+				ctx: context.Background(),
+				client: mockHTTPClient(func(req *http.Request) *http.Response {
+					body := `{
+						"errors":[
+							{
+								"value":"111111111133",
+								"detail":"Could not find user with id: [111111111133].",
+								"title":"Not Found Error",
+								"resource_type":"user",
+								"parameter":"id",
+								"resource_id":"111111111133",
+								"type":"https://api.twitter.com/2/problems/resource-not-found"
+							}
+						]
+					}`
+					return &http.Response{
+						StatusCode: http.StatusNotFound,
+						Body:       io.NopCloser(strings.NewReader(body)),
+					}
+				}),
+				listID: "111111111133",
+				userID: "1228393702244134912",
+			},
+			want: &gotwtr.UndoListMembersResponse{
+				IsMember: nil,
+				Errors: []*gotwtr.APIResponseError{
+					{
+						Value:        "111111111133",
+						Detail:       "Could not find user with id: [111111111133].",
+						Title:        "Not Found Error",
+						ResourceType: "user",
+						Parameter:    "id",
+						ResourceID:   "111111111133",
+						Type:         "https://api.twitter.com/2/problems/resource-not-found",
+					},
+				},
+			},
+			wantErr: true,
+		},
+	}
+	for i, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
+			got, err := c.UndoListMembers(tt.args.ctx, tt.args.listID, tt.args.userID)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("UndoListMembers() index = %v error = %v, wantErr %v", i, err, tt.wantErr)
+				return
+			}
+			if diff := cmp.Diff(got, tt.want); diff != "" {
+				t.Errorf("UndoListMembers() index = %v mismatch (-want +got):\n%s", i, diff)
 				return
 			}
 		})
