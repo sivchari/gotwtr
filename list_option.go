@@ -178,7 +178,7 @@ func (l ListFollowersOption) addQuery(req *http.Request) {
 	}
 }
 
-type ListsSpecifiedUserOption struct {
+type ListMembershipsOption struct {
 	Expansions      []Expansion
 	ListFields      []ListField
 	MaxResults      int
@@ -186,7 +186,7 @@ type ListsSpecifiedUserOption struct {
 	UserFields      []UserField
 }
 
-func (l *ListsSpecifiedUserOption) addQuery(req *http.Request) {
+func (l *ListMembershipsOption) addQuery(req *http.Request) {
 	q := req.URL.Query()
 	if len(l.Expansions) > 0 {
 		q.Add("expansions", strings.Join(expansionsToString(l.Expansions), ","))
