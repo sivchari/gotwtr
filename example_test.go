@@ -513,15 +513,33 @@ func ExampleClient_ListMembers() {
 	}
 }
 
-func ExampleClient_ListsSpecifiedUser() {
+func ExampleClient_ListMemberships() {
 	client := gotwtr.New("key")
-	lists, err := client.ListsSpecifiedUser(context.Background(), "user_id")
+	lists, err := client.ListMemberships(context.Background(), "user_id")
 	if err != nil {
 		log.Fatal(err)
 	}
 	for _, list := range lists.Lists {
 		fmt.Println(list)
 	}
+}
+
+func ExampleClient_PostListMembers() {
+	client := gotwtr.New("key")
+	plm, err := client.PostListMembers(context.Background(), "list_id", "user_id")
+	if err != nil {
+		log.Println(err)
+	}
+	fmt.Println(plm)
+}
+
+func ExampleClient_UndoListMembers() {
+	client := gotwtr.New("key")
+	ulm, err := client.UndoListMembers(context.Background(), "list_id", "user_id")
+	if err != nil {
+		log.Println(err)
+	}
+	fmt.Println(ulm)
 }
 
 func ExampleClient_LookUpListFollowers() {

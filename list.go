@@ -92,7 +92,7 @@ type ListMembersResponse struct {
 	Type     string              `json:"type,omitempty"`
 }
 
-type ListsSpecifiedUserResponse struct {
+type ListMembershipsResponse struct {
 	Lists    []*List             `json:"data"`
 	Includes *ListIncludes       `json:"includes,omitempty"`
 	Errors   []*APIResponseError `json:"errors,omitempty"`
@@ -100,4 +100,22 @@ type ListsSpecifiedUserResponse struct {
 	Title    string              `json:"title,omitempty"`
 	Detail   string              `json:"detail,omitempty"`
 	Type     string              `json:"type,omitempty"`
+}
+
+type PostListMembersResponse struct {
+	IsMember *IsMember           `json:"data"`
+	Errors   []*APIResponseError `json:"errors,omitempty"`
+}
+
+type UndoListMembersResponse struct {
+	IsMember *IsMember           `json:"data"`
+	Errors   []*APIResponseError `json:"errors,omitempty"`
+}
+
+type IsMember struct {
+	IsMember bool `json:"is_member"`
+}
+
+type ListMembersBody struct {
+	UserID string `json:"user_id"`
 }
