@@ -61,12 +61,12 @@ func postBlocking(ctx context.Context, c *client, userID string, targetUserID st
 	body := &BlockingBody{
 		TargetUserID: targetUserID,
 	}
-	jsonStr, err := json.Marshal(body)
+	j, err := json.Marshal(body)
 	if err != nil {
 		return nil, errors.New("post blocking: can not marshal")
 	}
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodPost, ep, bytes.NewBuffer(jsonStr))
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, ep, bytes.NewBuffer(j))
 	if err != nil {
 		return nil, fmt.Errorf("post blocking new request with ctx: %w", err)
 	}

@@ -28,12 +28,12 @@ func addOrDeleteRules(ctx context.Context, c *client, body *AddOrDeleteJSONBody,
 		}
 	}
 
-	jsonStr, err := json.Marshal(body)
+	j, err := json.Marshal(body)
 	if err != nil {
 		return nil, errors.New("add or delete rules : can not marshal")
 	}
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodPost, addOrDeleteRulesURL, bytes.NewBuffer(jsonStr))
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, addOrDeleteRulesURL, bytes.NewBuffer(j))
 	if err != nil {
 		return nil, fmt.Errorf("add or delete rules new request with ctx: %w", err)
 	}

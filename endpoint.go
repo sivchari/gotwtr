@@ -25,6 +25,8 @@ const (
 	postUsersLikingTweetURL   = "https://api.twitter.com/2/users/%v/likes"
 	undoUsersLikingTweetURL   = "https://api.twitter.com/2/users/%v/likes/%v"
 	searchAllTweetsURL        = "https://api.twitter.com/2/tweets/search/all"
+	postTweetURL              = "https://api.twitter.com/2/tweets"
+	deleteTweetURL            = "https://api.twitter.com/2/tweets/%v"
 )
 
 const (

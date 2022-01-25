@@ -611,3 +611,17 @@ type TweetsUserLikedMeta struct {
 	ResultCount int    `json:"result_count"`
 	NextToken   string `json:"next_token"`
 }
+
+type TweetReply struct {
+	ExcludeReplyUserIDs []string `json:"exclude_reply_user_ids"`
+	InReplyToTweetID    string   `json:"in_reply_to_tweet_id"`
+}
+
+type PostTweetResponse struct {
+	ID   string `json:"id"`
+	Text string `json:"text"`
+}
+
+type DeleteTweetResponse struct {
+	Deleted bool `json:"deleted"`
+}
