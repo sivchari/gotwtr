@@ -120,12 +120,12 @@ func postUsersLikingTweet(ctx context.Context, c *client, userID string, tweetID
 	body := &UsersLikingBody{
 		TweetID: tweetID,
 	}
-	jsonStr, err := json.Marshal(body)
+	j, err := json.Marshal(body)
 	if err != nil {
 		return nil, errors.New("post users liking tweet: can not marshal")
 	}
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodPost, ep, bytes.NewBuffer(jsonStr))
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, ep, bytes.NewBuffer(j))
 	if err != nil {
 		return nil, fmt.Errorf("post users liking tweet new request with ctx: %w", err)
 	}
