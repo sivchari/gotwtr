@@ -40,6 +40,8 @@ type Tweets interface {
 	PostUsersLikingTweet(ctx context.Context, userID string, tweetID string) (*PostUsersLikingTweetResponse, error)
 	UndoUsersLikingTweet(ctx context.Context, userID string, tweetID string) (*UndoUsersLikingTweetResponse, error)
 	SearchAllTweets(ctx context.Context, tweet string, opt ...*SearchTweetsOption) (*SearchTweetsResponse, error)
+	PostTweet(ctx context.Context, body *PostTweetOption) (*PostTweetResponse, error)
+	DeleteTweet(ctx context.Context, tweetID string) (*DeleteTweetResponse, error)
 }
 
 type Users interface {
@@ -176,6 +178,16 @@ func (c *Client) SearchRecentTweets(ctx context.Context, tweet string, opt ...*S
 // This endpoint is only available to those users who have been approved for Academic Research access.
 func (c *client) SearchAllTweets(ctx context.Context, tweet string, opt ...*SearchTweetsOption) (*SearchTweetsResponse, error) {
 	return searchAllTweets(ctx, c, tweet, opt...)
+}
+
+// PostTweet creates a Tweet on behalf of an authenticated user.
+func (c *client) PostTweet(ctx context.Context, body *PostTweetOption) (*PostTweetResponse, error) {
+	return postTweet(ctx, c, body)
+}
+
+// DeleteTweet allows a user or authenticated user ID to delete a Tweet.
+func (c *client) DeleteTweet(ctx context.Context, tweetID string) (*DeleteTweetResponse, error) {
+	return deleteTweet(ctx, c, tweetID)
 }
 
 // CountsRecentTweet returns count of Tweets from the last seven days that match a query.
