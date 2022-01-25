@@ -236,7 +236,7 @@ func Test_tweetsUserLiked(t *testing.T) {
 	type args struct {
 		ctx    context.Context
 		client *http.Client
-		opt    []*gotwtr.TweetsUserLikedOpts
+		opt    []*gotwtr.TweetsUserLikedOption
 	}
 	tests := []struct {
 		name    string
@@ -349,7 +349,7 @@ func Test_tweetsUserLiked(t *testing.T) {
 						Body:       io.NopCloser(strings.NewReader(body)),
 					}
 				}),
-				opt: []*gotwtr.TweetsUserLikedOpts{
+				opt: []*gotwtr.TweetsUserLikedOption{
 					{
 						TweetFields: []gotwtr.TweetField{gotwtr.TweetFieldCreatedAt, gotwtr.TweetFieldSource},
 					},

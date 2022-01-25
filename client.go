@@ -35,7 +35,7 @@ type Tweets interface {
 	RetweetsLookup(ctx context.Context, tweetID string, opt ...*RetweetsLookupOption) (*RetweetsResponse, error)
 	PostRetweet(ctx context.Context, userID string, tweetID string) (*PostRetweetResponse, error)
 	UndoRetweet(ctx context.Context, userID string, sourceTweetID string) (*UndoRetweetResponse, error)
-	TweetsUserLiked(ctx context.Context, userID string, opt ...*TweetsUserLikedOpts) (*TweetsUserLikedResponse, error)
+	TweetsUserLiked(ctx context.Context, userID string, opt ...*TweetsUserLikedOption) (*TweetsUserLikedResponse, error)
 	UsersLikingTweet(ctx context.Context, tweetID string, opt ...*UsersLikingTweetOption) (*UsersLikingTweetResponse, error)
 	PostUsersLikingTweet(ctx context.Context, userID string, tweetID string) (*PostUsersLikingTweetResponse, error)
 	UndoUsersLikingTweet(ctx context.Context, userID string, tweetID string) (*UndoUsersLikingTweetResponse, error)
@@ -221,7 +221,7 @@ func (c *client) UndoRetweet(ctx context.Context, userID string, sourceTweetID s
 
 // TweetsUserLiked allows you to get information about a Tweet’s liking users.
 // You will receive the most recent 100 users who liked the specified Tweet.
-func (c *Client) TweetsUserLiked(ctx context.Context, userID string, opt ...*TweetsUserLikedOpts) (*TweetsUserLikedResponse, error) {
+func (c *Client) TweetsUserLiked(ctx context.Context, userID string, opt ...*TweetsUserLikedOption) (*TweetsUserLikedResponse, error) {
 	return tweetsUserLiked(ctx, c.client, userID, opt...)
 }
 

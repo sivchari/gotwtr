@@ -53,7 +53,7 @@ func usersLikingTweet(ctx context.Context, c *client, tweetID string, opt ...*Us
 	return &ultr, nil
 }
 
-func tweetsUserLiked(ctx context.Context, c *client, userID string, opt ...*TweetsUserLikedOpts) (*TweetsUserLikedResponse, error) {
+func tweetsUserLiked(ctx context.Context, c *client, userID string, opt ...*TweetsUserLikedOption) (*TweetsUserLikedResponse, error) {
 	if userID == "" {
 		return nil, errors.New("tweets user liked: user id parameter is required")
 	}
@@ -65,7 +65,7 @@ func tweetsUserLiked(ctx context.Context, c *client, userID string, opt ...*Twee
 	}
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.bearerToken))
 
-	var topt TweetsUserLikedOpts
+	var topt TweetsUserLikedOption
 	switch len(opt) {
 	case 0:
 		// do nothing
