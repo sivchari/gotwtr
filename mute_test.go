@@ -467,7 +467,7 @@ func Test_undoMuting(t *testing.T) {
 				t.Errorf("UndoMuting() index = %v error = %v, wantErr %v", i, err, tt.wantErr)
 				return
 			}
-			if diff := cmp.Diff(got, tt.want); diff != "" {
+			if diff := cmp.Diff(tt.want, got); diff != "" {
 				t.Errorf("UndoMuting() index = %v mismatch (-want +got):\n%s", i, diff)
 				return
 			}

@@ -618,10 +618,18 @@ type TweetReply struct {
 }
 
 type PostTweetResponse struct {
+	PostTweetData PostTweetData `json:"data"`
+}
+
+type PostTweetData struct {
 	ID   string `json:"id"`
 	Text string `json:"text"`
 }
 
 type DeleteTweetResponse struct {
+	Data DeleteTweetData `json:"data"`
+}
+
+type DeleteTweetData struct {
 	Deleted bool `json:"deleted"`
 }

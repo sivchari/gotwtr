@@ -12,7 +12,7 @@ import (
 func postTweet(ctx context.Context, c *client, body *PostTweetOption) (*PostTweetResponse, error) {
 	j, err := json.Marshal(body)
 	if err != nil {
-		return nil, fmt.Errorf("postTweet: %w", err)
+		return nil, fmt.Errorf("postTweet json marshal: %w", err)
 	}
 	req, err := http.NewRequestWithContext(ctx, http.MethodPost, postTweetURL, bytes.NewBuffer(j))
 	if err != nil {
@@ -43,7 +43,7 @@ func postTweet(ctx context.Context, c *client, body *PostTweetOption) (*PostTwee
 
 func deleteTweet(ctx context.Context, c *client, tweetID string) (*DeleteTweetResponse, error) {
 	if tweetID == "" {
-		return nil, errors.New("delete tweet: tweetID parameter is required")
+		return nil, errors.New("delete tweet: tweet id parameter is required")
 	}
 	ep := fmt.Sprintf(deleteTweetURL, tweetID)
 
