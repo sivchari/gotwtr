@@ -1,6 +1,7 @@
 package gotwtr
 
 import (
+	"context"
 	"net/http"
 	"sync"
 )
@@ -322,6 +323,7 @@ type ConnectToStream struct {
 	ch     chan<- ConnectToStreamResponse
 	done   chan struct{}
 	wg     *sync.WaitGroup
+	cancel context.CancelFunc
 }
 
 type PostRetweetResponse struct {

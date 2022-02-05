@@ -113,6 +113,7 @@ func retrieveStreamRules(ctx context.Context, c *client, opt ...*RetrieveStreamR
 
 func (s *ConnectToStream) Stop() {
 	close(s.done)
+	s.cancel()
 	s.wg.Wait()
 }
 
@@ -148,6 +149,7 @@ func (s *ConnectToStream) retry(req *http.Request) {
 }
 
 func connectToStream(ctx context.Context, c *client, ch chan<- ConnectToStreamResponse, errCh chan<- error, opt ...*ConnectToStreamOption) *ConnectToStream {
+	ctx, cancel := context.WithCancel(ctx)
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, connectToStreamURL, nil)
 	if err != nil {
 		errCh <- fmt.Errorf("connect to stream new request with ctx: %w", err)
@@ -171,6 +173,7 @@ func connectToStream(ctx context.Context, c *client, ch chan<- ConnectToStreamRe
 		ch:     ch,
 		done:   make(chan struct{}),
 		wg:     &sync.WaitGroup{},
+		cancel: cancel,
 	}
 
 	s.wg.Add(1)
