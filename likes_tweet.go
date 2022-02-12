@@ -53,7 +53,7 @@ func usersLikingTweet(ctx context.Context, c *client, tweetID string, opt ...*Us
 	return &ultr, nil
 }
 
-func tweetsUserLiked(ctx context.Context, c *client, userID string, opt ...*TweetsUserLikedOpts) (*TweetsUserLikedResponse, error) {
+func tweetsUserLiked(ctx context.Context, c *client, userID string, opt ...*TweetsUserLikedOption) (*TweetsUserLikedResponse, error) {
 	if userID == "" {
 		return nil, errors.New("tweets user liked: user id parameter is required")
 	}
@@ -65,7 +65,7 @@ func tweetsUserLiked(ctx context.Context, c *client, userID string, opt ...*Twee
 	}
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.bearerToken))
 
-	var topt TweetsUserLikedOpts
+	var topt TweetsUserLikedOption
 	switch len(opt) {
 	case 0:
 		// do nothing
@@ -120,12 +120,12 @@ func postUsersLikingTweet(ctx context.Context, c *client, userID string, tweetID
 	body := &UsersLikingBody{
 		TweetID: tweetID,
 	}
-	jsonStr, err := json.Marshal(body)
+	j, err := json.Marshal(body)
 	if err != nil {
 		return nil, errors.New("post users liking tweet: can not marshal")
 	}
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodPost, ep, bytes.NewBuffer(jsonStr))
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, ep, bytes.NewBuffer(j))
 	if err != nil {
 		return nil, fmt.Errorf("post users liking tweet new request with ctx: %w", err)
 	}

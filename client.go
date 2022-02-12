@@ -35,11 +35,13 @@ type Tweets interface {
 	RetweetsLookup(ctx context.Context, tweetID string, opt ...*RetweetsLookupOption) (*RetweetsResponse, error)
 	PostRetweet(ctx context.Context, userID string, tweetID string) (*PostRetweetResponse, error)
 	UndoRetweet(ctx context.Context, userID string, sourceTweetID string) (*UndoRetweetResponse, error)
-	TweetsUserLiked(ctx context.Context, userID string, opt ...*TweetsUserLikedOpts) (*TweetsUserLikedResponse, error)
+	TweetsUserLiked(ctx context.Context, userID string, opt ...*TweetsUserLikedOption) (*TweetsUserLikedResponse, error)
 	UsersLikingTweet(ctx context.Context, tweetID string, opt ...*UsersLikingTweetOption) (*UsersLikingTweetResponse, error)
 	PostUsersLikingTweet(ctx context.Context, userID string, tweetID string) (*PostUsersLikingTweetResponse, error)
 	UndoUsersLikingTweet(ctx context.Context, userID string, tweetID string) (*UndoUsersLikingTweetResponse, error)
 	SearchAllTweets(ctx context.Context, tweet string, opt ...*SearchTweetsOption) (*SearchTweetsResponse, error)
+	PostTweet(ctx context.Context, body *PostTweetOption) (*PostTweetResponse, error)
+	DeleteTweet(ctx context.Context, tweetID string) (*DeleteTweetResponse, error)
 }
 
 type Users interface {
@@ -180,6 +182,16 @@ func (c *client) SearchAllTweets(ctx context.Context, tweet string, opt ...*Sear
 	return searchAllTweets(ctx, c, tweet, opt...)
 }
 
+// PostTweet creates a Tweet on behalf of an authenticated user.
+func (c *client) PostTweet(ctx context.Context, body *PostTweetOption) (*PostTweetResponse, error) {
+	return postTweet(ctx, c, body)
+}
+
+// DeleteTweet allows a user or authenticated user ID to delete a Tweet.
+func (c *client) DeleteTweet(ctx context.Context, tweetID string) (*DeleteTweetResponse, error) {
+	return deleteTweet(ctx, c, tweetID)
+}
+
 // CountsRecentTweet returns count of Tweets from the last seven days that match a query.
 func (c *Client) CountsRecentTweet(ctx context.Context, tweet string, opt ...*TweetCountsOption) (*TweetCountsResponse, error) {
 	return countsRecentTweet(ctx, c.client, tweet, opt...)
@@ -223,7 +235,7 @@ func (c *client) UndoRetweet(ctx context.Context, userID string, sourceTweetID s
 
 // TweetsUserLiked allows you to get information about a Tweet’s liking users.
 // You will receive the most recent 100 users who liked the specified Tweet.
-func (c *Client) TweetsUserLiked(ctx context.Context, userID string, opt ...*TweetsUserLikedOpts) (*TweetsUserLikedResponse, error) {
+func (c *Client) TweetsUserLiked(ctx context.Context, userID string, opt ...*TweetsUserLikedOption) (*TweetsUserLikedResponse, error) {
 	return tweetsUserLiked(ctx, c.client, userID, opt...)
 }
 
