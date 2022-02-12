@@ -513,9 +513,9 @@ func ExampleClient_ListMembers() {
 	}
 }
 
-func ExampleClient_ListMemberships() {
+func ExampleClient_ListsSpecifiedUser() {
 	client := gotwtr.New("key")
-	lists, err := client.ListMemberships(context.Background(), "user_id")
+	lists, err := client.ListsSpecifiedUser(context.Background(), "user_id")
 	if err != nil {
 		log.Fatal(err)
 	}

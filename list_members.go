@@ -66,28 +66,28 @@ func listMembers(ctx context.Context, c *client, listID string, opt ...*ListMemb
 	return &lmr, nil
 }
 
-func listMemberships(ctx context.Context, c *client, userID string, opt ...*ListMembershipsOption) (*ListMembershipsResponse, error) {
+func listsSpecifiedUser(ctx context.Context, c *client, userID string, opt ...*ListsSpecifiedUserOption) (*ListsSpecifiedUserResponse, error) {
 	if userID == "" {
-		return nil, errors.New("list memberships: userID parameter is required")
+		return nil, errors.New("lists specified user: userID parameter is required")
 	}
 
-	lm := fmt.Sprintf(listMembershipsURL, userID)
+	lm := fmt.Sprintf(listsSpecifiedUserURL, userID)
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, lm, nil)
 	if err != nil {
-		return nil, fmt.Errorf("list memberships: %w", err)
+		return nil, fmt.Errorf("lists specified user: %w", err)
 	}
 
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.bearerToken))
 
-	var lopt ListMembershipsOption
+	var lopt ListsSpecifiedUserOption
 	switch len(opt) {
 	case 0:
 		// do nothing
 	case 1:
 		lopt = *opt[0]
 	default:
-		return nil, errors.New("list memberships: only one option is allowed")
+		return nil, errors.New("lists specified user: only one option is allowed")
 	}
 	const (
 		minimumMaxResults = 1
@@ -98,7 +98,7 @@ func listMemberships(ctx context.Context, c *client, userID string, opt ...*List
 		lopt.MaxResults = defaultMaxResults
 	}
 	if lopt.MaxResults < minimumMaxResults || lopt.MaxResults > maximumMaxResults {
-		return nil, fmt.Errorf("list memberships: max results must be between %d and %d", minimumMaxResults, maximumMaxResults)
+		return nil, fmt.Errorf("lists specified user: max results must be between %d and %d", minimumMaxResults, maximumMaxResults)
 	}
 	lopt.addQuery(req)
 
@@ -109,13 +109,13 @@ func listMemberships(ctx context.Context, c *client, userID string, opt ...*List
 
 	defer resp.Body.Close()
 
-	var lmr ListMembershipsResponse
+	var lmr ListsSpecifiedUserResponse
 	if err := json.NewDecoder(resp.Body).Decode(&lmr); err != nil {
-		return nil, fmt.Errorf("list memberships: %w", err)
+		return nil, fmt.Errorf("lists specified user: %w", err)
 	}
 	if resp.StatusCode != http.StatusOK {
 		return &lmr, &HTTPError{
-			APIName: "list memberships",
+			APIName: "lists specified user",
 			Status:  resp.Status,
 			URL:     req.URL.String(),
 		}
@@ -136,12 +136,12 @@ func postListMembers(ctx context.Context, c *client, listID string, userID strin
 	body := &ListMembersBody{
 		UserID: userID,
 	}
-	jsonStr, err := json.Marshal(body)
+	j, err := json.Marshal(body)
 	if err != nil {
 		return nil, errors.New("post list members: can not marshal")
 	}
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodPost, ep, bytes.NewBuffer(jsonStr))
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, ep, bytes.NewBuffer(j))
 	if err != nil {
 		return nil, fmt.Errorf("post list members new request with ctx: %w", err)
 	}
