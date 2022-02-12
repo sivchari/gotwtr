@@ -72,7 +72,7 @@ type Lists interface {
 	LookUpAllListsOwned(ctx context.Context, userID string, opt ...*AllListsOwnedOption) (*AllListsOwnedResponse, error)
 	LookUpListTweets(ctx context.Context, listID string, opt ...*ListTweetsOption) (*ListTweetsResponse, error)
 	ListMembers(ctx context.Context, listID string, opt ...*ListMembersOption) (*ListMembersResponse, error)
-	ListMemberships(ctx context.Context, userID string, opt ...*ListMembershipsOption) (*ListMembershipsResponse, error)
+	ListsSpecifiedUser(ctx context.Context, userID string, opt ...*ListsSpecifiedUserOption) (*ListsSpecifiedUserResponse, error)
 	PostListMembers(ctx context.Context, listID string, userID string) (*PostListMembersResponse, error)
 	UndoListMembers(ctx context.Context, listID string, userID string) (*UndoListMembersResponse, error)
 	LookUpListFollowers(ctx context.Context, listID string, opt ...*ListFollowersOption) (*ListFollowersResponse, error)
@@ -359,20 +359,22 @@ func (c *Client) LookUpListTweets(ctx context.Context, listID string, opt ...*Li
 	return lookUpListTweets(ctx, c.client, listID, opt...)
 }
 
-// ListsSpecifiedUser returns all Lists a specified user is a member of that.
-func (c *Client) ListMemberships(ctx context.Context, userID string, opt ...*ListMembershipsOption) (*ListMembershipsResponse, error) {
-	return listMemberships(ctx, c.client, userID, opt...)
-}
-
 // ListMembers returns a list of users who are members of the specified List.
 func (c *Client) ListMembers(ctx context.Context, listID string, opt ...*ListMembersOption) (*ListMembersResponse, error) {
 	return listMembers(ctx, c.client, listID, opt...)
 }
 
+// ListsSpecifiedUser returns all Lists a specified user is a member of that.
+func (c *Client) ListsSpecifiedUser(ctx context.Context, userID string, opt ...*ListsSpecifiedUserOption) (*ListsSpecifiedUserResponse, error) {
+	return listsSpecifiedUser(ctx, c.client, userID, opt...)
+}
+
+// PostListMembers enables the authenticated user to add a member to a List they own.
 func (c *Client) PostListMembers(ctx context.Context, listID string, userID string) (*PostListMembersResponse, error) {
 	return postListMembers(ctx, c.client, listID, userID)
 }
 
+// UndoListMembers enables the authenticated user to remove a member from a List they own.
 func (c *Client) UndoListMembers(ctx context.Context, listID string, userID string) (*UndoListMembersResponse, error) {
 	return undoListMembers(ctx, c.client, listID, userID)
 }

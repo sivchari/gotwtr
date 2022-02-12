@@ -127,18 +127,18 @@ func Test_listMembers(t *testing.T) {
 	}
 }
 
-func Test_ListSpecifiedUser(t *testing.T) {
+func Test_ListsSpecifiedUser(t *testing.T) {
 	t.Parallel()
 	type args struct {
 		ctx    context.Context
 		client *http.Client
 		id     string
-		opt    []*gotwtr.ListMembershipsOption
+		opt    []*gotwtr.ListsSpecifiedUserOption
 	}
 	tests := []struct {
 		name    string
 		args    args
-		want    *gotwtr.ListMembershipsResponse
+		want    *gotwtr.ListsSpecifiedUserResponse
 		wantErr bool
 	}{
 		{
@@ -171,9 +171,9 @@ func Test_ListSpecifiedUser(t *testing.T) {
 					}
 				}),
 				id:  "84839422",
-				opt: []*gotwtr.ListMembershipsOption{},
+				opt: []*gotwtr.ListsSpecifiedUserOption{},
 			},
-			want: &gotwtr.ListMembershipsResponse{
+			want: &gotwtr.ListsSpecifiedUserResponse{
 				Lists: []*gotwtr.List{
 					{
 						ID:   "1451951974291689472",
@@ -228,9 +228,9 @@ func Test_ListSpecifiedUser(t *testing.T) {
 					}
 				}),
 				id:  "84839422",
-				opt: []*gotwtr.ListMembershipsOption{},
+				opt: []*gotwtr.ListsSpecifiedUserOption{},
 			},
-			want: &gotwtr.ListMembershipsResponse{
+			want: &gotwtr.ListsSpecifiedUserResponse{
 				Lists: []*gotwtr.List{
 					{
 						ID:            "1451951974291689472",
@@ -279,9 +279,9 @@ func Test_ListSpecifiedUser(t *testing.T) {
 					}
 				}),
 				id:  "849422",
-				opt: []*gotwtr.ListMembershipsOption{},
+				opt: []*gotwtr.ListsSpecifiedUserOption{},
 			},
-			want: &gotwtr.ListMembershipsResponse{
+			want: &gotwtr.ListsSpecifiedUserResponse{
 				Errors: []*gotwtr.APIResponseError{
 					{
 						Value:        "849422",
@@ -320,9 +320,9 @@ func Test_ListSpecifiedUser(t *testing.T) {
 					}
 				}),
 				id:  "8488877666666666666666666666666622839422",
-				opt: []*gotwtr.ListMembershipsOption{},
+				opt: []*gotwtr.ListsSpecifiedUserOption{},
 			},
-			want: &gotwtr.ListMembershipsResponse{
+			want: &gotwtr.ListsSpecifiedUserResponse{
 				Errors: []*gotwtr.APIResponseError{
 					{
 						Parameters: gotwtr.Parameter{
@@ -343,13 +343,13 @@ func Test_ListSpecifiedUser(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			c := gotwtr.New("key", gotwtr.WithHTTPClient(tt.args.client))
-			got, err := c.ListMemberships(tt.args.ctx, tt.args.id, tt.args.opt...)
+			got, err := c.ListsSpecifiedUser(tt.args.ctx, tt.args.id, tt.args.opt...)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("client.ListMemberships() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("client.ListsSpecifiedUser() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if diff := cmp.Diff(tt.want, got); diff != "" {
-				t.Errorf("client.ListMemberships() mismatch (-want +got):\n%s", diff)
+				t.Errorf("client.ListsSpecifiedUser() mismatch (-want +got):\n%s", diff)
 				return
 			}
 		})
