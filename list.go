@@ -127,7 +127,7 @@ type PinnedListsResponse struct {
 	Meta     *ListMeta           `json:"meta"`
 	Title    string              `json:"title,omitempty"`
 	Detail   string              `json:"detail,omitempty"`
-	Type     string              `json: "type,omitempty"`
+	Type     string              `json:"type,omitempty"`
 }
 
 type PostPinnedListsResponse struct {
