@@ -119,3 +119,21 @@ type ListsSpecifiedUserResponse struct {
 	Detail   string              `json:"detail,omitempty"`
 	Type     string              `json:"type,omitempty"`
 }
+
+type PostListMembersResponse struct {
+	IsMember *IsMember           `json:"data"`
+	Errors   []*APIResponseError `json:"errors,omitempty"`
+}
+
+type UndoListMembersResponse struct {
+	IsMember *IsMember           `json:"data"`
+	Errors   []*APIResponseError `json:"errors,omitempty"`
+}
+
+type IsMember struct {
+	IsMember bool `json:"is_member"`
+}
+
+type ListMembersBody struct {
+	UserID string `json:"user_id"`
+}
