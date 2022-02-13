@@ -138,7 +138,7 @@ func postListMembers(ctx context.Context, c *client, listID string, userID strin
 	}
 	j, err := json.Marshal(body)
 	if err != nil {
-		return nil, errors.New("post list members: can not marshal")
+		return nil, fmt.Errorf("post list members: can not marshal: %w", err)
 	}
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodPost, ep, bytes.NewBuffer(j))
