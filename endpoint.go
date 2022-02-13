@@ -65,3 +65,7 @@ const (
 	lookUpListFollowersURL       = "https://api.twitter.com/2/lists/%v/followers"
 	lookUpAllListsUserFollowsURL = "https://api.twitter.com/2/users/%v/followed_lists"
 )
+
+const (
+	complianceJobsURL = "https://api.twitter.com/2/compliance/jobs"
+)
