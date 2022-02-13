@@ -563,3 +563,32 @@ func ExampleClient_LookUpAllListsUserFollows() {
 		fmt.Println(list)
 	}
 }
+
+func ExampleClient_PinnedLists() {
+	client := gotwtr.New("key")
+	pl, err := client.PinnedLists(context.Background(), "user_id")
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, l := range pl.Lists {
+		fmt.Println(l)
+	}
+}
+
+func ExampleClient_PostPinnedLists() {
+	client := gotwtr.New("key")
+	ppl, err := client.PostPinnedLists(context.Background(), "list_id", "user_id")
+	if err != nil {
+		log.Println(err)
+	}
+	fmt.Println(ppl)
+}
+
+func ExampleClient_UndoPinnedLists() {
+	client := gotwtr.New("key")
+	upl, err := client.UndoPinnedLists(context.Background(), "list_id", "user_id")
+	if err != nil {
+		log.Println(err)
+	}
+	fmt.Println(upl)
+}
