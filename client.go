@@ -81,6 +81,10 @@ type Lists interface {
 	LookUpAllListsUserFollows(ctx context.Context, userID string, opt ...*ListFollowsOption) (*AllListsUserFollowsResponse, error)
 }
 
+type Compliances interface {
+	ComplianceJobs(ctx context.Context, opt *ComplianceJobsOption) (*ComplianceJobsResponse, error)
+}
+
 // Twtr is a main interface for all Twitter API calls.
 type Twtr interface {
 	OAuth
@@ -88,6 +92,7 @@ type Twtr interface {
 	Users
 	Spaces
 	Lists
+	Compliances
 }
 
 type client struct {
@@ -399,4 +404,8 @@ func (c *Client) LookUpListFollowers(ctx context.Context, listID string, opt ...
 // LookUpAllListsUserFollows returns all Lists a specified user follows.
 func (c *Client) LookUpAllListsUserFollows(ctx context.Context, userID string, opt ...*ListFollowsOption) (*AllListsUserFollowsResponse, error) {
 	return lookUpAllListsUserFollows(ctx, c.client, userID, opt...)
+}
+
+func (c *Client) ComplianceJobs(ctx context.Context, opt *ComplianceJobsOption) (*ComplianceJobsResponse, error) {
+	return complianceJobs(ctx, c.client, opt)
 }
