@@ -405,8 +405,8 @@ func (c *Client) LookUpAllListsUserFollows(ctx context.Context, userID string, o
 }
 
 // PinnedLists returns the Lists pinned by a specified user.
-func (c *Client) PinnedLists(ctx context.Context, userId string, opt ...*PinnedListsOption) (*PinnedListsResponse, error) {
-	return pinnedLists(ctx, c.client, userId, opt...)
+func (c *Client) PinnedLists(ctx context.Context, userID string, opt ...*PinnedListsOption) (*PinnedListsResponse, error) {
+	return pinnedLists(ctx, c.client, userID, opt...)
 }
 
 // PostPinnedLists enables the authenticated user to pin a List.
