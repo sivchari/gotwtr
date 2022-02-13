@@ -75,8 +75,10 @@ type Lists interface {
 	LookUpListTweets(ctx context.Context, listID string, opt ...*ListTweetsOption) (*ListTweetsResponse, error)
 	ListMembers(ctx context.Context, listID string, opt ...*ListMembersOption) (*ListMembersResponse, error)
 	ListsSpecifiedUser(ctx context.Context, userID string, opt ...*ListsSpecifiedUserOption) (*ListsSpecifiedUserResponse, error)
-	LookUpListFollowers(ctx context.Context, listID string, opt ...*ListFollowersOption) (*ListFollowersResponse, error)
-	LookUpAllListsUserFollows(ctx context.Context, userID string, opt ...*ListFollowsOption) (*AllListsUserFollowsResponse, error)
+	ListFollowers(ctx context.Context, listID string, opt ...*ListFollowersOption) (*ListFollowersResponse, error)
+	AllListsUserFollows(ctx context.Context, userID string, opt ...*ListFollowsOption) (*AllListsUserFollowsResponse, error)
+	PostListFollows(ctx context.Context, listID string, userID string) (*PostListFollowsResponse, error)
+	UndoListFollows(ctx context.Context, listID string, userID string) (*UndoListFollowsResponse, error)
 }
 
 // Twtr is a main interface for all Twitter API calls.
@@ -379,12 +381,22 @@ func (c *Client) ListMembers(ctx context.Context, listID string, opt ...*ListMem
 	return listMembers(ctx, c.client, listID, opt...)
 }
 
-// LookUpListFollowers returns a list of users who are followers of the specified List.
-func (c *Client) LookUpListFollowers(ctx context.Context, listID string, opt ...*ListFollowersOption) (*ListFollowersResponse, error) {
-	return lookUpListFollowers(ctx, c.client, listID, opt...)
+// ListFollowers returns a list of users who are followers of the specified List.
+func (c *Client) ListFollowers(ctx context.Context, listID string, opt ...*ListFollowersOption) (*ListFollowersResponse, error) {
+	return listFollowers(ctx, c.client, listID, opt...)
 }
 
-// LookUpAllListsUserFollows returns all Lists a specified user follows.
-func (c *Client) LookUpAllListsUserFollows(ctx context.Context, userID string, opt ...*ListFollowsOption) (*AllListsUserFollowsResponse, error) {
-	return lookUpAllListsUserFollows(ctx, c.client, userID, opt...)
+// AllListsUserFollows returns all Lists a specified user follows.
+func (c *Client) AllListsUserFollows(ctx context.Context, userID string, opt ...*ListFollowsOption) (*AllListsUserFollowsResponse, error) {
+	return allListsUserFollows(ctx, c.client, userID, opt...)
+}
+
+// PostListFollows enables the authenticated user to follow a List.
+func (c *Client) PostListFollows(ctx context.Context, listID string, userID string) (*PostListFollowsResponse, error) {
+	return postListFollows(ctx, c.client, listID, userID)
+}
+
+// UndoListFollows enables the authenticated user to unfollow a List.
+func (c *Client) UndoListFollows(ctx context.Context, listID string, userID string) (*UndoListFollowsResponse, error) {
+	return undoListFollows(ctx, c.client, listID, userID)
 }

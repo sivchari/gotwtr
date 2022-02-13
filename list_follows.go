@@ -1,6 +1,7 @@
 package gotwtr
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"errors"
@@ -8,11 +9,11 @@ import (
 	"net/http"
 )
 
-func lookUpListFollowers(ctx context.Context, c *client, listID string, opt ...*ListFollowersOption) (*ListFollowersResponse, error) {
+func listFollowers(ctx context.Context, c *client, listID string, opt ...*ListFollowersOption) (*ListFollowersResponse, error) {
 	if listID == "" {
 		return nil, errors.New("look up list followers: listID parameter is required")
 	}
-	ep := fmt.Sprintf(lookUpListFollowersURL, listID)
+	ep := fmt.Sprintf(listFollowersURL, listID)
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, ep, nil)
 	if err != nil {
@@ -64,11 +65,11 @@ func lookUpListFollowers(ctx context.Context, c *client, listID string, opt ...*
 	return &lfr, nil
 }
 
-func lookUpAllListsUserFollows(ctx context.Context, c *client, userID string, opt ...*ListFollowsOption) (*AllListsUserFollowsResponse, error) {
+func allListsUserFollows(ctx context.Context, c *client, userID string, opt ...*ListFollowsOption) (*AllListsUserFollowsResponse, error) {
 	if userID == "" {
 		return nil, errors.New("look up all lists user follows: userID parameter is required")
 	}
-	ep := fmt.Sprintf(lookUpAllListsUserFollowsURL, userID)
+	ep := fmt.Sprintf(allListsUserFollowsURL, userID)
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, ep, nil)
 	if err != nil {
@@ -117,4 +118,85 @@ func lookUpAllListsUserFollows(ctx context.Context, c *client, userID string, op
 	}
 
 	return &alufr, nil
+}
+
+func postListFollows(ctx context.Context, c *client, listID string, userID string) (*PostListFollowsResponse, error) {
+	if userID == "" {
+		return nil, errors.New("post list follows: userID parameter is required")
+	}
+	ep := fmt.Sprintf(postListFollowsURL, listID)
+
+	if listID == "" {
+		return nil, errors.New("post list follows: listID parameter is required")
+	}
+	body := &ListFollowsBody{
+		ListID: listID,
+	}
+	j, err := json.Marshal(body)
+	if err != nil {
+		return nil, fmt.Errorf("post list follows: can not marshal: %w", err)
+	}
+
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, ep, bytes.NewBuffer(j))
+	if err != nil {
+		return nil, fmt.Errorf("post list follows new request with ctx: %w", err)
+	}
+	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.bearerToken))
+	req.Header.Set("Content-Type", "application/json")
+
+	resp, err := c.client.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("post list follows response: %w", err)
+	}
+	defer resp.Body.Close()
+
+	var postListFollows PostListFollowsResponse
+	if err := json.NewDecoder(resp.Body).Decode(&postListFollows); err != nil {
+		return nil, fmt.Errorf("post list follows decode: %w", err)
+	}
+	if resp.StatusCode != http.StatusOK {
+		return &postListFollows, &HTTPError{
+			APIName: "post list follows",
+			Status:  resp.Status,
+			URL:     req.URL.String(),
+		}
+	}
+
+	return &postListFollows, nil
+}
+
+func undoListFollows(ctx context.Context, c *client, listID string, userID string) (*UndoListFollowsResponse, error) {
+	if listID == "" {
+		return nil, errors.New("undo list follows: listID parameter is required")
+	}
+	if userID == "" {
+		return nil, errors.New("undo list follows: userID parameter is required")
+	}
+	ep := fmt.Sprintf(undoListFollowsURL, listID, userID)
+
+	req, err := http.NewRequestWithContext(ctx, http.MethodDelete, ep, nil)
+	if err != nil {
+		return nil, fmt.Errorf("undo list follows new request with ctx: %w", err)
+	}
+	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.bearerToken))
+
+	resp, err := c.client.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("undo list follows response: %w", err)
+	}
+	defer resp.Body.Close()
+
+	var undoListFollows UndoListFollowsResponse
+	if err := json.NewDecoder(resp.Body).Decode(&undoListFollows); err != nil {
+		return nil, fmt.Errorf("undo list follows decode: %w", err)
+	}
+	if resp.StatusCode != http.StatusOK {
+		return &undoListFollows, &HTTPError{
+			APIName: "undo list follows",
+			Status:  resp.Status,
+			URL:     req.URL.String(),
+		}
+	}
+
+	return &undoListFollows, nil
 }

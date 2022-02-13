@@ -55,11 +55,13 @@ const (
 )
 
 const (
-	lookUpListURL                = "https://api.twitter.com/2/lists/%v"
-	lookUpAllListsOwnedURL       = "https://api.twitter.com/2/users/%v/owned_lists"
-	lookUpListTweetsURL          = "https://api.twitter.com/2/lists/%v/tweets"
-	listsSpecifiedUserURL        = "https://api.twitter.com/2/users/%v/list_memberships"
-	listMembersURL               = "https://api.twitter.com/2/lists/%v/members"
-	lookUpListFollowersURL       = "https://api.twitter.com/2/lists/%v/followers"
-	lookUpAllListsUserFollowsURL = "https://api.twitter.com/2/users/%v/followed_lists"
+	lookUpListURL          = "https://api.twitter.com/2/lists/%v"
+	lookUpAllListsOwnedURL = "https://api.twitter.com/2/users/%v/owned_lists"
+	lookUpListTweetsURL    = "https://api.twitter.com/2/lists/%v/tweets"
+	listsSpecifiedUserURL  = "https://api.twitter.com/2/users/%v/list_memberships"
+	listMembersURL         = "https://api.twitter.com/2/lists/%v/members"
+	listFollowersURL       = "https://api.twitter.com/2/lists/%v/followers"
+	allListsUserFollowsURL = "https://api.twitter.com/2/users/%v/followed_lists"
+	postListFollowsURL     = "https://api.twitter.com/2/users/%v/followed_lists"
+	undoListFollowsURL     = "https://api.twitter.com/2/users/%v/followed_lists/%v"
 )
