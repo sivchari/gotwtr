@@ -542,7 +542,7 @@ func ExampleClient_UndoListMembers() {
 	fmt.Println(ulm)
 }
 
-func ExampleClient_LookUpListFollowers() {
+func ExampleClient_ListFollowers() {
 	client := gotwtr.New("key")
 	followers, err := client.ListFollowers(context.Background(), "list_id")
 	if err != nil {
@@ -553,7 +553,7 @@ func ExampleClient_LookUpListFollowers() {
 	}
 }
 
-func ExampleClient_LookUpAllListsUserFollows() {
+func ExampleClient_AllListsUserFollows() {
 	client := gotwtr.New("key")
 	lists, err := client.AllListsUserFollows(context.Background(), "user_id")
 	if err != nil {

@@ -297,11 +297,11 @@ func Test_listFollowers(t *testing.T) {
 			c := gotwtr.New("key", gotwtr.WithHTTPClient(tt.args.client))
 			got, err := c.ListFollowers(tt.args.ctx, tt.args.id, tt.args.opt...)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("client.ListFollowersByID() index = %v error = %v, wantErr %v", i, err, tt.wantErr)
+				t.Errorf("client.ListFollowers() index = %v error = %v, wantErr %v", i, err, tt.wantErr)
 				return
 			}
 			if diff := cmp.Diff(tt.want, got); diff != "" {
-				t.Errorf("client.ListFollowersByID() index = %v mismatch (-want +got):\n%s", i, diff)
+				t.Errorf("client.ListFollowers() index = %v mismatch (-want +got):\n%s", i, diff)
 				return
 			}
 		})
@@ -515,7 +515,7 @@ func Test_postListFollows(t *testing.T) {
 				ctx: context.Background(),
 				client: mockHTTPClient(func(req *http.Request) *http.Response {
 					if req.Method != http.MethodPost {
-						t.Fatalf("the method is not correct got %s want %s", req.Method, http.MethodPost)
+						t.Errorf("the method is not correct got %s want %s", req.Method, http.MethodPost)
 					}
 					body := `{
 						"data": {
@@ -660,7 +660,7 @@ func Test_undoListFollows(t *testing.T) {
 				ctx: context.Background(),
 				client: mockHTTPClient(func(req *http.Request) *http.Response {
 					if req.Method != http.MethodDelete {
-						t.Fatalf("the method is not correct got %s want %s", req.Method, http.MethodDelete)
+						t.Errorf("the method is not correct got %s want %s", req.Method, http.MethodDelete)
 					}
 					body := `{
 						"data": {

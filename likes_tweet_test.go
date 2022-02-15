@@ -431,7 +431,7 @@ func Test_postUsersLikingTweet(t *testing.T) {
 				ctx: context.Background(),
 				client: mockHTTPClient(func(req *http.Request) *http.Response {
 					if req.Method != http.MethodPost {
-						t.Fatalf("the method is not correct got %s want %s", req.Method, http.MethodPost)
+						t.Errorf("the method is not correct got %s want %s", req.Method, http.MethodPost)
 					}
 					body := `{
 						"data": {
@@ -534,7 +534,7 @@ func Test_undoUsersLikingTweet(t *testing.T) {
 				ctx: context.Background(),
 				client: mockHTTPClient(func(req *http.Request) *http.Response {
 					if req.Method != http.MethodDelete {
-						t.Fatalf("the method is not correct got %s want %s", req.Method, http.MethodDelete)
+						t.Errorf("the method is not correct got %s want %s", req.Method, http.MethodDelete)
 					}
 					body := `{
 						"data": {
