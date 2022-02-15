@@ -11,13 +11,13 @@ import (
 
 func pinnedLists(ctx context.Context, c *client, userID string, opt ...*PinnedListsOption) (*PinnedListsResponse, error) {
 	if userID == "" {
-		return nil, errors.New("look up pinned lists: userID parameter is required")
+		return nil, errors.New("pinned lists: userID parameter is required")
 	}
 	ep := fmt.Sprintf(pinnedListsURL, userID)
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, ep, nil)
 	if err != nil {
-		return nil, fmt.Errorf("look up pinned lists new request with ctx: %w", err)
+		return nil, fmt.Errorf("pinned lists new request with ctx: %w", err)
 	}
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.bearerToken))
 
@@ -28,23 +28,23 @@ func pinnedLists(ctx context.Context, c *client, userID string, opt ...*PinnedLi
 	case 1:
 		lopt = *opt[0]
 	default:
-		return nil, errors.New("look up pinned lists: only one option is allowed")
+		return nil, errors.New("pinned lists: only one option is allowed")
 	}
 	lopt.addQuery(req)
 
 	resp, err := c.client.Do(req)
 	if err != nil {
-		return nil, fmt.Errorf("look up pinned lists response: %w", err)
+		return nil, fmt.Errorf("pinned lists response: %w", err)
 	}
 	defer resp.Body.Close()
 
 	var plr PinnedListsResponse
 	if err := json.NewDecoder(resp.Body).Decode(&plr); err != nil {
-		return nil, fmt.Errorf("look up pinned lists decode: %w", err)
+		return nil, fmt.Errorf("pinned lists decode: %w", err)
 	}
 	if resp.StatusCode != http.StatusOK {
 		return &plr, &HTTPError{
-			APIName: "look up pinned lists",
+			APIName: "pinned lists",
 			Status:  resp.Status,
 			URL:     req.URL.String(),
 		}
