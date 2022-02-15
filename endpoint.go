@@ -68,3 +68,7 @@ const (
 	postPinnedListsURL           = "https://api.twitter.com/2/users/%v/pinned_lists"
 	undoPinnedListsURL           = "https://api.twitter.com/2/users/%v/pinned_lists/%v"
 )
+
+const (
+	complianceJobsURL = "https://api.twitter.com/2/compliance/jobs"
+)

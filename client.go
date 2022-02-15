@@ -84,6 +84,10 @@ type Lists interface {
 	UndoPinnedLists(ctx context.Context, listID string, userID string) (*UndoPinnedListsResponse, error)
 }
 
+type Compliances interface {
+	ComplianceJobs(ctx context.Context, opt *ComplianceJobsOption) (*ComplianceJobsResponse, error)
+}
+
 // Twtr is a main interface for all Twitter API calls.
 type Twtr interface {
 	OAuth
@@ -91,6 +95,7 @@ type Twtr interface {
 	Users
 	Spaces
 	Lists
+	Compliances
 }
 
 type client struct {
@@ -417,4 +422,8 @@ func (c *Client) PostPinnedLists(ctx context.Context, listID string, userID stri
 // UndoPinnedLists enables the authenticated user to unpin a List.
 func (c *Client) UndoPinnedLists(ctx context.Context, listID string, userID string) (*UndoPinnedListsResponse, error) {
 	return undoPinnedLists(ctx, c.client, listID, userID)
+}
+
+func (c *Client) ComplianceJobs(ctx context.Context, opt *ComplianceJobsOption) (*ComplianceJobsResponse, error) {
+	return complianceJobs(ctx, c.client, opt)
 }
