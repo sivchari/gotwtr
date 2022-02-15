@@ -581,3 +581,14 @@ func ExampleClient_UndoListFollows() {
 	}
 	fmt.Println(ulf)
 }
+
+func ExampleClient_ComplianceJobs() {
+	client := gotwtr.New("key")
+	cj, err := client.ComplianceJobs(context.Background(), &gotwtr.ComplianceJobsOption{
+		Type: gotwtr.ComplianceFieldTypeTweets,
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(cj)
+}

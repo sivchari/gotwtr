@@ -67,3 +67,7 @@ const (
 	postListFollowsURL     = "https://api.twitter.com/2/users/%v/followed_lists"
 	undoListFollowsURL     = "https://api.twitter.com/2/users/%v/followed_lists/%v"
 )
+
+const (
+	complianceJobsURL = "https://api.twitter.com/2/compliance/jobs"
+)

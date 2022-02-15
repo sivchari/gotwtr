@@ -83,6 +83,10 @@ type Lists interface {
 	UndoListFollows(ctx context.Context, listID string, userID string) (*UndoListFollowsResponse, error)
 }
 
+type Compliances interface {
+	ComplianceJobs(ctx context.Context, opt *ComplianceJobsOption) (*ComplianceJobsResponse, error)
+}
+
 // Twtr is a main interface for all Twitter API calls.
 type Twtr interface {
 	OAuth
@@ -90,6 +94,7 @@ type Twtr interface {
 	Users
 	Spaces
 	Lists
+	Compliances
 }
 
 type client struct {
@@ -411,4 +416,8 @@ func (c *Client) PostListFollows(ctx context.Context, listID string, userID stri
 // UndoListFollows enables the authenticated user to unfollow a List.
 func (c *Client) UndoListFollows(ctx context.Context, listID string, userID string) (*UndoListFollowsResponse, error) {
 	return undoListFollows(ctx, c.client, listID, userID)
+}
+
+func (c *Client) ComplianceJobs(ctx context.Context, opt *ComplianceJobsOption) (*ComplianceJobsResponse, error) {
+	return complianceJobs(ctx, c.client, opt)
 }
