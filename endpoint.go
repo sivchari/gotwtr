@@ -64,6 +64,9 @@ const (
 	undoListMembersURL           = "https://api.twitter.com/2/lists/%v/members/%v"
 	lookUpListFollowersURL       = "https://api.twitter.com/2/lists/%v/followers"
 	lookUpAllListsUserFollowsURL = "https://api.twitter.com/2/users/%v/followed_lists"
+	pinnedListsURL               = "https://api.twitter.com/2/users/%v/pinned_lists"
+	postPinnedListsURL           = "https://api.twitter.com/2/users/%v/pinned_lists"
+	undoPinnedListsURL           = "https://api.twitter.com/2/users/%v/pinned_lists/%v"
 )
 
 const (

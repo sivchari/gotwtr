@@ -119,3 +119,31 @@ type IsMember struct {
 type ListMembersBody struct {
 	UserID string `json:"user_id"`
 }
+
+type PinnedListsResponse struct {
+	Lists    []*List             `json:"data"`
+	Includes *ListIncludes       `json:"includes,omitempty"`
+	Errors   []*APIResponseError `json:"errors,omitempty"`
+	Meta     *ListMeta           `json:"meta"`
+	Title    string              `json:"title,omitempty"`
+	Detail   string              `json:"detail,omitempty"`
+	Type     string              `json:"type,omitempty"`
+}
+
+type PostPinnedListsResponse struct {
+	Pinned *Pinned             `json:"data"`
+	Errors []*APIResponseError `json:"errors,omitempty"`
+}
+
+type UndoPinnedListsResponse struct {
+	Pinned *Pinned             `json:"data"`
+	Errors []*APIResponseError `json:"errors,omitempty"`
+}
+
+type Pinned struct {
+	Pinned bool `json:"pinned"`
+}
+
+type PinnedListsBody struct {
+	ListID string `json:"list_id"`
+}
