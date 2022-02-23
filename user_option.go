@@ -36,22 +36,82 @@ type FollowOption struct {
 	UserFields      []UserField
 }
 
-func (t FollowOption) addQuery(req *http.Request) {
+func (f *FollowOption) addQuery(req *http.Request) {
 	q := req.URL.Query()
-	if len(t.Expansions) > 0 {
-		q.Add("expansions", strings.Join(expansionsToString(t.Expansions), ","))
+	if len(f.Expansions) > 0 {
+		q.Add("expansions", strings.Join(expansionsToString(f.Expansions), ","))
 	}
-	if t.MaxResults > 0 {
-		q.Add("max_results", strconv.Itoa(t.MaxResults))
+	if f.MaxResults > 0 {
+		q.Add("max_results", strconv.Itoa(f.MaxResults))
 	}
-	if len(t.PaginationToken) > 0 {
-		q.Add("pagination_token", t.PaginationToken)
+	if len(f.PaginationToken) > 0 {
+		q.Add("pagination_token", f.PaginationToken)
 	}
-	if len(t.TweetFields) > 0 {
-		q.Add("tweet.fields", strings.Join(tweetFieldsToString(t.TweetFields), ","))
+	if len(f.TweetFields) > 0 {
+		q.Add("tweet.fields", strings.Join(tweetFieldsToString(f.TweetFields), ","))
 	}
-	if len(t.UserFields) > 0 {
-		q.Add("user.fields", strings.Join(userFieldsToString(t.UserFields), ","))
+	if len(f.UserFields) > 0 {
+		q.Add("user.fields", strings.Join(userFieldsToString(f.UserFields), ","))
+	}
+	if len(q) > 0 {
+		req.URL.RawQuery = q.Encode()
+	}
+}
+
+type BlockOption struct {
+	Expansions      []Expansion
+	MaxResults      int
+	PaginationToken string
+	TweetFields     []TweetField
+	UserFields      []UserField
+}
+
+func (b *BlockOption) addQuery(req *http.Request) {
+	q := req.URL.Query()
+	if len(b.Expansions) > 0 {
+		q.Add("expansions", strings.Join(expansionsToString(b.Expansions), ","))
+	}
+	if b.MaxResults > 0 {
+		q.Add("max_results", strconv.Itoa(b.MaxResults))
+	}
+	if len(b.PaginationToken) > 0 {
+		q.Add("pagination_token", b.PaginationToken)
+	}
+	if len(b.TweetFields) > 0 {
+		q.Add("tweet.fields", strings.Join(tweetFieldsToString(b.TweetFields), ","))
+	}
+	if len(b.UserFields) > 0 {
+		q.Add("user.fields", strings.Join(userFieldsToString(b.UserFields), ","))
+	}
+	if len(q) > 0 {
+		req.URL.RawQuery = q.Encode()
+	}
+}
+
+type MuteOption struct {
+	Expansions      []Expansion
+	MaxResults      int
+	PaginationToken string
+	TweetFields     []TweetField
+	UserFields      []UserField
+}
+
+func (m *MuteOption) addQuery(req *http.Request) {
+	q := req.URL.Query()
+	if len(m.Expansions) > 0 {
+		q.Add("expansions", strings.Join(expansionsToString(m.Expansions), ","))
+	}
+	if m.MaxResults > 0 {
+		q.Add("max_results", strconv.Itoa(m.MaxResults))
+	}
+	if len(m.PaginationToken) > 0 {
+		q.Add("pagination_token", m.PaginationToken)
+	}
+	if len(m.TweetFields) > 0 {
+		q.Add("tweet.fields", strings.Join(tweetFieldsToString(m.TweetFields), ","))
+	}
+	if len(m.UserFields) > 0 {
+		q.Add("user.fields", strings.Join(userFieldsToString(m.UserFields), ","))
 	}
 	if len(q) > 0 {
 		req.URL.RawQuery = q.Encode()

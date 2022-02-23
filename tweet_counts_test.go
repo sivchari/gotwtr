@@ -135,7 +135,7 @@ func Test_client_TweetCounts(t *testing.T) {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
+			c := gotwtr.New("key", gotwtr.WithHTTPClient(tt.args.client))
 			got, err := c.CountsRecentTweet(tt.args.ctx, tt.args.query, tt.args.opt...)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("client.CountsRecentTweet() error = %v, wantErr %v", err, tt.wantErr)

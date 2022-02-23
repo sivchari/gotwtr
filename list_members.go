@@ -1,6 +1,7 @@
 package gotwtr
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"errors"
@@ -8,11 +9,11 @@ import (
 	"net/http"
 )
 
-func listMembers(ctx context.Context, c *client, listid string, opt ...*ListMembersOption) (*ListMembersResponse, error) {
-	if listid == "" {
+func listMembers(ctx context.Context, c *client, listID string, opt ...*ListMembersOption) (*ListMembersResponse, error) {
+	if listID == "" {
 		return nil, errors.New("look up list members: id parameter is required")
 	}
-	lm := fmt.Sprintf(listMembersURL, listid)
+	lm := fmt.Sprintf(listMembersURL, listID)
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, lm, nil)
 	if err != nil {
@@ -121,4 +122,85 @@ func listsSpecifiedUser(ctx context.Context, c *client, userID string, opt ...*L
 	}
 
 	return &lmr, nil
+}
+
+func postListMembers(ctx context.Context, c *client, listID string, userID string) (*PostListMembersResponse, error) {
+	if listID == "" {
+		return nil, errors.New("post list members: listID parameter is required")
+	}
+	ep := fmt.Sprintf(postListMembersURL, listID)
+
+	if userID == "" {
+		return nil, errors.New("post list members: userID parameter is required")
+	}
+	body := &ListMembersBody{
+		UserID: userID,
+	}
+	j, err := json.Marshal(body)
+	if err != nil {
+		return nil, fmt.Errorf("post list members: can not marshal: %w", err)
+	}
+
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, ep, bytes.NewBuffer(j))
+	if err != nil {
+		return nil, fmt.Errorf("post list members new request with ctx: %w", err)
+	}
+	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.bearerToken))
+	req.Header.Set("Content-Type", "application/json")
+
+	resp, err := c.client.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("post list members response: %w", err)
+	}
+	defer resp.Body.Close()
+
+	var postListMembers PostListMembersResponse
+	if err := json.NewDecoder(resp.Body).Decode(&postListMembers); err != nil {
+		return nil, fmt.Errorf("post list members decode: %w", err)
+	}
+	if resp.StatusCode != http.StatusOK {
+		return &postListMembers, &HTTPError{
+			APIName: "post list members",
+			Status:  resp.Status,
+			URL:     req.URL.String(),
+		}
+	}
+
+	return &postListMembers, nil
+}
+
+func undoListMembers(ctx context.Context, c *client, listID string, userID string) (*UndoListMembersResponse, error) {
+	if listID == "" {
+		return nil, errors.New("undo list members: listID parameter is required")
+	}
+	if userID == "" {
+		return nil, errors.New("undo list members: userID parameter is required")
+	}
+	ep := fmt.Sprintf(undoListMembersURL, listID, userID)
+
+	req, err := http.NewRequestWithContext(ctx, http.MethodDelete, ep, nil)
+	if err != nil {
+		return nil, fmt.Errorf("undo list members new request with ctx: %w", err)
+	}
+	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.bearerToken))
+
+	resp, err := c.client.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("undo list members response: %w", err)
+	}
+	defer resp.Body.Close()
+
+	var undoListMembers UndoListMembersResponse
+	if err := json.NewDecoder(resp.Body).Decode(&undoListMembers); err != nil {
+		return nil, fmt.Errorf("undo list members decode: %w", err)
+	}
+	if resp.StatusCode != http.StatusOK {
+		return &undoListMembers, &HTTPError{
+			APIName: "undo list members",
+			Status:  resp.Status,
+			URL:     req.URL.String(),
+		}
+	}
+
+	return &undoListMembers, nil
 }

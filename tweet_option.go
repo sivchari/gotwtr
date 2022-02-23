@@ -176,8 +176,9 @@ type SearchTweetsOption struct {
 	UserFields  []UserField
 }
 
-func (t SearchTweetsOption) addQuery(req *http.Request) {
+func (t SearchTweetsOption) addQuery(req *http.Request, tweet string) {
 	q := req.URL.Query()
+	q.Add("query", tweet)
 	if !t.EndTime.IsZero() {
 		q.Add("end_time", t.EndTime.Format(time.RFC3339))
 	}
@@ -417,7 +418,7 @@ func (r RetweetsLookupOption) addQuery(req *http.Request) {
 	}
 }
 
-type TweetsUserLikedOpts struct {
+type TweetsUserLikedOption struct {
 	Expansions      []Expansion
 	MediaFields     []MediaField
 	PlaceFields     []PlaceField
@@ -428,7 +429,7 @@ type TweetsUserLikedOpts struct {
 	PaginationToken string
 }
 
-func (t *TweetsUserLikedOpts) addQuery(req *http.Request) {
+func (t *TweetsUserLikedOption) addQuery(req *http.Request) {
 	q := req.URL.Query()
 	if len(t.Expansions) > 0 {
 		q.Add("expansions", strings.Join(expansionsToString(t.Expansions), ","))
@@ -465,4 +466,16 @@ func tweetFieldsToString(tfs []TweetField) []string {
 		slice[i] = string(tf)
 	}
 	return slice
+}
+
+type PostTweetOption struct {
+	DirectMessageDeepLink string     `json:"direct_message_deep_link,omitempty"`
+	ForSuperFollowersOnly bool       `json:"for_super_followers_only,omitempty"`
+	Geo                   TweetGeo   `json:"geo,omitempty"`
+	Media                 Media      `json:"media,omitempty"`
+	Poll                  Poll       `json:"poll,omitempty"`
+	QuoteTweetID          string     `json:"quote_tweet_id,omitempty"`
+	Reply                 TweetReply `json:"reply,omitempty"`
+	ReplySettings         string     `json:"reply_settings,omitempty"`
+	Text                  string     `json:"text,omitempty"`
 }

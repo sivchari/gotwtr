@@ -9,9 +9,34 @@ import (
 	"github.com/sivchari/gotwtr"
 )
 
+func ExampleClient_GenerateAppOnlyBearerToken() {
+	c := gotwtr.New(
+		"key",
+		gotwtr.WithConsumerSecret("sec"),
+	)
+	b, err := c.GenerateAppOnlyBearerToken(context.Background())
+	if err != nil {
+		log.Fatal(err)
+	}
+	if !b {
+		log.Fatal("failed to generate bearer token")
+	}
+}
+
+// func ExampleClient_InvalidatingBearerToken() {
+// 	client := gotwtr.New("key")
+// 	b, err := client.InvalidatingBearerToken(context.Background())
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
+// 	if !b {
+// 		log.Fatal("failed to invalidate bearer token")
+// 	}
+// }
+
 func ExampleClient_RetrieveMultipleTweets() {
 	client := gotwtr.New("key")
-	ts, err := client.RetrieveMultipleTweets(context.Background(), []string{"id", "id2"})
+	ts, err := client.RetrieveMultipleTweets(context.Background(), []string{"tweet_id", "tweet_id2"})
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -22,7 +47,7 @@ func ExampleClient_RetrieveMultipleTweets() {
 
 func ExampleClient_RetrieveSingleTweet() {
 	client := gotwtr.New("key")
-	t, err := client.RetrieveSingleTweet(context.Background(), "id")
+	t, err := client.RetrieveSingleTweet(context.Background(), "tweet_id")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -31,7 +56,7 @@ func ExampleClient_RetrieveSingleTweet() {
 
 func ExampleClient_UserMentionTimeline() {
 	client := gotwtr.New("key")
-	tws, err := client.UserMentionTimeline(context.Background(), "id")
+	tws, err := client.UserMentionTimeline(context.Background(), "user_id")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -42,7 +67,7 @@ func ExampleClient_UserMentionTimeline() {
 
 func ExampleClient_UserTweetTimeline() {
 	client := gotwtr.New("key")
-	ts, err := client.UserTweetTimeline(context.Background(), "id")
+	ts, err := client.UserTweetTimeline(context.Background(), "user_id")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -190,14 +215,32 @@ func ExampleClient_VolumeStreams() {
 
 func ExampleClient_RetweetsLookup() {
 	client := gotwtr.New("key")
-	t, err := client.RetweetsLookup(context.Background(), "id")
+	t, err := client.RetweetsLookup(context.Background(), "tweet_id")
 	if err != nil {
 		log.Println(err)
 	}
 	fmt.Println(t)
 }
 
-func ExampleClient_TweetsUserLiked_noOption() {
+func ExampleClient_PostRetweet() {
+	client := gotwtr.New("key")
+	pr, err := client.PostRetweet(context.Background(), "user_id", "tweet_id")
+	if err != nil {
+		log.Println(err)
+	}
+	fmt.Println(pr)
+}
+
+func ExampleClient_UndoRetweet() {
+	client := gotwtr.New("key")
+	ur, err := client.UndoRetweet(context.Background(), "user_id", "source_tweet_id")
+	if err != nil {
+		log.Println(err)
+	}
+	fmt.Println(ur)
+}
+
+func ExampleClient_TweetsUserLiked() {
 	client := gotwtr.New("key")
 	tulr, err := client.TweetsUserLiked(context.Background(), "user_id")
 	if err != nil {
@@ -207,22 +250,7 @@ func ExampleClient_TweetsUserLiked_noOption() {
 		fmt.Printf("id: %s, text: %s\n", tweet.ID, tweet.Text)
 	}
 }
-
-func ExampleClient_TweetsUserLiked_option() {
-	client := gotwtr.New("key")
-	tulr, err := client.TweetsUserLiked(context.Background(), "user_id", &gotwtr.TweetsUserLikedOpts{
-		TweetFields: []gotwtr.TweetField{gotwtr.TweetFieldCreatedAt, gotwtr.TweetFieldSource},
-		MaxResults:  10,
-	})
-	if err != nil {
-		log.Fatal(err)
-	}
-	for _, tweet := range tulr.Tweets {
-		fmt.Printf("id: %s, text: %s, created_at: %s, source: %s\n", tweet.ID, tweet.Text, tweet.CreatedAt, tweet.Source)
-	}
-}
-
-func ExampleClient_UsersLikingTweet_noOption() {
+func ExampleClient_UsersLikingTweet() {
 	client := gotwtr.New("key")
 	ultr, err := client.UsersLikingTweet(context.Background(), "tweet_id")
 	if err != nil {
@@ -233,22 +261,316 @@ func ExampleClient_UsersLikingTweet_noOption() {
 	}
 }
 
-func ExampleClient_UsersLikingTweet_option() {
+func ExampleClient_PostUsersLikingTweet() {
 	client := gotwtr.New("key")
-	ultr, err := client.UsersLikingTweet(context.Background(), "tweet_id", &gotwtr.UsersLikingTweetOption{
-		Expansions:  []gotwtr.Expansion{gotwtr.ExpansionPinnedTweetID},
-		UserFields:  []gotwtr.UserField{gotwtr.UserFieldCreatedAt},
-		TweetFields: []gotwtr.TweetField{gotwtr.TweetFieldCreatedAt},
+	pult, err := client.PostUsersLikingTweet(context.Background(), "user_id", "tweet_id")
+	if err != nil {
+		log.Println(err)
+	}
+	fmt.Println(pult)
+}
+
+func ExampleClient_UndoUsersLikingTweet() {
+	client := gotwtr.New("key")
+	uult, err := client.UndoUsersLikingTweet(context.Background(), "user_id", "tweet_id")
+	if err != nil {
+		log.Println(err)
+	}
+	fmt.Println(uult)
+}
+
+func ExampleClient_RetrieveMultipleUsersWithIDs() {
+	client := gotwtr.New("key")
+	// look up users
+	us, err := client.RetrieveMultipleUsersWithIDs(context.Background(), []string{"user_id", "user_id2"})
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, u := range us.Users {
+		fmt.Println(u)
+	}
+}
+
+func ExampleClient_RetrieveSingleUserWithID() {
+	client := gotwtr.New("key")
+	u, err := client.RetrieveSingleUserWithID(context.Background(), "user_id")
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(u)
+}
+
+func ExampleClient_RetrieveMultipleUsersWithUserNames() {
+	client := gotwtr.New("key")
+	uns, err := client.RetrieveMultipleUsersWithUserNames(context.Background(), []string{"username", "username2"})
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, un := range uns.Users {
+		fmt.Println(un)
+	}
+}
+
+func ExampleClient_RetrieveSingleUserWithUserName() {
+	client := gotwtr.New("key")
+	un, err := client.RetrieveSingleUserWithUserName(context.Background(), "username")
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(un)
+}
+
+func ExampleClient_Following() {
+	client := gotwtr.New("key")
+	f, err := client.Following(context.Background(), "user_id")
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, user := range f.Users {
+		fmt.Println(user)
+	}
+}
+
+func ExampleClient_Followers() {
+	client := gotwtr.New("key")
+	f, err := client.Followers(context.Background(), "user_id")
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, user := range f.Users {
+		fmt.Println(user)
+	}
+}
+
+func ExampleClient_PostFollowing() {
+	client := gotwtr.New("key")
+	pf, err := client.PostFollowing(context.Background(), "user_id", "target_user_id")
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(pf)
+}
+
+func ExampleClient_UndoFollowing() {
+	client := gotwtr.New("key")
+	uf, err := client.UndoFollowing(context.Background(), "source_user_id", "target_user_id")
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(uf)
+}
+
+func ExampleClient_Blocking() {
+	client := gotwtr.New("key")
+	b, err := client.Blocking(context.Background(), "user_id")
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, user := range b.Users {
+		fmt.Println(user)
+	}
+}
+
+func ExampleClient_PostBlocking() {
+	client := gotwtr.New("key")
+	pb, err := client.PostBlocking(context.Background(), "user_id", "target_user_id")
+	if err != nil {
+		log.Println(err)
+	}
+	fmt.Println(pb)
+}
+
+func ExampleClient_UndoBlocking() {
+	client := gotwtr.New("key")
+	ub, err := client.UndoBlocking(context.Background(), "source_user_id", "target_user_id")
+	if err != nil {
+		log.Println(err)
+	}
+	fmt.Println(ub)
+}
+
+func ExampleClient_Muting() {
+	client := gotwtr.New("key")
+	m, err := client.Muting(context.Background(), "user_id")
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, user := range m.Users {
+		fmt.Println(user)
+	}
+}
+
+func ExampleClient_PostMuting() {
+	client := gotwtr.New("key")
+	pm, err := client.PostMuting(context.Background(), "user_id", "target_user_id")
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(pm)
+}
+
+func ExampleClient_UndoMuting() {
+	client := gotwtr.New("key")
+	um, err := client.UndoMuting(context.Background(), "source_user_id", "target_user_id")
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(um)
+}
+
+func ExampleClient_LookUpSpace() {
+	client := gotwtr.New("key")
+	s, err := client.LookUpSpace(context.Background(), "space_id")
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(s)
+}
+
+func ExampleClient_LookUpSpaces() {
+	client := gotwtr.New("key")
+	ss, err := client.LookUpSpaces(context.Background(), []string{"space_id", "space_id2"})
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, s := range ss.Spaces {
+		fmt.Println(s)
+	}
+}
+
+func ExampleClient_UsersPurchasedSpaceTicket() {
+	client := gotwtr.New("key")
+	tickets, err := client.UsersPurchasedSpaceTicket(context.Background(), "space_id")
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, user := range tickets.Users {
+		fmt.Println(user)
+	}
+}
+
+func ExampleClient_DiscoverSpaces() {
+	client := gotwtr.New("key")
+	discover, err := client.DiscoverSpaces(context.Background(), []string{"user_id", "user_id2"})
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, space := range discover.Spaces {
+		fmt.Println(space)
+	}
+}
+
+func ExampleClient_SearchSpaces() {
+	client := gotwtr.New("key")
+	spaces, err := client.SearchSpaces(context.Background(), "query")
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, space := range spaces.Spaces {
+		fmt.Println(space)
+	}
+}
+
+func ExampleClient_LookUpList() {
+	client := gotwtr.New("key")
+	l, err := client.LookUpList(context.Background(), "list_id")
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(l)
+}
+
+func ExampleClient_LookUpAllListsOwned() {
+	client := gotwtr.New("key")
+	lists, err := client.LookUpAllListsOwned(context.Background(), "user_id")
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, list := range lists.Lists {
+		fmt.Println(list)
+	}
+}
+
+func ExampleClient_LookUpListTweets() {
+	client := gotwtr.New("key")
+	lt, err := client.LookUpListTweets(context.Background(), "list_id")
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, tweet := range lt.Tweets {
+		fmt.Println(tweet)
+	}
+}
+
+func ExampleClient_ListMembers() {
+	client := gotwtr.New("key")
+	members, err := client.ListMembers(context.Background(), "list_id")
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, member := range members.Users {
+		fmt.Println(member)
+	}
+}
+
+func ExampleClient_ListsSpecifiedUser() {
+	client := gotwtr.New("key")
+	lists, err := client.ListsSpecifiedUser(context.Background(), "user_id")
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, list := range lists.Lists {
+		fmt.Println(list)
+	}
+}
+
+func ExampleClient_PostListMembers() {
+	client := gotwtr.New("key")
+	plm, err := client.PostListMembers(context.Background(), "list_id", "user_id")
+	if err != nil {
+		log.Println(err)
+	}
+	fmt.Println(plm)
+}
+
+func ExampleClient_UndoListMembers() {
+	client := gotwtr.New("key")
+	ulm, err := client.UndoListMembers(context.Background(), "list_id", "user_id")
+	if err != nil {
+		log.Println(err)
+	}
+	fmt.Println(ulm)
+}
+
+func ExampleClient_LookUpListFollowers() {
+	client := gotwtr.New("key")
+	followers, err := client.LookUpListFollowers(context.Background(), "list_id")
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, user := range followers.Users {
+		fmt.Println(user)
+	}
+}
+
+func ExampleClient_LookUpAllListsUserFollows() {
+	client := gotwtr.New("key")
+	lists, err := client.LookUpAllListsUserFollows(context.Background(), "user_id")
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, list := range lists.Lists {
+		fmt.Println(list)
+	}
+}
+
+func ExampleClient_ComplianceJobs() {
+	client := gotwtr.New("key")
+	cj, err := client.ComplianceJobs(context.Background(), &gotwtr.ComplianceJobsOption{
+		Type: gotwtr.ComplianceFieldTypeTweets,
 	})
 	if err != nil {
 		log.Fatal(err)
 	}
-	for _, user := range ultr.Users {
-		fmt.Printf("id: %s, name: %s, created_at: %v\n", user.ID, user.UserName, user.CreatedAt)
-	}
-	if ultr.Includes != nil {
-		for _, tweet := range ultr.Includes.Tweets {
-			fmt.Printf("tweet_id: %s, created_at: %v\n", tweet.ID, tweet.CreatedAt)
-		}
-	}
+	fmt.Println(cj)
 }

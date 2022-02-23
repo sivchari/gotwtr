@@ -2,6 +2,11 @@ package gotwtr
 
 // EndpointURL is the base URL for the Twitter V2 API.
 const (
+	generateAppOnlyBearerTokenURL = "https://api.twitter.com/oauth2/token?grant_type=client_credentials"
+	// invalidatingBearerTokenURL    = "https://api.twitter.com/oauth2/invalidate_token?access_token=%v"
+)
+
+const (
 	retrieveMultipleTweetsURL = "https://api.twitter.com/2/tweets?ids="
 	retrieveSingleTweetURL    = "https://api.twitter.com/2/tweets/%v"
 	userTweetTimelineURL      = "https://api.twitter.com/2/users/%v/tweets"
@@ -13,8 +18,15 @@ const (
 	connectToStreamURL        = "https://api.twitter.com/2/tweets/search/stream"
 	volumeStreamsURL          = "https://api.twitter.com/2/tweets/sample/stream"
 	retweetsLookupURL         = "https://api.twitter.com/2/tweets/%v/retweeted_by"
+	postRetweetURL            = "https://api.twitter.com/2/users/%v/retweets"
+	undoRetweetURL            = "https://api.twitter.com/2/users/%v/retweets/%v"
 	usersLikingTweetURL       = "https://api.twitter.com/2/tweets/%v/liking_users"
 	tweetsUserLikedURL        = "https://api.twitter.com/2/users/%v/liked_tweets"
+	postUsersLikingTweetURL   = "https://api.twitter.com/2/users/%v/likes"
+	undoUsersLikingTweetURL   = "https://api.twitter.com/2/users/%v/likes/%v"
+	searchAllTweetsURL        = "https://api.twitter.com/2/tweets/search/all"
+	postTweetURL              = "https://api.twitter.com/2/tweets"
+	deleteTweetURL            = "https://api.twitter.com/2/tweets/%v"
 )
 
 const (
@@ -24,6 +36,14 @@ const (
 	retrieveSingleUserWithUserNameURL     = "https://api.twitter.com/2/users/by/username/%v"
 	followingURL                          = "https://api.twitter.com/2/users/%v/following"
 	followersURL                          = "https://api.twitter.com/2/users/%v/followers"
+	postFollowingURL                      = "https://api.twitter.com/2/users/%v/following"
+	undoFollowingURL                      = "https://api.twitter.com/2/users/%v/following/%v"
+	blockingURL                           = "https://api.twitter.com/2/users/%v/blocking"
+	postBlockingURL                       = "https://api.twitter.com/2/users/%v/blocking"
+	undoBlockingURL                       = "https://api.twitter.com/2/users/%v/blocking/%v"
+	mutingURL                             = "https://api.twitter.com/2/users/%v/muting"
+	postMutingURL                         = "https://api.twitter.com/2/users/%v/muting"
+	undoMutingURL                         = "https://api.twitter.com/2/users/%v/muting/%v"
 )
 
 const (
@@ -40,7 +60,13 @@ const (
 	lookUpListTweetsURL          = "https://api.twitter.com/2/lists/%v/tweets"
 	listsSpecifiedUserURL        = "https://api.twitter.com/2/users/%v/list_memberships"
 	listMembersURL               = "https://api.twitter.com/2/lists/%v/members"
+	postListMembersURL           = "https://api.twitter.com/2/lists/%v/members"
+	undoListMembersURL           = "https://api.twitter.com/2/lists/%v/members/%v"
 	listURL                      = "https://api.twitter.com/2/lists"
 	lookUpListFollowersURL       = "https://api.twitter.com/2/lists/%v/followers"
 	lookUpAllListsUserFollowsURL = "https://api.twitter.com/2/users/%v/followed_lists"
+)
+
+const (
+	complianceJobsURL = "https://api.twitter.com/2/compliance/jobs"
 )

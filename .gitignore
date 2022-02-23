@@ -17,4 +17,5 @@
 .env
 
 .idea/
+coverage.txt
 

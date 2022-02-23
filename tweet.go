@@ -434,6 +434,24 @@ type UsersLikingTweetResponse struct {
 	Errors   []*APIResponseError          `json:"errors,omitempty"`
 }
 
+type PostUsersLikingTweetResponse struct {
+	Liked  *Liked              `json:"data"`
+	Errors []*APIResponseError `json:"errors,omitempty"`
+}
+
+type UndoUsersLikingTweetResponse struct {
+	Liked  *Liked              `json:"data"`
+	Errors []*APIResponseError `json:"errors,omitempty"`
+}
+
+type Liked struct {
+	Liked bool `json:"liked"`
+}
+
+type UsersLikingBody struct {
+	TweetID string `json:"tweet_id"`
+}
+
 type LookUpUsersWhoLikedIncludes struct {
 	Tweets []*Tweet `json:"tweets"`
 }
@@ -592,4 +610,26 @@ type TweetsUserLikedResponse struct {
 type TweetsUserLikedMeta struct {
 	ResultCount int    `json:"result_count"`
 	NextToken   string `json:"next_token"`
+}
+
+type TweetReply struct {
+	ExcludeReplyUserIDs []string `json:"exclude_reply_user_ids"`
+	InReplyToTweetID    string   `json:"in_reply_to_tweet_id"`
+}
+
+type PostTweetResponse struct {
+	PostTweetData PostTweetData `json:"data"`
+}
+
+type PostTweetData struct {
+	ID   string `json:"id"`
+	Text string `json:"text"`
+}
+
+type DeleteTweetResponse struct {
+	Data DeleteTweetData `json:"data"`
+}
+
+type DeleteTweetData struct {
+	Deleted bool `json:"deleted"`
 }

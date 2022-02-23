@@ -22,7 +22,6 @@ linters:
   enable:
     - bodyclose
     - forcetypeassert
-    - goconst
     - gocritic
     - goimports
     - gosimple
