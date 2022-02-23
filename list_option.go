@@ -208,6 +208,28 @@ func (l *ListsSpecifiedUserOption) addQuery(req *http.Request) {
 	}
 }
 
+type PinnedListsOption struct {
+	Expansions []Expansion
+	ListFields []ListField
+	UserFields []UserField
+}
+
+func (l *PinnedListsOption) addQuery(req *http.Request) {
+	q := req.URL.Query()
+	if len(l.Expansions) > 0 {
+		q.Add("expansions", strings.Join(expansionsToString(l.Expansions), ","))
+	}
+	if len(l.ListFields) > 0 {
+		q.Add("tweet.fields", strings.Join(listFieldsToString(l.ListFields), "."))
+	}
+	if len(l.UserFields) > 0 && len(l.Expansions) > 0 {
+		q.Add("user.fields", strings.Join(userFieldsToString(l.UserFields), ","))
+	}
+	if len(q) > 0 {
+		req.URL.RawQuery = q.Encode()
+	}
+}
+
 func listFieldsToString(lfs []ListField) []string {
 	slice := make([]string, len(lfs))
 	for i, lf := range lfs {
