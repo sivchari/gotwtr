@@ -136,5 +136,5 @@ type UpdateMetaDataForListData struct {
 type UpdateMetaDataForListBody struct {
 	Description string `json:"description,omitempty"`
 	Name        string `json:"name,omitempty"`
-	Private     string `json:"private,omitempty"`
+	Private     bool   `json:"private,omitempty"`
 }

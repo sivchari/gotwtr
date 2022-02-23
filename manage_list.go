@@ -11,6 +11,10 @@ import (
 
 //https://developer.twitter.com/en/docs/twitter-api/lists/manage-lists/api-reference/post-lists
 func createNewList(ctx context.Context, c *client, body *CreateNewListBody) (*CreateNewListResponse, error) {
+	if body.Name == "" {
+		return nil, errors.New("create new list: name parameter is required")
+	}
+
 	jsonStr, err := json.Marshal(body)
 	if err != nil {
 		return nil, errors.New("create new list : can not marshal")
