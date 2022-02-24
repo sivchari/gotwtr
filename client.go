@@ -81,6 +81,9 @@ type Lists interface {
 	AllListsUserFollows(ctx context.Context, userID string, opt ...*ListFollowsOption) (*AllListsUserFollowsResponse, error)
 	PostListFollows(ctx context.Context, listID string, userID string) (*PostListFollowsResponse, error)
 	UndoListFollows(ctx context.Context, listID string, userID string) (*UndoListFollowsResponse, error)
+	PinnedLists(ctx context.Context, userID string, opt ...*PinnedListsOption) (*PinnedListsResponse, error)
+	PostPinnedLists(ctx context.Context, listID string, userID string) (*PostPinnedListsResponse, error)
+	UndoPinnedLists(ctx context.Context, listID string, userID string) (*UndoPinnedListsResponse, error)
 }
 
 type Compliances interface {
@@ -416,6 +419,21 @@ func (c *Client) PostListFollows(ctx context.Context, listID string, userID stri
 // UndoListFollows enables the authenticated user to unfollow a List.
 func (c *Client) UndoListFollows(ctx context.Context, listID string, userID string) (*UndoListFollowsResponse, error) {
 	return undoListFollows(ctx, c.client, listID, userID)
+}
+
+// PinnedLists returns the Lists pinned by a specified user.
+func (c *Client) PinnedLists(ctx context.Context, userID string, opt ...*PinnedListsOption) (*PinnedListsResponse, error) {
+	return pinnedLists(ctx, c.client, userID, opt...)
+}
+
+// PostPinnedLists enables the authenticated user to pin a List.
+func (c *Client) PostPinnedLists(ctx context.Context, listID string, userID string) (*PostPinnedListsResponse, error) {
+	return postPinnedLists(ctx, c.client, listID, userID)
+}
+
+// UndoPinnedLists enables the authenticated user to unpin a List.
+func (c *Client) UndoPinnedLists(ctx context.Context, listID string, userID string) (*UndoPinnedListsResponse, error) {
+	return undoPinnedLists(ctx, c.client, listID, userID)
 }
 
 func (c *Client) ComplianceJobs(ctx context.Context, opt *ComplianceJobsOption) (*ComplianceJobsResponse, error) {
