@@ -77,8 +77,10 @@ type Lists interface {
 	ListsSpecifiedUser(ctx context.Context, userID string, opt ...*ListsSpecifiedUserOption) (*ListsSpecifiedUserResponse, error)
 	PostListMembers(ctx context.Context, listID string, userID string) (*PostListMembersResponse, error)
 	UndoListMembers(ctx context.Context, listID string, userID string) (*UndoListMembersResponse, error)
-	LookUpListFollowers(ctx context.Context, listID string, opt ...*ListFollowersOption) (*ListFollowersResponse, error)
-	LookUpAllListsUserFollows(ctx context.Context, userID string, opt ...*ListFollowsOption) (*AllListsUserFollowsResponse, error)
+	ListFollowers(ctx context.Context, listID string, opt ...*ListFollowersOption) (*ListFollowersResponse, error)
+	AllListsUserFollows(ctx context.Context, userID string, opt ...*ListFollowsOption) (*AllListsUserFollowsResponse, error)
+	PostListFollows(ctx context.Context, listID string, userID string) (*PostListFollowsResponse, error)
+	UndoListFollows(ctx context.Context, listID string, userID string) (*UndoListFollowsResponse, error)
 	PinnedLists(ctx context.Context, userID string, opt ...*PinnedListsOption) (*PinnedListsResponse, error)
 	PostPinnedLists(ctx context.Context, listID string, userID string) (*PostPinnedListsResponse, error)
 	UndoPinnedLists(ctx context.Context, listID string, userID string) (*UndoPinnedListsResponse, error)
@@ -399,14 +401,24 @@ func (c *Client) UndoListMembers(ctx context.Context, listID string, userID stri
 	return undoListMembers(ctx, c.client, listID, userID)
 }
 
-// LookUpListFollowers returns a list of users who are followers of the specified List.
-func (c *Client) LookUpListFollowers(ctx context.Context, listID string, opt ...*ListFollowersOption) (*ListFollowersResponse, error) {
-	return lookUpListFollowers(ctx, c.client, listID, opt...)
+// ListFollowers returns a list of users who are followers of the specified List.
+func (c *Client) ListFollowers(ctx context.Context, listID string, opt ...*ListFollowersOption) (*ListFollowersResponse, error) {
+	return listFollowers(ctx, c.client, listID, opt...)
 }
 
-// LookUpAllListsUserFollows returns all Lists a specified user follows.
-func (c *Client) LookUpAllListsUserFollows(ctx context.Context, userID string, opt ...*ListFollowsOption) (*AllListsUserFollowsResponse, error) {
-	return lookUpAllListsUserFollows(ctx, c.client, userID, opt...)
+// AllListsUserFollows returns all Lists a specified user follows.
+func (c *Client) AllListsUserFollows(ctx context.Context, userID string, opt ...*ListFollowsOption) (*AllListsUserFollowsResponse, error) {
+	return allListsUserFollows(ctx, c.client, userID, opt...)
+}
+
+// PostListFollows enables the authenticated user to follow a List.
+func (c *Client) PostListFollows(ctx context.Context, listID string, userID string) (*PostListFollowsResponse, error) {
+	return postListFollows(ctx, c.client, listID, userID)
+}
+
+// UndoListFollows enables the authenticated user to unfollow a List.
+func (c *Client) UndoListFollows(ctx context.Context, listID string, userID string) (*UndoListFollowsResponse, error) {
+	return undoListFollows(ctx, c.client, listID, userID)
 }
 
 // PinnedLists returns the Lists pinned by a specified user.

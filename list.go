@@ -82,6 +82,24 @@ type AllListsUserFollowsResponse struct {
 	Type     string              `json:"type,omitempty"`
 }
 
+type PostListFollowsResponse struct {
+	Following *ListFollows        `json:"data"`
+	Errors    []*APIResponseError `json:"errors,omitempty"`
+}
+
+type UndoListFollowsResponse struct {
+	Following *ListFollows        `json:"data"`
+	Errors    []*APIResponseError `json:"errors,omitempty"`
+}
+
+type ListFollows struct {
+	Following bool `json:"following"`
+}
+
+type ListFollowsBody struct {
+	ListID string `json:"list_id"`
+}
+
 type ListMembersResponse struct {
 	Users    []*User             `json:"data"`
 	Includes *ListIncludes       `json:"includes,omitempty"`
