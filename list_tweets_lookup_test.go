@@ -182,6 +182,7 @@ func Test_lookUpListTweets(t *testing.T) {
 		},
 	}
 	for i, tt := range tests {
+		i := i
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
