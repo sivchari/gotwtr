@@ -49,5 +49,5 @@ type ComplianceJobData struct {
 	UploadExpiresAt   string `json:"upload_expires_at"`
 	DownloadURL       string `json:"download_url"`
 	DownloadExpiresAt string `json:"download_expires_at"`
-	Error             string `json:error,omitempty`
+	Error             string `json:"error,omitempty"`
 }
