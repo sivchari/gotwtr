@@ -60,17 +60,18 @@ const (
 	lookUpListTweetsURL    = "https://api.twitter.com/2/lists/%v/tweets"
 	listMembersURL         = "https://api.twitter.com/2/lists/%v/members"
 	listsSpecifiedUserURL  = "https://api.twitter.com/2/users/%v/list_memberships"
-	postListMembersURL           = "https://api.twitter.com/2/lists/%v/members"
-	undoListMembersURL           = "https://api.twitter.com/2/lists/%v/members/%v"
+	postListMembersURL     = "https://api.twitter.com/2/lists/%v/members"
+	undoListMembersURL     = "https://api.twitter.com/2/lists/%v/members/%v"
 	listFollowersURL       = "https://api.twitter.com/2/lists/%v/followers"
 	allListsUserFollowsURL = "https://api.twitter.com/2/users/%v/followed_lists"
 	postListFollowsURL     = "https://api.twitter.com/2/users/%v/followed_lists"
 	undoListFollowsURL     = "https://api.twitter.com/2/users/%v/followed_lists/%v"
-	pinnedListsURL               = "https://api.twitter.com/2/users/%v/pinned_lists"
-	postPinnedListsURL           = "https://api.twitter.com/2/users/%v/pinned_lists"
-	undoPinnedListsURL           = "https://api.twitter.com/2/users/%v/pinned_lists/%v"
+	pinnedListsURL         = "https://api.twitter.com/2/users/%v/pinned_lists"
+	postPinnedListsURL     = "https://api.twitter.com/2/users/%v/pinned_lists"
+	undoPinnedListsURL     = "https://api.twitter.com/2/users/%v/pinned_lists/%v"
 )
 
 const (
 	complianceJobsURL = "https://api.twitter.com/2/compliance/jobs"
+	complianceJobURL  = "https://api.twitter.com/2/compliance/jobs/%v"
 )
