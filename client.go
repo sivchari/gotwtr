@@ -16,9 +16,6 @@ const (
 
 type OAuth interface {
 	GenerateAppOnlyBearerToken(ctx context.Context) (bool, error)
-	// InvalidatingBearerToken(ctx context.Context) (bool, error)
-	// RefreshToken() (string, error)
-	// RevokeToken() (bool, error)
 }
 
 type Tweets interface {
@@ -88,6 +85,7 @@ type Lists interface {
 
 type Compliances interface {
 	ComplianceJobs(ctx context.Context, opt *ComplianceJobsOption) (*ComplianceJobsResponse, error)
+	ComplianceJob(ctx context.Context, complianceJobID int) (*ComplianceJobResponse, error)
 }
 
 // Twtr is a main interface for all Twitter API calls.
@@ -153,10 +151,6 @@ func New(bearerToken string, opts ...ClientOption) *Client {
 func (c *client) GenerateAppOnlyBearerToken(ctx context.Context) (bool, error) {
 	return generateAppOnlyBearerToken(ctx, c)
 }
-
-// func (c *client) InvalidatingBearerToken(ctx context.Context) (bool, error) {
-// 	return invalidatingBearerToken(ctx, c)
-// }
 
 // RetrieveMultipleTweets returns a variety of information about the Tweet specified by the requested ID or list of IDs.
 func (c *Client) RetrieveMultipleTweets(ctx context.Context, tweetIDs []string, opt ...*RetriveTweetOption) (*TweetsResponse, error) {
@@ -436,6 +430,12 @@ func (c *Client) UndoPinnedLists(ctx context.Context, listID string, userID stri
 	return undoPinnedLists(ctx, c.client, listID, userID)
 }
 
+// ComplianceJobs returns a list of recent compliance jobs.
 func (c *Client) ComplianceJobs(ctx context.Context, opt *ComplianceJobsOption) (*ComplianceJobsResponse, error) {
 	return complianceJobs(ctx, c.client, opt)
+}
+
+// ComplianceJob returns a single compliance job with the specified ID.
+func (c *Client) ComplianceJob(ctx context.Context, complianceJobID int) (*ComplianceJobResponse, error) {
+	return complianceJob(ctx, c.client, complianceJobID)
 }

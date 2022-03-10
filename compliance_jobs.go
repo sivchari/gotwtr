@@ -37,3 +37,30 @@ func complianceJobs(ctx context.Context, c *client, opt *ComplianceJobsOption) (
 	}
 	return &cj, nil
 }
+
+func complianceJob(ctx context.Context, c *client, cjID int) (*ComplianceJobResponse, error) {
+	ep := fmt.Sprintf(complianceJobURL, cjID)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, ep, nil)
+	if err != nil {
+		return nil, fmt.Errorf("compliance job new request with ctx: %w", err)
+	}
+	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.bearerToken))
+	resp, err := c.client.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("compliance job response: %w", err)
+	}
+	defer resp.Body.Close()
+
+	var cj ComplianceJobResponse
+	if err := json.NewDecoder(resp.Body).Decode(&cj); err != nil {
+		return nil, fmt.Errorf("compliance job: %w", err)
+	}
+	if resp.StatusCode != http.StatusOK {
+		return &cj, &HTTPError{
+			APIName: "compliance job",
+			Status:  resp.Status,
+			URL:     req.URL.String(),
+		}
+	}
+	return &cj, nil
+}
