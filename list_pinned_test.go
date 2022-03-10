@@ -178,6 +178,7 @@ func Test_pinnedLists(t *testing.T) {
 		},
 	}
 	for i, tt := range tests {
+		i := i
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
@@ -323,6 +324,7 @@ func Test_postPinnedLists(t *testing.T) {
 		},
 	}
 	for i, tt := range tests {
+		i := i
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
@@ -468,6 +470,7 @@ func Test_undoPinnedLists(t *testing.T) {
 		},
 	}
 	for i, tt := range tests {
+		i := i
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()

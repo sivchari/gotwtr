@@ -415,6 +415,7 @@ func Test_postRetweet(t *testing.T) {
 		},
 	}
 	for i, tt := range tests {
+		i := i
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
@@ -626,6 +627,7 @@ func Test_undoRetweet(t *testing.T) {
 		},
 	}
 	for i, tt := range tests {
+		i := i
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
