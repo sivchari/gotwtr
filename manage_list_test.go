@@ -82,52 +82,44 @@ func Test_CreateNewList(t *testing.T) {
 			},
 			wantErr: false,
 		},
-		/*
-			{
-			    name: "404 not found",
-			    args: args{
-			        ctx: context.Background(),
-			        client: mockHTTPClient(func(req *http.Request) *http.Response {
-			            body := `{
-							"errors":[
-								{
-									"parameters":{
-										"id":[
-											"111111111111111111111111"
-										]
-									},
-									"message":"The id query parameter value [111111111111111111111111] is not valid"
-								}
-							],
-							"title":"Invalid Request",
-							"detail":"One or more parameters to your request was invalid.",
-							"type":"https://api.twitter.com/2/problems/invalid-request"
-						}`
-			            return &http.Response{
-			                StatusCode: http.StatusNotFound,
-			                Body:       io.NopCloser(strings.NewReader(body)),
-			            }
-			        }),
-			        body: &gotwtr.CreateNewListBody{},
-			    },
-			    want: &gotwtr.CreateNewListResponse{
-			        Data: nil,
-			        Errors: []*gotwtr.APIResponseError{
-			            {
-			                Parameters: gotwtr.Parameter{
-			                    ID: []string{"111111111111111111111111"},
-			                },
-			                Message: "The id query parameter value [111111111111111111111111] is not valid",
-			            },
-			        },
-			        Meta:   nil,
-			        Title:  "Invalid Request",
-			        Detail: "One or more parameters to your request was invalid.",
-			        Type:   "https://api.twitter.com/2/problems/invalid-request",
-			    },
-			    wantErr: true,
+		{
+			name: "403 authentication error",
+			args: args{
+				ctx: context.Background(),
+				client: mockHTTPClient(func(req *http.Request) *http.Response {
+					body := `{
+						"errors": [
+							{
+								"title": "Unsupported Authentication",
+								"detail": "Authenticating with OAuth 2.0 Application-Only is forbidden for this endpoint.  Supported authentication types are [OAuth 1.0a User Context, OAuth 2.0 User Context].",
+								"type": "https://api.twitter.com/2/problems/unsupported-authentication",
+								"status": 403
+							}
+						]
+					}`
+
+					return &http.Response{
+						StatusCode: http.StatusForbidden,
+						Body:       io.NopCloser(strings.NewReader(body)),
+					}
+				}),
+				body: &gotwtr.CreateNewListBody{
+					Name: "test v2 create list",
+				},
 			},
-		*/
+			want: &gotwtr.CreateNewListResponse{
+				Data: nil,
+				Errors: []*gotwtr.APIResponseError{
+					{
+						Title:  "Unsupported Authentication",
+						Detail: "Authenticating with OAuth 2.0 Application-Only is forbidden for this endpoint.  Supported authentication types are [OAuth 1.0a User Context, OAuth 2.0 User Context].",
+						Type:   "https://api.twitter.com/2/problems/unsupported-authentication",
+						Status: 403,
+					},
+				},
+			},
+			wantErr: true,
+		},
 	}
 	for i, tt := range tests {
 		tt := tt
@@ -184,52 +176,49 @@ func Test_DeleteList(t *testing.T) {
 			},
 			wantErr: false,
 		},
-		/*
-			        {
-			            name: "404 not found",
-			            args: args{
-			                ctx: context.Background(),
-			                client: mockHTTPClient(func(req *http.Request) *http.Response {
-			                    body := `{
-									"errors":[
-										{
-											"parameters":{
-												"id":[
-													"111111111111111111111111"
-												]
-											},
-											"message":"The id query parameter value [111111111111111111111111] is not valid"
-										}
-									],
-									"title":"Invalid Request",
-									"detail":"One or more parameters to your request was invalid.",
-									"type":"https://api.twitter.com/2/problems/invalid-request"
-								}`
-			                    return &http.Response{
-			                        StatusCode: http.StatusNotFound,
-			                        Body:       io.NopCloser(strings.NewReader(body)),
-			                    }
-			                }),
-			                listID: "",
-			            },
-			            want: &gotwtr.DeleteListResponse{
-			                Data: nil,
-			                Errors: []*gotwtr.APIResponseError{
-			                    {
-			                        Parameters: gotwtr.Parameter{
-			                            ID: []string{"111111111111111111111111"},
-			                        },
-			                        Message: "The id query parameter value [111111111111111111111111] is not valid",
-			                    },
-			                },
-			                Meta:   nil,
-			                Title:  "Invalid Request",
-			                Detail: "One or more parameters to your request was invalid.",
-			                Type:   "https://api.twitter.com/2/problems/invalid-request",
-			            },
-			            wantErr: true,
-			        },
-		*/
+		{
+			name: "404 not found",
+			args: args{
+				ctx: context.Background(),
+				client: mockHTTPClient(func(req *http.Request) *http.Response {
+					body := `{
+					"errors":[
+						{
+							"parameters":{
+								"id":[
+									"111111111111111111111111"
+								]
+							},
+							"message":"The id query parameter value [111111111111111111111111] is not valid"
+						}
+					],
+					"title":"Invalid Request",
+					"detail":"One or more parameters to your request was invalid.",
+					"type":"https://api.twitter.com/2/problems/invalid-request"
+				}`
+					return &http.Response{
+						StatusCode: http.StatusNotFound,
+						Body:       io.NopCloser(strings.NewReader(body)),
+					}
+				}),
+				listID: "111111111111111111111111",
+			},
+			want: &gotwtr.DeleteListResponse{
+				Data: nil,
+				Errors: []*gotwtr.APIResponseError{
+					{
+						Parameters: gotwtr.Parameter{
+							ID: []string{"111111111111111111111111"},
+						},
+						Message: "The id query parameter value [111111111111111111111111] is not valid",
+					},
+				},
+				Title:  "Invalid Request",
+				Detail: "One or more parameters to your request was invalid.",
+				Type:   "https://api.twitter.com/2/problems/invalid-request",
+			},
+			wantErr: true,
+		},
 	}
 	for i, tt := range tests {
 		tt := tt
@@ -319,52 +308,49 @@ func Test_UpdateMetaDataForList(t *testing.T) {
 			},
 			wantErr: false,
 		},
-		/*
-		           {
-		               name: "404 not found",
-		               args: args{
-		                   ctx: context.Background(),
-		                   client: mockHTTPClient(func(req *http.Request) *http.Response {
-		                       body := `{
-		   						"errors":[
-		   							{
-		   								"parameters":{
-		   									"id":[
-		   										"111111111111111111111111"
-		   									]
-		   								},
-		   								"message":"The id query parameter value [111111111111111111111111] is not valid"
-		   							}
-		   						],
-		   						"title":"Invalid Request",
-		   						"detail":"One or more parameters to your request was invalid.",
-		   						"type":"https://api.twitter.com/2/problems/invalid-request"
-		   					}`
-		                       return &http.Response{
-		                           StatusCode: http.StatusNotFound,
-		                           Body:       io.NopCloser(strings.NewReader(body)),
-		                       }
-		                   }),
-		                   listID: "",
-		               },
-		               want: &gotwtr.DeleteListResponse{
-		                   Data: nil,
-		                   Errors: []*gotwtr.APIResponseError{
-		                       {
-		                           Parameters: gotwtr.Parameter{
-		                               ID: []string{"111111111111111111111111"},
-		                           },
-		                           Message: "The id query parameter value [111111111111111111111111] is not valid",
-		                       },
-		                   },
-		                   Meta:   nil,
-		                   Title:  "Invalid Request",
-		                   Detail: "One or more parameters to your request was invalid.",
-		                   Type:   "https://api.twitter.com/2/problems/invalid-request",
-		               },
-		               wantErr: true,
-		           },
-		*/
+		{
+			name: "404 not found",
+			args: args{
+				ctx: context.Background(),
+				client: mockHTTPClient(func(req *http.Request) *http.Response {
+					body := `{
+  						"errors":[
+  							{
+  								"parameters":{
+  									"id":[
+  										"111111111111111111111111"
+  									]
+  								},
+  								"message":"The id query parameter value [111111111111111111111111] is not valid"
+  							}
+  						],
+  						"title":"Invalid Request",
+  						"detail":"One or more parameters to your request was invalid.",
+  						"type":"https://api.twitter.com/2/problems/invalid-request"
+  					}`
+					return &http.Response{
+						StatusCode: http.StatusNotFound,
+						Body:       io.NopCloser(strings.NewReader(body)),
+					}
+				}),
+				listID: "111111111111111111111111",
+			},
+			want: &gotwtr.UpdateMetaDataForListResponse{
+				Data: nil,
+				Errors: []*gotwtr.APIResponseError{
+					{
+						Parameters: gotwtr.Parameter{
+							ID: []string{"111111111111111111111111"},
+						},
+						Message: "The id query parameter value [111111111111111111111111] is not valid",
+					},
+				},
+				Title:  "Invalid Request",
+				Detail: "One or more parameters to your request was invalid.",
+				Type:   "https://api.twitter.com/2/problems/invalid-request",
+			},
+			wantErr: true,
+		},
 	}
 	for i, tt := range tests {
 		tt := tt

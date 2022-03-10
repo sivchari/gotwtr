@@ -121,7 +121,11 @@ type ListMembersBody struct {
 }
 
 type CreateNewListResponse struct {
-	Data *CreateNewListData `json:"data"`
+	Data   *CreateNewListData  `json:"data"`
+	Errors []*APIResponseError `json:"errors,omitempty"`
+	Title  string              `json:"title,omitempty"`
+	Detail string              `json:"detail,omitempty"`
+	Type   string              `json:"type,omitempty"`
 }
 
 type CreateNewListData struct {
@@ -136,7 +140,11 @@ type CreateNewListBody struct {
 }
 
 type DeleteListResponse struct {
-	Data *DeleteListData `json:"data"`
+	Data   *DeleteListData     `json:"data"`
+	Errors []*APIResponseError `json:"errors,omitempty"`
+	Title  string              `json:"title,omitempty"`
+	Detail string              `json:"detail,omitempty"`
+	Type   string              `json:"type,omitempty"`
 }
 
 type DeleteListData struct {
@@ -144,7 +152,11 @@ type DeleteListData struct {
 }
 
 type UpdateMetaDataForListResponse struct {
-	Data *UpdateMetaDataForListData `json:"data"`
+	Data   *UpdateMetaDataForListData `json:"data"`
+	Errors []*APIResponseError        `json:"errors,omitempty"`
+	Title  string                     `json:"title,omitempty"`
+	Detail string                     `json:"detail,omitempty"`
+	Type   string                     `json:"type,omitempty"`
 }
 
 type UpdateMetaDataForListData struct {
