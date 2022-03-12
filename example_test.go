@@ -571,9 +571,9 @@ func ExampleClient_UndoListMembers() {
 	fmt.Println(ulm)
 }
 
-func ExampleClient_LookUpListFollowers() {
+func ExampleClient_ListFollowers() {
 	client := gotwtr.New("key")
-	followers, err := client.LookUpListFollowers(context.Background(), "list_id")
+	followers, err := client.ListFollowers(context.Background(), "list_id")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -582,15 +582,62 @@ func ExampleClient_LookUpListFollowers() {
 	}
 }
 
-func ExampleClient_LookUpAllListsUserFollows() {
+func ExampleClient_AllListsUserFollows() {
 	client := gotwtr.New("key")
-	lists, err := client.LookUpAllListsUserFollows(context.Background(), "user_id")
+	lists, err := client.AllListsUserFollows(context.Background(), "user_id")
 	if err != nil {
 		log.Fatal(err)
 	}
 	for _, list := range lists.Lists {
 		fmt.Println(list)
 	}
+}
+
+func ExampleClient_PostListFollows() {
+	client := gotwtr.New("key")
+	plf, err := client.PostListFollows(context.Background(), "list_id", "user_id")
+	if err != nil {
+		log.Println(err)
+	}
+	fmt.Println(plf)
+}
+
+func ExampleClient_UndoListFollows() {
+	client := gotwtr.New("key")
+	ulf, err := client.UndoListFollows(context.Background(), "list_id", "user_id")
+	if err != nil {
+		log.Println(err)
+	}
+	fmt.Println(ulf)
+}
+
+func ExampleClient_PinnedLists() {
+	client := gotwtr.New("key")
+	pl, err := client.PinnedLists(context.Background(), "user_id")
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, l := range pl.Lists {
+		fmt.Println(l)
+	}
+}
+
+func ExampleClient_PostPinnedLists() {
+	client := gotwtr.New("key")
+	ppl, err := client.PostPinnedLists(context.Background(), "list_id", "user_id")
+	if err != nil {
+		log.Println(err)
+	}
+	fmt.Println(ppl)
+}
+
+func ExampleClient_UndoPinnedLists() {
+	client := gotwtr.New("key")
+	upl, err := client.UndoPinnedLists(context.Background(), "list_id", "user_id")
+	if err != nil {
+		log.Println(err)
+	}
+	fmt.Println(upl)
 }
 
 func ExampleClient_ComplianceJobs() {

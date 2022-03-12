@@ -11,7 +11,7 @@ import (
 	"github.com/sivchari/gotwtr"
 )
 
-func Test_lookUpListFollowers(t *testing.T) {
+func Test_listFollowers(t *testing.T) {
 	t.Parallel()
 	type args struct {
 		ctx    context.Context
@@ -295,20 +295,20 @@ func Test_lookUpListFollowers(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			c := gotwtr.New("key", gotwtr.WithHTTPClient(tt.args.client))
-			got, err := c.LookUpListFollowers(tt.args.ctx, tt.args.id, tt.args.opt...)
+			got, err := c.ListFollowers(tt.args.ctx, tt.args.id, tt.args.opt...)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("client.LookUpListFollowersByID() index = %v error = %v, wantErr %v", i, err, tt.wantErr)
+				t.Errorf("client.ListFollowers() index = %v error = %v, wantErr %v", i, err, tt.wantErr)
 				return
 			}
 			if diff := cmp.Diff(tt.want, got); diff != "" {
-				t.Errorf("client.LookUpListFollowersByID() index = %v mismatch (-want +got):\n%s", i, diff)
+				t.Errorf("client.ListFollowers() index = %v mismatch (-want +got):\n%s", i, diff)
 				return
 			}
 		})
 	}
 }
 
-func Test_lookUpAllListsUserFollows(t *testing.T) {
+func Test_allListsUserFollows(t *testing.T) {
 	t.Parallel()
 	type args struct {
 		ctx    context.Context
@@ -482,13 +482,303 @@ func Test_lookUpAllListsUserFollows(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			c := gotwtr.New("key", gotwtr.WithHTTPClient(tt.args.client))
-			got, err := c.LookUpAllListsUserFollows(tt.args.ctx, tt.args.id, tt.args.opt...)
+			got, err := c.AllListsUserFollows(tt.args.ctx, tt.args.id, tt.args.opt...)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("client.LookUpAllListsUserFollows() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("client.AllListsUserFollows() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if diff := cmp.Diff(tt.want, got); diff != "" {
-				t.Errorf("client.LookUpAllListsUserFollows() mismatch (-want +got):\n%s", diff)
+				t.Errorf("client.AllListsUserFollows() mismatch (-want +got):\n%s", diff)
+				return
+			}
+		})
+	}
+}
+
+func Test_postListFollows(t *testing.T) {
+	t.Parallel()
+	type args struct {
+		ctx    context.Context
+		client *http.Client
+		listID string
+		userID string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    *gotwtr.PostListFollowsResponse
+		wantErr bool
+	}{
+		{
+			name: "200 success",
+			args: args{
+				ctx: context.Background(),
+				client: mockHTTPClient(func(req *http.Request) *http.Response {
+					if req.Method != http.MethodPost {
+						t.Errorf("the method is not correct got %s want %s", req.Method, http.MethodPost)
+					}
+					body := `{
+						"data": {
+							"following": true
+						}
+					}`
+					return &http.Response{
+						StatusCode: http.StatusOK,
+						Body:       io.NopCloser(strings.NewReader(body)),
+					}
+				}),
+				listID: "6253282",
+				userID: "2244994945",
+			},
+			want: &gotwtr.PostListFollowsResponse{
+				Following: &gotwtr.ListFollows{
+					Following: true,
+				},
+			},
+			wantErr: false,
+		},
+		{
+			name: "404 not found, invalid listID",
+			args: args{
+				ctx: context.Background(),
+				client: mockHTTPClient(func(req *http.Request) *http.Response {
+					body := `{
+						"errors":[
+							{
+								"value":"111111111122",
+								"detail":"Could not find list with id: [111111111122].",
+								"title":"Not Found Error",
+								"resource_type":"list",
+								"parameter":"id",
+								"resource_id":"111111111122",
+								"type":"https://api.twitter.com/2/problems/resource-not-found"
+							}
+						]
+					}`
+					return &http.Response{
+						StatusCode: http.StatusNotFound,
+						Body:       io.NopCloser(strings.NewReader(body)),
+					}
+				}),
+				listID: "111111111122",
+				userID: "1228393702244134912",
+			},
+			want: &gotwtr.PostListFollowsResponse{
+				Following: nil,
+				Errors: []*gotwtr.APIResponseError{
+					{
+						Value:        "111111111122",
+						Detail:       "Could not find list with id: [111111111122].",
+						Title:        "Not Found Error",
+						ResourceType: "list",
+						Parameter:    "id",
+						ResourceID:   "111111111122",
+						Type:         "https://api.twitter.com/2/problems/resource-not-found",
+					},
+				},
+			},
+			wantErr: true,
+		},
+		{
+			name: "404 not found, invalid userID",
+			args: args{
+				ctx: context.Background(),
+				client: mockHTTPClient(func(req *http.Request) *http.Response {
+					body := `{
+						"errors":[
+							{
+								"value":"1228393702244134912",
+								"detail":"Could not find user with id: [1228393702244134912].",
+								"title":"Not Found Error",
+								"resource_type":"user",
+								"parameter":"id",
+								"resource_id":"1228393702244134912",
+								"type":"https://api.twitter.com/2/problems/resource-not-found"
+							}
+						]
+					}`
+					return &http.Response{
+						StatusCode: http.StatusNotFound,
+						Body:       io.NopCloser(strings.NewReader(body)),
+					}
+				}),
+				listID: "111111111122",
+				userID: "1228393702244134912",
+			},
+			want: &gotwtr.PostListFollowsResponse{
+				Following: nil,
+				Errors: []*gotwtr.APIResponseError{
+					{
+						Value:        "1228393702244134912",
+						Detail:       "Could not find user with id: [1228393702244134912].",
+						Title:        "Not Found Error",
+						ResourceType: "user",
+						Parameter:    "id",
+						ResourceID:   "1228393702244134912",
+						Type:         "https://api.twitter.com/2/problems/resource-not-found",
+					},
+				},
+			},
+			wantErr: true,
+		},
+	}
+	for i, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
+			got, err := c.PostListFollows(tt.args.ctx, tt.args.listID, tt.args.userID)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("PostListFollows() index = %v error = %v, wantErr %v", i, err, tt.wantErr)
+				return
+			}
+			if diff := cmp.Diff(got, tt.want); diff != "" {
+				t.Errorf("PostListFollows() index = %v mismatch (-want +got):\n%s", i, diff)
+				return
+			}
+		})
+	}
+}
+
+func Test_undoListFollows(t *testing.T) {
+	t.Parallel()
+	type args struct {
+		ctx    context.Context
+		client *http.Client
+		listID string
+		userID string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    *gotwtr.UndoListFollowsResponse
+		wantErr bool
+	}{
+		{
+			name: "200 success",
+			args: args{
+				ctx: context.Background(),
+				client: mockHTTPClient(func(req *http.Request) *http.Response {
+					if req.Method != http.MethodDelete {
+						t.Errorf("the method is not correct got %s want %s", req.Method, http.MethodDelete)
+					}
+					body := `{
+						"data": {
+							"following": false
+						}
+					}`
+					return &http.Response{
+						StatusCode: http.StatusOK,
+						Body:       io.NopCloser(strings.NewReader(body)),
+					}
+				}),
+				listID: "2244994945",
+				userID: "6253282",
+			},
+			want: &gotwtr.UndoListFollowsResponse{
+				Following: &gotwtr.ListFollows{
+					Following: false,
+				},
+			},
+			wantErr: false,
+		},
+		{
+			name: "404 not found, invalid listID",
+			args: args{
+				ctx: context.Background(),
+				client: mockHTTPClient(func(req *http.Request) *http.Response {
+					body := `{
+						"errors":[
+							{
+								"value":"111111111122",
+								"detail":"Could not find list with id: [111111111122].",
+								"title":"Not Found Error",
+								"resource_type":"list",
+								"parameter":"id",
+								"resource_id":"111111111122",
+								"type":"https://api.twitter.com/2/problems/resource-not-found"
+							}
+						]
+					}`
+					return &http.Response{
+						StatusCode: http.StatusNotFound,
+						Body:       io.NopCloser(strings.NewReader(body)),
+					}
+				}),
+				listID: "111111111122",
+				userID: "1228393702244134912",
+			},
+			want: &gotwtr.UndoListFollowsResponse{
+				Following: nil,
+				Errors: []*gotwtr.APIResponseError{
+					{
+						Value:        "111111111122",
+						Detail:       "Could not find list with id: [111111111122].",
+						Title:        "Not Found Error",
+						ResourceType: "list",
+						Parameter:    "id",
+						ResourceID:   "111111111122",
+						Type:         "https://api.twitter.com/2/problems/resource-not-found",
+					},
+				},
+			},
+			wantErr: true,
+		},
+		{
+			name: "404 not found, invalid userID",
+			args: args{
+				ctx: context.Background(),
+				client: mockHTTPClient(func(req *http.Request) *http.Response {
+					body := `{
+						"errors":[
+							{
+								"value":"111111111133",
+								"detail":"Could not find user with id: [111111111133].",
+								"title":"Not Found Error",
+								"resource_type":"user",
+								"parameter":"id",
+								"resource_id":"111111111133",
+								"type":"https://api.twitter.com/2/problems/resource-not-found"
+							}
+						]
+					}`
+					return &http.Response{
+						StatusCode: http.StatusNotFound,
+						Body:       io.NopCloser(strings.NewReader(body)),
+					}
+				}),
+				listID: "111111111133",
+				userID: "1228393702244134912",
+			},
+			want: &gotwtr.UndoListFollowsResponse{
+				Following: nil,
+				Errors: []*gotwtr.APIResponseError{
+					{
+						Value:        "111111111133",
+						Detail:       "Could not find user with id: [111111111133].",
+						Title:        "Not Found Error",
+						ResourceType: "user",
+						Parameter:    "id",
+						ResourceID:   "111111111133",
+						Type:         "https://api.twitter.com/2/problems/resource-not-found",
+					},
+				},
+			},
+			wantErr: true,
+		},
+	}
+	for i, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
+			got, err := c.UndoListFollows(tt.args.ctx, tt.args.listID, tt.args.userID)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("UndoListFollows() index = %v error = %v, wantErr %v", i, err, tt.wantErr)
+				return
+			}
+			if diff := cmp.Diff(got, tt.want); diff != "" {
+				t.Errorf("UndoListFollows() index = %v mismatch (-want +got):\n%s", i, diff)
 				return
 			}
 		})
