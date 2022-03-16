@@ -3,7 +3,6 @@ package gotwtr
 // EndpointURL is the base URL for the Twitter V2 API.
 const (
 	generateAppOnlyBearerTokenURL = "https://api.twitter.com/oauth2/token?grant_type=client_credentials"
-	// invalidatingBearerTokenURL    = "https://api.twitter.com/oauth2/invalidate_token?access_token=%v"
 )
 
 const (
@@ -72,6 +71,7 @@ const (
 )
 
 const (
-	complianceJobsURL = "https://api.twitter.com/2/compliance/jobs"
-	complianceJobURL  = "https://api.twitter.com/2/compliance/jobs/%v"
+	complianceJobsURL      = "https://api.twitter.com/2/compliance/jobs"
+	complianceJobURL       = "https://api.twitter.com/2/compliance/jobs/%v"
+	createComplianceJobURL = "https://api.twitter.com/2/compliance/jobs"
 )

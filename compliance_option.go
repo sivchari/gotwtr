@@ -14,3 +14,9 @@ func (c *ComplianceJobsOption) addQuery(req *http.Request) {
 		q.Add("status", string(c.Status))
 	}
 }
+
+type CreateComplianceJobOption struct {
+	Type      ComplianceFieldType `json:"type"`
+	Name      string              `json:"name,omitempty"`
+	Resumable bool                `json:"resumable,omitempty"`
+}

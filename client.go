@@ -84,8 +84,9 @@ type Lists interface {
 }
 
 type Compliances interface {
-	ComplianceJobs(ctx context.Context, opt *ComplianceJobsOption) (*ComplianceJobsResponse, error)
 	ComplianceJob(ctx context.Context, complianceJobID int) (*ComplianceJobResponse, error)
+	ComplianceJobs(ctx context.Context, opt *ComplianceJobsOption) (*ComplianceJobsResponse, error)
+	CreateComplianceJob(ctx context.Context, opt ...*CreateComplianceJobOption) (*CreateComplianceJobResponse, error)
 }
 
 // Twtr is a main interface for all Twitter API calls.
@@ -438,4 +439,9 @@ func (c *Client) ComplianceJobs(ctx context.Context, opt *ComplianceJobsOption) 
 // ComplianceJob returns a single compliance job with the specified ID.
 func (c *Client) ComplianceJob(ctx context.Context, complianceJobID int) (*ComplianceJobResponse, error) {
 	return complianceJob(ctx, c.client, complianceJobID)
+}
+
+// CreateComplianceJob create a compliance job.
+func (c *Client) CreateComplianceJob(ctx context.Context, opt ...*CreateComplianceJobOption) (*CreateComplianceJobResponse, error) {
+	return createComplianceJob(ctx, c.client, opt...)
 }
