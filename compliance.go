@@ -53,3 +53,22 @@ type ComplianceJobData struct {
 	Resumable         bool   `json:"resumable"`
 	Error             string `json:"error,omitempty"`
 }
+
+type CreateComplianceJobResponse struct {
+	CreateComplianceJobData *CreateComplianceJobData `json:"data"`
+	Errors                  []*APIResponseError      `json:"errors"`
+}
+
+type CreateComplianceJobData struct {
+	ID                string `json:"id"`
+	CreatedAt         string `json:"created_at"`
+	Type              string `json:"type"`
+	Name              string `json:"name"`
+	UploadURL         string `json:"upload_url"`
+	UploadExpiresAt   string `json:"upload_expires_at"`
+	DownloadURL       string `json:"download_url"`
+	DownloadExpiresAt string `json:"download_expires_at"`
+	Status            string `json:"status"`
+	Resumable         bool   `json:"resumable"`
+	Error             string `json:"error,omitempty"`
+}
