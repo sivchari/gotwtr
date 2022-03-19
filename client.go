@@ -40,6 +40,7 @@ type Tweets interface {
 	SearchAllTweets(ctx context.Context, tweet string, opt ...*SearchTweetsOption) (*SearchTweetsResponse, error)
 	PostTweet(ctx context.Context, body *PostTweetOption) (*PostTweetResponse, error)
 	DeleteTweet(ctx context.Context, tweetID string) (*DeleteTweetResponse, error)
+	HideReplies(ctx context.Context, tweetID string, hidden bool) (*HideRepliesResponse, error)
 }
 
 type Users interface {
@@ -196,6 +197,11 @@ func (c *client) PostTweet(ctx context.Context, body *PostTweetOption) (*PostTwe
 // DeleteTweet allows a user or authenticated user ID to delete a Tweet.
 func (c *client) DeleteTweet(ctx context.Context, tweetID string) (*DeleteTweetResponse, error) {
 	return deleteTweet(ctx, c, tweetID)
+}
+
+// HideReplies hides or unhides a reply to a Tweet.
+func (c *client) HideReplies(ctx context.Context, tweetID string, hidden bool) (*HideRepliesResponse, error) {
+	return hideReplies(ctx, c, tweetID, hidden)
 }
 
 // CountRecentTweets returns the count of Tweets from the last seven days that match a query.

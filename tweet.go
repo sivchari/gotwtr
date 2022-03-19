@@ -634,3 +634,12 @@ type DeleteTweetResponse struct {
 type DeleteTweetData struct {
 	Deleted bool `json:"deleted"`
 }
+
+type HideRepliesResponse struct {
+	HideRepliesResponseData *HideRepliesResponseData `json:"data"`
+	Errors                  []*APIResponseError      `json:"errors,omitempty"`
+}
+
+type HideRepliesResponseData struct {
+	Hidden bool `json:"hidden"`
+}
