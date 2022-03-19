@@ -22,17 +22,6 @@ func ExampleClient_GenerateAppOnlyBearerToken() {
 	}
 }
 
-// func ExampleClient_InvalidatingBearerToken() {
-// 	client := gotwtr.New("key")
-// 	b, err := client.InvalidatingBearerToken(context.Background())
-// 	if err != nil {
-// 		log.Fatal(err)
-// 	}
-// 	if !b {
-// 		log.Fatal("failed to invalidate bearer token")
-// 	}
-// }
-
 func ExampleClient_RetrieveMultipleTweets() {
 	client := gotwtr.New("key")
 	ts, err := client.RetrieveMultipleTweets(context.Background(), []string{"tweet_id", "tweet_id2"})
@@ -97,9 +86,21 @@ func ExampleClient_SearchRecentTweets() {
 
 }
 
-func ExampleClient_CountsRecentTweet() {
+func ExampleClient_CountRecentTweets() {
 	client := gotwtr.New("key")
-	ts, err := client.CountsRecentTweet(context.Background(), "from:TwitterDev")
+	ts, err := client.CountRecentTweets(context.Background(), "lakers")
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Println(ts.Meta.TotalTweetCount)
+	for _, t := range ts.Counts {
+		log.Println(t)
+	}
+}
+
+func ExampleClient_CountAllTweets() {
+	client := gotwtr.New("key")
+	ts, err := client.CountAllTweets(context.Background(), "lakers")
 	if err != nil {
 		log.Fatal(err)
 	}

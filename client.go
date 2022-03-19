@@ -24,7 +24,8 @@ type Tweets interface {
 	UserMentionTimeline(ctx context.Context, userID string, opt ...*UserMentionTimelineOption) (*UserMentionTimelineResponse, error)
 	UserTweetTimeline(ctx context.Context, userID string, opt ...*UserTweetTimelineOption) (*UserTweetTimelineResponse, error)
 	SearchRecentTweets(ctx context.Context, tweet string, opt ...*SearchTweetsOption) (*SearchTweetsResponse, error)
-	CountsRecentTweet(ctx context.Context, tweet string, opt ...*TweetCountsOption) (*TweetCountsResponse, error)
+	CountRecentTweets(ctx context.Context, tweet string, opt ...*TweetCountsOption) (*TweetCountsResponse, error)
+	CountAllTweets(ctx context.Context, tweet string, opt ...*TweetCountsAllOption) (*TweetCountsResponse, error)
 	AddOrDeleteRules(ctx context.Context, body *AddOrDeleteJSONBody, opt ...*AddOrDeleteRulesOption) (*AddOrDeleteRulesResponse, error)
 	RetrieveStreamRules(ctx context.Context, opt ...*RetrieveStreamRulesOption) (*RetrieveStreamRulesResponse, error)
 	ConnectToStream(ctx context.Context, ch chan<- ConnectToStreamResponse, errCh chan<- error, opt ...*ConnectToStreamOption) *ConnectToStream
@@ -197,9 +198,14 @@ func (c *client) DeleteTweet(ctx context.Context, tweetID string) (*DeleteTweetR
 	return deleteTweet(ctx, c, tweetID)
 }
 
-// CountsRecentTweet returns count of Tweets from the last seven days that match a query.
-func (c *Client) CountsRecentTweet(ctx context.Context, tweet string, opt ...*TweetCountsOption) (*TweetCountsResponse, error) {
-	return countsRecentTweet(ctx, c.client, tweet, opt...)
+// CountRecentTweets returns the count of Tweets from the last seven days that match a query.
+func (c *Client) CountRecentTweets(ctx context.Context, tweet string, opt ...*TweetCountsOption) (*TweetCountsResponse, error) {
+	return countRecentTweets(ctx, c.client, tweet, opt...)
+}
+
+// CountAllTweets returns the count of Tweets that match your query from the complete history of public Tweets; since the first Tweet was created March 26, 2006.
+func (c *Client) CountAllTweets(ctx context.Context, tweet string, opt ...*TweetCountsAllOption) (*TweetCountsResponse, error) {
+	return countAllTweets(ctx, c.client, tweet, opt...)
 }
 
 // AddOrDeleteRules To create one or more rules, submit an add JSON body with an array of rules and operators.
