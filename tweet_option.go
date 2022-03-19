@@ -517,3 +517,7 @@ type PostTweetOption struct {
 	ReplySettings         string     `json:"reply_settings,omitempty"`
 	Text                  string     `json:"text,omitempty"`
 }
+
+type hideRepliesBody struct {
+	Hidden bool `json:"hidden"`
+}

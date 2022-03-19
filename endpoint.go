@@ -27,6 +27,7 @@ const (
 	searchAllTweetsURL        = "https://api.twitter.com/2/tweets/search/all"
 	postTweetURL              = "https://api.twitter.com/2/tweets"
 	deleteTweetURL            = "https://api.twitter.com/2/tweets/%v"
+	hideRepliesURL            = "https://api.twitter.com/2/tweets/%v/hidden"
 )
 
 const (
