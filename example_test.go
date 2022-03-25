@@ -2,7 +2,6 @@ package gotwtr_test
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"time"
 
@@ -23,17 +22,6 @@ func ExampleClient_GenerateAppOnlyBearerToken() {
 	}
 }
 
-// func ExampleClient_InvalidatingBearerToken() {
-// 	client := gotwtr.New("key")
-// 	b, err := client.InvalidatingBearerToken(context.Background())
-// 	if err != nil {
-// 		log.Fatal(err)
-// 	}
-// 	if !b {
-// 		log.Fatal("failed to invalidate bearer token")
-// 	}
-// }
-
 func ExampleClient_RetrieveMultipleTweets() {
 	client := gotwtr.New("key")
 	ts, err := client.RetrieveMultipleTweets(context.Background(), []string{"tweet_id", "tweet_id2"})
@@ -41,7 +29,7 @@ func ExampleClient_RetrieveMultipleTweets() {
 		log.Fatal(err)
 	}
 	for _, t := range ts.Tweets {
-		fmt.Println(t)
+		log.Println(t)
 	}
 }
 
@@ -51,7 +39,7 @@ func ExampleClient_RetrieveSingleTweet() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(*t.Tweet)
+	log.Println(*t.Tweet)
 }
 
 func ExampleClient_UserMentionTimeline() {
@@ -61,7 +49,7 @@ func ExampleClient_UserMentionTimeline() {
 		log.Fatal(err)
 	}
 	for _, tw := range tws.Tweets {
-		fmt.Println(tw)
+		log.Println(tw)
 	}
 }
 
@@ -72,7 +60,7 @@ func ExampleClient_UserTweetTimeline() {
 		log.Fatal(err)
 	}
 	for _, t := range ts.Tweets {
-		fmt.Println(t)
+		log.Println(t)
 	}
 }
 
@@ -89,24 +77,36 @@ func ExampleClient_SearchRecentTweets() {
 		log.Fatal(err)
 	}
 	for _, t := range tsr.Tweets {
-		fmt.Println("---")
-		fmt.Println(t.Text)
+		log.Println("---")
+		log.Println(t.Text)
 	}
 
-	fmt.Println("---meta---")
-	fmt.Println(tsr.Meta)
+	log.Println("---meta---")
+	log.Println(tsr.Meta)
 
 }
 
-func ExampleClient_CountsRecentTweet() {
+func ExampleClient_CountRecentTweets() {
 	client := gotwtr.New("key")
-	ts, err := client.CountsRecentTweet(context.Background(), "from:TwitterDev")
+	ts, err := client.CountRecentTweets(context.Background(), "lakers")
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(ts.Meta.TotalTweetCount)
+	log.Println(ts.Meta.TotalTweetCount)
 	for _, t := range ts.Counts {
-		fmt.Println(t)
+		log.Println(t)
+	}
+}
+
+func ExampleClient_CountAllTweets() {
+	client := gotwtr.New("key")
+	ts, err := client.CountAllTweets(context.Background(), "lakers")
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Println(ts.Meta.TotalTweetCount)
+	for _, t := range ts.Counts {
+		log.Println(t)
 	}
 }
 
@@ -137,7 +137,7 @@ func ExampleClient_AddOrDeleteRules_delete() {
 	}
 	var ids []string
 	for _, t := range ts.Rules {
-		fmt.Println(t)
+		log.Println(t)
 		ids = append(ids, t.ID)
 	}
 
@@ -159,7 +159,7 @@ func ExampleClient_RetrieveStreamRules() {
 		log.Fatal(err)
 	}
 	for _, t := range ts.Rules {
-		fmt.Println(t)
+		log.Println(t)
 	}
 }
 
@@ -168,15 +168,15 @@ func ExampleClient_ConnectToStream() {
 	ch := make(chan gotwtr.ConnectToStreamResponse, 5)
 	errCh := make(chan error)
 	stream := client.ConnectToStream(context.Background(), ch, errCh)
-	fmt.Println("streaming...")
+	log.Println("streaming...")
 	ctx, cancel := context.WithCancel(context.Background())
 	go func(ctx context.Context) {
 		for {
 			select {
 			case data := <-ch:
-				fmt.Println(data.Tweet)
+				log.Println(data.Tweet)
 			case err := <-errCh:
-				fmt.Println(err)
+				log.Println(err)
 			case <-ctx.Done():
 				return
 			}
@@ -185,7 +185,7 @@ func ExampleClient_ConnectToStream() {
 	time.Sleep(time.Second * 10)
 	cancel()
 	stream.Stop()
-	fmt.Println("done")
+	log.Println("done")
 }
 
 func ExampleClient_VolumeStreams() {
@@ -193,15 +193,15 @@ func ExampleClient_VolumeStreams() {
 	ch := make(chan gotwtr.VolumeStreamsResponse, 5)
 	errCh := make(chan error)
 	stream := client.VolumeStreams(context.Background(), ch, errCh)
-	fmt.Println("streaming...")
+	log.Println("streaming...")
 	done := make(chan struct{})
 	go func(done chan struct{}) {
 		for {
 			select {
 			case data := <-ch:
-				fmt.Println(data.Tweet)
+				log.Println(data.Tweet)
 			case err := <-errCh:
-				fmt.Println(err)
+				log.Println(err)
 			case <-done:
 				return
 			}
@@ -210,7 +210,7 @@ func ExampleClient_VolumeStreams() {
 	time.Sleep(time.Second * 10)
 	close(done)
 	stream.Stop()
-	fmt.Println("done")
+	log.Println("done")
 }
 
 func ExampleClient_RetweetsLookup() {
@@ -219,7 +219,7 @@ func ExampleClient_RetweetsLookup() {
 	if err != nil {
 		log.Println(err)
 	}
-	fmt.Println(t)
+	log.Println(t)
 }
 
 func ExampleClient_PostRetweet() {
@@ -228,7 +228,7 @@ func ExampleClient_PostRetweet() {
 	if err != nil {
 		log.Println(err)
 	}
-	fmt.Println(pr)
+	log.Println(pr)
 }
 
 func ExampleClient_UndoRetweet() {
@@ -237,7 +237,7 @@ func ExampleClient_UndoRetweet() {
 	if err != nil {
 		log.Println(err)
 	}
-	fmt.Println(ur)
+	log.Println(ur)
 }
 
 func ExampleClient_TweetsUserLiked() {
@@ -247,7 +247,7 @@ func ExampleClient_TweetsUserLiked() {
 		log.Println(err)
 	}
 	for _, tweet := range tulr.Tweets {
-		fmt.Printf("id: %s, text: %s\n", tweet.ID, tweet.Text)
+		log.Printf("id: %s, text: %s\n", tweet.ID, tweet.Text)
 	}
 }
 func ExampleClient_UsersLikingTweet() {
@@ -257,7 +257,7 @@ func ExampleClient_UsersLikingTweet() {
 		log.Fatal(err)
 	}
 	for _, user := range ultr.Users {
-		fmt.Printf("id: %s, name: %s\n", user.ID, user.UserName)
+		log.Printf("id: %s, name: %s\n", user.ID, user.UserName)
 	}
 }
 
@@ -267,7 +267,7 @@ func ExampleClient_PostUsersLikingTweet() {
 	if err != nil {
 		log.Println(err)
 	}
-	fmt.Println(pult)
+	log.Println(pult)
 }
 
 func ExampleClient_UndoUsersLikingTweet() {
@@ -276,7 +276,7 @@ func ExampleClient_UndoUsersLikingTweet() {
 	if err != nil {
 		log.Println(err)
 	}
-	fmt.Println(uult)
+	log.Println(uult)
 }
 
 func ExampleClient_RetrieveMultipleUsersWithIDs() {
@@ -287,7 +287,7 @@ func ExampleClient_RetrieveMultipleUsersWithIDs() {
 		log.Fatal(err)
 	}
 	for _, u := range us.Users {
-		fmt.Println(u)
+		log.Println(u)
 	}
 }
 
@@ -297,7 +297,7 @@ func ExampleClient_RetrieveSingleUserWithID() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(u)
+	log.Println(u)
 }
 
 func ExampleClient_RetrieveMultipleUsersWithUserNames() {
@@ -307,7 +307,7 @@ func ExampleClient_RetrieveMultipleUsersWithUserNames() {
 		log.Fatal(err)
 	}
 	for _, un := range uns.Users {
-		fmt.Println(un)
+		log.Println(un)
 	}
 }
 
@@ -317,7 +317,7 @@ func ExampleClient_RetrieveSingleUserWithUserName() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(un)
+	log.Println(un)
 }
 
 func ExampleClient_Following() {
@@ -327,7 +327,7 @@ func ExampleClient_Following() {
 		log.Fatal(err)
 	}
 	for _, user := range f.Users {
-		fmt.Println(user)
+		log.Println(user)
 	}
 }
 
@@ -338,7 +338,7 @@ func ExampleClient_Followers() {
 		log.Fatal(err)
 	}
 	for _, user := range f.Users {
-		fmt.Println(user)
+		log.Println(user)
 	}
 }
 
@@ -348,7 +348,7 @@ func ExampleClient_PostFollowing() {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(pf)
+	log.Println(pf)
 }
 
 func ExampleClient_UndoFollowing() {
@@ -357,7 +357,7 @@ func ExampleClient_UndoFollowing() {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(uf)
+	log.Println(uf)
 }
 
 func ExampleClient_Blocking() {
@@ -367,7 +367,7 @@ func ExampleClient_Blocking() {
 		log.Fatal(err)
 	}
 	for _, user := range b.Users {
-		fmt.Println(user)
+		log.Println(user)
 	}
 }
 
@@ -377,7 +377,7 @@ func ExampleClient_PostBlocking() {
 	if err != nil {
 		log.Println(err)
 	}
-	fmt.Println(pb)
+	log.Println(pb)
 }
 
 func ExampleClient_UndoBlocking() {
@@ -386,7 +386,7 @@ func ExampleClient_UndoBlocking() {
 	if err != nil {
 		log.Println(err)
 	}
-	fmt.Println(ub)
+	log.Println(ub)
 }
 
 func ExampleClient_Muting() {
@@ -396,7 +396,7 @@ func ExampleClient_Muting() {
 		log.Fatal(err)
 	}
 	for _, user := range m.Users {
-		fmt.Println(user)
+		log.Println(user)
 	}
 }
 
@@ -406,7 +406,7 @@ func ExampleClient_PostMuting() {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(pm)
+	log.Println(pm)
 }
 
 func ExampleClient_UndoMuting() {
@@ -415,7 +415,7 @@ func ExampleClient_UndoMuting() {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(um)
+	log.Println(um)
 }
 
 func ExampleClient_LookUpSpace() {
@@ -424,7 +424,7 @@ func ExampleClient_LookUpSpace() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(s)
+	log.Println(s)
 }
 
 func ExampleClient_LookUpSpaces() {
@@ -434,7 +434,7 @@ func ExampleClient_LookUpSpaces() {
 		log.Fatal(err)
 	}
 	for _, s := range ss.Spaces {
-		fmt.Println(s)
+		log.Println(s)
 	}
 }
 
@@ -445,7 +445,7 @@ func ExampleClient_UsersPurchasedSpaceTicket() {
 		log.Fatal(err)
 	}
 	for _, user := range tickets.Users {
-		fmt.Println(user)
+		log.Println(user)
 	}
 }
 
@@ -456,7 +456,7 @@ func ExampleClient_DiscoverSpaces() {
 		log.Fatal(err)
 	}
 	for _, space := range discover.Spaces {
-		fmt.Println(space)
+		log.Println(space)
 	}
 }
 
@@ -467,7 +467,7 @@ func ExampleClient_SearchSpaces() {
 		log.Fatal(err)
 	}
 	for _, space := range spaces.Spaces {
-		fmt.Println(space)
+		log.Println(space)
 	}
 }
 
@@ -477,7 +477,7 @@ func ExampleClient_LookUpList() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(l)
+	log.Println(l)
 }
 
 func ExampleClient_LookUpAllListsOwned() {
@@ -487,7 +487,7 @@ func ExampleClient_LookUpAllListsOwned() {
 		log.Fatal(err)
 	}
 	for _, list := range lists.Lists {
-		fmt.Println(list)
+		log.Println(list)
 	}
 }
 
@@ -527,7 +527,7 @@ func ExampleClient_LookUpListTweets() {
 		log.Fatal(err)
 	}
 	for _, tweet := range lt.Tweets {
-		fmt.Println(tweet)
+		log.Println(tweet)
 	}
 }
 
@@ -538,7 +538,7 @@ func ExampleClient_ListMembers() {
 		log.Fatal(err)
 	}
 	for _, member := range members.Users {
-		fmt.Println(member)
+		log.Println(member)
 	}
 }
 
@@ -549,7 +549,7 @@ func ExampleClient_ListsSpecifiedUser() {
 		log.Fatal(err)
 	}
 	for _, list := range lists.Lists {
-		fmt.Println(list)
+		log.Println(list)
 	}
 }
 
@@ -559,7 +559,7 @@ func ExampleClient_PostListMembers() {
 	if err != nil {
 		log.Println(err)
 	}
-	fmt.Println(plm)
+	log.Println(plm)
 }
 
 func ExampleClient_UndoListMembers() {
@@ -568,7 +568,7 @@ func ExampleClient_UndoListMembers() {
 	if err != nil {
 		log.Println(err)
 	}
-	fmt.Println(ulm)
+	log.Println(ulm)
 }
 
 func ExampleClient_ListFollowers() {
@@ -578,7 +578,7 @@ func ExampleClient_ListFollowers() {
 		log.Fatal(err)
 	}
 	for _, user := range followers.Users {
-		fmt.Println(user)
+		log.Println(user)
 	}
 }
 
@@ -589,7 +589,7 @@ func ExampleClient_AllListsUserFollows() {
 		log.Fatal(err)
 	}
 	for _, list := range lists.Lists {
-		fmt.Println(list)
+		log.Println(list)
 	}
 }
 
@@ -599,7 +599,7 @@ func ExampleClient_PostListFollows() {
 	if err != nil {
 		log.Println(err)
 	}
-	fmt.Println(plf)
+	log.Println(plf)
 }
 
 func ExampleClient_UndoListFollows() {
@@ -608,7 +608,7 @@ func ExampleClient_UndoListFollows() {
 	if err != nil {
 		log.Println(err)
 	}
-	fmt.Println(ulf)
+	log.Println(ulf)
 }
 
 func ExampleClient_PinnedLists() {
@@ -618,7 +618,7 @@ func ExampleClient_PinnedLists() {
 		log.Fatal(err)
 	}
 	for _, l := range pl.Lists {
-		fmt.Println(l)
+		log.Println(l)
 	}
 }
 
@@ -628,7 +628,7 @@ func ExampleClient_PostPinnedLists() {
 	if err != nil {
 		log.Println(err)
 	}
-	fmt.Println(ppl)
+	log.Println(ppl)
 }
 
 func ExampleClient_UndoPinnedLists() {
@@ -637,7 +637,7 @@ func ExampleClient_UndoPinnedLists() {
 	if err != nil {
 		log.Println(err)
 	}
-	fmt.Println(upl)
+	log.Println(upl)
 }
 
 func ExampleClient_ComplianceJobs() {
@@ -648,5 +648,17 @@ func ExampleClient_ComplianceJobs() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(cj)
+	log.Println(cj)
+}
+
+func ExampleClient_ComplianceJob() {
+	client := gotwtr.New("key")
+	cj, err := client.ComplianceJob(context.Background(), 1382081613278814209)
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Println(cj)
+	for _, e := range cj.Errors {
+		log.Println(e)
+	}
 }

@@ -233,7 +233,8 @@ type TimeseriesCount struct {
 }
 
 type TweetCountMeta struct {
-	TotalTweetCount int `json:"total_tweet_count"`
+	TotalTweetCount int    `json:"total_tweet_count"`
+	NextToken       string `json:"next_token,omitempty"`
 }
 
 type TweetCountsResponse struct {
@@ -632,4 +633,13 @@ type DeleteTweetResponse struct {
 
 type DeleteTweetData struct {
 	Deleted bool `json:"deleted"`
+}
+
+type HideRepliesResponse struct {
+	HideRepliesResponseData *HideRepliesResponseData `json:"data"`
+	Errors                  []*APIResponseError      `json:"errors,omitempty"`
+}
+
+type HideRepliesResponseData struct {
+	Hidden bool `json:"hidden"`
 }

@@ -252,6 +252,43 @@ func (t *TweetCountsOption) addQuery(req *http.Request) {
 	}
 }
 
+type TweetCountsAllOption struct {
+	StartTime   time.Time
+	EndTime     time.Time
+	SinceID     string
+	UntilID     string
+	Granularity string
+	NextToken   string
+}
+
+func (t *TweetCountsAllOption) addQuery(req *http.Request, tweet string) {
+	q := req.URL.Query()
+	q.Add("query", tweet)
+	if !t.StartTime.IsZero() {
+		// YYYY-MM-DDTHH:mm:ssZ (ISO 8601/RFC 3339).
+		q.Add("start_time", t.StartTime.Format(time.RFC3339))
+	}
+	if !t.EndTime.IsZero() {
+		// YYYY-MM-DDTHH:mm:ssZ (ISO 8601/RFC 3339).
+		q.Add("end_time", t.EndTime.Format(time.RFC3339))
+	}
+	if len(t.SinceID) > 0 {
+		q.Add("since_id", t.SinceID)
+	}
+	if len(t.UntilID) > 0 {
+		q.Add("until_id", t.UntilID)
+	}
+	if len(t.Granularity) > 0 {
+		q.Add("granularity", t.Granularity)
+	}
+	if t.NextToken != "" {
+		q.Add("next_token", t.NextToken)
+	}
+	if len(q) > 0 {
+		req.URL.RawQuery = q.Encode()
+	}
+}
+
 type AddOrDeleteRulesOption struct {
 	DryRun bool // If it is true, test a the syntax of your rule without submitting it
 }
@@ -478,4 +515,8 @@ type PostTweetOption struct {
 	Reply                 TweetReply `json:"reply,omitempty"`
 	ReplySettings         string     `json:"reply_settings,omitempty"`
 	Text                  string     `json:"text,omitempty"`
+}
+
+type hideRepliesBody struct {
+	Hidden bool `json:"hidden"`
 }

@@ -16,9 +16,6 @@ const (
 
 type OAuth interface {
 	GenerateAppOnlyBearerToken(ctx context.Context) (bool, error)
-	// InvalidatingBearerToken(ctx context.Context) (bool, error)
-	// RefreshToken() (string, error)
-	// RevokeToken() (bool, error)
 }
 
 type Tweets interface {
@@ -27,7 +24,8 @@ type Tweets interface {
 	UserMentionTimeline(ctx context.Context, userID string, opt ...*UserMentionTimelineOption) (*UserMentionTimelineResponse, error)
 	UserTweetTimeline(ctx context.Context, userID string, opt ...*UserTweetTimelineOption) (*UserTweetTimelineResponse, error)
 	SearchRecentTweets(ctx context.Context, tweet string, opt ...*SearchTweetsOption) (*SearchTweetsResponse, error)
-	CountsRecentTweet(ctx context.Context, tweet string, opt ...*TweetCountsOption) (*TweetCountsResponse, error)
+	CountRecentTweets(ctx context.Context, tweet string, opt ...*TweetCountsOption) (*TweetCountsResponse, error)
+	CountAllTweets(ctx context.Context, tweet string, opt ...*TweetCountsAllOption) (*TweetCountsResponse, error)
 	AddOrDeleteRules(ctx context.Context, body *AddOrDeleteJSONBody, opt ...*AddOrDeleteRulesOption) (*AddOrDeleteRulesResponse, error)
 	RetrieveStreamRules(ctx context.Context, opt ...*RetrieveStreamRulesOption) (*RetrieveStreamRulesResponse, error)
 	ConnectToStream(ctx context.Context, ch chan<- ConnectToStreamResponse, errCh chan<- error, opt ...*ConnectToStreamOption) *ConnectToStream
@@ -42,6 +40,7 @@ type Tweets interface {
 	SearchAllTweets(ctx context.Context, tweet string, opt ...*SearchTweetsOption) (*SearchTweetsResponse, error)
 	PostTweet(ctx context.Context, body *PostTweetOption) (*PostTweetResponse, error)
 	DeleteTweet(ctx context.Context, tweetID string) (*DeleteTweetResponse, error)
+	HideReplies(ctx context.Context, tweetID string, hidden bool) (*HideRepliesResponse, error)
 }
 
 type Users interface {
@@ -90,7 +89,9 @@ type Lists interface {
 }
 
 type Compliances interface {
+	ComplianceJob(ctx context.Context, complianceJobID int) (*ComplianceJobResponse, error)
 	ComplianceJobs(ctx context.Context, opt *ComplianceJobsOption) (*ComplianceJobsResponse, error)
+	CreateComplianceJob(ctx context.Context, opt ...*CreateComplianceJobOption) (*CreateComplianceJobResponse, error)
 }
 
 // Twtr is a main interface for all Twitter API calls.
@@ -157,10 +158,6 @@ func (c *client) GenerateAppOnlyBearerToken(ctx context.Context) (bool, error) {
 	return generateAppOnlyBearerToken(ctx, c)
 }
 
-// func (c *client) InvalidatingBearerToken(ctx context.Context) (bool, error) {
-// 	return invalidatingBearerToken(ctx, c)
-// }
-
 // RetrieveMultipleTweets returns a variety of information about the Tweet specified by the requested ID or list of IDs.
 func (c *Client) RetrieveMultipleTweets(ctx context.Context, tweetIDs []string, opt ...*RetriveTweetOption) (*TweetsResponse, error) {
 	return retrieveMultipleTweets(ctx, c.client, tweetIDs, opt...)
@@ -205,9 +202,19 @@ func (c *client) DeleteTweet(ctx context.Context, tweetID string) (*DeleteTweetR
 	return deleteTweet(ctx, c, tweetID)
 }
 
-// CountsRecentTweet returns count of Tweets from the last seven days that match a query.
-func (c *Client) CountsRecentTweet(ctx context.Context, tweet string, opt ...*TweetCountsOption) (*TweetCountsResponse, error) {
-	return countsRecentTweet(ctx, c.client, tweet, opt...)
+// HideReplies hides or unhides a reply to a Tweet.
+func (c *client) HideReplies(ctx context.Context, tweetID string, hidden bool) (*HideRepliesResponse, error) {
+	return hideReplies(ctx, c, tweetID, hidden)
+}
+
+// CountRecentTweets returns the count of Tweets from the last seven days that match a query.
+func (c *Client) CountRecentTweets(ctx context.Context, tweet string, opt ...*TweetCountsOption) (*TweetCountsResponse, error) {
+	return countRecentTweets(ctx, c.client, tweet, opt...)
+}
+
+// CountAllTweets returns the count of Tweets that match your query from the complete history of public Tweets; since the first Tweet was created March 26, 2006.
+func (c *Client) CountAllTweets(ctx context.Context, tweet string, opt ...*TweetCountsAllOption) (*TweetCountsResponse, error) {
+	return countAllTweets(ctx, c.client, tweet, opt...)
 }
 
 // AddOrDeleteRules To create one or more rules, submit an add JSON body with an array of rules and operators.
@@ -449,8 +456,19 @@ func (c *Client) UndoPinnedLists(ctx context.Context, listID string, userID stri
 	return undoPinnedLists(ctx, c.client, listID, userID)
 }
 
+// ComplianceJobs returns a list of recent compliance jobs.
 func (c *Client) ComplianceJobs(ctx context.Context, opt *ComplianceJobsOption) (*ComplianceJobsResponse, error) {
 	return complianceJobs(ctx, c.client, opt)
+}
+
+// ComplianceJob returns a single compliance job with the specified ID.
+func (c *Client) ComplianceJob(ctx context.Context, complianceJobID int) (*ComplianceJobResponse, error) {
+	return complianceJob(ctx, c.client, complianceJobID)
+}
+
+// CreateComplianceJob create a compliance job.
+func (c *Client) CreateComplianceJob(ctx context.Context, opt ...*CreateComplianceJobOption) (*CreateComplianceJobResponse, error) {
+	return createComplianceJob(ctx, c.client, opt...)
 }
 
 // Enables the authenticated user to update the meta data of a specified List that they own.

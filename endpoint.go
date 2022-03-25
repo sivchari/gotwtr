@@ -3,7 +3,6 @@ package gotwtr
 // EndpointURL is the base URL for the Twitter V2 API.
 const (
 	generateAppOnlyBearerTokenURL = "https://api.twitter.com/oauth2/token?grant_type=client_credentials"
-	// invalidatingBearerTokenURL    = "https://api.twitter.com/oauth2/invalidate_token?access_token=%v"
 )
 
 const (
@@ -13,6 +12,7 @@ const (
 	userMentionTimelineURL    = "https://api.twitter.com/2/users/%v/mentions"
 	searchRecentTweetsURL     = "https://api.twitter.com/2/tweets/search/recent?query=%v"
 	countsRecentTweetsURL     = "https://api.twitter.com/2/tweets/counts/recent?query=%v"
+	countsAllTweetsURL        = "https://api.twitter.com/2/tweets/counts/all"
 	addOrDeleteRulesURL       = "https://api.twitter.com/2/tweets/search/stream/rules"
 	retrieveStreamRulesURL    = "https://api.twitter.com/2/tweets/search/stream/rules"
 	connectToStreamURL        = "https://api.twitter.com/2/tweets/search/stream"
@@ -27,6 +27,7 @@ const (
 	searchAllTweetsURL        = "https://api.twitter.com/2/tweets/search/all"
 	postTweetURL              = "https://api.twitter.com/2/tweets"
 	deleteTweetURL            = "https://api.twitter.com/2/tweets/%v"
+	hideRepliesURL            = "https://api.twitter.com/2/tweets/%v/hidden"
 )
 
 const (
@@ -60,18 +61,20 @@ const (
 	lookUpListTweetsURL    = "https://api.twitter.com/2/lists/%v/tweets"
 	listMembersURL         = "https://api.twitter.com/2/lists/%v/members"
 	listsSpecifiedUserURL  = "https://api.twitter.com/2/users/%v/list_memberships"
-	postListMembersURL           = "https://api.twitter.com/2/lists/%v/members"
-	undoListMembersURL           = "https://api.twitter.com/2/lists/%v/members/%v"
+	postListMembersURL     = "https://api.twitter.com/2/lists/%v/members"
+	undoListMembersURL     = "https://api.twitter.com/2/lists/%v/members/%v"
 	listFollowersURL       = "https://api.twitter.com/2/lists/%v/followers"
 	allListsUserFollowsURL = "https://api.twitter.com/2/users/%v/followed_lists"
 	postListFollowsURL     = "https://api.twitter.com/2/users/%v/followed_lists"
 	undoListFollowsURL     = "https://api.twitter.com/2/users/%v/followed_lists/%v"
-	pinnedListsURL               = "https://api.twitter.com/2/users/%v/pinned_lists"
-	postPinnedListsURL           = "https://api.twitter.com/2/users/%v/pinned_lists"
-	undoPinnedListsURL           = "https://api.twitter.com/2/users/%v/pinned_lists/%v"
+	pinnedListsURL         = "https://api.twitter.com/2/users/%v/pinned_lists"
+	postPinnedListsURL     = "https://api.twitter.com/2/users/%v/pinned_lists"
+	undoPinnedListsURL     = "https://api.twitter.com/2/users/%v/pinned_lists/%v"
 	listURL                      = "https://api.twitter.com/2/lists"
 )
 
 const (
-	complianceJobsURL = "https://api.twitter.com/2/compliance/jobs"
+	complianceJobsURL      = "https://api.twitter.com/2/compliance/jobs"
+	complianceJobURL       = "https://api.twitter.com/2/compliance/jobs/%v"
+	createComplianceJobURL = "https://api.twitter.com/2/compliance/jobs"
 )
