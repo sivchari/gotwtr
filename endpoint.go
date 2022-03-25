@@ -70,7 +70,7 @@ const (
 	pinnedListsURL         = "https://api.twitter.com/2/users/%v/pinned_lists"
 	postPinnedListsURL     = "https://api.twitter.com/2/users/%v/pinned_lists"
 	undoPinnedListsURL     = "https://api.twitter.com/2/users/%v/pinned_lists/%v"
-	listURL                      = "https://api.twitter.com/2/lists"
+	listURL                = "https://api.twitter.com/2/lists"
 )
 
 const (
