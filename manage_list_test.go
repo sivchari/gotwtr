@@ -45,7 +45,7 @@ func Test_CreateNewList(t *testing.T) {
 				},
 			},
 			want: &gotwtr.CreateNewListResponse{
-				Data: &gotwtr.CreateNewListData{
+				CreateNewListData: &gotwtr.CreateNewListData{
 					ID:   "1441162269824405510",
 					Name: "test v2 create list",
 				},
@@ -75,7 +75,7 @@ func Test_CreateNewList(t *testing.T) {
 				},
 			},
 			want: &gotwtr.CreateNewListResponse{
-				Data: &gotwtr.CreateNewListData{
+				CreateNewListData: &gotwtr.CreateNewListData{
 					ID:   "1441162269824405511",
 					Name: "name-for-new-list",
 				},
@@ -108,7 +108,7 @@ func Test_CreateNewList(t *testing.T) {
 				},
 			},
 			want: &gotwtr.CreateNewListResponse{
-				Data: nil,
+				CreateNewListData: nil,
 				Errors: []*gotwtr.APIResponseError{
 					{
 						Title:  "Unsupported Authentication",
@@ -122,6 +122,7 @@ func Test_CreateNewList(t *testing.T) {
 		},
 	}
 	for i, tt := range tests {
+		i := i
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
@@ -170,7 +171,7 @@ func Test_DeleteList(t *testing.T) {
 				listID: "1441162269824405510",
 			},
 			want: &gotwtr.DeleteListResponse{
-				Data: &gotwtr.DeleteListData{
+				DeleteListData: &gotwtr.DeleteListData{
 					Deleted: true,
 				},
 			},
@@ -204,7 +205,7 @@ func Test_DeleteList(t *testing.T) {
 				listID: "111111111111111111111111",
 			},
 			want: &gotwtr.DeleteListResponse{
-				Data: nil,
+				DeleteListData: nil,
 				Errors: []*gotwtr.APIResponseError{
 					{
 						Parameters: gotwtr.Parameter{
@@ -221,6 +222,7 @@ func Test_DeleteList(t *testing.T) {
 		},
 	}
 	for i, tt := range tests {
+		i := i
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
@@ -271,7 +273,7 @@ func Test_UpdateMetaDataForList(t *testing.T) {
 				body:   nil,
 			},
 			want: &gotwtr.UpdateMetaDataForListResponse{
-				Data: &gotwtr.UpdateMetaDataForListData{
+				UpdateMetaDataForListData: &gotwtr.UpdateMetaDataForListData{
 					Updated: true,
 				},
 			},
@@ -302,7 +304,7 @@ func Test_UpdateMetaDataForList(t *testing.T) {
 				},
 			},
 			want: &gotwtr.UpdateMetaDataForListResponse{
-				Data: &gotwtr.UpdateMetaDataForListData{
+				UpdateMetaDataForListData: &gotwtr.UpdateMetaDataForListData{
 					Updated: true,
 				},
 			},
@@ -336,7 +338,7 @@ func Test_UpdateMetaDataForList(t *testing.T) {
 				listID: "111111111111111111111111",
 			},
 			want: &gotwtr.UpdateMetaDataForListResponse{
-				Data: nil,
+				UpdateMetaDataForListData: nil,
 				Errors: []*gotwtr.APIResponseError{
 					{
 						Parameters: gotwtr.Parameter{
@@ -353,6 +355,7 @@ func Test_UpdateMetaDataForList(t *testing.T) {
 		},
 	}
 	for i, tt := range tests {
+		i := i
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()

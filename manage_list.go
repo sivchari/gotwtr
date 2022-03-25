@@ -15,12 +15,12 @@ func createNewList(ctx context.Context, c *client, body *CreateNewListBody) (*Cr
 		return nil, errors.New("create new list: name parameter is required")
 	}
 
-	jsonStr, err := json.Marshal(body)
+	j, err := json.Marshal(body)
 	if err != nil {
 		return nil, errors.New("create new list : can not marshal")
 	}
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodPost, listURL, bytes.NewBuffer(jsonStr))
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, listURL, bytes.NewBuffer(j))
 	if err != nil {
 		return nil, fmt.Errorf("create new list new request with ctx: %w", err)
 	}
@@ -98,12 +98,12 @@ func updateMetaDataForList(ctx context.Context, c *client, listID string, body .
 		return nil, errors.New("update meta data for list: only one option is allowed")
 	}
 
-	jsonStr, err := json.Marshal(ubody)
+	j, err := json.Marshal(ubody)
 	if err != nil {
 		return nil, errors.New("create new list : can not marshal")
 	}
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodPut, ep, bytes.NewBuffer(jsonStr))
+	req, err := http.NewRequestWithContext(ctx, http.MethodPut, ep, bytes.NewBuffer(j))
 	if err != nil {
 		return nil, fmt.Errorf("update meta data for list new request with ctx: %w", err)
 	}
