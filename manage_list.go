@@ -20,7 +20,7 @@ func createNewList(ctx context.Context, c *client, body *CreateNewListBody) (*Cr
 		return nil, errors.New("create new list : can not marshal")
 	}
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodPost, listURL, bytes.NewBuffer(j))
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, createNewListURL, bytes.NewBuffer(j))
 	if err != nil {
 		return nil, fmt.Errorf("create new list new request with ctx: %w", err)
 	}
@@ -52,7 +52,7 @@ func deleteList(ctx context.Context, c *client, listID string) (*DeleteListRespo
 	if listID == "" {
 		return nil, errors.New("delete list: list id parameter is required")
 	}
-	ep := fmt.Sprintf(lookUpListURL, listID)
+	ep := fmt.Sprintf(deleteListURL, listID)
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodDelete, ep, nil)
 	if err != nil {
@@ -86,7 +86,7 @@ func updateMetaDataForList(ctx context.Context, c *client, listID string, body .
 	if listID == "" {
 		return nil, errors.New("update meta data for list: tweet id parameter is required")
 	}
-	ep := fmt.Sprintf(lookUpListURL, listID)
+	ep := fmt.Sprintf(updateMetaDataForListURL, listID)
 
 	var ubody UpdateMetaDataForListBody
 	switch len(body) {

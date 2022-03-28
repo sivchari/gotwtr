@@ -2,7 +2,6 @@ package gotwtr_test
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"time"
 
@@ -500,7 +499,7 @@ func ExampleClient_CreateNewList() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(l)
+	log.Println(l)
 }
 
 func ExampleClient_DeleteList() {
@@ -509,7 +508,7 @@ func ExampleClient_DeleteList() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(l)
+	log.Println(l)
 }
 
 func ExampleClient_UpdateMetaDataForList() {
@@ -518,7 +517,7 @@ func ExampleClient_UpdateMetaDataForList() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(l)
+	log.Println(l)
 }
 
 func ExampleClient_LookUpListTweets() {

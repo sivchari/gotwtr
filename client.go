@@ -376,7 +376,7 @@ func (c *Client) SearchSpaces(ctx context.Context, searchTerm string, opt ...*Se
 	return searchSpaces(ctx, c.client, searchTerm, opt...)
 }
 
-// Enables the authenticated user to create a List.
+// CreateNewList enables the authenticated user to create a List.
 func (c *Client) CreateNewList(ctx context.Context, body *CreateNewListBody) (*CreateNewListResponse, error) {
 	return createNewList(ctx, c.client, body)
 }
@@ -471,7 +471,7 @@ func (c *Client) CreateComplianceJob(ctx context.Context, opt ...*CreateComplian
 	return createComplianceJob(ctx, c.client, opt...)
 }
 
-// Enables the authenticated user to update the meta data of a specified List that they own.
+// UpdateMetaDataForList enables the authenticated user to update the meta data of a specified List that they own.
 func (c *Client) UpdateMetaDataForList(ctx context.Context, listID string, body ...*UpdateMetaDataForListBody) (*UpdateMetaDataForListResponse, error) {
 	return updateMetaDataForList(ctx, c.client, listID, body...)
 }
