@@ -165,3 +165,52 @@ type Pinned struct {
 type PinnedListsBody struct {
 	ListID string `json:"list_id"`
 }
+
+type CreateNewListResponse struct {
+	CreateNewListData *CreateNewListData  `json:"data"`
+	Errors            []*APIResponseError `json:"errors,omitempty"`
+	Title             string              `json:"title,omitempty"`
+	Detail            string              `json:"detail,omitempty"`
+	Type              string              `json:"type,omitempty"`
+}
+
+type CreateNewListData struct {
+	ID   string `json:"id"`
+	Name string `json:"name"`
+}
+
+type CreateNewListBody struct {
+	Name        string `json:"name"`
+	Description string `json:"description,omitempty"`
+	Private     bool   `json:"private,omitempty"`
+}
+
+type DeleteListResponse struct {
+	DeleteListData *DeleteListData     `json:"data"`
+	Errors         []*APIResponseError `json:"errors,omitempty"`
+	Title          string              `json:"title,omitempty"`
+	Detail         string              `json:"detail,omitempty"`
+	Type           string              `json:"type,omitempty"`
+}
+
+type DeleteListData struct {
+	Deleted bool `json:"deleted"`
+}
+
+type UpdateMetaDataForListResponse struct {
+	UpdateMetaDataForListData *UpdateMetaDataForListData `json:"data"`
+	Errors                    []*APIResponseError        `json:"errors,omitempty"`
+	Title                     string                     `json:"title,omitempty"`
+	Detail                    string                     `json:"detail,omitempty"`
+	Type                      string                     `json:"type,omitempty"`
+}
+
+type UpdateMetaDataForListData struct {
+	Updated bool `json:"updated"`
+}
+
+type UpdateMetaDataForListBody struct {
+	Description string `json:"description,omitempty"`
+	Name        string `json:"name,omitempty"`
+	Private     bool   `json:"private,omitempty"`
+}

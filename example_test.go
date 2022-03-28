@@ -491,6 +491,35 @@ func ExampleClient_LookUpAllListsOwned() {
 	}
 }
 
+func ExampleClient_CreateNewList() {
+	client := gotwtr.New("key")
+	l, err := client.CreateNewList(context.Background(), &gotwtr.CreateNewListBody{
+		Name: "test v2 create list",
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Println(l)
+}
+
+func ExampleClient_DeleteList() {
+	client := gotwtr.New("key")
+	l, err := client.DeleteList(context.Background(), "list_id")
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Println(l)
+}
+
+func ExampleClient_UpdateMetaDataForList() {
+	client := gotwtr.New("key")
+	l, err := client.UpdateMetaDataForList(context.Background(), "list_id")
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Println(l)
+}
+
 func ExampleClient_LookUpListTweets() {
 	client := gotwtr.New("key")
 	lt, err := client.LookUpListTweets(context.Background(), "list_id")
