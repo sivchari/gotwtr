@@ -100,7 +100,7 @@ func updateMetaDataForList(ctx context.Context, c *client, listID string, body .
 
 	j, err := json.Marshal(ubody)
 	if err != nil {
-		return nil, errors.New("create new list : can not marshal")
+		return nil, errors.New("update meta data for list : can not marshal")
 	}
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodPut, ep, bytes.NewBuffer(j))
