@@ -69,6 +69,8 @@ type Spaces interface {
 }
 
 type Lists interface {
+	CreateNewList(ctx context.Context, body *CreateNewListBody) (*CreateNewListResponse, error)
+	DeleteList(ctx context.Context, listID string) (*DeleteListResponse, error)
 	LookUpList(ctx context.Context, listID string, opt ...*LookUpListOption) (*ListResponse, error)
 	LookUpAllListsOwned(ctx context.Context, userID string, opt ...*AllListsOwnedOption) (*AllListsOwnedResponse, error)
 	LookUpListTweets(ctx context.Context, listID string, opt ...*ListTweetsOption) (*ListTweetsResponse, error)
@@ -83,6 +85,7 @@ type Lists interface {
 	PinnedLists(ctx context.Context, userID string, opt ...*PinnedListsOption) (*PinnedListsResponse, error)
 	PostPinnedLists(ctx context.Context, listID string, userID string) (*PostPinnedListsResponse, error)
 	UndoPinnedLists(ctx context.Context, listID string, userID string) (*UndoPinnedListsResponse, error)
+	UpdateMetaDataForList(ctx context.Context, listID string, body ...*UpdateMetaDataForListBody) (*UpdateMetaDataForListResponse, error)
 }
 
 type Compliances interface {
@@ -373,6 +376,16 @@ func (c *Client) SearchSpaces(ctx context.Context, searchTerm string, opt ...*Se
 	return searchSpaces(ctx, c.client, searchTerm, opt...)
 }
 
+// CreateNewList enables the authenticated user to create a List.
+func (c *Client) CreateNewList(ctx context.Context, body *CreateNewListBody) (*CreateNewListResponse, error) {
+	return createNewList(ctx, c.client, body)
+}
+
+// DeleteList enables the authenticated user to delete a List that they own.
+func (c *Client) DeleteList(ctx context.Context, listID string) (*DeleteListResponse, error) {
+	return deleteList(ctx, c.client, listID)
+}
+
 // LookUpList returns the details of a specified List.
 func (c *Client) LookUpList(ctx context.Context, listID string, opt ...*LookUpListOption) (*ListResponse, error) {
 	return lookUpList(ctx, c.client, listID, opt...)
@@ -456,4 +469,9 @@ func (c *Client) ComplianceJob(ctx context.Context, complianceJobID int) (*Compl
 // CreateComplianceJob create a compliance job.
 func (c *Client) CreateComplianceJob(ctx context.Context, opt ...*CreateComplianceJobOption) (*CreateComplianceJobResponse, error) {
 	return createComplianceJob(ctx, c.client, opt...)
+}
+
+// UpdateMetaDataForList enables the authenticated user to update the meta data of a specified List that they own.
+func (c *Client) UpdateMetaDataForList(ctx context.Context, listID string, body ...*UpdateMetaDataForListBody) (*UpdateMetaDataForListResponse, error) {
+	return updateMetaDataForList(ctx, c.client, listID, body...)
 }
