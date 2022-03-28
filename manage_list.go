@@ -84,7 +84,7 @@ func deleteList(ctx context.Context, c *client, listID string) (*DeleteListRespo
 //https://developer.twitter.com/en/docs/twitter-api/lists/manage-lists/api-reference/put-lists-id
 func updateMetaDataForList(ctx context.Context, c *client, listID string, body ...*UpdateMetaDataForListBody) (*UpdateMetaDataForListResponse, error) {
 	if listID == "" {
-		return nil, errors.New("update meta data for list: tweet id parameter is required")
+		return nil, errors.New("update meta data for list: list id parameter is required")
 	}
 	ep := fmt.Sprintf(updateMetaDataForListURL, listID)
 
