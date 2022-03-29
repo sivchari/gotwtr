@@ -14,8 +14,9 @@ func lookupUserBookmarks(ctx context.Context, c *client, userID string, opt ...*
 	if userID == "" {
 		return nil, errors.New("lookup user bookmarks: user id parameter is required")
 	}
+	ep := fmt.Sprintf(lookupUserBookmarksURL, userID)
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, lookupUserBookmarksURL, nil)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, ep, nil)
 	if err != nil {
 		return nil, fmt.Errorf("lookup user bookmarks new request with ctx: %w", err)
 	}
