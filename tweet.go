@@ -643,3 +643,35 @@ type HideRepliesResponse struct {
 type HideRepliesResponseData struct {
 	Hidden bool `json:"hidden"`
 }
+
+type LookupUserBookmarksResponse struct {
+	Tweets   []*Tweet                 `json:"data"`
+	Includes *TweetIncludes           `json:"includes,omitempty"`
+	Errors   []*APIResponseError      `json:"errors,omitempty"`
+	Meta     *LookupUserBookmarksMeta `json:"meta"`
+}
+
+type LookupUserBookmarksMeta struct {
+	ResultCount int    `json:"result_count"`
+	NextToken   string `json:"next_token"`
+}
+
+type BookmarkTweetBody struct {
+	TweetID string `json:"tweetID"`
+}
+
+type BookmarkTweetResponse struct {
+	Data *BookmarkTweetResponseData `json:"data"`
+}
+
+type BookmarkTweetResponseData struct {
+	Bookmarked bool `json:"bookmarked"`
+}
+
+type RemoveBookmarkOfTweetResponse struct {
+	Data *RemoveBookmarkOfTweetResponseData `json:"data"`
+}
+
+type RemoveBookmarkOfTweetResponseData struct {
+	Bookmarks bool `json:"bookmarks"`
+}

@@ -41,6 +41,9 @@ type Tweets interface {
 	PostTweet(ctx context.Context, body *PostTweetOption) (*PostTweetResponse, error)
 	DeleteTweet(ctx context.Context, tweetID string) (*DeleteTweetResponse, error)
 	HideReplies(ctx context.Context, tweetID string, hidden bool) (*HideRepliesResponse, error)
+	LookupUserBookmarks(ctx context.Context, userID string, opt ...*LookupUserBookmarksOption) (*LookupUserBookmarksResponse, error)
+	BookmarkTweet(ctx context.Context, userID string, body *BookmarkTweetBody) (*BookmarkTweetResponse, error)
+	RemoveBookmarkOfTweet(ctx context.Context, userID string, tweetID string) (*RemoveBookmarkOfTweetResponse, error)
 }
 
 type Users interface {
@@ -168,7 +171,7 @@ func (c *Client) RetrieveSingleTweet(ctx context.Context, tweetID string, opt ..
 	return retrieveSingleTweet(ctx, c.client, tweetID, opt...)
 }
 
-// UserMensionTimeline returns Tweets mentioning a single user specified by the requested userID.
+// UserMentionTimeline returns Tweets mentioning a single user specified by the requested userID.
 // By default, the most recent ten Tweets are returned per request. Using pagination, up to the most recent 800 Tweets can be retrieved.
 func (c *Client) UserMentionTimeline(ctx context.Context, userID string, opt ...*UserMentionTimelineOption) (*UserMentionTimelineResponse, error) {
 	return userMentionTimeline(ctx, c.client, userID, opt...)
@@ -207,6 +210,21 @@ func (c *client) HideReplies(ctx context.Context, tweetID string, hidden bool) (
 	return hideReplies(ctx, c, tweetID, hidden)
 }
 
+// LookupUserBookmarks returns the count of Tweets from the last seven days that match a query.
+func (c *Client) LookupUserBookmarks(ctx context.Context, userID string, opt ...*LookupUserBookmarksOption) (*LookupUserBookmarksResponse, error) {
+	return lookupUserBookmarks(ctx, c.client, userID, opt...)
+}
+
+// BookmarkTweet returns the count of Tweets from the last seven days that match a query.
+func (c *Client) BookmarkTweet(ctx context.Context, userID string, body *BookmarkTweetBody) (*BookmarkTweetResponse, error) {
+	return bookmarkTweet(ctx, c.client, userID, body)
+}
+
+// RemoveBookmarkOfTweet returns the count of Tweets from the last seven days that match a query.
+func (c *Client) RemoveBookmarkOfTweet(ctx context.Context, userID string, tweetID string) (*RemoveBookmarkOfTweetResponse, error) {
+	return removeBookmarkOfTweet(ctx, c.client, userID, tweetID)
+}
+
 // CountRecentTweets returns the count of Tweets from the last seven days that match a query.
 func (c *Client) CountRecentTweets(ctx context.Context, tweet string, opt ...*TweetCountsOption) (*TweetCountsResponse, error) {
 	return countRecentTweets(ctx, c.client, tweet, opt...)
@@ -223,7 +241,7 @@ func (c *Client) AddOrDeleteRules(ctx context.Context, body *AddOrDeleteJSONBody
 	return addOrDeleteRules(ctx, c.client, body, opt...)
 }
 
-// RetriveStreamRules return a list of rules currently active on the streaming endpoint, either as a list or individually.
+// RetrieveStreamRules return a list of rules currently active on the streaming endpoint, either as a list or individually.
 func (c *Client) RetrieveStreamRules(ctx context.Context, opt ...*RetrieveStreamRulesOption) (*RetrieveStreamRulesResponse, error) {
 	return retrieveStreamRules(ctx, c.client, opt...)
 }
@@ -280,7 +298,7 @@ func (c *Client) RetrieveMultipleUsersWithIDs(ctx context.Context, userIDs []str
 	return retrieveMultipleUsersWithIDs(ctx, c.client, userIDs, opt...)
 }
 
-// RetrieveSingleWithID returns a variety of information about a single user specified by the requested userID.
+// RetrieveSingleUserWithID returns a variety of information about a single user specified by the requested userID.
 func (c *Client) RetrieveSingleUserWithID(ctx context.Context, userID string, opt ...*RetrieveUserOption) (*UserResponse, error) {
 	return retrieveSingleUserWithID(ctx, c.client, userID, opt...)
 }

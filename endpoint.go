@@ -28,6 +28,9 @@ const (
 	postTweetURL              = "https://api.twitter.com/2/tweets"
 	deleteTweetURL            = "https://api.twitter.com/2/tweets/%v"
 	hideRepliesURL            = "https://api.twitter.com/2/tweets/%v/hidden"
+	lookupUserBookmarksURL    = "https://api.twitter.com/2/users/%v/bookmarks"
+	bookmarkTweetURL          = "https://api.twitter.com/2/users/%v/bookmarks"
+	removeBookmarkOfTweetURL  = "https://api.twitter.com/2/users/%v/bookmarks/%v"
 )
 
 const (
