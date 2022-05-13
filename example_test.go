@@ -520,6 +520,35 @@ func ExampleClient_UpdateMetaDataForList() {
 	log.Println(l)
 }
 
+func ExampleClient_LookupUserBookmarks() {
+	client := gotwtr.New("key")
+	l, err := client.LookupUserBookmarks(context.Background(), "userID")
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Println(l)
+}
+
+func ExampleClient_BookmarkTweet() {
+	client := gotwtr.New("key")
+	l, err := client.BookmarkTweet(context.Background(), "user_id", &gotwtr.BookmarkTweetBody{
+		TweetID: "2022",
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Println(l)
+}
+
+func ExampleClient_RemoveBookmarkOfTweet() {
+	client := gotwtr.New("key")
+	l, err := client.RemoveBookmarkOfTweet(context.Background(), "user_id", "tweet_id")
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Println(l)
+}
+
 func ExampleClient_LookUpListTweets() {
 	client := gotwtr.New("key")
 	lt, err := client.LookUpListTweets(context.Background(), "list_id")
