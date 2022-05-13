@@ -521,3 +521,45 @@ type PostTweetOption struct {
 type hideRepliesBody struct {
 	Hidden bool `json:"hidden"`
 }
+
+type LookupUserBookmarksOption struct {
+	Expansions      []Expansion
+	MaxResults      int
+	MediaFields     []MediaField
+	PaginationToken string
+	PlaceFields     []PlaceField
+	PollFields      []PollField
+	TweetFields     []TweetField
+	UserFields      []UserField
+}
+
+func (l LookupUserBookmarksOption) addQuery(req *http.Request) {
+	q := req.URL.Query()
+	if len(l.Expansions) > 0 {
+		q.Add("expansions", strings.Join(expansionsToString(l.Expansions), ","))
+	}
+	if l.MaxResults > 0 {
+		q.Add("max_results", strconv.Itoa(l.MaxResults))
+	}
+	if len(l.MediaFields) > 0 {
+		q.Add("media.fields", strings.Join(mediaFieldsToString(l.MediaFields), ","))
+	}
+	if l.PaginationToken != "" {
+		q.Add("pagination_token", l.PaginationToken)
+	}
+	if len(l.PlaceFields) > 0 {
+		q.Add("place.fields", strings.Join(placeFieldsToString(l.PlaceFields), ","))
+	}
+	if len(l.PollFields) > 0 {
+		q.Add("poll.fields", strings.Join(pollFieldsToString(l.PollFields), ","))
+	}
+	if len(l.TweetFields) > 0 {
+		q.Add("tweet.fields", strings.Join(tweetFieldsToString(l.TweetFields), ","))
+	}
+	if len(l.UserFields) > 0 {
+		q.Add("user.fields", strings.Join(userFieldsToString(l.UserFields), ","))
+	}
+	if len(q) > 0 {
+		req.URL.RawQuery = q.Encode()
+	}
+}

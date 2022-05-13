@@ -643,3 +643,46 @@ type HideRepliesResponse struct {
 type HideRepliesResponseData struct {
 	Hidden bool `json:"hidden"`
 }
+
+type LookupUserBookmarksResponse struct {
+	Tweets   []*Tweet                 `json:"data"`
+	Includes *TweetIncludes           `json:"includes,omitempty"`
+	Meta     *LookupUserBookmarksMeta `json:"meta"`
+	Errors   []*APIResponseError      `json:"errors,omitempty"`
+	Title    string                   `json:"title,omitempty"`
+	Detail   string                   `json:"detail,omitempty"`
+	Type     string                   `json:"type,omitempty"`
+}
+
+type LookupUserBookmarksMeta struct {
+	ResultCount int    `json:"result_count"`
+	NextToken   string `json:"next_token"`
+}
+
+type BookmarkTweetBody struct {
+	TweetID string `json:"tweetID"`
+}
+
+type BookmarkTweetResponse struct {
+	BookmarkTweetData *BookmarkTweetData  `json:"data"`
+	Errors            []*APIResponseError `json:"errors,omitempty"`
+	Title             string              `json:"title,omitempty"`
+	Detail            string              `json:"detail,omitempty"`
+	Type              string              `json:"type,omitempty"`
+}
+
+type BookmarkTweetData struct {
+	Bookmarked bool `json:"bookmarked"`
+}
+
+type RemoveBookmarkOfTweetResponse struct {
+	RemoveBookmarkOfTweetData *RemoveBookmarkOfTweetData `json:"data"`
+	Errors                    []*APIResponseError        `json:"errors,omitempty"`
+	Title                     string                     `json:"title,omitempty"`
+	Detail                    string                     `json:"detail,omitempty"`
+	Type                      string                     `json:"type,omitempty"`
+}
+
+type RemoveBookmarkOfTweetData struct {
+	Bookmarks bool `json:"bookmarks"`
+}
