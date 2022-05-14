@@ -507,15 +507,15 @@ func tweetFieldsToString(tfs []TweetField) []string {
 }
 
 type PostTweetOption struct {
-	DirectMessageDeepLink string     `json:"direct_message_deep_link,omitempty"`
-	ForSuperFollowersOnly bool       `json:"for_super_followers_only,omitempty"`
-	Geo                   TweetGeo   `json:"geo,omitempty"`
-	Media                 Media      `json:"media,omitempty"`
-	Poll                  Poll       `json:"poll,omitempty"`
-	QuoteTweetID          string     `json:"quote_tweet_id,omitempty"`
-	Reply                 TweetReply `json:"reply,omitempty"`
-	ReplySettings         string     `json:"reply_settings,omitempty"`
-	Text                  string     `json:"text,omitempty"`
+	DirectMessageDeepLink string      `json:"direct_message_deep_link,omitempty"`
+	ForSuperFollowersOnly bool        `json:"for_super_followers_only,omitempty"`
+	Geo                   *TweetGeo   `json:"geo,omitempty"`
+	Media                 *Media      `json:"media,omitempty"`
+	Poll                  *Poll       `json:"poll,omitempty"`
+	QuoteTweetID          string      `json:"quote_tweet_id,omitempty"`
+	Reply                 *TweetReply `json:"reply,omitempty"`
+	ReplySettings         string      `json:"reply_settings,omitempty"`
+	Text                  string      `json:"text,omitempty"`
 }
 
 type hideRepliesBody struct {
