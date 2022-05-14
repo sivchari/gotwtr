@@ -26,7 +26,7 @@ func Test_postTweet(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name: "200 ok default payload",
+			name: "201 ok default payload",
 			args: args{
 				ctx: context.Background(),
 				client: mockHTTPClient(func(request *http.Request) *http.Response {
@@ -39,7 +39,7 @@ func Test_postTweet(t *testing.T) {
                         }
                     `
 					return &http.Response{
-						StatusCode: http.StatusOK,
+						StatusCode: http.StatusCreated,
 						Body:       io.NopCloser(strings.NewReader(body)),
 					}
 				}),
