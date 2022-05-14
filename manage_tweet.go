@@ -31,7 +31,7 @@ func postTweet(ctx context.Context, c *client, body *PostTweetOption) (*PostTwee
 	if err := json.NewDecoder(resp.Body).Decode(&postTweet); err != nil {
 		return nil, fmt.Errorf("post tweet decode: %w", err)
 	}
-	if resp.StatusCode != http.StatusOK {
+	if resp.StatusCode != http.StatusCreated {
 		return &postTweet, &HTTPError{
 			APIName: "post tweet",
 			Status:  resp.Status,
