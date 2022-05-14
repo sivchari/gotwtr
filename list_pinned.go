@@ -57,7 +57,7 @@ func postPinnedLists(ctx context.Context, c *client, listID string, userID strin
 	if userID == "" {
 		return nil, errors.New("post pinned lists: userID parameter is required")
 	}
-	ep := fmt.Sprintf(postPinnedListsURL, listID)
+	ep := fmt.Sprintf(postPinnedListsURL, userID)
 
 	if listID == "" {
 		return nil, errors.New("post pinned lists: listID parameter is required")
@@ -104,13 +104,14 @@ func undoPinnedLists(ctx context.Context, c *client, listID string, userID strin
 	if userID == "" {
 		return nil, errors.New("undo pinned lists: userID parameter is required")
 	}
-	ep := fmt.Sprintf(undoPinnedListsURL, listID, userID)
+	ep := fmt.Sprintf(undoPinnedListsURL, userID, listID)
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodDelete, ep, nil)
 	if err != nil {
 		return nil, fmt.Errorf("undo pinned lists new request with ctx: %w", err)
 	}
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.bearerToken))
+	req.Header.Set("Content-Type", "application/json")
 
 	resp, err := c.client.Do(req)
 	if err != nil {

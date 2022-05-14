@@ -183,6 +183,7 @@ func undoListMembers(ctx context.Context, c *client, listID string, userID strin
 		return nil, fmt.Errorf("undo list members new request with ctx: %w", err)
 	}
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.bearerToken))
+	req.Header.Set("Content-Type", "application/json")
 
 	resp, err := c.client.Do(req)
 	if err != nil {
