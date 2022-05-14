@@ -25,7 +25,7 @@ func Test_CreateNewList(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name: "200 Create a list",
+			name: "201 Create a list",
 			args: args{
 				ctx: context.Background(),
 				client: mockHTTPClient(func(req *http.Request) *http.Response {
@@ -36,7 +36,7 @@ func Test_CreateNewList(t *testing.T) {
                         }
                     }`
 					return &http.Response{
-						StatusCode: http.StatusOK,
+						StatusCode: http.StatusCreated,
 						Body:       io.NopCloser(strings.NewReader(body)),
 					}
 				}),
@@ -53,7 +53,7 @@ func Test_CreateNewList(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name: "200 Create a list Option",
+			name: "201 Create a list Option",
 			args: args{
 				ctx: context.Background(),
 				client: mockHTTPClient(func(req *http.Request) *http.Response {
@@ -64,7 +64,7 @@ func Test_CreateNewList(t *testing.T) {
                         }
                     }`
 					return &http.Response{
-						StatusCode: http.StatusOK,
+						StatusCode: http.StatusCreated,
 						Body:       io.NopCloser(strings.NewReader(body)),
 					}
 				}),
