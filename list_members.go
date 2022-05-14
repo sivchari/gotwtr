@@ -19,8 +19,8 @@ func listMembers(ctx context.Context, c *client, listID string, opt ...*ListMemb
 	if err != nil {
 		return nil, fmt.Errorf("look up list members: %w", err)
 	}
-
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.bearerToken))
+	req.Header.Set("Content-Type", "application/json")
 
 	var lopt ListMembersOption
 	switch len(opt) {
