@@ -14,6 +14,9 @@ func createNewList(ctx context.Context, c *client, body *CreateNewListBody) (*Cr
 	if body.Name == "" {
 		return nil, errors.New("create new list: name parameter is required")
 	}
+	if len(body.Name) > 25 {
+		return nil, errors.New("create new list: name parameter is less than 25 characters")
+	}
 
 	j, err := json.Marshal(body)
 	if err != nil {
@@ -25,6 +28,7 @@ func createNewList(ctx context.Context, c *client, body *CreateNewListBody) (*Cr
 		return nil, fmt.Errorf("create new list new request with ctx: %w", err)
 	}
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.bearerToken))
+	req.Header.Set("Content-Type", "application/json")
 
 	resp, err := c.client.Do(req)
 	if err != nil {
@@ -36,7 +40,7 @@ func createNewList(ctx context.Context, c *client, body *CreateNewListBody) (*Cr
 	if err := json.NewDecoder(resp.Body).Decode(&createNewList); err != nil {
 		return nil, fmt.Errorf("create new list decode: %w", err)
 	}
-	if resp.StatusCode != http.StatusOK {
+	if resp.StatusCode != http.StatusCreated {
 		return &createNewList, &HTTPError{
 			APIName: "create new list",
 			Status:  resp.Status,
