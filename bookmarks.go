@@ -74,6 +74,7 @@ func bookmarkTweet(ctx context.Context, c *client, userID string, body *Bookmark
 		return nil, fmt.Errorf("bookmark tweet new request with ctx: %w", err)
 	}
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.bearerToken))
+	req.Header.Set("Content-type", "application/json")
 
 	resp, err := c.client.Do(req)
 	if err != nil {

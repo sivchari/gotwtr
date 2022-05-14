@@ -660,7 +660,7 @@ type LookupUserBookmarksMeta struct {
 }
 
 type BookmarkTweetBody struct {
-	TweetID string `json:"tweetID"`
+	TweetID string `json:"tweet_id"`
 }
 
 type BookmarkTweetResponse struct {
