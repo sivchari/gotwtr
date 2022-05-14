@@ -12,6 +12,7 @@ const (
 	userMentionTimelineURL    = "https://api.twitter.com/2/users/%v/mentions"
 	searchRecentTweetsURL     = "https://api.twitter.com/2/tweets/search/recent"
 	countsRecentTweetsURL     = "https://api.twitter.com/2/tweets/counts/recent"
+	countsAllTweetsURL        = "https://api.twitter.com/2/tweets/counts/all"
 	addOrDeleteRulesURL       = "https://api.twitter.com/2/tweets/search/stream/rules"
 	retrieveStreamRulesURL    = "https://api.twitter.com/2/tweets/search/stream/rules"
 	connectToStreamURL        = "https://api.twitter.com/2/tweets/search/stream"

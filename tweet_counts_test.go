@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/google/go-cmp/cmp"
+
 	"github.com/sivchari/gotwtr"
 )
 
@@ -136,13 +137,13 @@ func Test_client_TweetCounts(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			c := gotwtr.New("key", gotwtr.WithHTTPClient(tt.args.client))
-			got, err := c.CountsRecentTweet(tt.args.ctx, tt.args.query, tt.args.opt...)
+			got, err := c.CountRecentTweets(tt.args.ctx, tt.args.query, tt.args.opt...)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("client.CountsRecentTweet() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("client.CountRecentTweets() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if diff := cmp.Diff(tt.want, got); diff != "" {
-				t.Errorf("client.CountsRecentTweet() mismatch (-want +got):\n%s", diff)
+				t.Errorf("client.CountRecentTweets() mismatch (-want +got):\n%s", diff)
 				return
 			}
 		})
