@@ -691,3 +691,22 @@ func ExampleClient_ComplianceJob() {
 		log.Println(e)
 	}
 }
+
+func ExampleClient_PostTweet() {
+	client := gotwtr.New("key")
+	t, err := client.PostTweet(context.Background(), &gotwtr.PostTweetOption{
+		Text: "Hello World",
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Println(t)
+}
+
+func ExampleClient_DeleteTweet() {
+	client := gotwtr.New("key")
+	_, err := client.DeleteTweet(context.Background(), "tweet_id")
+	if err != nil {
+		log.Fatal(err)
+	}
+}

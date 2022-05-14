@@ -14,13 +14,13 @@ func postTweet(ctx context.Context, c *client, body *PostTweetOption) (*PostTwee
 	if err != nil {
 		return nil, fmt.Errorf("postTweet json marshal: %w", err)
 	}
+	fmt.Println(string(j))
 	req, err := http.NewRequestWithContext(ctx, http.MethodPost, postTweetURL, bytes.NewBuffer(j))
 	if err != nil {
 		return nil, fmt.Errorf("postTweet new request with ctx: %w", err)
 	}
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.bearerToken))
 	req.Header.Set("Content-Type", "application/json")
-
 	resp, err := c.client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("post tweet response: %w", err)
