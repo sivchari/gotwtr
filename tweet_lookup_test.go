@@ -9,6 +9,7 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
+
 	"github.com/sivchari/gotwtr"
 )
 
@@ -362,7 +363,7 @@ func Test_retriveMultipleTweets(t *testing.T) {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
+			c := gotwtr.New("key", gotwtr.WithHTTPClient(tt.args.client))
 			got, err := c.RetrieveMultipleTweets(tt.args.ctx, tt.args.ids, tt.args.opt...)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("client.RetrieveMultipleTweets() error = %v, wantErr %v", err, tt.wantErr)
@@ -951,7 +952,7 @@ func Test_lookUpByID(t *testing.T) {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
+			c := gotwtr.New("key", gotwtr.WithHTTPClient(tt.args.client))
 			got, err := c.RetrieveSingleTweet(tt.args.ctx, tt.args.id, tt.args.opt...)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("client.RetrieveSingleTweet() error = %v, wantErr %v", err, tt.wantErr)

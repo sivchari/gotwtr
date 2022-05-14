@@ -2,7 +2,6 @@ package gotwtr_test
 
 import (
 	"context"
-	"fmt"
 	"io"
 	"net/http"
 	"strings"
@@ -13,208 +12,78 @@ import (
 	"github.com/sivchari/gotwtr"
 )
 
-func Test_listMembers(t *testing.T) {
+func Test_pinnedLists(t *testing.T) {
 	t.Parallel()
 	type args struct {
 		ctx    context.Context
 		client *http.Client
 		id     string
-		opt    []*gotwtr.ListMembersOption
+		opt    []*gotwtr.PinnedListsOption
 	}
 	tests := []struct {
 		name    string
 		args    args
-		want    *gotwtr.ListMembersResponse
+		want    *gotwtr.PinnedListsResponse
 		wantErr bool
 	}{
 		{
-			name: "200 ok default payload",
+			name: "200 ok no option",
 			args: args{
 				ctx: context.Background(),
-				client: mockHTTPClient(func(request *http.Request) *http.Response {
-					data := `{
+				client: mockHTTPClient(func(req *http.Request) *http.Response {
+					body := `{
 						"data": [
 							{
-								"id": "1319036828964454402",
-								"name": "Birdwatch",
-								"username": "birdwatch"
-							},
-							{
-								"id": "1244731491088809984",
-								"name": "Twitter Thailand",
-								"username": "TwitterThailand"
-							},
-							{
-								"id": "1194267639100723200",
-								"name": "Twitter Retweets",
-								"username": "TwitterRetweets"
-							},
-							{
-								"id": "1168976680867762177",
-								"name": "Twitter Able",
-								"username": "TwitterAble"
-							},
-							{
-								"id": "1065249714214457345",
-								"name": "Spaces",
-								"username": "TwitterSpaces"
+								"id": "1451305624956858369",
+								"name": "Test List"
 							}
 						],
 						"meta": {
-							"result_count": 5,
-							"next_token": "5676935732641845249"
+							"result_count": 1
 						}
 					}`
 					return &http.Response{
 						StatusCode: http.StatusOK,
-						Body:       io.NopCloser(strings.NewReader(data)),
+						Body:       io.NopCloser(strings.NewReader(body)),
 					}
 				}),
-				id:  "84839422",
-				opt: []*gotwtr.ListMembersOption{},
+				id:  "2244994945",
+				opt: []*gotwtr.PinnedListsOption{},
 			},
-			want: &gotwtr.ListMembersResponse{
-				Users: []*gotwtr.User{
-					{
-						ID:       "1319036828964454402",
-						Name:     "Birdwatch",
-						UserName: "birdwatch",
-					},
-					{
-						ID:       "1244731491088809984",
-						Name:     "Twitter Thailand",
-						UserName: "TwitterThailand",
-					},
-					{
-						ID:       "1194267639100723200",
-						Name:     "Twitter Retweets",
-						UserName: "TwitterRetweets",
-					},
-					{
-						ID:       "1168976680867762177",
-						Name:     "Twitter Able",
-						UserName: "TwitterAble",
-					},
-					{
-						ID:       "1065249714214457345",
-						Name:     "Spaces",
-						UserName: "TwitterSpaces",
-					},
-				},
-				Meta: &gotwtr.ListMeta{
-					ResultCount: 5,
-					NextToken:   "5676935732641845249",
-				},
-			},
-			wantErr: false,
-		},
-	}
-	for _, tt := range tests {
-		tt := tt
-		t.Run(tt.name, func(t *testing.T) {
-			t.Parallel()
-			c := gotwtr.New("key", gotwtr.WithHTTPClient(tt.args.client))
-			got, err := c.ListMembers(tt.args.ctx, tt.args.id, tt.args.opt...)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("client.ListMembers() error = %v, wantErr %v", err, tt.wantErr)
-				return
-			}
-			if diff := cmp.Diff(tt.want, got); diff != "" {
-				t.Errorf("client.ListMembers() mismatch (-want +got):\n%s", diff)
-				return
-			}
-		})
-	}
-}
-
-func Test_ListsSpecifiedUser(t *testing.T) {
-	t.Parallel()
-	type args struct {
-		ctx    context.Context
-		client *http.Client
-		id     string
-		opt    []*gotwtr.ListsSpecifiedUserOption
-	}
-	tests := []struct {
-		name    string
-		args    args
-		want    *gotwtr.ListsSpecifiedUserResponse
-		wantErr bool
-	}{
-		{
-			name: "200 ok default payload",
-			args: args{
-				ctx: context.Background(),
-				client: mockHTTPClient(func(request *http.Request) *http.Response {
-					data := `{
-						"data": [
-							{
-								"id": "1451951974291689472",
-								"name": "Twitter"
-							},
-							{
-								"id": "1451812298184540161",
-								"name": "Updates"
-							},
-							{
-								"id": "1450519480132509697",
-								"name": "Twitter"
-							}
-						],
-						"meta": {
-							"result_count": 3
-						}
-					}`
-					return &http.Response{
-						StatusCode: http.StatusOK,
-						Body:       io.NopCloser(strings.NewReader(data)),
-					}
-				}),
-				id:  "84839422",
-				opt: []*gotwtr.ListsSpecifiedUserOption{},
-			},
-			want: &gotwtr.ListsSpecifiedUserResponse{
+			want: &gotwtr.PinnedListsResponse{
 				Lists: []*gotwtr.List{
 					{
-						ID:   "1451951974291689472",
-						Name: "Twitter",
-					},
-					{
-						ID:   "1451812298184540161",
-						Name: "Updates",
-					},
-					{
-						ID:   "1450519480132509697",
-						Name: "Twitter",
+						ID:   "1451305624956858369",
+						Name: "Test List",
 					},
 				},
 				Meta: &gotwtr.ListMeta{
-					ResultCount: 3,
+					ResultCount: 1,
 				},
 			},
 			wantErr: false,
 		},
 		{
-			name: "200 ok option",
+			name: "200 ok and option",
 			args: args{
 				ctx: context.Background(),
-				client: mockHTTPClient(func(request *http.Request) *http.Response {
-					data := `{
+				client: mockHTTPClient(func(req *http.Request) *http.Response {
+					body := `{
 						"data": [
 							{
-								"follower_count": 5,
-								"id": "1451951974291689472",
-								"name": "Twitter",
-								"owner_id": "1227213680120479745"
+								"follower_count": 0,
+								"id": "1451305624956858369",
+								"name": "Test List",
+								"owner_id": "2244994945"
 							}
 						],
 						"includes": {
 							"users": [
 								{
-									"name": "구돆",
-									"created_at": "2020-02-11T12:52:11.000Z",
-									"id": "1227213680120479745",
-									"username": "Follow__Y0U"
+									"username": "TwitterDev",
+									"id": "2244994945",
+									"created_at": "2013-12-14T04:35:55.000Z",
+									"name": "Twitter Dev"
 								}
 							]
 						},
@@ -224,28 +93,37 @@ func Test_ListsSpecifiedUser(t *testing.T) {
 					}`
 					return &http.Response{
 						StatusCode: http.StatusOK,
-						Body:       io.NopCloser(strings.NewReader(data)),
+						Body:       io.NopCloser(strings.NewReader(body)),
 					}
 				}),
-				id:  "84839422",
-				opt: []*gotwtr.ListsSpecifiedUserOption{},
+				id: "84839422",
+				opt: []*gotwtr.PinnedListsOption{
+					{
+						UserFields: []gotwtr.UserField{
+							gotwtr.UserFieldUserName,
+							gotwtr.UserFieldID,
+							gotwtr.UserFieldCreatedAt,
+							gotwtr.UserFieldName,
+						},
+					},
+				},
 			},
-			want: &gotwtr.ListsSpecifiedUserResponse{
+			want: &gotwtr.PinnedListsResponse{
 				Lists: []*gotwtr.List{
 					{
-						ID:            "1451951974291689472",
-						Name:          "Twitter",
-						FollowerCount: 5,
-						OwnerID:       "1227213680120479745",
+						FollowerCount: 0,
+						ID:            "1451305624956858369",
+						Name:          "Test List",
+						OwnerID:       "2244994945",
 					},
 				},
 				Includes: &gotwtr.ListIncludes{
 					Users: []*gotwtr.User{
 						{
-							Name:      "구돆",
-							CreatedAt: "2020-02-11T12:52:11.000Z",
-							ID:        "1227213680120479745",
-							UserName:  "Follow__Y0U",
+							UserName:  "TwitterDev",
+							ID:        "2244994945",
+							CreatedAt: "2013-12-14T04:35:55.000Z",
+							Name:      "Twitter Dev",
 						},
 					},
 				},
@@ -256,79 +134,41 @@ func Test_ListsSpecifiedUser(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name: "User Not Found",
+			name: "404 not found",
 			args: args{
 				ctx: context.Background(),
-				client: mockHTTPClient(func(request *http.Request) *http.Response {
-					data := `{
-						"errors":[
-							{
-								"value":"849422",
-								"detail":"Could not find user with id: [849422].",
-								"title":"Not Found Error",
-								"resource_type":"user",
-								"parameter":"id",
-								"resource_id":"849422",
-								"type":"https://api.twitter.com/2/problems/resource-not-found"
-							}
-						]
-					}`
-					return &http.Response{
-						StatusCode: http.StatusNotFound,
-						Body:       io.NopCloser(strings.NewReader(data)),
-					}
-				}),
-				id:  "849422",
-				opt: []*gotwtr.ListsSpecifiedUserOption{},
-			},
-			want: &gotwtr.ListsSpecifiedUserResponse{
-				Errors: []*gotwtr.APIResponseError{
-					{
-						Value:        "849422",
-						Detail:       "Could not find user with id: [849422].",
-						Title:        "Not Found Error",
-						ResourceType: "user",
-						Parameter:    "id",
-						ResourceID:   "849422",
-						Type:         "https://api.twitter.com/2/problems/resource-not-found",
-					},
-				},
-			},
-			wantErr: true,
-		},
-		{
-			name: "Invalid Request",
-			args: args{
-				ctx: context.Background(),
-				client: mockHTTPClient(func(request *http.Request) *http.Response {
-					data := fmt.Sprintf(`{
+				client: mockHTTPClient(func(req *http.Request) *http.Response {
+					body := `{
 						"errors":[
 							{
 								"parameters":{
-									"id": ["8488877666666666666666666666666622839422"]
+									"id":[
+										"111111111111111111111111"
+									]
 								},
-								"message":"The %v query parameter value [8488877666666666666666666666666622839422] is not valid"
+								"message":"The id query parameter value [111111111111111111111111] is not valid"
 							}
 						],
 						"title":"Invalid Request",
 						"detail":"One or more parameters to your request was invalid.",
 						"type":"https://api.twitter.com/2/problems/invalid-request"
-					}`, "`id`")
+					}`
 					return &http.Response{
-						StatusCode: http.StatusBadRequest,
-						Body:       io.NopCloser(strings.NewReader(data)),
+						StatusCode: http.StatusNotFound,
+						Body:       io.NopCloser(strings.NewReader(body)),
 					}
 				}),
-				id:  "8488877666666666666666666666666622839422",
-				opt: []*gotwtr.ListsSpecifiedUserOption{},
+				id:  "111111111111111111111111",
+				opt: []*gotwtr.PinnedListsOption{},
 			},
-			want: &gotwtr.ListsSpecifiedUserResponse{
+			want: &gotwtr.PinnedListsResponse{
+				Lists: nil,
 				Errors: []*gotwtr.APIResponseError{
 					{
 						Parameters: gotwtr.Parameter{
-							ID: []string{"8488877666666666666666666666666622839422"},
+							ID: []string{"111111111111111111111111"},
 						},
-						Message: "The `id` query parameter value [8488877666666666666666666666666622839422] is not valid",
+						Message: "The id query parameter value [111111111111111111111111] is not valid",
 					},
 				},
 				Title:  "Invalid Request",
@@ -338,25 +178,26 @@ func Test_ListsSpecifiedUser(t *testing.T) {
 			wantErr: true,
 		},
 	}
-	for _, tt := range tests {
+	for i, tt := range tests {
+		i := i
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			c := gotwtr.New("key", gotwtr.WithHTTPClient(tt.args.client))
-			got, err := c.ListsSpecifiedUser(tt.args.ctx, tt.args.id, tt.args.opt...)
+			got, err := c.PinnedLists(tt.args.ctx, tt.args.id, tt.args.opt...)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("client.ListsSpecifiedUser() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("client.PinendLists() index = %v error = %v, wantErr %v", i, err, tt.wantErr)
 				return
 			}
 			if diff := cmp.Diff(tt.want, got); diff != "" {
-				t.Errorf("client.ListsSpecifiedUser() mismatch (-want +got):\n%s", diff)
+				t.Errorf("client.PinnedLists() index = %v mismatch (-want +got):\n%s", i, diff)
 				return
 			}
 		})
 	}
 }
 
-func Test_postListMembers(t *testing.T) {
+func Test_postPinnedLists(t *testing.T) {
 	t.Parallel()
 	type args struct {
 		ctx    context.Context
@@ -367,7 +208,7 @@ func Test_postListMembers(t *testing.T) {
 	tests := []struct {
 		name    string
 		args    args
-		want    *gotwtr.PostListMembersResponse
+		want    *gotwtr.PostPinnedListsResponse
 		wantErr bool
 	}{
 		{
@@ -380,7 +221,7 @@ func Test_postListMembers(t *testing.T) {
 					}
 					body := `{
 						"data": {
-							"is_member": true
+							"pinned": true
 						}
 					}`
 					return &http.Response{
@@ -391,9 +232,9 @@ func Test_postListMembers(t *testing.T) {
 				listID: "6253282",
 				userID: "2244994945",
 			},
-			want: &gotwtr.PostListMembersResponse{
-				IsMember: &gotwtr.IsMember{
-					IsMember: true,
+			want: &gotwtr.PostPinnedListsResponse{
+				Pinned: &gotwtr.Pinned{
+					Pinned: true,
 				},
 			},
 			wantErr: false,
@@ -424,8 +265,8 @@ func Test_postListMembers(t *testing.T) {
 				listID: "111111111122",
 				userID: "1228393702244134912",
 			},
-			want: &gotwtr.PostListMembersResponse{
-				IsMember: nil,
+			want: &gotwtr.PostPinnedListsResponse{
+				Pinned: nil,
 				Errors: []*gotwtr.APIResponseError{
 					{
 						Value:        "111111111122",
@@ -466,8 +307,8 @@ func Test_postListMembers(t *testing.T) {
 				listID: "111111111122",
 				userID: "1228393702244134912",
 			},
-			want: &gotwtr.PostListMembersResponse{
-				IsMember: nil,
+			want: &gotwtr.PostPinnedListsResponse{
+				Pinned: nil,
 				Errors: []*gotwtr.APIResponseError{
 					{
 						Value:        "1228393702244134912",
@@ -489,20 +330,20 @@ func Test_postListMembers(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
-			got, err := c.PostListMembers(tt.args.ctx, tt.args.listID, tt.args.userID)
+			got, err := c.PostPinnedLists(tt.args.ctx, tt.args.listID, tt.args.userID)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("PostListMembers() index = %v error = %v, wantErr %v", i, err, tt.wantErr)
+				t.Errorf("PostPinnedLists() index = %v error = %v, wantErr %v", i, err, tt.wantErr)
 				return
 			}
 			if diff := cmp.Diff(got, tt.want); diff != "" {
-				t.Errorf("PostListMembers() index = %v mismatch (-want +got):\n%s", i, diff)
+				t.Errorf("PostPinnedLists() index = %v mismatch (-want +got):\n%s", i, diff)
 				return
 			}
 		})
 	}
 }
 
-func Test_undoListMembers(t *testing.T) {
+func Test_undoPinnedLists(t *testing.T) {
 	t.Parallel()
 	type args struct {
 		ctx    context.Context
@@ -513,7 +354,7 @@ func Test_undoListMembers(t *testing.T) {
 	tests := []struct {
 		name    string
 		args    args
-		want    *gotwtr.UndoListMembersResponse
+		want    *gotwtr.UndoPinnedListsResponse
 		wantErr bool
 	}{
 		{
@@ -526,7 +367,7 @@ func Test_undoListMembers(t *testing.T) {
 					}
 					body := `{
 						"data": {
-							"following": false
+							"Pinned": false
 						}
 					}`
 					return &http.Response{
@@ -537,9 +378,9 @@ func Test_undoListMembers(t *testing.T) {
 				listID: "2244994945",
 				userID: "6253282",
 			},
-			want: &gotwtr.UndoListMembersResponse{
-				IsMember: &gotwtr.IsMember{
-					IsMember: false,
+			want: &gotwtr.UndoPinnedListsResponse{
+				Pinned: &gotwtr.Pinned{
+					Pinned: false,
 				},
 			},
 			wantErr: false,
@@ -570,8 +411,8 @@ func Test_undoListMembers(t *testing.T) {
 				listID: "111111111122",
 				userID: "1228393702244134912",
 			},
-			want: &gotwtr.UndoListMembersResponse{
-				IsMember: nil,
+			want: &gotwtr.UndoPinnedListsResponse{
+				Pinned: nil,
 				Errors: []*gotwtr.APIResponseError{
 					{
 						Value:        "111111111122",
@@ -612,8 +453,8 @@ func Test_undoListMembers(t *testing.T) {
 				listID: "111111111133",
 				userID: "1228393702244134912",
 			},
-			want: &gotwtr.UndoListMembersResponse{
-				IsMember: nil,
+			want: &gotwtr.UndoPinnedListsResponse{
+				Pinned: nil,
 				Errors: []*gotwtr.APIResponseError{
 					{
 						Value:        "111111111133",
@@ -635,13 +476,13 @@ func Test_undoListMembers(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
-			got, err := c.UndoListMembers(tt.args.ctx, tt.args.listID, tt.args.userID)
+			got, err := c.UndoPinnedLists(tt.args.ctx, tt.args.listID, tt.args.userID)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("UndoListMembers() index = %v error = %v, wantErr %v", i, err, tt.wantErr)
+				t.Errorf("UndoPinnedLists() index = %v error = %v, wantErr %v", i, err, tt.wantErr)
 				return
 			}
 			if diff := cmp.Diff(got, tt.want); diff != "" {
-				t.Errorf("UndoListMembers() index = %v mismatch (-want +got):\n%s", i, diff)
+				t.Errorf("UndoPinnedLists() index = %v mismatch (-want +got):\n%s", i, diff)
 				return
 			}
 		})

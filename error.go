@@ -25,6 +25,7 @@ type APIResponseError struct {
 	RequiredEnrollment string      `json:"required_enrollment,omitempty"`
 	RegistrationURL    string      `json:"registration_url,omitempty"`
 	ConnectionIssue    string      `json:"connection_issue,omitempty"`
+	Status             int         `json:"status,omitempty"`
 }
 
 type Parameter struct {

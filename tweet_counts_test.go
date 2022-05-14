@@ -1,7 +1,9 @@
 package gotwtr_test
 
 import (
+	"bytes"
 	"context"
+	_ "embed"
 	"io"
 	"net/http"
 	"strings"
@@ -10,6 +12,11 @@ import (
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/sivchari/gotwtr"
+)
+
+var (
+	//go:embed embed/count_all_tweets.json
+	countAllTweets []byte
 )
 
 func Test_client_TweetCounts(t *testing.T) {
@@ -135,14 +142,79 @@ func Test_client_TweetCounts(t *testing.T) {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
-			got, err := c.CountsRecentTweet(tt.args.ctx, tt.args.query, tt.args.opt...)
+			c := gotwtr.New("key", gotwtr.WithHTTPClient(tt.args.client))
+			got, err := c.CountRecentTweets(tt.args.ctx, tt.args.query, tt.args.opt...)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("client.CountsRecentTweet() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("client.CountRecentTweets() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if diff := cmp.Diff(tt.want, got); diff != "" {
-				t.Errorf("client.CountsRecentTweet() mismatch (-want +got):\n%s", diff)
+				t.Errorf("client.CountRecentTweets() mismatch (-want +got):\n%s", diff)
+				return
+			}
+		})
+	}
+}
+
+func Test_countAllTweets(t *testing.T) {
+	t.Parallel()
+	type args struct {
+		ctx    context.Context
+		client *http.Client
+		query  string
+		opt    []*gotwtr.TweetCountsAllOption
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    *gotwtr.TweetCountsResponse
+		wantErr bool
+	}{
+		{
+			name: "200 ok",
+			args: args{
+				ctx: context.Background(),
+				client: mockHTTPClient(func(req *http.Request) *http.Response {
+					return &http.Response{
+						StatusCode: http.StatusOK,
+						Body:       io.NopCloser(bytes.NewReader(countAllTweets)),
+					}
+				}),
+				query: "lakers",
+				opt:   nil,
+			},
+			want: &gotwtr.TweetCountsResponse{
+				Counts: []*gotwtr.TimeseriesCount{
+					{
+						Start:      "2021-09-27T13:00:00.000Z",
+						End:        "2021-09-27T14:00:00.000Z",
+						TweetCount: 2,
+					},
+					{
+						Start:      "2021-09-27T14:00:00.000Z",
+						End:        "2021-09-27T15:00:00.000Z",
+						TweetCount: 2,
+					},
+				},
+				Meta: &gotwtr.TweetCountMeta{
+					TotalTweetCount: 4,
+				},
+			},
+			wantErr: false,
+		},
+	}
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			c := gotwtr.New("key", gotwtr.WithHTTPClient(tt.args.client))
+			got, err := c.CountAllTweets(tt.args.ctx, tt.args.query, tt.args.opt...)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("client.CountAllTweets() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("client.CountAllTweets() mismatch (-want +got):\n%s", diff)
 				return
 			}
 		})

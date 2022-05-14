@@ -8,6 +8,7 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
+
 	"github.com/sivchari/gotwtr"
 )
 
@@ -57,7 +58,7 @@ func Test_sampledStream(t *testing.T) {
 			t.Parallel()
 			ch := make(chan gotwtr.VolumeStreamsResponse)
 			errCh := make(chan error)
-			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
+			c := gotwtr.New("key", gotwtr.WithHTTPClient(tt.args.client))
 			c.VolumeStreams(tt.args.ctx, ch, errCh, tt.args.opt...)
 			select {
 			case got := <-ch:

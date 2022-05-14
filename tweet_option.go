@@ -253,6 +253,43 @@ func (t *TweetCountsOption) addQuery(req *http.Request, tweet string) {
 	}
 }
 
+type TweetCountsAllOption struct {
+	StartTime   time.Time
+	EndTime     time.Time
+	SinceID     string
+	UntilID     string
+	Granularity string
+	NextToken   string
+}
+
+func (t *TweetCountsAllOption) addQuery(req *http.Request, tweet string) {
+	q := req.URL.Query()
+	q.Add("query", tweet)
+	if !t.StartTime.IsZero() {
+		// YYYY-MM-DDTHH:mm:ssZ (ISO 8601/RFC 3339).
+		q.Add("start_time", t.StartTime.Format(time.RFC3339))
+	}
+	if !t.EndTime.IsZero() {
+		// YYYY-MM-DDTHH:mm:ssZ (ISO 8601/RFC 3339).
+		q.Add("end_time", t.EndTime.Format(time.RFC3339))
+	}
+	if len(t.SinceID) > 0 {
+		q.Add("since_id", t.SinceID)
+	}
+	if len(t.UntilID) > 0 {
+		q.Add("until_id", t.UntilID)
+	}
+	if len(t.Granularity) > 0 {
+		q.Add("granularity", t.Granularity)
+	}
+	if t.NextToken != "" {
+		q.Add("next_token", t.NextToken)
+	}
+	if len(q) > 0 {
+		req.URL.RawQuery = q.Encode()
+	}
+}
+
 type AddOrDeleteRulesOption struct {
 	DryRun bool // If it is true, test a the syntax of your rule without submitting it
 }
@@ -419,7 +456,7 @@ func (r RetweetsLookupOption) addQuery(req *http.Request) {
 	}
 }
 
-type TweetsUserLikedOpts struct {
+type TweetsUserLikedOption struct {
 	Expansions      []Expansion
 	MediaFields     []MediaField
 	PlaceFields     []PlaceField
@@ -430,7 +467,7 @@ type TweetsUserLikedOpts struct {
 	PaginationToken string
 }
 
-func (t *TweetsUserLikedOpts) addQuery(req *http.Request) {
+func (t *TweetsUserLikedOption) addQuery(req *http.Request) {
 	q := req.URL.Query()
 	if len(t.Expansions) > 0 {
 		q.Add("expansions", strings.Join(expansionsToString(t.Expansions), ","))
@@ -467,4 +504,62 @@ func tweetFieldsToString(tfs []TweetField) []string {
 		slice[i] = string(tf)
 	}
 	return slice
+}
+
+type PostTweetOption struct {
+	DirectMessageDeepLink string      `json:"direct_message_deep_link,omitempty"`
+	ForSuperFollowersOnly bool        `json:"for_super_followers_only,omitempty"`
+	Geo                   *TweetGeo   `json:"geo,omitempty"`
+	Media                 *Media      `json:"media,omitempty"`
+	Poll                  *Poll       `json:"poll,omitempty"`
+	QuoteTweetID          string      `json:"quote_tweet_id,omitempty"`
+	Reply                 *TweetReply `json:"reply,omitempty"`
+	ReplySettings         string      `json:"reply_settings,omitempty"`
+	Text                  string      `json:"text,omitempty"`
+}
+
+type hideRepliesBody struct {
+	Hidden bool `json:"hidden"`
+}
+
+type LookupUserBookmarksOption struct {
+	Expansions      []Expansion
+	MaxResults      int
+	MediaFields     []MediaField
+	PaginationToken string
+	PlaceFields     []PlaceField
+	PollFields      []PollField
+	TweetFields     []TweetField
+	UserFields      []UserField
+}
+
+func (l LookupUserBookmarksOption) addQuery(req *http.Request) {
+	q := req.URL.Query()
+	if len(l.Expansions) > 0 {
+		q.Add("expansions", strings.Join(expansionsToString(l.Expansions), ","))
+	}
+	if l.MaxResults > 0 {
+		q.Add("max_results", strconv.Itoa(l.MaxResults))
+	}
+	if len(l.MediaFields) > 0 {
+		q.Add("media.fields", strings.Join(mediaFieldsToString(l.MediaFields), ","))
+	}
+	if l.PaginationToken != "" {
+		q.Add("pagination_token", l.PaginationToken)
+	}
+	if len(l.PlaceFields) > 0 {
+		q.Add("place.fields", strings.Join(placeFieldsToString(l.PlaceFields), ","))
+	}
+	if len(l.PollFields) > 0 {
+		q.Add("poll.fields", strings.Join(pollFieldsToString(l.PollFields), ","))
+	}
+	if len(l.TweetFields) > 0 {
+		q.Add("tweet.fields", strings.Join(tweetFieldsToString(l.TweetFields), ","))
+	}
+	if len(l.UserFields) > 0 {
+		q.Add("user.fields", strings.Join(userFieldsToString(l.UserFields), ","))
+	}
+	if len(q) > 0 {
+		req.URL.RawQuery = q.Encode()
+	}
 }

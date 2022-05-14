@@ -8,6 +8,7 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
+
 	"github.com/sivchari/gotwtr"
 )
 
@@ -16,7 +17,7 @@ func Test_followers(t *testing.T) {
 	type args struct {
 		ctx    context.Context
 		client *http.Client
-		id     string
+		userID string
 		opt    []*gotwtr.FollowOption
 	}
 	tests := []struct {
@@ -93,8 +94,8 @@ func Test_followers(t *testing.T) {
 						Body:       io.NopCloser(strings.NewReader(body)),
 					}
 				}),
-				id:  "2244994945",
-				opt: []*gotwtr.FollowOption{},
+				userID: "2244994945",
+				opt:    []*gotwtr.FollowOption{},
 			},
 			want: &gotwtr.FollowersResponse{
 				Users: []*gotwtr.User{
@@ -149,7 +150,7 @@ func Test_followers(t *testing.T) {
 						UserName: "TwitterData",
 					},
 				},
-				Meta: gotwtr.FollowsMeta{
+				Meta: &gotwtr.FollowsMeta{
 					ResultCount: 10,
 					NextToken:   "DFEDBNRFT3MHCZZZ",
 				},
@@ -415,7 +416,7 @@ func Test_followers(t *testing.T) {
 						Body:       io.NopCloser(strings.NewReader(body)),
 					}
 				}),
-				id: "2244994945",
+				userID: "2244994945",
 				opt: []*gotwtr.FollowOption{
 					{
 						Expansions: []gotwtr.Expansion{gotwtr.ExpansionPinnedTweetID, gotwtr.ExpansionContextAnnotations},
@@ -695,8 +696,8 @@ func Test_followers(t *testing.T) {
 						Body:       io.NopCloser(strings.NewReader(body)),
 					}
 				}),
-				id:  "1111111111111111111111",
-				opt: []*gotwtr.FollowOption{},
+				userID: "1111111111111111111111",
+				opt:    []*gotwtr.FollowOption{},
 			},
 			want: &gotwtr.FollowersResponse{
 				Users: nil,
@@ -720,7 +721,7 @@ func Test_followers(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
-			got, err := c.Followers(tt.args.ctx, tt.args.id, tt.args.opt...)
+			got, err := c.Followers(tt.args.ctx, tt.args.userID, tt.args.opt...)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("client.Followers() index = %v error = %v, wantErr %v", i, err, tt.wantErr)
 				return
@@ -738,7 +739,7 @@ func Test_following(t *testing.T) {
 	type args struct {
 		ctx    context.Context
 		client *http.Client
-		id     string
+		userID string
 		opt    []*gotwtr.FollowOption
 	}
 	tests := []struct {
@@ -815,8 +816,8 @@ func Test_following(t *testing.T) {
 						Body:       io.NopCloser(strings.NewReader(body)),
 					}
 				}),
-				id:  "2244994945",
-				opt: []*gotwtr.FollowOption{},
+				userID: "2244994945",
+				opt:    []*gotwtr.FollowOption{},
 			},
 			want: &gotwtr.FollowingResponse{
 				Users: []*gotwtr.User{
@@ -871,7 +872,7 @@ func Test_following(t *testing.T) {
 						UserName: "TwitterData",
 					},
 				},
-				Meta: gotwtr.FollowsMeta{
+				Meta: &gotwtr.FollowsMeta{
 					ResultCount: 10,
 					NextToken:   "DFEDBNRFT3MHCZZZ",
 				},
@@ -1137,7 +1138,7 @@ func Test_following(t *testing.T) {
 						Body:       io.NopCloser(strings.NewReader(body)),
 					}
 				}),
-				id: "2244994945",
+				userID: "2244994945",
 				opt: []*gotwtr.FollowOption{
 					{
 						Expansions: []gotwtr.Expansion{gotwtr.ExpansionPinnedTweetID, gotwtr.ExpansionContextAnnotations},
@@ -1417,8 +1418,8 @@ func Test_following(t *testing.T) {
 						Body:       io.NopCloser(strings.NewReader(body)),
 					}
 				}),
-				id:  "1111111111111111111111",
-				opt: []*gotwtr.FollowOption{},
+				userID: "1111111111111111111111",
+				opt:    []*gotwtr.FollowOption{},
 			},
 			want: &gotwtr.FollowingResponse{
 				Users: nil,
@@ -1442,13 +1443,381 @@ func Test_following(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
-			got, err := c.Following(tt.args.ctx, tt.args.id, tt.args.opt...)
+			got, err := c.Following(tt.args.ctx, tt.args.userID, tt.args.opt...)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("client.Following() index = %v error = %v, wantErr %v", i, err, tt.wantErr)
 				return
 			}
 			if diff := cmp.Diff(tt.want, got); diff != "" {
 				t.Errorf("client.Following() index = %v mismatch (-want +got):\n%s", i, diff)
+				return
+			}
+		})
+	}
+}
+
+func Test_postFollowing(t *testing.T) {
+	t.Parallel()
+	type args struct {
+		ctx          context.Context
+		client       *http.Client
+		userID       string
+		targetUserID string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    *gotwtr.PostFollowingResponse
+		wantErr bool
+	}{
+		{
+			name: "200 success public user",
+			args: args{
+				ctx: context.Background(),
+				client: mockHTTPClient(func(req *http.Request) *http.Response {
+					if req.Method != http.MethodPost {
+						t.Errorf("the method is not correct got %s want %s", req.Method, http.MethodPost)
+					}
+					body := `{
+						"data": {
+							"following": true,
+							"pending_follow": false
+						}
+					}`
+					return &http.Response{
+						StatusCode: http.StatusOK,
+						Body:       io.NopCloser(strings.NewReader(body)),
+					}
+				}),
+				userID:       "6253282",
+				targetUserID: "2244994945",
+			},
+			want: &gotwtr.PostFollowingResponse{
+				Following: &gotwtr.Following{
+					Following:     true,
+					PendingFollow: false,
+				},
+			},
+			wantErr: false,
+		},
+		{
+			name: "200 success protected user",
+			args: args{
+				ctx: context.Background(),
+				client: mockHTTPClient(func(req *http.Request) *http.Response {
+					if req.Method != http.MethodPost {
+						t.Errorf("the method is not correct got %s want %s", req.Method, http.MethodPost)
+					}
+					body := `{
+						"data": {
+							"following": false,
+							"pending_follow": true
+						}
+					}`
+					return &http.Response{
+						StatusCode: http.StatusOK,
+						Body:       io.NopCloser(strings.NewReader(body)),
+					}
+				}),
+				userID:       "6253282",
+				targetUserID: "2244994945",
+			},
+			want: &gotwtr.PostFollowingResponse{
+				Following: &gotwtr.Following{
+					Following:     false,
+					PendingFollow: true,
+				},
+			},
+			wantErr: false,
+		},
+		{
+			name: "400 request failed",
+			args: args{
+				ctx: context.Background(),
+				client: mockHTTPClient(func(req *http.Request) *http.Response {
+					body := `{
+						"errors": [
+							{
+								"message":"Sorry, that page does not exist, code:34."
+							}
+						]
+					}`
+					return &http.Response{
+						StatusCode: http.StatusBadRequest,
+						Body:       io.NopCloser(strings.NewReader(body)),
+					}
+				}),
+				userID:       "2244994945",
+				targetUserID: "1228393702244134912",
+			},
+			want: &gotwtr.PostFollowingResponse{
+				Errors: []*gotwtr.APIResponseError{
+					{
+						Message: "Sorry, that page does not exist, code:34.",
+					},
+				},
+			},
+			wantErr: true,
+		},
+		{
+			name: "403 authentication error",
+			args: args{
+				ctx: context.Background(),
+				client: mockHTTPClient(func(req *http.Request) *http.Response {
+					body := `{
+						"errors": [
+							{
+								"title": "Unsupported Authentication",
+								"detail": "Authenticating with OAuth 2.0 Application-Only is forbidden for this endpoint. Supported authentication types are [OAuth 1.0a User Context, OAuth 2.0 User Context].",
+								"type": "https://api.twitter.com/2/problems/unsupported-authentication",
+								"status": 403
+							}
+						]
+					}`
+					return &http.Response{
+						StatusCode: http.StatusForbidden,
+						Body:       io.NopCloser(strings.NewReader(body)),
+					}
+				}),
+				userID:       "111111111",
+				targetUserID: "1228393702244134912",
+			},
+			want: &gotwtr.PostFollowingResponse{
+				Following: nil,
+				Errors: []*gotwtr.APIResponseError{
+					{
+						Title:  "Unsupported Authentication",
+						Detail: "Authenticating with OAuth 2.0 Application-Only is forbidden for this endpoint. Supported authentication types are [OAuth 1.0a User Context, OAuth 2.0 User Context].",
+						Type:   "https://api.twitter.com/2/problems/unsupported-authentication",
+						Status: 403,
+					},
+				},
+			},
+			wantErr: true,
+		},
+		{
+			name: "404 not found, invalid userID",
+			args: args{
+				ctx: context.Background(),
+				client: mockHTTPClient(func(req *http.Request) *http.Response {
+					body := `{
+						"errors":[
+							{
+								"value":"111111111122",
+								"detail":"Could not find user with id: [111111111122].",
+								"title":"Not Found Error",
+								"resource_type":"user",
+								"parameter":"id",
+								"resource_id":"111111111122",
+								"type":"https://api.twitter.com/2/problems/resource-not-found"
+							}
+						]
+					}`
+					return &http.Response{
+						StatusCode: http.StatusNotFound,
+						Body:       io.NopCloser(strings.NewReader(body)),
+					}
+				}),
+				userID:       "111111111122",
+				targetUserID: "1228393702244134912",
+			},
+			want: &gotwtr.PostFollowingResponse{
+				Following: nil,
+				Errors: []*gotwtr.APIResponseError{
+					{
+						Value:        "111111111122",
+						Detail:       "Could not find user with id: [111111111122].",
+						Title:        "Not Found Error",
+						ResourceType: "user",
+						Parameter:    "id",
+						ResourceID:   "111111111122",
+						Type:         "https://api.twitter.com/2/problems/resource-not-found",
+					},
+				},
+			},
+			wantErr: true,
+		},
+	}
+	for i, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
+			got, err := c.PostFollowing(tt.args.ctx, tt.args.userID, tt.args.targetUserID)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("PostFollowing() index = %v error = %v, wantErr %v", i, err, tt.wantErr)
+				return
+			}
+			if diff := cmp.Diff(got, tt.want); diff != "" {
+				t.Errorf("PostFollowing() index = %v mismatch (-want +got):\n%s", i, diff)
+				return
+			}
+		})
+	}
+}
+
+func Test_undoFollowing(t *testing.T) {
+	t.Parallel()
+	type args struct {
+		ctx          context.Context
+		client       *http.Client
+		sourceUserID string
+		targetUserID string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    *gotwtr.UndoFollowingResponse
+		wantErr bool
+	}{
+		{
+			name: "200 success",
+			args: args{
+				ctx: context.Background(),
+				client: mockHTTPClient(func(req *http.Request) *http.Response {
+					if req.Method != http.MethodDelete {
+						t.Errorf("the method is not correct got %s want %s", req.Method, http.MethodDelete)
+					}
+					body := `{
+						"data": {
+							"following": false
+						}
+					}`
+					return &http.Response{
+						StatusCode: http.StatusOK,
+						Body:       io.NopCloser(strings.NewReader(body)),
+					}
+				}),
+				sourceUserID: "2244994945",
+				targetUserID: "6253282",
+			},
+			want: &gotwtr.UndoFollowingResponse{
+				Following: &gotwtr.Following{
+					Following: false,
+				},
+			},
+			wantErr: false,
+		},
+		{
+			name: "400 request failed",
+			args: args{
+				ctx: context.Background(),
+				client: mockHTTPClient(func(req *http.Request) *http.Response {
+					body := `{
+						"errors": [
+							{
+								"message":"Sorry, that page does not exist,   code:34"
+							}
+						]
+					}`
+					return &http.Response{
+						StatusCode: http.StatusBadRequest,
+						Body:       io.NopCloser(strings.NewReader(body)),
+					}
+				}),
+				sourceUserID: "2244994945",
+				targetUserID: "1228393702244134912",
+			},
+			want: &gotwtr.UndoFollowingResponse{
+				Errors: []*gotwtr.APIResponseError{
+					{
+						Message: "Sorry, that page does not exist,   code:34",
+					},
+				},
+			},
+			wantErr: true,
+		},
+		{
+			name: "403 authentication error",
+			args: args{
+				ctx: context.Background(),
+				client: mockHTTPClient(func(req *http.Request) *http.Response {
+					body := `{
+						"errors": [
+							{
+								"title": "Unsupported Authentication",
+								"detail": "Authenticating with OAuth 2.0 Application-Only is forbidden for this endpoint.   Supported authentication types are [OAuth 1.0a User Context, OAuth 2.0 User Context].",
+								"type": "https://api.twitter.com/2/problems/unsupported-authentication",
+								"status": 403
+							}
+						]
+					}`
+					return &http.Response{
+						StatusCode: http.StatusForbidden,
+						Body:       io.NopCloser(strings.NewReader(body)),
+					}
+				}),
+				sourceUserID: "111111111",
+				targetUserID: "1228393702244134912",
+			},
+			want: &gotwtr.UndoFollowingResponse{
+				Following: nil,
+				Errors: []*gotwtr.APIResponseError{
+					{
+						Title:  "Unsupported Authentication",
+						Detail: "Authenticating with OAuth 2.0 Application-Only is forbidden for this endpoint.   Supported authentication types are [OAuth 1.0a User Context, OAuth 2.0 User Context].",
+						Type:   "https://api.twitter.com/2/problems/unsupported-authentication",
+						Status: 403,
+					},
+				},
+			},
+			wantErr: true,
+		},
+		{
+			name: "404 not found, invalid userID",
+			args: args{
+				ctx: context.Background(),
+				client: mockHTTPClient(func(req *http.Request) *http.Response {
+					body := `{
+						"errors":[
+							{
+								"value":"111111111133",
+								"detail":"Could not find user with id: [111111111133].",
+								"title":"Not Found Error",
+								"resource_type":"user",
+								"parameter":"id",
+								"resource_id":"111111111133",
+								"type":"https://api.twitter.com/2/problems/resource-not-found"
+							}
+						]
+					}`
+					return &http.Response{
+						StatusCode: http.StatusNotFound,
+						Body:       io.NopCloser(strings.NewReader(body)),
+					}
+				}),
+				sourceUserID: "111111111133",
+				targetUserID: "1228393702244134912",
+			},
+			want: &gotwtr.UndoFollowingResponse{
+				Following: nil,
+				Errors: []*gotwtr.APIResponseError{
+					{
+						Value:        "111111111133",
+						Detail:       "Could not find user with id: [111111111133].",
+						Title:        "Not Found Error",
+						ResourceType: "user",
+						Parameter:    "id",
+						ResourceID:   "111111111133",
+						Type:         "https://api.twitter.com/2/problems/resource-not-found",
+					},
+				},
+			},
+			wantErr: true,
+		},
+	}
+	for i, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
+			got, err := c.UndoFollowing(tt.args.ctx, tt.args.sourceUserID, tt.args.targetUserID)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("UndoFollowing() index = %v error = %v, wantErr %v", i, err, tt.wantErr)
+				return
+			}
+			if diff := cmp.Diff(got, tt.want); diff != "" {
+				t.Errorf("UndoFollowing() index = %v mismatch (-want +got):\n%s", i, diff)
 				return
 			}
 		})

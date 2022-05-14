@@ -34,6 +34,8 @@ type Media struct {
 	PublicMetrics    *MediaMetrics `json:"public_metrics,omitempty"`
 	Width            int           `json:"width,omitempty"`
 	AltText          string        `json:"alt_text,omitempty"`
+	MediaIDs         []string      `json:"media_ids,omitempty"`
+	TaggedUserIDs    []string      `json:"tagged_user_ids,omitempty"`
 }
 
 type MediaMetrics struct {

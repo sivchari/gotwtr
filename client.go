@@ -14,20 +14,36 @@ const (
 	userLookUpMaxIDs            = 100
 )
 
+type OAuth interface {
+	GenerateAppOnlyBearerToken(ctx context.Context) (bool, error)
+}
+
 type Tweets interface {
 	RetrieveMultipleTweets(ctx context.Context, tweetIDs []string, opt ...*RetriveTweetOption) (*TweetsResponse, error)
 	RetrieveSingleTweet(ctx context.Context, tweetID string, opt ...*RetriveTweetOption) (*TweetResponse, error)
 	UserMentionTimeline(ctx context.Context, userID string, opt ...*UserMentionTimelineOption) (*UserMentionTimelineResponse, error)
 	UserTweetTimeline(ctx context.Context, userID string, opt ...*UserTweetTimelineOption) (*UserTweetTimelineResponse, error)
 	SearchRecentTweets(ctx context.Context, tweet string, opt ...*SearchTweetsOption) (*SearchTweetsResponse, error)
-	CountsRecentTweet(ctx context.Context, tweet string, opt ...*TweetCountsOption) (*TweetCountsResponse, error)
+	CountRecentTweets(ctx context.Context, tweet string, opt ...*TweetCountsOption) (*TweetCountsResponse, error)
+	CountAllTweets(ctx context.Context, tweet string, opt ...*TweetCountsAllOption) (*TweetCountsResponse, error)
 	AddOrDeleteRules(ctx context.Context, body *AddOrDeleteJSONBody, opt ...*AddOrDeleteRulesOption) (*AddOrDeleteRulesResponse, error)
 	RetrieveStreamRules(ctx context.Context, opt ...*RetrieveStreamRulesOption) (*RetrieveStreamRulesResponse, error)
 	ConnectToStream(ctx context.Context, ch chan<- ConnectToStreamResponse, errCh chan<- error, opt ...*ConnectToStreamOption) *ConnectToStream
 	VolumeStreams(ctx context.Context, ch chan<- VolumeStreamsResponse, errCh chan<- error, opt ...*VolumeStreamsOption) *VolumeStreams
 	RetweetsLookup(ctx context.Context, tweetID string, opt ...*RetweetsLookupOption) (*RetweetsResponse, error)
-	TweetsUserLiked(ctx context.Context, userID string, opt ...*TweetsUserLikedOpts) (*TweetsUserLikedResponse, error)
+	PostRetweet(ctx context.Context, userID string, tweetID string) (*PostRetweetResponse, error)
+	UndoRetweet(ctx context.Context, userID string, sourceTweetID string) (*UndoRetweetResponse, error)
+	TweetsUserLiked(ctx context.Context, userID string, opt ...*TweetsUserLikedOption) (*TweetsUserLikedResponse, error)
 	UsersLikingTweet(ctx context.Context, tweetID string, opt ...*UsersLikingTweetOption) (*UsersLikingTweetResponse, error)
+	PostUsersLikingTweet(ctx context.Context, userID string, tweetID string) (*PostUsersLikingTweetResponse, error)
+	UndoUsersLikingTweet(ctx context.Context, userID string, tweetID string) (*UndoUsersLikingTweetResponse, error)
+	SearchAllTweets(ctx context.Context, tweet string, opt ...*SearchTweetsOption) (*SearchTweetsResponse, error)
+	PostTweet(ctx context.Context, body *PostTweetOption) (*PostTweetResponse, error)
+	DeleteTweet(ctx context.Context, tweetID string) (*DeleteTweetResponse, error)
+	HideReplies(ctx context.Context, tweetID string, hidden bool) (*HideRepliesResponse, error)
+	LookupUserBookmarks(ctx context.Context, userID string, opt ...*LookupUserBookmarksOption) (*LookupUserBookmarksResponse, error)
+	BookmarkTweet(ctx context.Context, userID string, body *BookmarkTweetBody) (*BookmarkTweetResponse, error)
+	RemoveBookmarkOfTweet(ctx context.Context, userID string, tweetID string) (*RemoveBookmarkOfTweetResponse, error)
 }
 
 type Users interface {
@@ -37,6 +53,14 @@ type Users interface {
 	RetrieveSingleUserWithUserName(ctx context.Context, userName string, opt ...*RetrieveUserOption) (*UserResponse, error)
 	Followers(ctx context.Context, userID string, opt ...*FollowOption) (*FollowersResponse, error)
 	Following(ctx context.Context, userID string, opt ...*FollowOption) (*FollowingResponse, error)
+	PostFollowing(ctx context.Context, userID string, targetUserID string) (*PostFollowingResponse, error)
+	UndoFollowing(ctx context.Context, sourceUserID string, targetUserID string) (*UndoFollowingResponse, error)
+	Blocking(ctx context.Context, userID string, opt ...*BlockOption) (*BlockingResponse, error)
+	PostBlocking(ctx context.Context, userID string, targetUserID string) (*PostBlockingResponse, error)
+	UndoBlocking(ctx context.Context, sourceUserID string, targetUserID string) (*UndoBlockingResponse, error)
+	Muting(ctx context.Context, userID string, opt ...*MuteOption) (*MutingResponse, error)
+	PostMuting(ctx context.Context, userID string, targetUserID string) (*PostMutingResponse, error)
+	UndoMuting(ctx context.Context, sourceUserID string, targetUserID string) (*UndoMutingResponse, error)
 }
 
 type Spaces interface {
@@ -48,26 +72,46 @@ type Spaces interface {
 }
 
 type Lists interface {
+	CreateNewList(ctx context.Context, body *CreateNewListBody) (*CreateNewListResponse, error)
+	DeleteList(ctx context.Context, listID string) (*DeleteListResponse, error)
 	LookUpList(ctx context.Context, listID string, opt ...*LookUpListOption) (*ListResponse, error)
 	LookUpAllListsOwned(ctx context.Context, userID string, opt ...*AllListsOwnedOption) (*AllListsOwnedResponse, error)
 	LookUpListTweets(ctx context.Context, listID string, opt ...*ListTweetsOption) (*ListTweetsResponse, error)
 	ListMembers(ctx context.Context, listID string, opt ...*ListMembersOption) (*ListMembersResponse, error)
 	ListsSpecifiedUser(ctx context.Context, userID string, opt ...*ListsSpecifiedUserOption) (*ListsSpecifiedUserResponse, error)
-	LookUpListFollowers(ctx context.Context, listID string, opt ...*ListFollowersOption) (*ListFollowersResponse, error)
-	LookUpAllListsUserFollows(ctx context.Context, userID string, opt ...*ListFollowsOption) (*AllListsUserFollowsResponse, error)
+	PostListMembers(ctx context.Context, listID string, userID string) (*PostListMembersResponse, error)
+	UndoListMembers(ctx context.Context, listID string, userID string) (*UndoListMembersResponse, error)
+	ListFollowers(ctx context.Context, listID string, opt ...*ListFollowersOption) (*ListFollowersResponse, error)
+	AllListsUserFollows(ctx context.Context, userID string, opt ...*ListFollowsOption) (*AllListsUserFollowsResponse, error)
+	PostListFollows(ctx context.Context, listID string, userID string) (*PostListFollowsResponse, error)
+	UndoListFollows(ctx context.Context, listID string, userID string) (*UndoListFollowsResponse, error)
+	PinnedLists(ctx context.Context, userID string, opt ...*PinnedListsOption) (*PinnedListsResponse, error)
+	PostPinnedLists(ctx context.Context, listID string, userID string) (*PostPinnedListsResponse, error)
+	UndoPinnedLists(ctx context.Context, listID string, userID string) (*UndoPinnedListsResponse, error)
+	UpdateMetaDataForList(ctx context.Context, listID string, body ...*UpdateMetaDataForListBody) (*UpdateMetaDataForListResponse, error)
+}
+
+type Compliances interface {
+	ComplianceJob(ctx context.Context, complianceJobID int) (*ComplianceJobResponse, error)
+	ComplianceJobs(ctx context.Context, opt *ComplianceJobsOption) (*ComplianceJobsResponse, error)
+	CreateComplianceJob(ctx context.Context, opt ...*CreateComplianceJobOption) (*CreateComplianceJobResponse, error)
 }
 
 // Twtr is a main interface for all Twitter API calls.
 type Twtr interface {
+	OAuth
 	Tweets
 	Users
 	Spaces
 	Lists
+	Compliances
 }
 
 type client struct {
-	bearerToken string
-	client      *http.Client
+	consumerKey    string
+	consumerSecret string
+	bearerToken    string
+	client         *http.Client
 }
 
 // Client is an API client for Twitter v2 API.
@@ -79,6 +123,18 @@ var _ Twtr = (*Client)(nil)
 
 type ClientOption func(*client)
 
+func WithConsumerKey(consumerKey string) ClientOption {
+	return func(c *client) {
+		c.consumerKey = consumerKey
+	}
+}
+
+func WithConsumerSecret(consumerSecret string) ClientOption {
+	return func(c *client) {
+		c.consumerSecret = consumerSecret
+	}
+}
+
 func WithHTTPClient(httpClient *http.Client) ClientOption {
 	return func(c *client) {
 		c.client = httpClient
@@ -87,8 +143,10 @@ func WithHTTPClient(httpClient *http.Client) ClientOption {
 
 func New(bearerToken string, opts ...ClientOption) *Client {
 	c := &client{
-		bearerToken: bearerToken,
-		client:      http.DefaultClient,
+		consumerKey:    "",
+		consumerSecret: "",
+		bearerToken:    bearerToken,
+		client:         http.DefaultClient,
 	}
 	for _, opt := range opts {
 		opt(c)
@@ -96,6 +154,11 @@ func New(bearerToken string, opts ...ClientOption) *Client {
 	return &Client{
 		client: c,
 	}
+}
+
+// GenerateAppOnlyBearerToken generates a bearer token for app-only auth.
+func (c *client) GenerateAppOnlyBearerToken(ctx context.Context) (bool, error) {
+	return generateAppOnlyBearerToken(ctx, c)
 }
 
 // RetrieveMultipleTweets returns a variety of information about the Tweet specified by the requested ID or list of IDs.
@@ -108,7 +171,7 @@ func (c *Client) RetrieveSingleTweet(ctx context.Context, tweetID string, opt ..
 	return retrieveSingleTweet(ctx, c.client, tweetID, opt...)
 }
 
-// UserMensionTimeline returns Tweets mentioning a single user specified by the requested userID.
+// UserMentionTimeline returns Tweets mentioning a single user specified by the requested userID.
 // By default, the most recent ten Tweets are returned per request. Using pagination, up to the most recent 800 Tweets can be retrieved.
 func (c *Client) UserMentionTimeline(ctx context.Context, userID string, opt ...*UserMentionTimelineOption) (*UserMentionTimelineResponse, error) {
 	return userMentionTimeline(ctx, c.client, userID, opt...)
@@ -126,9 +189,50 @@ func (c *Client) SearchRecentTweets(ctx context.Context, tweet string, opt ...*S
 	return searchRecentTweets(ctx, c.client, tweet, opt...)
 }
 
-// CountsRecentTweet returns count of Tweets from the last seven days that match a query.
-func (c *Client) CountsRecentTweet(ctx context.Context, tweet string, opt ...*TweetCountsOption) (*TweetCountsResponse, error) {
-	return countsRecentTweet(ctx, c.client, tweet, opt...)
+// SearchAllTweets returns Tweets since the first Tweet was created on March 26, 2006.
+// This endpoint is only available to those users who have been approved for Academic Research access.
+func (c *client) SearchAllTweets(ctx context.Context, tweet string, opt ...*SearchTweetsOption) (*SearchTweetsResponse, error) {
+	return searchAllTweets(ctx, c, tweet, opt...)
+}
+
+// PostTweet creates a Tweet on behalf of an authenticated user.
+func (c *client) PostTweet(ctx context.Context, body *PostTweetOption) (*PostTweetResponse, error) {
+	return postTweet(ctx, c, body)
+}
+
+// DeleteTweet allows a user or authenticated user ID to delete a Tweet.
+func (c *client) DeleteTweet(ctx context.Context, tweetID string) (*DeleteTweetResponse, error) {
+	return deleteTweet(ctx, c, tweetID)
+}
+
+// HideReplies hides or unhides a reply to a Tweet.
+func (c *client) HideReplies(ctx context.Context, tweetID string, hidden bool) (*HideRepliesResponse, error) {
+	return hideReplies(ctx, c, tweetID, hidden)
+}
+
+// LookupUserBookmarks returns the count of Tweets from the last seven days that match a query.
+func (c *Client) LookupUserBookmarks(ctx context.Context, userID string, opt ...*LookupUserBookmarksOption) (*LookupUserBookmarksResponse, error) {
+	return lookupUserBookmarks(ctx, c.client, userID, opt...)
+}
+
+// BookmarkTweet returns the count of Tweets from the last seven days that match a query.
+func (c *Client) BookmarkTweet(ctx context.Context, userID string, body *BookmarkTweetBody) (*BookmarkTweetResponse, error) {
+	return bookmarkTweet(ctx, c.client, userID, body)
+}
+
+// RemoveBookmarkOfTweet returns the count of Tweets from the last seven days that match a query.
+func (c *Client) RemoveBookmarkOfTweet(ctx context.Context, userID string, tweetID string) (*RemoveBookmarkOfTweetResponse, error) {
+	return removeBookmarkOfTweet(ctx, c.client, userID, tweetID)
+}
+
+// CountRecentTweets returns the count of Tweets from the last seven days that match a query.
+func (c *Client) CountRecentTweets(ctx context.Context, tweet string, opt ...*TweetCountsOption) (*TweetCountsResponse, error) {
+	return countRecentTweets(ctx, c.client, tweet, opt...)
+}
+
+// CountAllTweets returns the count of Tweets that match your query from the complete history of public Tweets; since the first Tweet was created March 26, 2006.
+func (c *Client) CountAllTweets(ctx context.Context, tweet string, opt ...*TweetCountsAllOption) (*TweetCountsResponse, error) {
+	return countAllTweets(ctx, c.client, tweet, opt...)
 }
 
 // AddOrDeleteRules To create one or more rules, submit an add JSON body with an array of rules and operators.
@@ -137,7 +241,7 @@ func (c *Client) AddOrDeleteRules(ctx context.Context, body *AddOrDeleteJSONBody
 	return addOrDeleteRules(ctx, c.client, body, opt...)
 }
 
-// RetriveStreamRules return a list of rules currently active on the streaming endpoint, either as a list or individually.
+// RetrieveStreamRules return a list of rules currently active on the streaming endpoint, either as a list or individually.
 func (c *Client) RetrieveStreamRules(ctx context.Context, opt ...*RetrieveStreamRulesOption) (*RetrieveStreamRulesResponse, error) {
 	return retrieveStreamRules(ctx, c.client, opt...)
 }
@@ -157,9 +261,19 @@ func (c *Client) RetweetsLookup(ctx context.Context, tweetID string, opt ...*Ret
 	return retweetsLookup(ctx, c.client, tweetID, opt...)
 }
 
+// PostRetweet causes the user ID identified in the path parameter to Retweet the target Tweet.
+func (c *client) PostRetweet(ctx context.Context, userID string, tweetID string) (*PostRetweetResponse, error) {
+	return postRetweet(ctx, c, userID, tweetID)
+}
+
+// UndoRetweet allows a user or authenticated user ID to remove the Retweet of a Tweet.
+func (c *client) UndoRetweet(ctx context.Context, userID string, sourceTweetID string) (*UndoRetweetResponse, error) {
+	return undoRetweet(ctx, c, userID, sourceTweetID)
+}
+
 // TweetsUserLiked allows you to get information about a Tweet’s liking users.
 // You will receive the most recent 100 users who liked the specified Tweet.
-func (c *Client) TweetsUserLiked(ctx context.Context, userID string, opt ...*TweetsUserLikedOpts) (*TweetsUserLikedResponse, error) {
+func (c *Client) TweetsUserLiked(ctx context.Context, userID string, opt ...*TweetsUserLikedOption) (*TweetsUserLikedResponse, error) {
 	return tweetsUserLiked(ctx, c.client, userID, opt...)
 }
 
@@ -168,12 +282,23 @@ func (c *Client) UsersLikingTweet(ctx context.Context, tweetID string, opt ...*U
 	return usersLikingTweet(ctx, c.client, tweetID, opt...)
 }
 
+// PostUsersLikingTweet causes the user ID identified in the path parameter to Like the target Tweet.
+func (c *client) PostUsersLikingTweet(ctx context.Context, userID string, tweetID string) (*PostUsersLikingTweetResponse, error) {
+	return postUsersLikingTweet(ctx, c, userID, tweetID)
+}
+
+// UndoUsersLikingTweet allows a user or authenticated user ID to unlike a Tweet.
+// The request succeeds with no action when the user sends a request to a user they're not liking the Tweet or have already unliked the Tweet.
+func (c *client) UndoUsersLikingTweet(ctx context.Context, userID string, tweetID string) (*UndoUsersLikingTweetResponse, error) {
+	return undoUsersLikingTweet(ctx, c, userID, tweetID)
+}
+
 // RetrieveMultipleUsersWithIDs returns a variety of information about one or more users specified by the requested userIDs.
 func (c *Client) RetrieveMultipleUsersWithIDs(ctx context.Context, userIDs []string, opt ...*RetrieveUserOption) (*UsersResponse, error) {
 	return retrieveMultipleUsersWithIDs(ctx, c.client, userIDs, opt...)
 }
 
-// RetrieveSingleWithID returns a variety of information about a single user specified by the requested userID.
+// RetrieveSingleUserWithID returns a variety of information about a single user specified by the requested userID.
 func (c *Client) RetrieveSingleUserWithID(ctx context.Context, userID string, opt ...*RetrieveUserOption) (*UserResponse, error) {
 	return retrieveSingleUserWithID(ctx, c.client, userID, opt...)
 }
@@ -196,6 +321,48 @@ func (c *Client) Followers(ctx context.Context, userID string, opt ...*FollowOpt
 // Following returns a list of users the specified userID is following.
 func (c *Client) Following(ctx context.Context, userID string, opt ...*FollowOption) (*FollowingResponse, error) {
 	return following(ctx, c.client, userID, opt...)
+}
+
+// PostFollowing allows a user ID to follow another user.
+// If the target user does not have public Tweets, this method will send a follow request.
+func (c *Client) PostFollowing(ctx context.Context, userID string, targetUserID string) (*PostFollowingResponse, error) {
+	return postFollowing(ctx, c.client, userID, targetUserID)
+}
+
+// UndoFollowing allows a user ID to unfollow another user.
+func (c *Client) UndoFollowing(ctx context.Context, sourceUserID string, targetUserID string) (*UndoFollowingResponse, error) {
+	return undoFollowing(ctx, c.client, sourceUserID, targetUserID)
+}
+
+// Blocking returns a list of users who are blocked by the specified user ID.
+func (c *Client) Blocking(ctx context.Context, userID string, opt ...*BlockOption) (*BlockingResponse, error) {
+	return blocking(ctx, c.client, userID, opt...)
+}
+
+// PostBlocking causes the user (in the path) to block the target user.
+// The user (in the path) must match the user Access Tokens being used to authorize the request.
+func (c *Client) PostBlocking(ctx context.Context, userID string, targetUserID string) (*PostBlockingResponse, error) {
+	return postBlocking(ctx, c.client, userID, targetUserID)
+}
+
+// UndoBlocking allows a user or authenticated user ID to unblock another user.
+func (c *Client) UndoBlocking(ctx context.Context, sourceUserID string, targetUserID string) (*UndoBlockingResponse, error) {
+	return undoBlocking(ctx, c.client, sourceUserID, targetUserID)
+}
+
+// Muting returns a list of users who are muted by the specified user ID.
+func (c *Client) Muting(ctx context.Context, userID string, opt ...*MuteOption) (*MutingResponse, error) {
+	return muting(ctx, c.client, userID, opt...)
+}
+
+// PostMuting allows an authenticated user ID to mute the target user.
+func (c *Client) PostMuting(ctx context.Context, userID string, targetUserID string) (*PostMutingResponse, error) {
+	return postMuting(ctx, c.client, userID, targetUserID)
+}
+
+// UndoMuting allows an authenticated user ID to unmute the target user.
+func (c *Client) UndoMuting(ctx context.Context, sourceUserID string, targetUserID string) (*UndoMutingResponse, error) {
+	return undoMuting(ctx, c.client, sourceUserID, targetUserID)
 }
 
 // LookUpSpace returns a variety of information about a single Space specified by the requested ID.
@@ -227,6 +394,16 @@ func (c *Client) SearchSpaces(ctx context.Context, searchTerm string, opt ...*Se
 	return searchSpaces(ctx, c.client, searchTerm, opt...)
 }
 
+// CreateNewList enables the authenticated user to create a List.
+func (c *Client) CreateNewList(ctx context.Context, body *CreateNewListBody) (*CreateNewListResponse, error) {
+	return createNewList(ctx, c.client, body)
+}
+
+// DeleteList enables the authenticated user to delete a List that they own.
+func (c *Client) DeleteList(ctx context.Context, listID string) (*DeleteListResponse, error) {
+	return deleteList(ctx, c.client, listID)
+}
+
 // LookUpList returns the details of a specified List.
 func (c *Client) LookUpList(ctx context.Context, listID string, opt ...*LookUpListOption) (*ListResponse, error) {
 	return lookUpList(ctx, c.client, listID, opt...)
@@ -242,22 +419,77 @@ func (c *Client) LookUpListTweets(ctx context.Context, listID string, opt ...*Li
 	return lookUpListTweets(ctx, c.client, listID, opt...)
 }
 
+// ListMembers returns a list of users who are members of the specified List.
+func (c *Client) ListMembers(ctx context.Context, listID string, opt ...*ListMembersOption) (*ListMembersResponse, error) {
+	return listMembers(ctx, c.client, listID, opt...)
+}
+
 // ListsSpecifiedUser returns all Lists a specified user is a member of that.
 func (c *Client) ListsSpecifiedUser(ctx context.Context, userID string, opt ...*ListsSpecifiedUserOption) (*ListsSpecifiedUserResponse, error) {
 	return listsSpecifiedUser(ctx, c.client, userID, opt...)
 }
 
-// ListMembers returns a list of users who are members of the specified List.
-func (c *Client) ListMembers(ctx context.Context, listid string, opt ...*ListMembersOption) (*ListMembersResponse, error) {
-	return listMembers(ctx, c.client, listid, opt...)
+// PostListMembers enables the authenticated user to add a member to a List they own.
+func (c *Client) PostListMembers(ctx context.Context, listID string, userID string) (*PostListMembersResponse, error) {
+	return postListMembers(ctx, c.client, listID, userID)
 }
 
-// LookUpListFollowers returns a list of users who are followers of the specified List.
-func (c *Client) LookUpListFollowers(ctx context.Context, listID string, opt ...*ListFollowersOption) (*ListFollowersResponse, error) {
-	return lookUpListFollowers(ctx, c.client, listID, opt...)
+// UndoListMembers enables the authenticated user to remove a member from a List they own.
+func (c *Client) UndoListMembers(ctx context.Context, listID string, userID string) (*UndoListMembersResponse, error) {
+	return undoListMembers(ctx, c.client, listID, userID)
 }
 
-// LookUpAllListsUserFollows returns all Lists a specified user follows.
-func (c *Client) LookUpAllListsUserFollows(ctx context.Context, userID string, opt ...*ListFollowsOption) (*AllListsUserFollowsResponse, error) {
-	return lookUpAllListsUserFollows(ctx, c.client, userID, opt...)
+// ListFollowers returns a list of users who are followers of the specified List.
+func (c *Client) ListFollowers(ctx context.Context, listID string, opt ...*ListFollowersOption) (*ListFollowersResponse, error) {
+	return listFollowers(ctx, c.client, listID, opt...)
+}
+
+// AllListsUserFollows returns all Lists a specified user follows.
+func (c *Client) AllListsUserFollows(ctx context.Context, userID string, opt ...*ListFollowsOption) (*AllListsUserFollowsResponse, error) {
+	return allListsUserFollows(ctx, c.client, userID, opt...)
+}
+
+// PostListFollows enables the authenticated user to follow a List.
+func (c *Client) PostListFollows(ctx context.Context, listID string, userID string) (*PostListFollowsResponse, error) {
+	return postListFollows(ctx, c.client, listID, userID)
+}
+
+// UndoListFollows enables the authenticated user to unfollow a List.
+func (c *Client) UndoListFollows(ctx context.Context, listID string, userID string) (*UndoListFollowsResponse, error) {
+	return undoListFollows(ctx, c.client, listID, userID)
+}
+
+// PinnedLists returns the Lists pinned by a specified user.
+func (c *Client) PinnedLists(ctx context.Context, userID string, opt ...*PinnedListsOption) (*PinnedListsResponse, error) {
+	return pinnedLists(ctx, c.client, userID, opt...)
+}
+
+// PostPinnedLists enables the authenticated user to pin a List.
+func (c *Client) PostPinnedLists(ctx context.Context, listID string, userID string) (*PostPinnedListsResponse, error) {
+	return postPinnedLists(ctx, c.client, listID, userID)
+}
+
+// UndoPinnedLists enables the authenticated user to unpin a List.
+func (c *Client) UndoPinnedLists(ctx context.Context, listID string, userID string) (*UndoPinnedListsResponse, error) {
+	return undoPinnedLists(ctx, c.client, listID, userID)
+}
+
+// ComplianceJobs returns a list of recent compliance jobs.
+func (c *Client) ComplianceJobs(ctx context.Context, opt *ComplianceJobsOption) (*ComplianceJobsResponse, error) {
+	return complianceJobs(ctx, c.client, opt)
+}
+
+// ComplianceJob returns a single compliance job with the specified ID.
+func (c *Client) ComplianceJob(ctx context.Context, complianceJobID int) (*ComplianceJobResponse, error) {
+	return complianceJob(ctx, c.client, complianceJobID)
+}
+
+// CreateComplianceJob create a compliance job.
+func (c *Client) CreateComplianceJob(ctx context.Context, opt ...*CreateComplianceJobOption) (*CreateComplianceJobResponse, error) {
+	return createComplianceJob(ctx, c.client, opt...)
+}
+
+// UpdateMetaDataForList enables the authenticated user to update the meta data of a specified List that they own.
+func (c *Client) UpdateMetaDataForList(ctx context.Context, listID string, body ...*UpdateMetaDataForListBody) (*UpdateMetaDataForListResponse, error) {
+	return updateMetaDataForList(ctx, c.client, listID, body...)
 }

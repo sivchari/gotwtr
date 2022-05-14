@@ -233,7 +233,8 @@ type TimeseriesCount struct {
 }
 
 type TweetCountMeta struct {
-	TotalTweetCount int `json:"total_tweet_count"`
+	TotalTweetCount int    `json:"total_tweet_count"`
+	NextToken       string `json:"next_token,omitempty"`
 }
 
 type TweetCountsResponse struct {
@@ -434,6 +435,24 @@ type UsersLikingTweetResponse struct {
 	Errors   []*APIResponseError          `json:"errors,omitempty"`
 }
 
+type PostUsersLikingTweetResponse struct {
+	Liked  *Liked              `json:"data"`
+	Errors []*APIResponseError `json:"errors,omitempty"`
+}
+
+type UndoUsersLikingTweetResponse struct {
+	Liked  *Liked              `json:"data"`
+	Errors []*APIResponseError `json:"errors,omitempty"`
+}
+
+type Liked struct {
+	Liked bool `json:"liked"`
+}
+
+type UsersLikingBody struct {
+	TweetID string `json:"tweet_id"`
+}
+
 type LookUpUsersWhoLikedIncludes struct {
 	Tweets []*Tweet `json:"tweets"`
 }
@@ -592,4 +611,78 @@ type TweetsUserLikedResponse struct {
 type TweetsUserLikedMeta struct {
 	ResultCount int    `json:"result_count"`
 	NextToken   string `json:"next_token"`
+}
+
+type TweetReply struct {
+	ExcludeReplyUserIDs []string `json:"exclude_reply_user_ids"`
+	InReplyToTweetID    string   `json:"in_reply_to_tweet_id"`
+}
+
+type PostTweetResponse struct {
+	PostTweetData PostTweetData `json:"data"`
+}
+
+type PostTweetData struct {
+	ID   string `json:"id"`
+	Text string `json:"text"`
+}
+
+type DeleteTweetResponse struct {
+	Data DeleteTweetData `json:"data"`
+}
+
+type DeleteTweetData struct {
+	Deleted bool `json:"deleted"`
+}
+
+type HideRepliesResponse struct {
+	HideRepliesResponseData *HideRepliesResponseData `json:"data"`
+	Errors                  []*APIResponseError      `json:"errors,omitempty"`
+}
+
+type HideRepliesResponseData struct {
+	Hidden bool `json:"hidden"`
+}
+
+type LookupUserBookmarksResponse struct {
+	Tweets   []*Tweet                 `json:"data"`
+	Includes *TweetIncludes           `json:"includes,omitempty"`
+	Meta     *LookupUserBookmarksMeta `json:"meta"`
+	Errors   []*APIResponseError      `json:"errors,omitempty"`
+	Title    string                   `json:"title,omitempty"`
+	Detail   string                   `json:"detail,omitempty"`
+	Type     string                   `json:"type,omitempty"`
+}
+
+type LookupUserBookmarksMeta struct {
+	ResultCount int    `json:"result_count"`
+	NextToken   string `json:"next_token"`
+}
+
+type BookmarkTweetBody struct {
+	TweetID string `json:"tweet_id"`
+}
+
+type BookmarkTweetResponse struct {
+	BookmarkTweetData *BookmarkTweetData  `json:"data"`
+	Errors            []*APIResponseError `json:"errors,omitempty"`
+	Title             string              `json:"title,omitempty"`
+	Detail            string              `json:"detail,omitempty"`
+	Type              string              `json:"type,omitempty"`
+}
+
+type BookmarkTweetData struct {
+	Bookmarked bool `json:"bookmarked"`
+}
+
+type RemoveBookmarkOfTweetResponse struct {
+	RemoveBookmarkOfTweetData *RemoveBookmarkOfTweetData `json:"data"`
+	Errors                    []*APIResponseError        `json:"errors,omitempty"`
+	Title                     string                     `json:"title,omitempty"`
+	Detail                    string                     `json:"detail,omitempty"`
+	Type                      string                     `json:"type,omitempty"`
+}
+
+type RemoveBookmarkOfTweetData struct {
+	Bookmarks bool `json:"bookmarks"`
 }
