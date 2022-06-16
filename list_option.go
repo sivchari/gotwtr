@@ -18,7 +18,7 @@ func (l LookUpListOption) addQuery(req *http.Request) {
 		q.Add("expansions", strings.Join(expansionsToString(l.Expansions), ","))
 	}
 	if len(l.ListFields) > 0 {
-		q.Add("list.fields", strings.Join(listFieldsToString(l.ListFields), "."))
+		q.Add("list.fields", strings.Join(listFieldsToString(l.ListFields), ","))
 	}
 	if len(l.UserFields) > 0 {
 		q.Add("user.fields", strings.Join(userFieldsToString(l.UserFields), ","))
@@ -42,7 +42,7 @@ func (a AllListsOwnedOption) addQuery(req *http.Request) {
 		q.Add("expansions", strings.Join(expansionsToString(a.Expansions), ","))
 	}
 	if len(a.ListFields) > 0 {
-		q.Add("list.fields", strings.Join(listFieldsToString(a.ListFields), "."))
+		q.Add("list.fields", strings.Join(listFieldsToString(a.ListFields), ","))
 	}
 	if a.MaxResults > 0 {
 		q.Add("max_results", strconv.Itoa(a.MaxResults))
@@ -78,7 +78,7 @@ func (l ListTweetsOption) addQuery(req *http.Request) {
 		q.Add("pagination_token", l.PaginationToken)
 	}
 	if len(l.TweetFields) > 0 {
-		q.Add("tweet.fields", strings.Join(tweetFieldsToString(l.TweetFields), "."))
+		q.Add("tweet.fields", strings.Join(tweetFieldsToString(l.TweetFields), ","))
 	}
 	if len(l.UserFields) > 0 {
 		q.Add("user.fields", strings.Join(userFieldsToString(l.UserFields), ","))
@@ -108,7 +108,7 @@ func (l ListMembersOption) addQuery(req *http.Request) {
 		q.Add("pagination_token", l.PaginationToken)
 	}
 	if len(l.TweetFields) > 0 {
-		q.Add("tweet.fields", strings.Join(tweetFieldsToString(l.TweetFields), "."))
+		q.Add("tweet.fields", strings.Join(tweetFieldsToString(l.TweetFields), ","))
 	}
 	if len(l.UserFields) > 0 {
 		q.Add("user.fields", strings.Join(userFieldsToString(l.UserFields), ","))
@@ -132,7 +132,7 @@ func (l ListFollowsOption) addQuery(req *http.Request) {
 		q.Add("expansions", strings.Join(expansionsToString(l.Expansions), ","))
 	}
 	if len(l.ListFields) > 0 {
-		q.Add("list.fields", strings.Join(listFieldsToString(l.ListFields), "."))
+		q.Add("list.fields", strings.Join(listFieldsToString(l.ListFields), ","))
 	}
 	if l.MaxResults > 0 {
 		q.Add("max_results", strconv.Itoa(l.MaxResults))
@@ -168,7 +168,7 @@ func (l ListFollowersOption) addQuery(req *http.Request) {
 		q.Add("pagination_token", l.PaginationToken)
 	}
 	if len(l.TweetFields) > 0 {
-		q.Add("tweet.fields", strings.Join(tweetFieldsToString(l.TweetFields), "."))
+		q.Add("tweet.fields", strings.Join(tweetFieldsToString(l.TweetFields), ","))
 	}
 	if len(l.UserFields) > 0 {
 		q.Add("user.fields", strings.Join(userFieldsToString(l.UserFields), ","))
@@ -192,7 +192,7 @@ func (l *ListsSpecifiedUserOption) addQuery(req *http.Request) {
 		q.Add("expansions", strings.Join(expansionsToString(l.Expansions), ","))
 	}
 	if len(l.ListFields) > 0 {
-		q.Add("tweet.fields", strings.Join(listFieldsToString(l.ListFields), "."))
+		q.Add("tweet.fields", strings.Join(listFieldsToString(l.ListFields), ","))
 	}
 	if l.MaxResults > 0 {
 		q.Add("max_results", strconv.Itoa(l.MaxResults))
@@ -220,7 +220,7 @@ func (l *PinnedListsOption) addQuery(req *http.Request) {
 		q.Add("expansions", strings.Join(expansionsToString(l.Expansions), ","))
 	}
 	if len(l.ListFields) > 0 {
-		q.Add("tweet.fields", strings.Join(listFieldsToString(l.ListFields), "."))
+		q.Add("tweet.fields", strings.Join(listFieldsToString(l.ListFields), ","))
 	}
 	if len(l.UserFields) > 0 && len(l.Expansions) > 0 {
 		q.Add("user.fields", strings.Join(userFieldsToString(l.UserFields), ","))
