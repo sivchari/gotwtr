@@ -19,81 +19,110 @@ type OAuth interface {
 }
 
 type Tweets interface {
-	RetrieveMultipleTweets(ctx context.Context, tweetIDs []string, opt ...*RetriveTweetOption) (*TweetsResponse, error)
-	RetrieveSingleTweet(ctx context.Context, tweetID string, opt ...*RetriveTweetOption) (*TweetResponse, error)
-	UserMentionTimeline(ctx context.Context, userID string, opt ...*UserMentionTimelineOption) (*UserMentionTimelineResponse, error)
-	UserTweetTimeline(ctx context.Context, userID string, opt ...*UserTweetTimelineOption) (*UserTweetTimelineResponse, error)
-	SearchRecentTweets(ctx context.Context, tweet string, opt ...*SearchTweetsOption) (*SearchTweetsResponse, error)
-	CountRecentTweets(ctx context.Context, tweet string, opt ...*TweetCountsOption) (*TweetCountsResponse, error)
-	CountAllTweets(ctx context.Context, tweet string, opt ...*TweetCountsAllOption) (*TweetCountsResponse, error)
-	AddOrDeleteRules(ctx context.Context, body *AddOrDeleteJSONBody, opt ...*AddOrDeleteRulesOption) (*AddOrDeleteRulesResponse, error)
-	RetrieveStreamRules(ctx context.Context, opt ...*RetrieveStreamRulesOption) (*RetrieveStreamRulesResponse, error)
-	ConnectToStream(ctx context.Context, ch chan<- ConnectToStreamResponse, errCh chan<- error, opt ...*ConnectToStreamOption) *ConnectToStream
-	VolumeStreams(ctx context.Context, ch chan<- VolumeStreamsResponse, errCh chan<- error, opt ...*VolumeStreamsOption) *VolumeStreams
-	RetweetsLookup(ctx context.Context, tweetID string, opt ...*RetweetsLookupOption) (*RetweetsResponse, error)
-	PostRetweet(ctx context.Context, userID string, tweetID string) (*PostRetweetResponse, error)
-	UndoRetweet(ctx context.Context, userID string, sourceTweetID string) (*UndoRetweetResponse, error)
-	TweetsUserLiked(ctx context.Context, userID string, opt ...*TweetsUserLikedOption) (*TweetsUserLikedResponse, error)
-	UsersLikingTweet(ctx context.Context, tweetID string, opt ...*UsersLikingTweetOption) (*UsersLikingTweetResponse, error)
-	PostUsersLikingTweet(ctx context.Context, userID string, tweetID string) (*PostUsersLikingTweetResponse, error)
-	UndoUsersLikingTweet(ctx context.Context, userID string, tweetID string) (*UndoUsersLikingTweetResponse, error)
-	SearchAllTweets(ctx context.Context, tweet string, opt ...*SearchTweetsOption) (*SearchTweetsResponse, error)
-	PostTweet(ctx context.Context, body *PostTweetOption) (*PostTweetResponse, error)
-	DeleteTweet(ctx context.Context, tweetID string) (*DeleteTweetResponse, error)
-	HideReplies(ctx context.Context, tweetID string, hidden bool) (*HideRepliesResponse, error)
+	// Bookmarks
+	RemoveBookmarkOfTweet(ctx context.Context, userID string, tweetID string) (*RemoveBookmarkOfTweetResponse, error)
 	LookupUserBookmarks(ctx context.Context, userID string, opt ...*LookupUserBookmarksOption) (*LookupUserBookmarksResponse, error)
 	BookmarkTweet(ctx context.Context, userID string, body *BookmarkTweetBody) (*BookmarkTweetResponse, error)
-	RemoveBookmarkOfTweet(ctx context.Context, userID string, tweetID string) (*RemoveBookmarkOfTweetResponse, error)
+	// Filtered stream
+	ConnectToStream(ctx context.Context, ch chan<- ConnectToStreamResponse, errCh chan<- error, opt ...*ConnectToStreamOption) *ConnectToStream
+	RetrieveStreamRules(ctx context.Context, opt ...*RetrieveStreamRulesOption) (*RetrieveStreamRulesResponse, error)
+	AddOrDeleteRules(ctx context.Context, body *AddOrDeleteJSONBody, opt ...*AddOrDeleteRulesOption) (*AddOrDeleteRulesResponse, error)
+	// Hide replies
+	HideReplies(ctx context.Context, tweetID string, hidden bool) (*HideRepliesResponse, error)
+	// Likes
+	UndoUsersLikingTweet(ctx context.Context, userID string, tweetID string) (*UndoUsersLikingTweetResponse, error)
+	UsersLikingTweet(ctx context.Context, tweetID string, opt ...*UsersLikingTweetOption) (*UsersLikingTweetResponse, error)
+	TweetsUserLiked(ctx context.Context, userID string, opt ...*TweetsUserLikedOption) (*TweetsUserLikedResponse, error)
+	PostUsersLikingTweet(ctx context.Context, userID string, tweetID string) (*PostUsersLikingTweetResponse, error)
+	// Manage Tweets
+	DeleteTweet(ctx context.Context, tweetID string) (*DeleteTweetResponse, error)
+	PostTweet(ctx context.Context, body *PostTweetOption) (*PostTweetResponse, error)
+	// TODO: Quote Tweets
+	// Retweets
+	UndoRetweet(ctx context.Context, userID string, sourceTweetID string) (*UndoRetweetResponse, error)
+	RetweetsLookup(ctx context.Context, tweetID string, opt ...*RetweetsLookupOption) (*RetweetsResponse, error)
+	PostRetweet(ctx context.Context, userID string, tweetID string) (*PostRetweetResponse, error)
+	// Search Tweets
+	SearchAllTweets(ctx context.Context, tweet string, opt ...*SearchTweetsOption) (*SearchTweetsResponse, error)
+	SearchRecentTweets(ctx context.Context, tweet string, opt ...*SearchTweetsOption) (*SearchTweetsResponse, error)
+	// Timelines
+	UserMentionTimeline(ctx context.Context, userID string, opt ...*UserMentionTimelineOption) (*UserMentionTimelineResponse, error)
+	// TODO: /2/users/:id/timelines/reverse_chronological
+	UserTweetTimeline(ctx context.Context, userID string, opt ...*UserTweetTimelineOption) (*UserTweetTimelineResponse, error)
+	// Tweet counts
+	CountAllTweets(ctx context.Context, tweet string, opt ...*TweetCountsAllOption) (*TweetCountsResponse, error)
+	CountRecentTweets(ctx context.Context, tweet string, opt ...*TweetCountsOption) (*TweetCountsResponse, error)
+	// Tweets lookup
+	RetrieveMultipleTweets(ctx context.Context, tweetIDs []string, opt ...*RetriveTweetOption) (*TweetsResponse, error)
+	RetrieveSingleTweet(ctx context.Context, tweetID string, opt ...*RetriveTweetOption) (*TweetResponse, error)
+	// Volume stream
+	VolumeStreams(ctx context.Context, ch chan<- VolumeStreamsResponse, errCh chan<- error, opt ...*VolumeStreamsOption) *VolumeStreams
+	// TODO: /2/tweets/sample10/stream
 }
 
 type Users interface {
+	// Blocks
+	UndoBlocking(ctx context.Context, sourceUserID string, targetUserID string) (*UndoBlockingResponse, error)
+	Blocking(ctx context.Context, userID string, opt ...*BlockOption) (*BlockingResponse, error)
+	PostBlocking(ctx context.Context, userID string, targetUserID string) (*PostBlockingResponse, error)
+	// Follows
+	UndoFollowing(ctx context.Context, sourceUserID string, targetUserID string) (*UndoFollowingResponse, error)
+	Followers(ctx context.Context, userID string, opt ...*FollowOption) (*FollowersResponse, error)
+	Following(ctx context.Context, userID string, opt ...*FollowOption) (*FollowingResponse, error)
+	PostFollowing(ctx context.Context, userID string, targetUserID string) (*PostFollowingResponse, error)
+	// Mutes
+	UndoMuting(ctx context.Context, sourceUserID string, targetUserID string) (*UndoMutingResponse, error)
+	Muting(ctx context.Context, userID string, opt ...*MuteOption) (*MutingResponse, error)
+	PostMuting(ctx context.Context, userID string, targetUserID string) (*PostMutingResponse, error)
+	// Users lookup
 	RetrieveMultipleUsersWithIDs(ctx context.Context, userIDs []string, opt ...*RetrieveUserOption) (*UsersResponse, error)
 	RetrieveSingleUserWithID(ctx context.Context, userID string, opt ...*RetrieveUserOption) (*UserResponse, error)
 	RetrieveMultipleUsersWithUserNames(ctx context.Context, userNames []string, opt ...*RetrieveUserOption) (*UsersResponse, error)
 	RetrieveSingleUserWithUserName(ctx context.Context, userName string, opt ...*RetrieveUserOption) (*UserResponse, error)
-	Followers(ctx context.Context, userID string, opt ...*FollowOption) (*FollowersResponse, error)
-	Following(ctx context.Context, userID string, opt ...*FollowOption) (*FollowingResponse, error)
-	PostFollowing(ctx context.Context, userID string, targetUserID string) (*PostFollowingResponse, error)
-	UndoFollowing(ctx context.Context, sourceUserID string, targetUserID string) (*UndoFollowingResponse, error)
-	Blocking(ctx context.Context, userID string, opt ...*BlockOption) (*BlockingResponse, error)
-	PostBlocking(ctx context.Context, userID string, targetUserID string) (*PostBlockingResponse, error)
-	UndoBlocking(ctx context.Context, sourceUserID string, targetUserID string) (*UndoBlockingResponse, error)
-	Muting(ctx context.Context, userID string, opt ...*MuteOption) (*MutingResponse, error)
-	PostMuting(ctx context.Context, userID string, targetUserID string) (*PostMutingResponse, error)
-	UndoMuting(ctx context.Context, sourceUserID string, targetUserID string) (*UndoMutingResponse, error)
+	// TODO: /2/users/me
 }
 
 type Spaces interface {
-	LookUpSpace(ctx context.Context, spaceID string, opt ...*SpaceOption) (*SpaceResponse, error)
-	LookUpSpaces(ctx context.Context, spaceIDs []string, opt ...*SpaceOption) (*SpacesResponse, error)
-	UsersPurchasedSpaceTicket(ctx context.Context, spaceID string, opt ...*UsersPurchasedSpaceTicketOption) (*UsersPurchasedSpaceTicketResponse, error)
-	DiscoverSpaces(ctx context.Context, userIDs []string, opt ...*DiscoverSpacesOption) (*DiscoverSpacesResponse, error)
+	// Search Spaces
 	SearchSpaces(ctx context.Context, searchTerm string, opt ...*SearchSpacesOption) (*SearchSpacesResponse, error)
+	// Spaces lookup
+	LookUpSpaces(ctx context.Context, spaceIDs []string, opt ...*SpaceOption) (*SpacesResponse, error)
+	LookUpSpace(ctx context.Context, spaceID string, opt ...*SpaceOption) (*SpaceResponse, error)
+	UsersPurchasedSpaceTicket(ctx context.Context, spaceID string, opt ...*UsersPurchasedSpaceTicketOption) (*UsersPurchasedSpaceTicketResponse, error)
+	// TODO: /2/spaces/:id/tweets
+	DiscoverSpaces(ctx context.Context, userIDs []string, opt ...*DiscoverSpacesOption) (*DiscoverSpacesResponse, error)
 }
 
 type Lists interface {
-	CreateNewList(ctx context.Context, body *CreateNewListBody) (*CreateNewListResponse, error)
-	DeleteList(ctx context.Context, listID string) (*DeleteListResponse, error)
-	LookUpList(ctx context.Context, listID string, opt ...*LookUpListOption) (*ListResponse, error)
-	LookUpAllListsOwned(ctx context.Context, userID string, opt ...*AllListsOwnedOption) (*AllListsOwnedResponse, error)
+	// List Tweets lookup
 	LookUpListTweets(ctx context.Context, listID string, opt ...*ListTweetsOption) (*ListTweetsResponse, error)
-	ListMembers(ctx context.Context, listID string, opt ...*ListMembersOption) (*ListMembersResponse, error)
-	ListsSpecifiedUser(ctx context.Context, userID string, opt ...*ListsSpecifiedUserOption) (*ListsSpecifiedUserResponse, error)
-	PostListMembers(ctx context.Context, listID string, userID string) (*PostListMembersResponse, error)
-	UndoListMembers(ctx context.Context, listID string, userID string) (*UndoListMembersResponse, error)
+	// List follows
+	UndoListFollows(ctx context.Context, listID string, userID string) (*UndoListFollowsResponse, error)
 	ListFollowers(ctx context.Context, listID string, opt ...*ListFollowersOption) (*ListFollowersResponse, error)
 	AllListsUserFollows(ctx context.Context, userID string, opt ...*ListFollowsOption) (*AllListsUserFollowsResponse, error)
 	PostListFollows(ctx context.Context, listID string, userID string) (*PostListFollowsResponse, error)
-	UndoListFollows(ctx context.Context, listID string, userID string) (*UndoListFollowsResponse, error)
+	// List lookup
+	LookUpList(ctx context.Context, listID string, opt ...*LookUpListOption) (*ListResponse, error)
+	LookUpAllListsOwned(ctx context.Context, userID string, opt ...*AllListsOwnedOption) (*AllListsOwnedResponse, error)
+	// List members
+	UndoListMembers(ctx context.Context, listID string, userID string) (*UndoListMembersResponse, error)
+	ListMembers(ctx context.Context, listID string, opt ...*ListMembersOption) (*ListMembersResponse, error)
+	ListsSpecifiedUser(ctx context.Context, userID string, opt ...*ListsSpecifiedUserOption) (*ListsSpecifiedUserResponse, error)
+	PostListMembers(ctx context.Context, listID string, userID string) (*PostListMembersResponse, error)
+	// Manage Lists
+	DeleteList(ctx context.Context, listID string) (*DeleteListResponse, error)
+	UpdateMetaDataForList(ctx context.Context, listID string, body ...*UpdateMetaDataForListBody) (*UpdateMetaDataForListResponse, error)
+	CreateNewList(ctx context.Context, body *CreateNewListBody) (*CreateNewListResponse, error)
+	// Pinned Lists
+	UndoPinnedLists(ctx context.Context, listID string, userID string) (*UndoPinnedListsResponse, error)
 	PinnedLists(ctx context.Context, userID string, opt ...*PinnedListsOption) (*PinnedListsResponse, error)
 	PostPinnedLists(ctx context.Context, listID string, userID string) (*PostPinnedListsResponse, error)
-	UndoPinnedLists(ctx context.Context, listID string, userID string) (*UndoPinnedListsResponse, error)
-	UpdateMetaDataForList(ctx context.Context, listID string, body ...*UpdateMetaDataForListBody) (*UpdateMetaDataForListResponse, error)
 }
 
 type Compliances interface {
-	ComplianceJob(ctx context.Context, complianceJobID int) (*ComplianceJobResponse, error)
+	// Batch compliance
 	ComplianceJobs(ctx context.Context, opt *ComplianceJobsOption) (*ComplianceJobsResponse, error)
+	ComplianceJob(ctx context.Context, complianceJobID int) (*ComplianceJobResponse, error)
 	CreateComplianceJob(ctx context.Context, opt ...*CreateComplianceJobOption) (*CreateComplianceJobResponse, error)
 }
 
