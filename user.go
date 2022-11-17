@@ -233,3 +233,31 @@ type MutesMeta struct {
 type MutingBody struct {
 	TargetUserID string `json:"target_user_id"`
 }
+
+type MeResponse struct {
+	ID              string              `json:"id"`
+	Name            string              `json:"name"`
+	UserName        string              `json:"username"`
+	CreatedAt       string              `json:"created_at,omitempty"`
+	Protected       bool                `json:"protected,omitempty"`
+	Withheld        *MeWithheld         `json:"withheld,omitempty"`
+	Location        string              `json:"location,omitempty"`
+	URL             string              `json:"url,omitempty"`
+	Description     string              `json:"description,omitempty"`
+	Verified        bool                `json:"verified,omitempty"`
+	Entities        *UserEntity         `json:"entities,omitempty"`
+	ProfileImageURL string              `json:"profile_image_url,omitempty"`
+	PublicMetrics   *UserPublicMetrics  `json:"public_metrics,omitempty"`
+	PinnedTweetID   string              `json:"pinned_tweet_id,omitempty"`
+	Includes        *MeIncludes         `json:"includes,omitempty"`
+	Errors          []*APIResponseError `json:"errors,omitempty"`
+}
+
+type MeWithheld struct {
+	CountryCodes []string `json:"country_codes"`
+	Scope        string   `json:"scope"`
+}
+
+type MeIncludes struct {
+	Tweets []*Tweet
+}

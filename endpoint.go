@@ -3,6 +3,7 @@ package gotwtr
 // EndpointURL is the base URL for the Twitter V2 API.
 const (
 	generateAppOnlyBearerTokenURL = "https://api.twitter.com/oauth2/token?grant_type=client_credentials"
+	// TODO: oauth2/invalidate_token
 )
 
 const (
@@ -24,7 +25,7 @@ const (
 	// Manage Tweets
 	deleteTweetURL = "https://api.twitter.com/2/tweets/%v"
 	postTweetURL   = "https://api.twitter.com/2/tweets"
-	// TODO: Quote Tweets
+	// TODO: /2/tweets/:id/quote_tweets
 	// Retweets
 	undoRetweetURL    = "https://api.twitter.com/2/users/%v/retweets/%v"
 	retweetsLookupURL = "https://api.twitter.com/2/tweets/%v/retweeted_by"
@@ -66,7 +67,7 @@ const (
 	retrieveSingleUserWithIDURL           = "https://api.twitter.com/2/users/%v"
 	retrieveMultipleUsersWithUserNamesURL = "https://api.twitter.com/2/users/by?usernames="
 	retrieveSingleUserWithUserNameURL     = "https://api.twitter.com/2/users/by/username/%v"
-	// TODO: /2/users/me
+	meURL                                 = "https://api.twitter.com/2/users/me"
 )
 
 const (
