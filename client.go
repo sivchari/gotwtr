@@ -16,6 +16,7 @@ const (
 
 type OAuth interface {
 	GenerateAppOnlyBearerToken(ctx context.Context) (bool, error)
+	// TODO: oauth2/invalidate_token
 }
 
 type Tweets interface {
@@ -37,7 +38,7 @@ type Tweets interface {
 	// Manage Tweets
 	DeleteTweet(ctx context.Context, tweetID string) (*DeleteTweetResponse, error)
 	PostTweet(ctx context.Context, body *PostTweetOption) (*PostTweetResponse, error)
-	// TODO: Quote Tweets
+	// TODO: /2/tweets/:id/quote_tweets
 	// Retweets
 	UndoRetweet(ctx context.Context, userID string, sourceTweetID string) (*UndoRetweetResponse, error)
 	RetweetsLookup(ctx context.Context, tweetID string, opt ...*RetweetsLookupOption) (*RetweetsResponse, error)
@@ -79,7 +80,7 @@ type Users interface {
 	RetrieveSingleUserWithID(ctx context.Context, userID string, opt ...*RetrieveUserOption) (*UserResponse, error)
 	RetrieveMultipleUsersWithUserNames(ctx context.Context, userNames []string, opt ...*RetrieveUserOption) (*UsersResponse, error)
 	RetrieveSingleUserWithUserName(ctx context.Context, userName string, opt ...*RetrieveUserOption) (*UserResponse, error)
-	// TODO: /2/users/me
+	Me(ctx context.Context, opt ...*MeOption) (*MeResponse, error)
 }
 
 type Spaces interface {
@@ -340,6 +341,11 @@ func (c *Client) RetrieveMultipleUsersWithUserNames(ctx context.Context, userNam
 // RetrieveSingleUserWithUserName returns a variety of information about one or more users specified by their username.
 func (c *Client) RetrieveSingleUserWithUserName(ctx context.Context, userName string, opt ...*RetrieveUserOption) (*UserResponse, error) {
 	return retrieveSingleUserWithUserName(ctx, c.client, userName, opt...)
+}
+
+// Me returns information about an authorized user.
+func (c *Client) Me(ctx context.Context, opt ...*MeOption) (*MeResponse, error) {
+	return me(ctx, c.client, opt...)
 }
 
 // Followers returns a list of users who are followers of the specified userID.

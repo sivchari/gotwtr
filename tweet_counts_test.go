@@ -15,7 +15,7 @@ import (
 )
 
 var (
-	//go:embed embed/count_all_tweets.json
+	//go:embed testdata/count_all_tweets.json
 	countAllTweets []byte
 )
 

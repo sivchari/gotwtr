@@ -311,6 +311,15 @@ func ExampleClient_RetrieveMultipleUsersWithUserNames() {
 	}
 }
 
+func ExampleClient_Me() {
+	client := gotwtr.New("key")
+	me, err := client.Me(context.Background())
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Printf("me is %+v", me)
+}
+
 func ExampleClient_RetrieveSingleUserWithUserName() {
 	client := gotwtr.New("key")
 	un, err := client.RetrieveSingleUserWithUserName(context.Background(), "username")

@@ -125,3 +125,25 @@ func userFieldsToString(ufs []UserField) []string {
 	}
 	return slice
 }
+
+type MeOption struct {
+	Expansions  []Expansion
+	TweetFields []TweetField
+	UserFields  []UserField
+}
+
+func (m *MeOption) addQuery(req *http.Request) {
+	q := req.URL.Query()
+	if len(m.Expansions) > 0 {
+		q.Add("expansions", strings.Join(expansionsToString(m.Expansions), ","))
+	}
+	if len(m.TweetFields) > 0 {
+		q.Add("tweet.fields", strings.Join(tweetFieldsToString(m.TweetFields), ","))
+	}
+	if len(m.UserFields) > 0 {
+		q.Add("user.fields", strings.Join(userFieldsToString(m.UserFields), ","))
+	}
+	if len(q) > 0 {
+		req.URL.RawQuery = q.Encode()
+	}
+}

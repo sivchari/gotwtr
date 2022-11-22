@@ -13,9 +13,9 @@ import (
 )
 
 var (
-	//go:embed embed/hide_replies_hidden.json
+	//go:embed testdata/hide_replies_hidden.json
 	hideRepliesHidden []byte
-	//go:embed embed/hide_replies_unhidden.json
+	//go:embed testdata/hide_replies_unhidden.json
 	hideRepliesUnhidden []byte
 )
 
