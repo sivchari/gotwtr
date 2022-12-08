@@ -13,6 +13,9 @@ func (c *ComplianceJobsOption) addQuery(req *http.Request) {
 	if c.Status != "" {
 		q.Add("status", string(c.Status))
 	}
+	if len(q) > 0 {
+		req.URL.RawQuery = q.Encode()
+	}
 }
 
 type CreateComplianceJobOption struct {
