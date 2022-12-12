@@ -11,6 +11,7 @@ type TweetField string
 	Tweet field will only return
 	if you've also included the expansions=referenced_tweets.id query parameter in your request.
 */
+
 const (
 	TweetFieldAttachments        TweetField = "attachments"
 	TweetFieldAuthorID           TweetField = "author_id"

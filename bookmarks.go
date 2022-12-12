@@ -9,7 +9,6 @@ import (
 	"net/http"
 )
 
-//https://developer.twitter.com/en/docs/twitter-api/tweets/bookmarks/api-reference/get-users-id-bookmarks
 func lookupUserBookmarks(ctx context.Context, c *client, userID string, opt ...*LookupUserBookmarksOption) (*LookupUserBookmarksResponse, error) {
 	if userID == "" {
 		return nil, errors.New("lookup user bookmarks: user id parameter is required")
@@ -54,7 +53,6 @@ func lookupUserBookmarks(ctx context.Context, c *client, userID string, opt ...*
 	return &lookupUserBookmarks, nil
 }
 
-//https://developer.twitter.com/en/docs/twitter-api/tweets/bookmarks/api-reference/post-users-id-bookmarks
 func bookmarkTweet(ctx context.Context, c *client, userID string, body *BookmarkTweetBody) (*BookmarkTweetResponse, error) {
 	if userID == "" {
 		return nil, errors.New("bookmark tweet: user id parameter is required")
@@ -97,7 +95,6 @@ func bookmarkTweet(ctx context.Context, c *client, userID string, body *Bookmark
 	return &bookmarkTweet, nil
 }
 
-//https://developer.twitter.com/en/docs/twitter-api/tweets/bookmarks/api-reference/delete-users-id-bookmarks-tweet_id
 func removeBookmarkOfTweet(ctx context.Context, c *client, userID string, tweetID string) (*RemoveBookmarkOfTweetResponse, error) {
 	if userID == "" {
 		return nil, errors.New("remove bookmark of tweet: user id parameter is required")

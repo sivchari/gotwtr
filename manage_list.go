@@ -9,7 +9,6 @@ import (
 	"net/http"
 )
 
-//https://developer.twitter.com/en/docs/twitter-api/lists/manage-lists/api-reference/post-lists
 func createNewList(ctx context.Context, c *client, body *CreateNewListBody) (*CreateNewListResponse, error) {
 	if body.Name == "" {
 		return nil, errors.New("create new list: name parameter is required")
@@ -50,7 +49,6 @@ func createNewList(ctx context.Context, c *client, body *CreateNewListBody) (*Cr
 	return &createNewList, nil
 }
 
-//https://developer.twitter.com/en/docs/twitter-api/lists/manage-lists/api-reference/delete-lists-id
 func deleteList(ctx context.Context, c *client, listID string) (*DeleteListResponse, error) {
 	if listID == "" {
 		return nil, errors.New("delete list: list id parameter is required")
@@ -84,7 +82,6 @@ func deleteList(ctx context.Context, c *client, listID string) (*DeleteListRespo
 	return &deleteList, nil
 }
 
-//https://developer.twitter.com/en/docs/twitter-api/lists/manage-lists/api-reference/put-lists-id
 func updateMetaDataForList(ctx context.Context, c *client, listID string, body ...*UpdateMetaDataForListBody) (*UpdateMetaDataForListResponse, error) {
 	if listID == "" {
 		return nil, errors.New("update meta data for list: list id parameter is required")

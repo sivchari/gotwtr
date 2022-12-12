@@ -6,6 +6,7 @@ type PollField string
 	Poll field will only return
 	if you've also included the expansions=attachments.poll_ids query parameter in your request.
 */
+
 const (
 	PollFieldDurationMinutes PollField = "duration_minutes"
 	PollFieldEndDateTime     PollField = "end_datetime"
