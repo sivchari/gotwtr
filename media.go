@@ -6,6 +6,7 @@ type MediaField string
 	Media field will only return
 	if you've also included the expansions=attachments.media_keys query parameter in your request.
 */
+
 const (
 	MediaFieldDurationMS       MediaField = "duration_ms"
 	MediaFieldHeight           MediaField = "height"

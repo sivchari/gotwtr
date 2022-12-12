@@ -10,6 +10,7 @@ type UserField string
 	- expansions=in_reply_to_user_id
 	- expansions=referenced_tweets.id.author_id
 */
+
 const (
 	UserFieldCreatedAt       UserField = "created_at"
 	UserFieldDescription     UserField = "description"

@@ -6,6 +6,7 @@ type PlaceField string
 	Place field will only return
 	if you've also included the expansions=geo.place_id query parameter in your request.
 */
+
 const (
 	PlaceFieldContainedWithin PlaceField = "contained_within"
 	PlaceFieldCountry         PlaceField = "country"
