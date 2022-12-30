@@ -127,6 +127,13 @@ type Compliances interface {
 	CreateComplianceJob(ctx context.Context, opt ...*CreateComplianceJobOption) (*CreateComplianceJobResponse, error)
 }
 
+type DirectMessages interface {
+	// Direct Message
+	CreateOneToOneDM(ctx context.Context, participantID string, body *CreateOneToOneDMBody) (*CreateOneToOneDMResponse, error)
+	CreateNewGroupDM(ctx context.Context, conversationID string, body *CreateNewGroupDMBody) (*CreateNewGroupDMResponse, error)
+	PostDM(ctx context.Context, body *PostDMBody) (*PostDMResponse, error)
+}
+
 // Twtr is a main interface for all Twitter API calls.
 type Twtr interface {
 	OAuth
@@ -135,6 +142,7 @@ type Twtr interface {
 	Spaces
 	Lists
 	Compliances
+	DirectMessages
 }
 
 type client struct {
@@ -527,4 +535,16 @@ func (c *Client) CreateComplianceJob(ctx context.Context, opt ...*CreateComplian
 // UpdateMetaDataForList enables the authenticated user to update the meta data of a specified List that they own.
 func (c *Client) UpdateMetaDataForList(ctx context.Context, listID string, body ...*UpdateMetaDataForListBody) (*UpdateMetaDataForListResponse, error) {
 	return updateMetaDataForList(ctx, c.client, listID, body...)
+}
+
+func (c *Client) CreateOneToOneDM(ctx context.Context, participantID string, body *CreateOneToOneDMBody) (*CreateOneToOneDMResponse, error) {
+	return createOneToOneDM(ctx, c.client, participantID, body)
+}
+
+func (c *Client) CreateNewGroupDM(ctx context.Context, conversationID string, body *CreateNewGroupDMBody) (*CreateNewGroupDMResponse, error) {
+	return createNewGroupDM(ctx, c.client, conversationID, body)
+}
+
+func (c *Client) PostDM(ctx context.Context, body *PostDMBody) (*PostDMResponse, error) {
+	return postDM(ctx, c.client, body)
 }
