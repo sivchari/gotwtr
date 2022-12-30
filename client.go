@@ -537,14 +537,17 @@ func (c *Client) UpdateMetaDataForList(ctx context.Context, listID string, body 
 	return updateMetaDataForList(ctx, c.client, listID, body...)
 }
 
+// CreateOneToOneDM enables create a new one-to-one conversation or retrieves the current conversation and adds the Direct Message to it.
 func (c *Client) CreateOneToOneDM(ctx context.Context, participantID string, body *CreateOneToOneDMBody) (*CreateOneToOneDMResponse, error) {
 	return createOneToOneDM(ctx, c.client, participantID, body)
 }
 
+// CreateNewGroupDM enables create a Direct Message on behalf of an authenticated user, and adds it to the specified conversation.
 func (c *Client) CreateNewGroupDM(ctx context.Context, conversationID string, body *CreateNewGroupDMBody) (*CreateNewGroupDMResponse, error) {
 	return createNewGroupDM(ctx, c.client, conversationID, body)
 }
 
+// PostDM enables create a new group conversation and adds a Direct Message to it on behalf of an authenticated user.
 func (c *Client) PostDM(ctx context.Context, body *PostDMBody) (*PostDMResponse, error) {
 	return postDM(ctx, c.client, body)
 }
