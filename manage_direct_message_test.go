@@ -2,6 +2,7 @@ package gotwtr_test
 
 import (
 	"context"
+	_ "embed"
 	"io"
 	"net/http"
 	"strings"
@@ -10,6 +11,18 @@ import (
 	"github.com/google/go-cmp/cmp"
 	"github.com/sivchari/gotwtr"
 )
+
+//go:embed testdata/create_one_to_one_dm.json
+var createOneToOneDM []byte
+
+//go:embed testdata/create_new_group_dm.json
+var createNewGroupDM []byte
+
+//go:embed testdata/post_dm.json
+var postDM []byte
+
+//go:embed testdata/403.json
+var forbidden []byte
 
 func Test_CreateOneToOneDM(t *testing.T) {
 	t.Parallel()
@@ -30,13 +43,9 @@ func Test_CreateOneToOneDM(t *testing.T) {
 			args: args{
 				ctx: context.Background(),
 				client: mockHTTPClient(func(req *http.Request) *http.Response {
-					body := `{
-						"dm_conversation_id": "1346889436626259968",
-						"dm_event_id": "128341038123"
-					}`
 					return &http.Response{
 						StatusCode: http.StatusCreated,
-						Body:       io.NopCloser(strings.NewReader(body)),
+						Body:       io.NopCloser(strings.NewReader(string(createOneToOneDM))),
 					}
 				}),
 				participantID: "2244994945",
@@ -60,19 +69,9 @@ func Test_CreateOneToOneDM(t *testing.T) {
 			args: args{
 				ctx: context.Background(),
 				client: mockHTTPClient(func(req *http.Request) *http.Response {
-					body := `{
-						"errors": [
-							{
-								"title": "Unsupported Authentication",
-								"detail": "Authenticating with OAuth 2.0 Application-Only is forbidden for this endpoint.  Supported authentication types are [OAuth 1.0a User Context, OAuth 2.0 User Context].",
-								"type": "https://api.twitter.com/2/problems/unsupported-authentication",
-								"status": 403
-							}
-						]
-					}`
 					return &http.Response{
 						StatusCode: http.StatusForbidden,
-						Body:       io.NopCloser(strings.NewReader(body)),
+						Body:       io.NopCloser(strings.NewReader(string(forbidden))),
 					}
 				}),
 				participantID: "2244994945",
@@ -135,13 +134,9 @@ func Test_CreateNewGroupDM(t *testing.T) {
 			args: args{
 				ctx: context.Background(),
 				client: mockHTTPClient(func(req *http.Request) *http.Response {
-					body := `{
-						"dm_conversation_id": "1346889436626259968",
-						"dm_event_id": "128341038123"
-					}`
 					return &http.Response{
 						StatusCode: http.StatusCreated,
-						Body:       io.NopCloser(strings.NewReader(body)),
+						Body:       io.NopCloser(strings.NewReader(string(createNewGroupDM))),
 					}
 				}),
 				conversationID: "1346889436626259968",
@@ -160,20 +155,9 @@ func Test_CreateNewGroupDM(t *testing.T) {
 			args: args{
 				ctx: context.Background(),
 				client: mockHTTPClient(func(req *http.Request) *http.Response {
-					body := `{
-						"errors": [
-							{
-								"title": "Unsupported Authentication",
-								"detail": "Authenticating with OAuth 2.0 Application-Only is forbidden for this endpoint.  Supported authentication types are [OAuth 1.0a User Context, OAuth 2.0 User Context].",
-								"type": "https://api.twitter.com/2/problems/unsupported-authentication",
-								"status": 403
-							}
-						]
-					}`
-
 					return &http.Response{
 						StatusCode: http.StatusForbidden,
-						Body:       io.NopCloser(strings.NewReader(body)),
+						Body:       io.NopCloser(strings.NewReader(string(forbidden))),
 					}
 				}),
 				conversationID: "1346889436626259968",
@@ -230,13 +214,9 @@ func Test_PostDM(t *testing.T) {
 			args: args{
 				ctx: context.Background(),
 				client: mockHTTPClient(func(req *http.Request) *http.Response {
-					body := `{
-						"dm_conversation_id": "1346889436626259968",
-						"dm_event_id": "128341038123"
-					}`
 					return &http.Response{
 						StatusCode: http.StatusCreated,
-						Body:       io.NopCloser(strings.NewReader(body)),
+						Body:       io.NopCloser(strings.NewReader(string(postDM))),
 					}
 				}),
 				body: &gotwtr.PostDMBody{
@@ -261,20 +241,9 @@ func Test_PostDM(t *testing.T) {
 			args: args{
 				ctx: context.Background(),
 				client: mockHTTPClient(func(req *http.Request) *http.Response {
-					body := `{
-						"errors": [
-							{
-								"title": "Unsupported Authentication",
-								"detail": "Authenticating with OAuth 2.0 Application-Only is forbidden for this endpoint.  Supported authentication types are [OAuth 1.0a User Context, OAuth 2.0 User Context].",
-								"type": "https://api.twitter.com/2/problems/unsupported-authentication",
-								"status": 403
-							}
-						]
-					}`
-
 					return &http.Response{
 						StatusCode: http.StatusForbidden,
-						Body:       io.NopCloser(strings.NewReader(body)),
+						Body:       io.NopCloser(strings.NewReader(string(forbidden))),
 					}
 				}),
 				body: &gotwtr.PostDMBody{

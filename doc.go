@@ -1,6 +1,6 @@
 // Package gotwtr provides a Client for the Twitter v2 API.
 //
-// # Note
+// Note
 //
 // This library will cover all Twitter v2 API in the future,
 // but please note that not all Twitter API are currently compatible with v2.
