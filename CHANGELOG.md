@@ -1,5 +1,8 @@
 # Changelog
 
+## [v1.1.3](https://github.com/sivchari/gotwtr/compare/v1.1.2...v1.1.3) - 2023-01-15
+- tiny fix by @sivchari in https://github.com/sivchari/gotwtr/pull/167
+
 ## [v1.1.2](https://github.com/sivchari/gotwtr/compare/v1.1.1...v1.1.2) - 2022-12-12
 - update: order of interface by @sivchari in https://github.com/sivchari/gotwtr/pull/155
 - update: workflow by @sivchari in https://github.com/sivchari/gotwtr/pull/156
