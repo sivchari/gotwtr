@@ -36,5 +36,5 @@ jobs:
           go mod download
 
       - name: test
-        run: go test -race -coverprofile="coverage.txt" -covermode=atomic ./...
+        run: go test -race ./...
 
