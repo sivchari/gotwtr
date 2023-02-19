@@ -689,17 +689,6 @@ func ExampleClient_ComplianceJobs() {
 	log.Println(cj)
 }
 
-func ExampleClient_LookUpAllOneToOneDM() {
-	client := gotwtr.New("key")
-	dm, err := client.LookUpAllOneToOneDM(context.Background(), "participant_id", &gotwtr.DirectMessageOption{
-		EventTypes: "MessageCreate",
-	})
-	if err != nil {
-		log.Fatal(err)
-	}
-	log.Println(dm)
-}
-
 func ExampleClient_ComplianceJob() {
 	client := gotwtr.New("key")
 	cj, err := client.ComplianceJob(context.Background(), 1382081613278814209)
@@ -723,17 +712,6 @@ func ExampleClient_PostTweet() {
 	log.Println(t)
 }
 
-func ExampleClient_LookUpDM() {
-	client := gotwtr.New("key")
-	dm, err := client.LookUpDM(context.Background(), "participant_id", &gotwtr.DirectMessageOption{
-		EventTypes: "MessageCreate",
-	})
-	if err != nil {
-		log.Fatal(err)
-	}
-	log.Println(dm)
-}
-
 func ExampleClient_DeleteTweet() {
 	client := gotwtr.New("key")
 	_, err := client.DeleteTweet(context.Background(), "tweet_id")
@@ -744,24 +722,13 @@ func ExampleClient_DeleteTweet() {
 
 func ExampleClient_CreateOneToOneDM() {
 	client := gotwtr.New("key")
-	dm, err := client.CreateOneToOneDM(context.Background(), "participant_id", &gotwtr.CreateOneToOneDMBody{
+	d, err := client.CreateOneToOneDM(context.Background(), "participant_id", &gotwtr.CreateOneToOneDMBody{
 		Text: "Hello World",
 	})
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Println(dm)
-}
-
-func ExampleClient_LookUpAllDM() {
-	client := gotwtr.New("key")
-	dm, err := client.LookUpAllDM(context.Background(), &gotwtr.DirectMessageOption{
-		EventTypes: "MessageCreate",
-	})
-	if err != nil {
-		log.Fatal(err)
-	}
-	log.Println(dm)
+	log.Println(d)
 }
 
 func ExampleClient_CreateNewGroupDM() {
@@ -791,4 +758,37 @@ func ExampleClient_PostDM() {
 		log.Fatal(err)
 	}
 	log.Println(d)
+}
+
+func ExampleClient_LookUpAllOneToOneDM() {
+	client := gotwtr.New("key")
+	dm, err := client.LookUpAllOneToOneDM(context.Background(), "participant_id", &gotwtr.DirectMessageOption{
+		EventTypes: "MessageCreate",
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Println(dm)
+}
+
+func ExampleClient_LookUpDM() {
+	client := gotwtr.New("key")
+	dm, err := client.LookUpDM(context.Background(), "participant_id", &gotwtr.DirectMessageOption{
+		EventTypes: "MessageCreate",
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Println(dm)
+}
+
+func ExampleClient_LookUpAllDM() {
+	client := gotwtr.New("key")
+	dm, err := client.LookUpAllDM(context.Background(), &gotwtr.DirectMessageOption{
+		EventTypes: "MessageCreate",
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Println(dm)
 }

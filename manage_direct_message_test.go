@@ -57,7 +57,7 @@ func Test_CreateOneToOneDM(t *testing.T) {
 			},
 			want: &gotwtr.CreateOneToOneDMResponse{
 				DMConversationID: "1346889436626259968",
-				DMEventFieldID:        "128341038123",
+				DMEventFieldID:   "128341038123",
 			},
 			wantErr: false,
 		},
@@ -143,7 +143,7 @@ func Test_CreateNewGroupDM(t *testing.T) {
 			},
 			want: &gotwtr.CreateNewGroupDMResponse{
 				DMConversationID: "1346889436626259968",
-				DMEventFieldID:        "128341038123",
+				DMEventFieldID:   "128341038123",
 			},
 			wantErr: false,
 		},
@@ -229,7 +229,7 @@ func Test_PostDM(t *testing.T) {
 			},
 			want: &gotwtr.PostDMResponse{
 				DMConversationID: "1346889436626259968",
-				DMEventFieldID:        "128341038123",
+				DMEventFieldID:   "128341038123",
 			},
 			wantErr: false,
 		},

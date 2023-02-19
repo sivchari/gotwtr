@@ -95,7 +95,7 @@ type LookUpAllOneToOneDMResponse struct {
 }
 
 type LookUpDMResponse struct {
-	Message []*DirectMessage      `json:"data"`
+	Message []*DirectMessage    `json:"data"`
 	Errors  []*APIResponseError `json:"errors,omitempty"`
 	Meta    *DirectMessageMeta  `json:"meta,omitempty"`
 	Title   string              `json:"title,omitempty"`
