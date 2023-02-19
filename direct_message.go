@@ -1,7 +1,6 @@
 package gotwtr
 
 type DMEventField string
-type EventTypes string
 
 const (
 	DirectMessageFieldID               DMEventField = "id"
@@ -14,6 +13,8 @@ const (
 	DirectMessageFieldReferencedTweets DMEventField = "referenced_tweets"
 	DirectMessageFieldAttachments      DMEventField = "attachments"
 )
+
+type EventTypes string
 
 const (
 	EventTypesFieldMessageCreate     EventTypes = "MessageCreate"
