@@ -138,10 +138,10 @@ func (s *ConnectToStream) retry(req *http.Request) {
 		var connectToStream ConnectToStreamResponse
 		err := dec.Decode(&connectToStream)
 		if err != nil {
+			s.errCh <- err
 			if err == io.EOF {
 				break
 			}
-			s.errCh <- err
 		}
 		s.ch <- connectToStream
 	}
