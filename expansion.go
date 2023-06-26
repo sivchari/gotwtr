@@ -13,6 +13,7 @@ const (
 	ExpansionGeoPlaceID                 Expansion = "geo.place_id"
 	ExpansionEntitiesMentionsUserName   Expansion = "entities.mentions.username"
 	ExpansionReferencedTweetsIDAuthorID Expansion = "referenced_tweets.id.author_id"
+	ExpansionContextAnnotation          Expansion = "context_annotations"
 	// USer payloads
 	ExpansionPinnedTweetID Expansion = "pinned_tweet_id"
 	// Direct Message event payloads with attachments.media_keys + referenced_tweets.id

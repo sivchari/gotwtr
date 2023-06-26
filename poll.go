@@ -8,10 +8,10 @@ type PollField string
 */
 
 const (
-	PollFieldDurationMinutes PollField = "duration_minutes"
-	PollFieldEndDateTime     PollField = "end_datetime"
 	PollFieldID              PollField = "id"
 	PollFieldOptions         PollField = "options"
+	PollFieldDurationMinutes PollField = "duration_minutes"
+	PollFieldEndDateTime     PollField = "end_datetime"
 	PollFieldVotingStatus    PollField = "voting_status"
 )
 
