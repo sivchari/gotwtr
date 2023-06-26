@@ -8,35 +8,37 @@ type MediaField string
 */
 
 const (
-	MediaFieldDurationMS       MediaField = "duration_ms"
-	MediaFieldHeight           MediaField = "height"
 	MediaFieldMediaKey         MediaField = "media_key"
-	MediaFieldPreviewImageURL  MediaField = "preview_image_url"
 	MediaFieldType             MediaField = "type"
 	MediaFieldURL              MediaField = "url"
-	MediaFieldWidth            MediaField = "width"
-	MediaFieldPublicMetrics    MediaField = "public_metrics"
+	MediaFieldDurationMS       MediaField = "duration_ms"
+	MediaFieldHeight           MediaField = "height"
 	MediaFieldNonPublicMetrics MediaField = "non_public_metrics"
 	MediaFieldOrganicMetrics   MediaField = "organic_metrics"
+	MediaFieldPreviewImageURL  MediaField = "preview_image_url"
 	MediaFieldPromotedMetrics  MediaField = "promoted_metrics"
+	MediaFieldPublicMetrics    MediaField = "public_metrics"
+	MediaFieldWidth            MediaField = "width"
 	MediaFieldAltText          MediaField = "alt_text"
+	MediaFieldVariants         MediaField = "variants"
 )
 
 type Media struct {
-	MediaKey         string        `json:"media_key"`
-	Type             string        `json:"type"`
-	URL              string        `json:"url,omitempty"`
-	DurationMs       int           `json:"duration_ms,omitempty"`
-	Height           int           `json:"height,omitempty"`
-	NonPublicMetrics *MediaMetrics `json:"non_public_metrics,omitempty"`
-	OrganicMetrics   *MediaMetrics `json:"organic_metrics,omitempty"`
-	PreviewImageURL  string        `json:"preview_image_url,omitempty"`
-	PromotedMetrics  *MediaMetrics `json:"promoted_metrics,omitempty"`
-	PublicMetrics    *MediaMetrics `json:"public_metrics,omitempty"`
-	Width            int           `json:"width,omitempty"`
-	AltText          string        `json:"alt_text,omitempty"`
-	MediaIDs         []string      `json:"media_ids,omitempty"`
-	TaggedUserIDs    []string      `json:"tagged_user_ids,omitempty"`
+	MediaKey         string         `json:"media_key"`
+	Type             string         `json:"type"`
+	URL              string         `json:"url,omitempty"`
+	DurationMs       int            `json:"duration_ms,omitempty"`
+	Height           int            `json:"height,omitempty"`
+	NonPublicMetrics *MediaMetrics  `json:"non_public_metrics,omitempty"`
+	OrganicMetrics   *MediaMetrics  `json:"organic_metrics,omitempty"`
+	PreviewImageURL  string         `json:"preview_image_url,omitempty"`
+	PromotedMetrics  *MediaMetrics  `json:"promoted_metrics,omitempty"`
+	PublicMetrics    *MediaMetrics  `json:"public_metrics,omitempty"`
+	Width            int            `json:"width,omitempty"`
+	AltText          string         `json:"alt_text,omitempty"`
+	MediaIDs         []string       `json:"media_ids,omitempty"`
+	TaggedUserIDs    []string       `json:"tagged_user_ids,omitempty"`
+	Variants         []MediaVariant `json:"variants,omitempty"`
 }
 
 type MediaMetrics struct {
@@ -46,6 +48,12 @@ type MediaMetrics struct {
 	Playback75Count  int `json:"playback_75_count,omitempty"`
 	Playback100Count int `json:"playback_100_count,omitempty"`
 	ViewCount        int `json:"view_count,omitempty"`
+}
+
+type MediaVariant struct {
+	BitRate     int    `json:"bit_rate"`
+	ContentType string `json:"content_type"`
+	URL         string `json:"url"`
 }
 
 func mediaFieldsToString(mfs []MediaField) []string {

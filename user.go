@@ -12,18 +12,18 @@ type UserField string
 */
 
 const (
+	UserFieldID              UserField = "id"
+	UserFieldName            UserField = "name"
+	UserFieldUserName        UserField = "username"
 	UserFieldCreatedAt       UserField = "created_at"
 	UserFieldDescription     UserField = "description"
 	UserFieldEntities        UserField = "entities"
-	UserFieldID              UserField = "id"
 	UserFieldLocation        UserField = "location"
-	UserFieldName            UserField = "name"
 	UserFieldPinnedTweetID   UserField = "pinned_tweet_id"
 	UserFieldProfileImageURL UserField = "profile_image_url"
 	UserFieldProtected       UserField = "protected"
 	UserFieldPublicMetrics   UserField = "public_metrics"
 	UserFieldURL             UserField = "url"
-	UserFieldUserName        UserField = "username"
 	UserFieldVerified        UserField = "verified"
 	UserFieldWithHeld        UserField = "withhel"
 )

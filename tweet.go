@@ -13,31 +13,35 @@ type TweetField string
 */
 
 const (
+	TweetFieldID                 TweetField = "id"
+	TweetFieldText               TweetField = "text"
+	TweetEditHistoryIDs          TweetField = "edit_history_tweet_ids"
 	TweetFieldAttachments        TweetField = "attachments"
 	TweetFieldAuthorID           TweetField = "author_id"
-	TweetFieldCreatedAt          TweetField = "created_at"
-	TweetFieldConversationID     TweetField = "conversation_id"
 	TweetFieldContextAnnotations TweetField = "context_annotations"
+	TweetFieldConversationID     TweetField = "conversation_id"
+	TweetFieldCreatedAt          TweetField = "created_at"
+	TweetFieldEditControls       TweetField = "edit_controls"
 	TweetFieldEntities           TweetField = "entities"
-	TweetFieldGeo                TweetField = "geo"
-	TweetFieldID                 TweetField = "id"
 	TweetFieldInReplyToUserID    TweetField = "in_reply_to_user_id"
 	TweetFieldLanguage           TweetField = "lang"
-	TweetFieldMaxResults         TweetField = "max_results"
 	TweetFieldNonPublicMetrics   TweetField = "non_public_metrics"
-	TweetFieldPublicMetrics      TweetField = "public_metrics"
 	TweetFieldOrganicMetrics     TweetField = "organic_metrics"
-	TweetFieldPromotedMetrics    TweetField = "promoted_metrics"
 	TweetFieldPossiblySensitve   TweetField = "possibly_sensitive"
+	TweetFieldPromotedMetrics    TweetField = "promoted_metrics"
+	TweetFieldPublicMetrics      TweetField = "public_metrics"
 	TweetFieldReferencedTweets   TweetField = "referenced_tweets"
+	TweetReplySettings           TweetField = "reply_settings"
 	TweetFieldSource             TweetField = "source"
-	TweetFieldText               TweetField = "text"
 	TweetFieldWithHeld           TweetField = "withheld"
+	TweetFieldGeo                TweetField = "geo"
+	TweetFieldMaxResults         TweetField = "max_results"
 )
 
 type Tweet struct {
 	ID                 string                    `json:"id"`
 	Text               string                    `json:"text"`
+	EditHistoryIDs     []string                  `json:"edit_history_tweet_ids"`
 	Attachments        *TweetAttachment          `json:"attachments,omitempty"`
 	AuthorID           string                    `json:"author_id,omitempty"`
 	ContextAnnotations []*TweetContextAnnotation `json:"context_annotations,omitempty"`
@@ -483,6 +487,8 @@ type TweetsUserLiked struct {
 	Lang               string                               `json:"lang,omitempty"`
 	ReplySettings      string                               `json:"reply_settings,omitempty"`
 	Source             string                               `json:"source,omitempty"`
+	EditHistoryIDs     []string                             `json:"edit_history_ids,omitempty"`
+	EditControls       *TweetsUserLikedEditControls         `json:"edit_controls,omitempty"`
 }
 
 type TweetsUserLikedReferencedTweets struct {
@@ -686,4 +692,10 @@ type RemoveBookmarkOfTweetResponse struct {
 
 type RemoveBookmarkOfTweetData struct {
 	Bookmarks bool `json:"bookmarks"`
+}
+
+type TweetsUserLikedEditControls struct {
+	EditRemaining  int    `json:"edit_remaining"`
+	IsEditEligible bool   `json:"is_edit_eligible"`
+	EditableUntil  string `json:"editable_until"`
 }
