@@ -719,3 +719,43 @@ func ExampleClient_DeleteTweet() {
 		log.Fatal(err)
 	}
 }
+
+func ExampleClient_CreateOneToOneDM() {
+	client := gotwtr.New("key")
+	d, err := client.CreateOneToOneDM(context.Background(), "participant_id", &gotwtr.CreateOneToOneDMBody{
+		Text: "Hello World",
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Println(d)
+}
+
+func ExampleClient_CreateNewGroupDM() {
+	client := gotwtr.New("key")
+	d, err := client.CreateNewGroupDM(context.Background(), "conversation_id", &gotwtr.CreateNewGroupDMBody{
+		Text: "Hello World",
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Println(d)
+}
+
+func ExampleClient_PostDM() {
+	client := gotwtr.New("key")
+	d, err := client.PostDM(context.Background(), &gotwtr.PostDMBody{
+		ConversationType: "Group",
+		ParticipantIDs: []string{
+			"944480690",
+			"906948460078698496",
+		},
+		Message: &gotwtr.Message{
+			Text: "Hello to you two, this is a new group conversation",
+		},
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Println(d)
+}

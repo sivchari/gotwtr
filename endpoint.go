@@ -113,3 +113,10 @@ const (
 	complianceJobURL       = "https://api.twitter.com/2/compliance/jobs/%v"
 	createComplianceJobURL = "https://api.twitter.com/2/compliance/jobs"
 )
+
+const (
+	// Manage Direct Message
+	createOneToOneDMURL = "https://api.twitter.com/2/dm_conversations/with/%v/messages"
+	createNewGroupDMURL = "https://api.twitter.com/2/dm_conversations/%v/messages"
+	postDMURL           = "https://api.twitter.com/2/dm_conversations"
+)
