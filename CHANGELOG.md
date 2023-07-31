@@ -1,5 +1,9 @@
 # Changelog
 
+## [v1.2.1](https://github.com/sivchari/gotwtr/compare/v1.2.0...v1.2.1) - 2023-07-31
+- fix: Go version by @sivchari in https://github.com/sivchari/gotwtr/pull/180
+- fix: Go version by @sivchari in https://github.com/sivchari/gotwtr/pull/182
+
 ## [v1.2.0](https://github.com/sivchari/gotwtr/compare/v1.1.3...v1.2.0) - 2023-07-31
 - Update expansions by @sivchari in https://github.com/sivchari/gotwtr/pull/172
 - added implement manage dm api by @mmmommm in https://github.com/sivchari/gotwtr/pull/165
