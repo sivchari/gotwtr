@@ -118,3 +118,10 @@ const (
 	createNewGroupDMURL = "https://api.twitter.com/2/dm_conversations/%v/messages"
 	postDMURL           = "https://api.twitter.com/2/dm_conversations"
 )
+
+const (
+	// LookUp Direct Message
+	lookUpAllOneToOneDMURL = "https://api.twitter.com/2/dm_conversations/with/%v/dm_events"
+	lookUpDMURL            = "https://api.twitter.com/2/dm_conversations/%v/dm_events"
+	lookUpAllDMURL         = "https://api.twitter.com/2/dm_events"
+)

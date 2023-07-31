@@ -21,9 +21,6 @@ var createNewGroupDM []byte
 //go:embed testdata/post_dm.json
 var postDM []byte
 
-//go:embed testdata/403.json
-var forbidden []byte
-
 func Test_CreateOneToOneDM(t *testing.T) {
 	t.Parallel()
 	type args struct {
@@ -51,7 +48,7 @@ func Test_CreateOneToOneDM(t *testing.T) {
 				participantID: "2244994945",
 				body: &gotwtr.CreateOneToOneDMBody{
 					Text: "This is a one-to-one Direct Message with an attachment",
-					Attachments: []gotwtr.MessageAttachment{
+					Attachments: []gotwtr.DirectMessageAttachment{
 						{
 							MediaID: "1455952740635586573",
 						},
@@ -60,7 +57,7 @@ func Test_CreateOneToOneDM(t *testing.T) {
 			},
 			want: &gotwtr.CreateOneToOneDMResponse{
 				DMConversationID: "1346889436626259968",
-				DMEventID:        "128341038123",
+				DMEventFieldID:   "128341038123",
 			},
 			wantErr: false,
 		},
@@ -77,7 +74,7 @@ func Test_CreateOneToOneDM(t *testing.T) {
 				participantID: "2244994945",
 				body: &gotwtr.CreateOneToOneDMBody{
 					Text: "This is a one-to-one Direct Message with an attachment",
-					Attachments: []gotwtr.MessageAttachment{
+					Attachments: []gotwtr.DirectMessageAttachment{
 						{
 							MediaID: "1455952740635586573",
 						},
@@ -146,7 +143,7 @@ func Test_CreateNewGroupDM(t *testing.T) {
 			},
 			want: &gotwtr.CreateNewGroupDMResponse{
 				DMConversationID: "1346889436626259968",
-				DMEventID:        "128341038123",
+				DMEventFieldID:   "128341038123",
 			},
 			wantErr: false,
 		},
@@ -225,14 +222,14 @@ func Test_PostDM(t *testing.T) {
 						"944480690",
 						"906948460078698496",
 					},
-					Message: &gotwtr.Message{
+					Message: &gotwtr.DirectMessage{
 						Text: "Hello to you two, this is a new group conversation",
 					},
 				},
 			},
 			want: &gotwtr.PostDMResponse{
 				DMConversationID: "1346889436626259968",
-				DMEventID:        "128341038123",
+				DMEventFieldID:   "128341038123",
 			},
 			wantErr: false,
 		},
@@ -252,7 +249,7 @@ func Test_PostDM(t *testing.T) {
 						"944480690",
 						"906948460078698496",
 					},
-					Message: &gotwtr.Message{
+					Message: &gotwtr.DirectMessage{
 						Text: "Hello to you two, this is a new group conversation",
 					},
 				},

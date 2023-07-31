@@ -132,6 +132,9 @@ type DirectMessages interface {
 	CreateOneToOneDM(ctx context.Context, participantID string, body *CreateOneToOneDMBody) (*CreateOneToOneDMResponse, error)
 	CreateNewGroupDM(ctx context.Context, conversationID string, body *CreateNewGroupDMBody) (*CreateNewGroupDMResponse, error)
 	PostDM(ctx context.Context, body *PostDMBody) (*PostDMResponse, error)
+	LookUpAllOneToOneDM(ctx context.Context, participantID string, opt ...*DirectMessageOption) (*LookUpAllOneToOneDMResponse, error)
+	LookUpDM(ctx context.Context, dmConversationID string, opt ...*DirectMessageOption) (*LookUpDMResponse, error)
+	LookUpAllDM(ctx context.Context, opt ...*DirectMessageOption) (*LookUpAllDMResponse, error)
 }
 
 // Twtr is a main interface for all Twitter API calls.
@@ -550,4 +553,23 @@ func (c *Client) CreateNewGroupDM(ctx context.Context, conversationID string, bo
 // PostDM enables create a new group conversation and adds a Direct Message to it on behalf of an authenticated user.
 func (c *Client) PostDM(ctx context.Context, body *PostDMBody) (*PostDMResponse, error) {
 	return postDM(ctx, c.client, body)
+}
+
+// LookUpAllOneToOneDM returns a list of Direct Messages (DM) events within a 1-1 conversation with the user specified in the participant_id path parameter.
+// Messages are returned in reverse chronological order.
+func (c *Client) LookUpAllOneToOneDM(ctx context.Context, participantID string, opt ...*DirectMessageOption) (*LookUpAllOneToOneDMResponse, error) {
+	return lookUpAllOneToOneDM(ctx, c.client, participantID, opt...)
+}
+
+// LookUpDM returns a list of Direct Messages within a conversation specified in the dm_conversation_id path parameter.
+// Messages are returned in reverse chronological order.
+func (c *Client) LookUpDM(ctx context.Context, dmConversationID string, opt ...*DirectMessageOption) (*LookUpDMResponse, error) {
+	return lookUpDM(ctx, c.client, dmConversationID, opt...)
+}
+
+// LookUpAllDM returns a list of Direct Messages for the authenticated user, both sent and received.
+// Direct Message events are returned in reverse chronological order.
+// Supports retrieving events from the previous 30 days.
+func (c *Client) LookUpAllDM(ctx context.Context, opt ...*DirectMessageOption) (*LookUpAllDMResponse, error) {
+	return lookUpAllDM(ctx, c.client, opt...)
 }
