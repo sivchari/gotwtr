@@ -1,5 +1,14 @@
 # Changelog
 
+## [v1.2.0](https://github.com/sivchari/gotwtr/compare/v1.1.3...v1.2.0) - 2023-07-31
+- Update expansions by @sivchari in https://github.com/sivchari/gotwtr/pull/172
+- added implement manage dm api by @mmmommm in https://github.com/sivchari/gotwtr/pull/165
+- update: endpoint by @sivchari in https://github.com/sivchari/gotwtr/pull/174
+- fix: readme by @sivchari in https://github.com/sivchari/gotwtr/pull/175
+- fix: filtered stream silence stop due to io eof by @zandwang in https://github.com/sivchari/gotwtr/pull/171
+- implement direct message lookup API by @mmmommm in https://github.com/sivchari/gotwtr/pull/166
+- update: actions by @sivchari in https://github.com/sivchari/gotwtr/pull/178
+
 ## [v1.1.3](https://github.com/sivchari/gotwtr/compare/v1.1.2...v1.1.3) - 2023-01-15
 - tiny fix by @sivchari in https://github.com/sivchari/gotwtr/pull/167
 
