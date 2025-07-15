@@ -36,11 +36,13 @@ func Test_lookUpSpaces(t *testing.T) {
 						"data": [
 							{
 								"id": "12345",
-								"state": "ended"
+								"state": "ended",
+								"subscriber_count": 100
 							},
 							{
 								"id": "67890",
-								"state": "ended"
+								"state": "ended",
+								"subscriber_count": 250
 							}
 						]
 					}`
@@ -58,12 +60,14 @@ func Test_lookUpSpaces(t *testing.T) {
 			want: &gotwtr.SpacesResponse{
 				Spaces: []*gotwtr.Space{
 					{
-						ID:    "12345",
-						State: "ended",
+						ID:              "12345",
+						State:           "ended",
+						SubscriberCount: 100,
 					},
 					{
-						ID:    "67890",
-						State: "ended",
+						ID:              "67890",
+						State:           "ended",
+						SubscriberCount: 250,
 					},
 				},
 			},

@@ -297,6 +297,10 @@ func Test_LookUpAllDM(t *testing.T) {
 						EventType: "MessageCreate",
 						ID:        "1346889436626259968",
 						Text:      "Hello just you...",
+						MediaKeys: []string{"3_1234567890"},
+						PublicMetrics: &gotwtr.DirectMessageMetrics{
+							ReadCount: 1,
+						},
 					},
 				},
 			},

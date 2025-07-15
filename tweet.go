@@ -47,6 +47,7 @@ type Tweet struct {
 	ContextAnnotations []*TweetContextAnnotation `json:"context_annotations,omitempty"`
 	ConversationID     string                    `json:"conversation_id,omitempty"`
 	CreatedAt          string                    `json:"created_at"`
+	EditControls       *TweetEditControls        `json:"edit_controls,omitempty"`
 	Entities           *TweetEntity              `json:"entities,omitempty"`
 	Geo                *TweetGeo                 `json:"geo,omitempty"`
 	InReplyToUserID    string                    `json:"in_reply_to_user_id,omitempty"`
@@ -149,6 +150,8 @@ type TweetMetrics struct {
 	URLLinkClicks     int `json:"url_link_clicks"`
 	UserProfileClicks int `json:"user_profile_clicks"`
 	QuoteCount        int `json:"quote_count"`
+	BookmarkCount     int `json:"bookmark_count"`
+	ViewCount         int `json:"view_count"`
 }
 
 type TweetReferencedTweet struct {
@@ -692,6 +695,12 @@ type RemoveBookmarkOfTweetResponse struct {
 
 type RemoveBookmarkOfTweetData struct {
 	Bookmarks bool `json:"bookmarks"`
+}
+
+type TweetEditControls struct {
+	EditRemaining  int    `json:"edit_remaining"`
+	IsEditEligible bool   `json:"is_edit_eligible"`
+	EditableUntil  string `json:"editable_until"`
 }
 
 type TweetsUserLikedEditControls struct {

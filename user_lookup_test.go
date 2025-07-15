@@ -36,7 +36,10 @@ func Test_retrieveMultipleUsersWithIDs(t *testing.T) {
 							{
 								"id": "2244994945",
 								"username": "TwitterDev",
-								"name": "Twitter Dev"
+								"name": "Twitter Dev",
+								"verified": true,
+								"verified_type": "blue",
+								"subscription_type": "premium"
 							}
 						]
 					}`
@@ -51,9 +54,12 @@ func Test_retrieveMultipleUsersWithIDs(t *testing.T) {
 			want: &gotwtr.UsersResponse{
 				Users: []*gotwtr.User{
 					{
-						ID:       "2244994945",
-						UserName: "TwitterDev",
-						Name:     "Twitter Dev",
+						ID:               "2244994945",
+						UserName:         "TwitterDev",
+						Name:             "Twitter Dev",
+						Verified:         true,
+						VerifiedType:     "blue",
+						SubscriptionType: "premium",
 					},
 				},
 				Includes: nil,

@@ -3,7 +3,11 @@
     {
       "event_type": "MessageCreate",
       "id": "1346889436626259968",
-      "text": "Hello just you..."
+      "text": "Hello just you...",
+      "media_keys": ["3_1234567890"],
+      "public_metrics": {
+        "read_count": 1
+      }
     }
   ]
 }
