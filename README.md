@@ -1,7 +1,7 @@
 # gotwtr
 
 [![Go Reference](https://pkg.go.dev/badge/github.com/sivchari/gotwtr.svg)](https://pkg.go.dev/github.com/sivchari/gotwtr)
-[![reviewdog](https://github.com/sivchari/gotwtr/actions/workflows/lint.yml/badge.svg)](https://github.com/sivchari/gotwtr/actions/workflows/lint.yml)
+[![lint](https://github.com/sivchari/gotwtr/actions/workflows/lint.yml/badge.svg)](https://github.com/sivchari/gotwtr/actions/workflows/lint.yml)
 [![test](https://github.com/sivchari/gotwtr/actions/workflows/test.yml/badge.svg)](https://github.com/sivchari/gotwtr/actions/workflows/test.yml)
 
 gotwtr is a Go client library for the Twitter v2 API.

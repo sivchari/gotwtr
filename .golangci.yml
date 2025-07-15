@@ -1,45 +1,28 @@
+version: "2"
+
 run:
   timeout: 10m
-  skip-files: [
-    'doc.go'
-  ]
-  skip-dirs: []
-
-linters-settings:
-  misspell:
-    locale: US
-  govet:
-    # report about shadowed variables
-    # FYI https://github.com/golang/go/blob/4a381e3ee3ad6104fc1e1bc255f29d6bf47d7969/src/cmd/vet/shadow.go
-    enable-all: true
-    check-shadowing: false
-    disable:
-      - fieldalignment
-      - shadow
-  staticcheck:
-    checks: ["all", "-S1*", "-ST1*", "-SA5011", "-SA1019", "-SA2002"]
 
 linters:
-  disable-all: true
+  default: standard
   enable:
     - bodyclose
     - forcetypeassert
     - gocritic
-    - goimports
-    - gosimple
     - govet
-    - ifshort
     - makezero
     - misspell
     - nilerr
     - noctx
     - revive
     - staticcheck
-    - varcheck
     - unused
-
-issues:
-  exclude-use-default: true
-  max-per-linter: 0
-  max-same-issues: 0
-  exclude: []
+  settings:
+    misspell:
+      locale: US
+    govet:
+      disable:
+        - fieldalignment
+        - shadow
+    staticcheck:
+      checks: ["all", "-S1*", "-ST1*", "-SA5011", "-SA1019", "-SA2002"]
