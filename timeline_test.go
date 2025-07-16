@@ -707,3 +707,85 @@ func Test_userMentionTimeline(t *testing.T) {
 		})
 	}
 }
+
+func Test_userReverseChronologicalTimeline(t *testing.T) {
+	t.Parallel()
+	type args struct {
+		ctx    context.Context
+		client *http.Client
+		id     string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    *gotwtr.UserReverseChronologicalTimelineResponse
+		wantErr bool
+	}{
+		{
+			name: "200 ok default payload",
+			args: args{
+				ctx: context.Background(),
+				client: mockHTTPClient(func(request *http.Request) *http.Response {
+					data := `{
+						"data": [
+							{
+								"id": "1460323737035677698",
+								"text": "Looking forward to the weekend!"
+							}
+						],
+						"meta": {
+							"result_count": 1,
+							"newest_id": "1460323737035677698",
+							"oldest_id": "1460323737035677698"
+						}
+					}`
+					return &http.Response{
+						StatusCode: http.StatusOK,
+						Body:       io.NopCloser(strings.NewReader(data)),
+					}
+				}),
+				id: "2244994945",
+			},
+			want: &gotwtr.UserReverseChronologicalTimelineResponse{
+				Tweets: []*gotwtr.Tweet{
+					{
+						ID:   "1460323737035677698",
+						Text: "Looking forward to the weekend!",
+					},
+				},
+				Meta: &gotwtr.UserTimelineMeta{
+					ResultCount: 1,
+					NewestID:    "1460323737035677698",
+					OldestID:    "1460323737035677698",
+				},
+			},
+			wantErr: false,
+		},
+		{
+			name: "empty user id",
+			args: args{
+				ctx:    context.Background(),
+				client: mockHTTPClient(func(request *http.Request) *http.Response { return nil }),
+				id:     "",
+			},
+			want:    nil,
+			wantErr: true,
+		},
+	}
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			c := gotwtr.New("key", gotwtr.WithHTTPClient(tt.args.client))
+			got, err := c.UserReverseChronologicalTimeline(tt.args.ctx, tt.args.id)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("client.UserReverseChronologicalTimeline() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("client.UserReverseChronologicalTimeline() diff = %v", diff)
+				return
+			}
+		})
+	}
+}

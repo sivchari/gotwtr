@@ -605,3 +605,65 @@ func (q QuoteTweetsOption) addQuery(req *http.Request) {
 		req.URL.RawQuery = query.Encode()
 	}
 }
+
+type UserReverseChronologicalTimelineOption struct {
+	EndTime         time.Time
+	Exclude         []Exclude
+	Expansions      []Expansion
+	MaxResults      int
+	MediaFields     []MediaField
+	PaginationToken string
+	PlaceFields     []PlaceField
+	PollFields      []PollField
+	SinceID         string
+	StartTime       time.Time
+	TweetFields     []TweetField
+	UntilID         string
+	UserFields      []UserField
+}
+
+func (u UserReverseChronologicalTimelineOption) addQuery(req *http.Request) {
+	q := req.URL.Query()
+	if !u.EndTime.IsZero() {
+		q.Add("end_time", u.EndTime.Format(time.RFC3339))
+	}
+	if len(u.Exclude) > 0 {
+		q.Add("exclude", strings.Join(excludeToString(u.Exclude), ","))
+	}
+	if len(u.Expansions) > 0 {
+		q.Add("expansions", strings.Join(expansionsToString(u.Expansions), ","))
+	}
+	if u.MaxResults > 0 {
+		q.Add("max_results", strconv.Itoa(u.MaxResults))
+	}
+	if len(u.MediaFields) > 0 {
+		q.Add("media.fields", strings.Join(mediaFieldsToString(u.MediaFields), ","))
+	}
+	if len(u.PaginationToken) > 0 {
+		q.Add("pagination_token", u.PaginationToken)
+	}
+	if len(u.PlaceFields) > 0 {
+		q.Add("place.fields", strings.Join(placeFieldsToString(u.PlaceFields), ","))
+	}
+	if len(u.PollFields) > 0 {
+		q.Add("poll.fields", strings.Join(pollFieldsToString(u.PollFields), ","))
+	}
+	if len(u.SinceID) > 0 {
+		q.Add("since_id", u.SinceID)
+	}
+	if !u.StartTime.IsZero() {
+		q.Add("start_time", u.StartTime.Format(time.RFC3339))
+	}
+	if len(u.TweetFields) > 0 {
+		q.Add("tweet.fields", strings.Join(tweetFieldsToString(u.TweetFields), ","))
+	}
+	if len(u.UntilID) > 0 {
+		q.Add("until_id", u.UntilID)
+	}
+	if len(u.UserFields) > 0 {
+		q.Add("user.fields", strings.Join(userFieldsToString(u.UserFields), ","))
+	}
+	if len(q) > 0 {
+		req.URL.RawQuery = q.Encode()
+	}
+}

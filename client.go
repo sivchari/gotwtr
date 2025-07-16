@@ -49,7 +49,7 @@ type Tweets interface {
 	SearchRecentTweets(ctx context.Context, tweet string, opt ...*SearchTweetsOption) (*SearchTweetsResponse, error)
 	// Timelines
 	UserMentionTimeline(ctx context.Context, userID string, opt ...*UserMentionTimelineOption) (*UserMentionTimelineResponse, error)
-	// TODO: /2/users/:id/timelines/reverse_chronological
+	UserReverseChronologicalTimeline(ctx context.Context, userID string, opt ...*UserReverseChronologicalTimelineOption) (*UserReverseChronologicalTimelineResponse, error)
 	UserTweetTimeline(ctx context.Context, userID string, opt ...*UserTweetTimelineOption) (*UserTweetTimelineResponse, error)
 	// Tweet counts
 	CountAllTweets(ctx context.Context, tweet string, opt ...*TweetCountsAllOption) (*TweetCountsResponse, error)
@@ -224,6 +224,11 @@ func (c *Client) QuoteTweets(ctx context.Context, tweetID string, opt ...*QuoteT
 // By default, the most recent ten Tweets are returned per request. Using pagination, up to the most recent 800 Tweets can be retrieved.
 func (c *Client) UserMentionTimeline(ctx context.Context, userID string, opt ...*UserMentionTimelineOption) (*UserMentionTimelineResponse, error) {
 	return userMentionTimeline(ctx, c.client, userID, opt...)
+}
+
+// UserReverseChronologicalTimeline returns Tweets from the user's timeline in reverse chronological order.
+func (c *Client) UserReverseChronologicalTimeline(ctx context.Context, userID string, opt ...*UserReverseChronologicalTimelineOption) (*UserReverseChronologicalTimelineResponse, error) {
+	return userReverseChronologicalTimeline(ctx, c.client, userID, opt...)
 }
 
 // UserTweetTimeline returns Tweets composed by a single user, specified by the requested userID.
