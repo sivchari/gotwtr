@@ -563,3 +563,45 @@ func (l LookupUserBookmarksOption) addQuery(req *http.Request) {
 		req.URL.RawQuery = q.Encode()
 	}
 }
+
+type QuoteTweetsOption struct {
+	Expansions      []Expansion
+	MaxResults      int
+	MediaFields     []MediaField
+	PaginationToken string
+	PlaceFields     []PlaceField
+	PollFields      []PollField
+	TweetFields     []TweetField
+	UserFields      []UserField
+}
+
+func (q QuoteTweetsOption) addQuery(req *http.Request) {
+	query := req.URL.Query()
+	if len(q.Expansions) > 0 {
+		query.Add("expansions", strings.Join(expansionsToString(q.Expansions), ","))
+	}
+	if q.MaxResults > 0 {
+		query.Add("max_results", strconv.Itoa(q.MaxResults))
+	}
+	if len(q.MediaFields) > 0 {
+		query.Add("media.fields", strings.Join(mediaFieldsToString(q.MediaFields), ","))
+	}
+	if q.PaginationToken != "" {
+		query.Add("pagination_token", q.PaginationToken)
+	}
+	if len(q.PlaceFields) > 0 {
+		query.Add("place.fields", strings.Join(placeFieldsToString(q.PlaceFields), ","))
+	}
+	if len(q.PollFields) > 0 {
+		query.Add("poll.fields", strings.Join(pollFieldsToString(q.PollFields), ","))
+	}
+	if len(q.TweetFields) > 0 {
+		query.Add("tweet.fields", strings.Join(tweetFieldsToString(q.TweetFields), ","))
+	}
+	if len(q.UserFields) > 0 {
+		query.Add("user.fields", strings.Join(userFieldsToString(q.UserFields), ","))
+	}
+	if len(query) > 0 {
+		req.URL.RawQuery = query.Encode()
+	}
+}
