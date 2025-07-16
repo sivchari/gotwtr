@@ -131,3 +131,10 @@ const (
 	lookUpDMURL            = "https://api.twitter.com/2/dm_conversations/%v/dm_events"
 	lookUpAllDMURL         = "https://api.twitter.com/2/dm_events"
 )
+
+const (
+	// Community Notes
+	searchPostsEligibleForNotesURL = "https://api.x.com/2/notes/search/posts_eligible_for_notes"
+	searchNotesWrittenURL          = "https://api.x.com/2/notes/search/notes_written"
+	createCommunityNoteURL         = "https://api.x.com/2/notes"
+)

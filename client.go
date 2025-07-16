@@ -141,6 +141,13 @@ type DirectMessages interface {
 	LookUpAllDM(ctx context.Context, opt ...*DirectMessageOption) (*LookUpAllDMResponse, error)
 }
 
+type CommunityNotes interface {
+	// Community Notes
+	SearchPostsEligibleForNotes(ctx context.Context, opt ...*SearchPostsEligibleForNotesOption) (*SearchPostsEligibleForNotesResponse, error)
+	SearchNotesWritten(ctx context.Context, opt ...*SearchNotesWrittenOption) (*SearchNotesWrittenResponse, error)
+	CreateCommunityNote(ctx context.Context, body *CreateCommunityNoteBody) (*CreateCommunityNoteResponse, error)
+}
+
 // Twtr is a main interface for all Twitter API calls.
 type Twtr interface {
 	OAuth
@@ -150,6 +157,7 @@ type Twtr interface {
 	Lists
 	Compliances
 	DirectMessages
+	CommunityNotes
 }
 
 type client struct {
@@ -606,4 +614,19 @@ func (c *Client) LookUpAllDM(ctx context.Context, opt ...*DirectMessageOption) (
 // SpacesTweets returns Tweets shared in the specified Space.
 func (c *Client) SpacesTweets(ctx context.Context, spaceID string, opt ...*SpacesTweetsOption) (*SpacesTweetsResponse, error) {
 	return spacesTweets(ctx, c.client, spaceID, opt...)
+}
+
+// SearchPostsEligibleForNotes returns a list of posts that are eligible to receive a Community Note.
+func (c *Client) SearchPostsEligibleForNotes(ctx context.Context, opt ...*SearchPostsEligibleForNotesOption) (*SearchPostsEligibleForNotesResponse, error) {
+	return searchPostsEligibleForNotes(ctx, c.client, opt...)
+}
+
+// SearchNotesWritten returns a list of Community Notes written by the authenticating user.
+func (c *Client) SearchNotesWritten(ctx context.Context, opt ...*SearchNotesWrittenOption) (*SearchNotesWrittenResponse, error) {
+	return searchNotesWritten(ctx, c.client, opt...)
+}
+
+// CreateCommunityNote creates a Community Note on a post.
+func (c *Client) CreateCommunityNote(ctx context.Context, body *CreateCommunityNoteBody) (*CreateCommunityNoteResponse, error) {
+	return createCommunityNote(ctx, c.client, body)
 }
