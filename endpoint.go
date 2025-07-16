@@ -14,9 +14,9 @@ const (
 	deleteTweetURL = "https://api.twitter.com/2/tweets/%v"
 	postTweetURL   = "https://api.twitter.com/2/tweets"
 	// Timelines
-	userMentionTimelineURL = "https://api.twitter.com/2/users/%v/mentions"
-	userTweetTimelineURL   = "https://api.twitter.com/2/users/%v/tweets"
-	// TODO: /2/users/:id/timelines/reverse_chronological
+	userMentionTimelineURL             = "https://api.twitter.com/2/users/%v/mentions"
+	userTweetTimelineURL               = "https://api.twitter.com/2/users/%v/tweets"
+	userReverseChronologicalTimelineURL = "https://api.twitter.com/2/users/%v/timelines/reverse_chronological"
 	// Search Tweets
 	searchAllTweetsURL    = "https://api.twitter.com/2/tweets/search/all"
 	searchRecentTweetsURL = "https://api.twitter.com/2/tweets/search/recent"

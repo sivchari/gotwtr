@@ -117,3 +117,58 @@ func userMentionTimeline(ctx context.Context, c *client, userID string, opt ...*
 
 	return &timelines, nil
 }
+
+func userReverseChronologicalTimeline(ctx context.Context, c *client, userID string, opt ...*UserReverseChronologicalTimelineOption) (*UserReverseChronologicalTimelineResponse, error) {
+	if userID == "" {
+		return nil, errors.New("user reverse chronological timeline: id parameter is required")
+	}
+	ep := fmt.Sprintf(userReverseChronologicalTimelineURL, userID)
+
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, ep, nil)
+	if err != nil {
+		return nil, fmt.Errorf("user reverse chronological timeline new request with ctx: %w", err)
+	}
+	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.bearerToken))
+
+	var uopt UserReverseChronologicalTimelineOption
+	switch len(opt) {
+	case 0:
+		// do nothing
+	case 1:
+		uopt = *opt[0]
+	default:
+		return nil, errors.New("user reverse chronological timeline: only one option is allowed")
+	}
+	const (
+		minimumMaxResults = 5
+		maximumMaxResults = 100
+		defaultMaxResults = 10
+	)
+	if uopt.MaxResults == 0 {
+		uopt.MaxResults = defaultMaxResults
+	}
+	if uopt.MaxResults < minimumMaxResults || uopt.MaxResults > maximumMaxResults {
+		return nil, fmt.Errorf("user reverse chronological timeline: max results must be between %d and %d", minimumMaxResults, maximumMaxResults)
+	}
+	uopt.addQuery(req)
+
+	resp, err := c.client.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("user reverse chronological timeline response: %w", err)
+	}
+	defer func() { _ = resp.Body.Close() }()
+
+	var timelines UserReverseChronologicalTimelineResponse
+	if err := json.NewDecoder(resp.Body).Decode(&timelines); err != nil {
+		return nil, fmt.Errorf("user reverse chronological timeline decode: %w", err)
+	}
+	if resp.StatusCode != http.StatusOK {
+		return &timelines, &HTTPError{
+			APIName: "user reverse chronological timeline",
+			Status:  resp.Status,
+			URL:     req.URL.String(),
+		}
+	}
+
+	return &timelines, nil
+}

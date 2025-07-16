@@ -210,6 +210,16 @@ type UserMentionTimelineResponse struct {
 	Type     string              `json:"type,omitempty"`
 }
 
+type UserReverseChronologicalTimelineResponse struct {
+	Tweets   []*Tweet            `json:"data"`
+	Includes *TweetIncludes      `json:"includes,omitempty"`
+	Errors   []*APIResponseError `json:"errors,omitempty"`
+	Meta     *UserTimelineMeta   `json:"meta"`
+	Title    string              `json:"title,omitempty"`
+	Detail   string              `json:"detail,omitempty"`
+	Type     string              `json:"type,omitempty"`
+}
+
 type UserTimelineMeta struct {
 	ResultCount int    `json:"result_count"`
 	NewestID    string `json:"newest_id"`
