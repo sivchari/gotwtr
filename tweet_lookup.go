@@ -46,7 +46,7 @@ func retrieveMultipleTweets(ctx context.Context, c *client, tweetIDs []string, o
 	if err != nil {
 		return nil, fmt.Errorf("retrieve multiple tweets response: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	var tweet TweetsResponse
 	if err := json.NewDecoder(resp.Body).Decode(&tweet); err != nil {
@@ -92,7 +92,7 @@ func retrieveSingleTweet(ctx context.Context, c *client, tweetID string, opt ...
 		return nil, fmt.Errorf("retrieve single tweet response: %w", err)
 	}
 
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	var tweet TweetResponse
 	if err := json.NewDecoder(resp.Body).Decode(&tweet); err != nil {

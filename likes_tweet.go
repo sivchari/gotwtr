@@ -36,7 +36,7 @@ func usersLikingTweet(ctx context.Context, c *client, tweetID string, opt ...*Us
 	if err != nil {
 		return nil, fmt.Errorf("users liking tweet: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	var ultr UsersLikingTweetResponse
 	if err := json.NewDecoder(resp.Body).Decode(&ultr); err != nil {
@@ -91,7 +91,7 @@ func tweetsUserLiked(ctx context.Context, c *client, userID string, opt ...*Twee
 	if err != nil {
 		return nil, fmt.Errorf("tweets user liked: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	var tulr TweetsUserLikedResponse
 	if err := json.NewDecoder(resp.Body).Decode(&tulr); err != nil {
@@ -136,7 +136,7 @@ func postUsersLikingTweet(ctx context.Context, c *client, userID string, tweetID
 	if err != nil {
 		return nil, fmt.Errorf("post users liking tweet response: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	var postUsersLikingTweet PostUsersLikingTweetResponse
 	if err := json.NewDecoder(resp.Body).Decode(&postUsersLikingTweet); err != nil {
@@ -172,7 +172,7 @@ func undoUsersLikingTweet(ctx context.Context, c *client, userID string, tweetID
 	if err != nil {
 		return nil, fmt.Errorf("undo users liking tweet response: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	var undoUsersLikingTweet UndoUsersLikingTweetResponse
 	if err := json.NewDecoder(resp.Body).Decode(&undoUsersLikingTweet); err != nil {

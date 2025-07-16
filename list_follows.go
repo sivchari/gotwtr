@@ -48,7 +48,7 @@ func listFollowers(ctx context.Context, c *client, listID string, opt ...*ListFo
 	if err != nil {
 		return nil, fmt.Errorf("list followers: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	var lfr ListFollowersResponse
 	if err := json.NewDecoder(resp.Body).Decode(&lfr); err != nil {
@@ -103,7 +103,7 @@ func allListsUserFollows(ctx context.Context, c *client, userID string, opt ...*
 	if err != nil {
 		return nil, fmt.Errorf("all lists user follows: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	var alufr AllListsUserFollowsResponse
 	if err := json.NewDecoder(resp.Body).Decode(&alufr); err != nil {
@@ -148,7 +148,7 @@ func postListFollows(ctx context.Context, c *client, listID string, userID strin
 	if err != nil {
 		return nil, fmt.Errorf("post list follows response: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	var postListFollows PostListFollowsResponse
 	if err := json.NewDecoder(resp.Body).Decode(&postListFollows); err != nil {
@@ -185,7 +185,7 @@ func undoListFollows(ctx context.Context, c *client, listID string, userID strin
 	if err != nil {
 		return nil, fmt.Errorf("undo list follows response: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	var undoListFollows UndoListFollowsResponse
 	if err := json.NewDecoder(resp.Body).Decode(&undoListFollows); err != nil {

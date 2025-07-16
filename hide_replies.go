@@ -34,7 +34,7 @@ func hideReplies(ctx context.Context, c *client, tweetID string, hidden bool) (*
 	if err != nil {
 		return nil, fmt.Errorf("hide replies: failed to send request: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	var hideReplies HideRepliesResponse
 	if err := json.NewDecoder(resp.Body).Decode(&hideReplies); err != nil {

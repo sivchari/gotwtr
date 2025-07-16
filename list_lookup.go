@@ -35,7 +35,7 @@ func lookUpList(ctx context.Context, c *client, listID string, opt ...*LookUpLis
 	if err != nil {
 		return nil, fmt.Errorf("look up list response: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	var lr ListResponse
 	if err := json.NewDecoder(resp.Body).Decode(&lr); err != nil {
@@ -92,7 +92,7 @@ func lookUpAllListsOwned(ctx context.Context, c *client, userID string, opt ...*
 		return nil, fmt.Errorf("look up all lists owned response: %w", err)
 	}
 
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	var alor AllListsOwnedResponse
 	if err := json.NewDecoder(resp.Body).Decode(&alor); err != nil {

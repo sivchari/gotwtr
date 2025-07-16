@@ -37,7 +37,7 @@ func lookUpSpace(ctx context.Context, c *client, spaceID string, opt ...*SpaceOp
 		return nil, fmt.Errorf("look up space response: %w", err)
 	}
 
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	var sr SpaceResponse
 	if err := json.NewDecoder(resp.Body).Decode(&sr); err != nil {
@@ -93,7 +93,7 @@ func lookUpSpaces(ctx context.Context, c *client, spaceIDs []string, opt ...*Spa
 	if err != nil {
 		return nil, fmt.Errorf("look up spaces response: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	var sr SpacesResponse
 
@@ -141,7 +141,7 @@ func usersPurchasedSpaceTicket(ctx context.Context, c *client, spaceID string, o
 		return nil, fmt.Errorf("users purchased space ticket response: %w", err)
 	}
 
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	var upstr UsersPurchasedSpaceTicketResponse
 	if err := json.NewDecoder(resp.Body).Decode(&upstr); err != nil {

@@ -46,7 +46,7 @@ func userTweetTimeline(ctx context.Context, c *client, userID string, opt ...*Us
 	if err != nil {
 		return nil, fmt.Errorf("user tweet timeline response: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	var timelines UserTweetTimelineResponse
 	if err := json.NewDecoder(resp.Body).Decode(&timelines); err != nil {
@@ -101,7 +101,7 @@ func userMentionTimeline(ctx context.Context, c *client, userID string, opt ...*
 	if err != nil {
 		return nil, fmt.Errorf("user mention timeline response: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	var timelines UserMentionTimelineResponse
 	if err := json.NewDecoder(resp.Body).Decode(&timelines); err != nil {

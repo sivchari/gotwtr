@@ -26,3 +26,7 @@ linters:
         - shadow
     staticcheck:
       checks: ["all", "-S1*", "-ST1*", "-SA5011", "-SA1019", "-SA2002"]
+    revive:
+      rules:
+        - name: exported
+          disabled: true

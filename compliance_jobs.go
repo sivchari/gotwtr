@@ -33,7 +33,7 @@ func complianceJobs(ctx context.Context, c *client, opt ...*ComplianceJobsOption
 	if err != nil {
 		return nil, fmt.Errorf("compliance jobs response: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	var cj ComplianceJobsResponse
 	if err := json.NewDecoder(resp.Body).Decode(&cj); err != nil {
@@ -60,7 +60,7 @@ func complianceJob(ctx context.Context, c *client, cjID int) (*ComplianceJobResp
 	if err != nil {
 		return nil, fmt.Errorf("compliance job response: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	var cj ComplianceJobResponse
 	if err := json.NewDecoder(resp.Body).Decode(&cj); err != nil {
@@ -103,7 +103,7 @@ func createComplianceJob(ctx context.Context, c *client, opt ...*CreateComplianc
 	if err != nil {
 		return nil, fmt.Errorf("create compliance job response: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	var cresponse CreateComplianceJobResponse
 	if err := json.NewDecoder(resp.Body).Decode(&cresponse); err != nil {

@@ -47,7 +47,7 @@ func lookUpListTweets(ctx context.Context, c *client, listID string, opt ...*Lis
 	if err != nil {
 		return nil, fmt.Errorf("look up list tweets: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	var ltr ListTweetsResponse
 	if err := json.NewDecoder(resp.Body).Decode(&ltr); err != nil {

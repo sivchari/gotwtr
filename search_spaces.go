@@ -34,7 +34,7 @@ func searchSpaces(ctx context.Context, c *client, searchTerm string, opt ...*Sea
 	if err != nil {
 		return nil, fmt.Errorf("search spaces: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	var ssr SearchSpacesResponse
 	if err := json.NewDecoder(resp.Body).Decode(&ssr); err != nil {

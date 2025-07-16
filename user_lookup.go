@@ -40,7 +40,7 @@ func retrieveMultipleUsersWithIDs(ctx context.Context, c *client, userIDs []stri
 	if err != nil {
 		return nil, fmt.Errorf("retrieve multiple users with ids response: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	var ur UsersResponse
 	if err := json.NewDecoder(resp.Body).Decode(&ur); err != nil {
@@ -86,7 +86,7 @@ func retrieveSingleUserWithID(ctx context.Context, c *client, userID string, opt
 		return nil, fmt.Errorf("retrieve single user with id response: %w", err)
 	}
 
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	var ur UserResponse
 	if err := json.NewDecoder(resp.Body).Decode(&ur); err != nil {
@@ -136,7 +136,7 @@ func retrieveMultipleUsersWithUserNames(ctx context.Context, c *client, userName
 		return nil, fmt.Errorf("retrieve multiple users with user names response: %w", err)
 	}
 
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	var ur UsersResponse
 	if err := json.NewDecoder(resp.Body).Decode(&ur); err != nil {
@@ -182,7 +182,7 @@ func retrieveSingleUserWithUserName(ctx context.Context, c *client, userName str
 		return nil, fmt.Errorf("retrieve single user with user name response: %w", err)
 	}
 
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	var ur UserResponse
 	if err := json.NewDecoder(resp.Body).Decode(&ur); err != nil {

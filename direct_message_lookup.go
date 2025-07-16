@@ -35,7 +35,7 @@ func lookUpAllOneToOneDM(ctx context.Context, c *client, participantID string, o
 	if err != nil {
 		return nil, fmt.Errorf("lookup all one to one DM response: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	var lookUpAllOneToOneDM LookUpAllOneToOneDMResponse
 	if err := json.NewDecoder(resp.Body).Decode(&lookUpAllOneToOneDM); err != nil {
@@ -78,7 +78,7 @@ func lookUpDM(ctx context.Context, c *client, dmConversationID string, opt ...*D
 	if err != nil {
 		return nil, fmt.Errorf("lookup DM response: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	var lookUpDM LookUpDMResponse
 	if err := json.NewDecoder(resp.Body).Decode(&lookUpDM); err != nil {
@@ -116,7 +116,7 @@ func lookUpAllDM(ctx context.Context, c *client, opt ...*DirectMessageOption) (*
 	if err != nil {
 		return nil, fmt.Errorf("lookup all DM response: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	var lookUpAllDM LookUpAllDMResponse
 	if err := json.NewDecoder(resp.Body).Decode(&lookUpAllDM); err != nil {

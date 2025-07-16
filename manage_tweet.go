@@ -25,7 +25,7 @@ func postTweet(ctx context.Context, c *client, body *PostTweetOption) (*PostTwee
 	if err != nil {
 		return nil, fmt.Errorf("post tweet response: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	var postTweet PostTweetResponse
 	if err := json.NewDecoder(resp.Body).Decode(&postTweet); err != nil {
@@ -57,7 +57,7 @@ func deleteTweet(ctx context.Context, c *client, tweetID string) (*DeleteTweetRe
 	if err != nil {
 		return nil, fmt.Errorf("delete tweet response: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	var deleteTweet DeleteTweetResponse
 	if err := json.NewDecoder(resp.Body).Decode(&deleteTweet); err != nil {

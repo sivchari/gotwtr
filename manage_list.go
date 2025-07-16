@@ -32,7 +32,7 @@ func createNewList(ctx context.Context, c *client, body *CreateNewListBody) (*Cr
 	if err != nil {
 		return nil, fmt.Errorf("create new list response: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	var createNewList CreateNewListResponse
 	if err := json.NewDecoder(resp.Body).Decode(&createNewList); err != nil {
@@ -65,7 +65,7 @@ func deleteList(ctx context.Context, c *client, listID string) (*DeleteListRespo
 	if err != nil {
 		return nil, fmt.Errorf("delete list response: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	var deleteList DeleteListResponse
 	if err := json.NewDecoder(resp.Body).Decode(&deleteList); err != nil {
@@ -113,7 +113,7 @@ func updateMetaDataForList(ctx context.Context, c *client, listID string, body .
 	if err != nil {
 		return nil, fmt.Errorf("update meta data for list response: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	var updateMetaDataForList UpdateMetaDataForListResponse
 	if err := json.NewDecoder(resp.Body).Decode(&updateMetaDataForList); err != nil {

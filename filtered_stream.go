@@ -55,7 +55,7 @@ func addOrDeleteRules(ctx context.Context, c *client, body *AddOrDeleteJSONBody,
 	if err != nil {
 		return nil, fmt.Errorf("add or delete rules: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	var addOrDelete AddOrDeleteRulesResponse
 	if err := json.NewDecoder(resp.Body).Decode(&addOrDelete); err != nil {
@@ -94,7 +94,7 @@ func retrieveStreamRules(ctx context.Context, c *client, opt ...*RetrieveStreamR
 	if err != nil {
 		return nil, fmt.Errorf("retrieve stream rules: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	var tweet RetrieveStreamRulesResponse
 	if err := json.NewDecoder(resp.Body).Decode(&tweet); err != nil {
@@ -123,7 +123,7 @@ func (s *ConnectToStream) retry(req *http.Request) {
 		s.errCh <- err
 		return
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 	if resp.StatusCode != http.StatusOK {
 		s.errCh <- &HTTPError{
 			APIName: "connect to stream",
