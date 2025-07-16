@@ -166,6 +166,14 @@ type MediaUpload interface {
 	CheckUploadStatus(ctx context.Context, req *MediaUploadStatusRequest) (*MediaUploadResponse, error)
 }
 
+type Analytics interface {
+	// Analytics Utilities
+	CalculateEngagementRate(metrics *TweetMetrics) float64
+	CalculateEngagementMetrics(metrics *TweetMetrics) *EngagementMetrics
+	GetTopPerformingTweets(tweets []*Tweet, limit int) []*Tweet
+	CompareMetrics(current, previous *TweetMetrics) *AnalyticsComparison
+}
+
 // Twtr is a main interface for all Twitter API calls.
 type Twtr interface {
 	OAuth
@@ -178,6 +186,7 @@ type Twtr interface {
 	CommunityNotes
 	Trends
 	MediaUpload
+	Analytics
 }
 
 type client struct {
@@ -689,4 +698,24 @@ func (c *Client) PostDMBlocking(ctx context.Context, userID string, targetUserID
 // UndoDMBlocking unblocks DMs from a specific user.
 func (c *Client) UndoDMBlocking(ctx context.Context, userID string, targetUserID string) (*UndoDMBlockingResponse, error) {
 	return undoDMBlocking(ctx, c.client, userID, targetUserID)
+}
+
+// CalculateEngagementRate calculates engagement rate from public metrics.
+func (c *Client) CalculateEngagementRate(metrics *TweetMetrics) float64 {
+	return CalculateEngagementRate(metrics)
+}
+
+// CalculateEngagementMetrics calculates detailed engagement metrics.
+func (c *Client) CalculateEngagementMetrics(metrics *TweetMetrics) *EngagementMetrics {
+	return CalculateEngagementMetrics(metrics)
+}
+
+// GetTopPerformingTweets sorts tweets by engagement rate and returns top performers.
+func (c *Client) GetTopPerformingTweets(tweets []*Tweet, limit int) []*Tweet {
+	return GetTopPerformingTweets(tweets, limit)
+}
+
+// CompareMetrics compares two sets of metrics and returns change percentage.
+func (c *Client) CompareMetrics(current, previous *TweetMetrics) *AnalyticsComparison {
+	return CompareMetrics(current, previous)
 }
