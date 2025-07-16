@@ -2,6 +2,7 @@ package gotwtr
 
 import (
 	"context"
+	"io"
 	"net/http"
 )
 
@@ -153,6 +154,15 @@ type Trends interface {
 	TrendsByWOEID(ctx context.Context, woeid string) (*TrendsByWOEIDResponse, error)
 }
 
+type MediaUpload interface {
+	// Media Upload
+	UploadMedia(ctx context.Context, media io.Reader, mediaType string, opt ...*MediaUploadOption) (*MediaUploadResponse, error)
+	InitializeChunkedUpload(ctx context.Context, req *MediaUploadInitRequest) (*MediaUploadResponse, error)
+	AppendChunkedUpload(ctx context.Context, req *MediaUploadAppendRequest) error
+	FinalizeChunkedUpload(ctx context.Context, req *MediaUploadFinalizeRequest) (*MediaUploadResponse, error)
+	CheckUploadStatus(ctx context.Context, req *MediaUploadStatusRequest) (*MediaUploadResponse, error)
+}
+
 // Twtr is a main interface for all Twitter API calls.
 type Twtr interface {
 	OAuth
@@ -164,6 +174,7 @@ type Twtr interface {
 	DirectMessages
 	CommunityNotes
 	Trends
+	MediaUpload
 }
 
 type client struct {
@@ -640,4 +651,29 @@ func (c *Client) CreateCommunityNote(ctx context.Context, body *CreateCommunityN
 // TrendsByWOEID returns trending topics for a specific location using Where On Earth ID (WOEID).
 func (c *Client) TrendsByWOEID(ctx context.Context, woeid string) (*TrendsByWOEIDResponse, error) {
 	return trendsByWOEID(ctx, c.client, woeid)
+}
+
+// UploadMedia uploads media files for use in tweets and direct messages.
+func (c *Client) UploadMedia(ctx context.Context, media io.Reader, mediaType string, opt ...*MediaUploadOption) (*MediaUploadResponse, error) {
+	return uploadMedia(ctx, c.client, media, mediaType, opt...)
+}
+
+// InitializeChunkedUpload initializes a chunked upload session for large files.
+func (c *Client) InitializeChunkedUpload(ctx context.Context, req *MediaUploadInitRequest) (*MediaUploadResponse, error) {
+	return initializeChunkedUpload(ctx, c.client, req)
+}
+
+// AppendChunkedUpload uploads a chunk of data to an existing upload session.
+func (c *Client) AppendChunkedUpload(ctx context.Context, req *MediaUploadAppendRequest) error {
+	return appendChunkedUpload(ctx, c.client, req)
+}
+
+// FinalizeChunkedUpload completes a chunked upload session.
+func (c *Client) FinalizeChunkedUpload(ctx context.Context, req *MediaUploadFinalizeRequest) (*MediaUploadResponse, error) {
+	return finalizeChunkedUpload(ctx, c.client, req)
+}
+
+// CheckUploadStatus checks the processing status of an uploaded media file.
+func (c *Client) CheckUploadStatus(ctx context.Context, req *MediaUploadStatusRequest) (*MediaUploadResponse, error) {
+	return checkUploadStatus(ctx, c.client, req)
 }
