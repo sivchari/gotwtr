@@ -28,7 +28,8 @@ const (
 	retrieveStreamRulesURL = "https://api.twitter.com/2/tweets/search/stream/rules"
 	addOrDeleteRulesURL    = "https://api.twitter.com/2/tweets/search/stream/rules"
 	// Volume streams
-	volumeStreamsURL = "https://api.twitter.com/2/tweets/sample/stream"
+	volumeStreamsURL    = "https://api.twitter.com/2/tweets/sample/stream"
+	volumeStreams10URL  = "https://api.twitter.com/2/tweets/sample10/stream"
 	// Retweets
 	undoRetweetURL    = "https://api.twitter.com/2/users/%v/retweets/%v"
 	retweetsLookupURL = "https://api.twitter.com/2/tweets/%v/retweeted_by"

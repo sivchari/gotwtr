@@ -83,3 +83,33 @@ func volumeStreams(ctx context.Context, c *client, ch chan<- VolumeStreamsRespon
 	go vs.retry(req)
 	return vs
 }
+
+func volumeStreams10(ctx context.Context, c *client, ch chan<- VolumeStreamsResponse, errCh chan<- error, opt ...*VolumeStreamsOption) *VolumeStreams {
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, volumeStreams10URL, nil)
+	if err != nil {
+		errCh <- fmt.Errorf("sampled stream 10%% new request with ctx: %w", err)
+	}
+	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.bearerToken))
+
+	var vopt VolumeStreamsOption
+	switch len(opt) {
+	case 0:
+		// do nothing
+	case 1:
+		vopt = *opt[0]
+	default:
+		errCh <- errors.New("sampled stream 10%%: only one option is allowed")
+	}
+	vopt.addQuery(req)
+
+	vs := &VolumeStreams{
+		client: c.client,
+		errCh:  errCh,
+		ch:     ch,
+		done:   make(chan struct{}),
+		wg:     &sync.WaitGroup{},
+	}
+	vs.wg.Add(1)
+	go vs.retry(req)
+	return vs
+}
