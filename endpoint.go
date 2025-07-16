@@ -54,6 +54,8 @@ const (
 	retrieveMultipleUsersWithUserNamesURL = "https://api.twitter.com/2/users/by?usernames="
 	retrieveSingleUserWithUserNameURL     = "https://api.twitter.com/2/users/by/username/%v"
 	meURL                                 = "https://api.twitter.com/2/users/me"
+	// User search
+	searchUsersURL = "https://api.twitter.com/2/users/search"
 	// Follows
 	undoFollowingURL = "https://api.twitter.com/2/users/%v/following/%v"
 	followersURL     = "https://api.twitter.com/2/users/%v/followers"

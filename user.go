@@ -270,3 +270,19 @@ type MeWithheld struct {
 type MeIncludes struct {
 	Tweets []*Tweet
 }
+
+type SearchUsersResponse struct {
+	Users    []*User             `json:"data"`
+	Includes *UserIncludes       `json:"includes,omitempty"`
+	Errors   []*APIResponseError `json:"errors,omitempty"`
+	Meta     *SearchUsersMeta    `json:"meta,omitempty"`
+	Title    string              `json:"title,omitempty"`
+	Detail   string              `json:"detail,omitempty"`
+	Type     string              `json:"type,omitempty"`
+}
+
+type SearchUsersMeta struct {
+	ResultCount   int    `json:"result_count,omitempty"`
+	NextToken     string `json:"next_token,omitempty"`
+	PreviousToken string `json:"previous_token,omitempty"`
+}

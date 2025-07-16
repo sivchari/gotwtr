@@ -147,3 +147,33 @@ func (m *MeOption) addQuery(req *http.Request) {
 		req.URL.RawQuery = q.Encode()
 	}
 }
+
+type SearchUsersOption struct {
+	Expansions      []Expansion
+	MaxResults      int
+	PaginationToken string
+	TweetFields     []TweetField
+	UserFields      []UserField
+}
+
+func (s *SearchUsersOption) addQuery(req *http.Request) {
+	q := req.URL.Query()
+	if len(s.Expansions) > 0 {
+		q.Add("expansions", strings.Join(expansionsToString(s.Expansions), ","))
+	}
+	if s.MaxResults > 0 {
+		q.Add("max_results", strconv.Itoa(s.MaxResults))
+	}
+	if len(s.PaginationToken) > 0 {
+		q.Add("pagination_token", s.PaginationToken)
+	}
+	if len(s.TweetFields) > 0 {
+		q.Add("tweet.fields", strings.Join(tweetFieldsToString(s.TweetFields), ","))
+	}
+	if len(s.UserFields) > 0 {
+		q.Add("user.fields", strings.Join(userFieldsToString(s.UserFields), ","))
+	}
+	if len(q) > 0 {
+		req.URL.RawQuery = q.Encode()
+	}
+}
