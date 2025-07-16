@@ -95,3 +95,70 @@ func Test_generateAppOnlyBearerToken(t *testing.T) {
 		})
 	}
 }
+
+func Test_InvalidateToken(t *testing.T) {
+	t.Parallel()
+	type args struct {
+		ctx         context.Context
+		client      *http.Client
+		bearerToken string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    *gotwtr.InvalidateTokenResponse
+		wantErr bool
+	}{
+		{
+			name: "200 ok",
+			args: args{
+				ctx: context.Background(),
+				client: mockHTTPClient(func(request *http.Request) *http.Response {
+					data := `{
+						"access_token": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+					}`
+					return &http.Response{
+						StatusCode: http.StatusOK,
+						Body:       io.NopCloser(strings.NewReader(data)),
+					}
+				}),
+				bearerToken: "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+			},
+			want: &gotwtr.InvalidateTokenResponse{
+				AccessToken: "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+			},
+			wantErr: false,
+		},
+		{
+			name: "no bearer token",
+			args: args{
+				ctx:         context.Background(),
+				client:      mockHTTPClient(func(request *http.Request) *http.Response { return nil }),
+				bearerToken: "",
+			},
+			want:    nil,
+			wantErr: true,
+		},
+	}
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			c := gotwtr.New(
+				tt.args.bearerToken,
+				gotwtr.WithHTTPClient(tt.args.client),
+				gotwtr.WithConsumerKey("consumerKey"),
+				gotwtr.WithConsumerSecret("consumerSecret"),
+			)
+			got, err := c.InvalidateToken(tt.args.ctx)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("client.InvalidateToken() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("client.InvalidateToken() diff = %v", diff)
+				return
+			}
+		})
+	}
+}

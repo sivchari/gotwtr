@@ -7,6 +7,8 @@ import (
 	"errors"
 	"io"
 	"net/http"
+	"net/url"
+	"strings"
 )
 
 type oauth struct {
@@ -71,4 +73,62 @@ func generateAppOnlyBearerToken(ctx context.Context, c *client) (bool, error) {
 	c.bearerToken = o.accessToken
 
 	return true, nil
+}
+
+type InvalidateTokenResponse struct {
+	AccessToken string              `json:"access_token,omitempty"`
+	Errors      []*APIResponseError `json:"errors,omitempty"`
+}
+
+func (c *client) InvalidateToken(ctx context.Context) (*InvalidateTokenResponse, error) {
+	if c.bearerToken == "" {
+		return nil, errors.New("bearer token is required for invalidation")
+	}
+
+	form := url.Values{}
+	form.Set("access_token", c.bearerToken)
+
+	ck := c.consumerKey
+	cs := c.consumerSecret
+	if ck == "" {
+		return nil, errors.New("consumer key is empty")
+	}
+	if cs == "" {
+		return nil, errors.New("consumer secret is empty")
+	}
+
+	credentials := ck + ":" + cs
+	b64credentials := base64.StdEncoding.EncodeToString([]byte(credentials))
+
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, invalidateTokenURL, strings.NewReader(form.Encode()))
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Set("Authorization", "Basic "+b64credentials)
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+
+	resp, err := c.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer func() { _ = resp.Body.Close() }()
+
+	var invalidateTokenResponse InvalidateTokenResponse
+	if err := json.NewDecoder(resp.Body).Decode(&invalidateTokenResponse); err != nil {
+		return nil, err
+	}
+
+	if resp.StatusCode != http.StatusOK {
+		return &invalidateTokenResponse, &HTTPError{
+			APIName: "invalidate token",
+			Status:  resp.Status,
+			URL:     req.URL.String(),
+		}
+	}
+
+	// トークンを無効化したのでクライアントからも削除
+	c.bearerToken = ""
+
+	return &invalidateTokenResponse, nil
 }
