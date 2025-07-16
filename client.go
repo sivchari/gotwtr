@@ -140,6 +140,9 @@ type DirectMessages interface {
 	LookUpAllOneToOneDM(ctx context.Context, participantID string, opt ...*DirectMessageOption) (*LookUpAllOneToOneDMResponse, error)
 	LookUpDM(ctx context.Context, dmConversationID string, opt ...*DirectMessageOption) (*LookUpDMResponse, error)
 	LookUpAllDM(ctx context.Context, opt ...*DirectMessageOption) (*LookUpAllDMResponse, error)
+	// DM Blocks
+	PostDMBlocking(ctx context.Context, userID string, targetUserID string) (*PostDMBlockingResponse, error)
+	UndoDMBlocking(ctx context.Context, userID string, targetUserID string) (*UndoDMBlockingResponse, error)
 }
 
 type CommunityNotes interface {
@@ -676,4 +679,14 @@ func (c *Client) FinalizeChunkedUpload(ctx context.Context, req *MediaUploadFina
 // CheckUploadStatus checks the processing status of an uploaded media file.
 func (c *Client) CheckUploadStatus(ctx context.Context, req *MediaUploadStatusRequest) (*MediaUploadResponse, error) {
 	return checkUploadStatus(ctx, c.client, req)
+}
+
+// PostDMBlocking blocks DMs from a specific user.
+func (c *Client) PostDMBlocking(ctx context.Context, userID string, targetUserID string) (*PostDMBlockingResponse, error) {
+	return postDMBlocking(ctx, c.client, userID, targetUserID)
+}
+
+// UndoDMBlocking unblocks DMs from a specific user.
+func (c *Client) UndoDMBlocking(ctx context.Context, userID string, targetUserID string) (*UndoDMBlockingResponse, error) {
+	return undoDMBlocking(ctx, c.client, userID, targetUserID)
 }
