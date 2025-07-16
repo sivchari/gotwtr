@@ -25,7 +25,9 @@ const (
 	UserFieldPublicMetrics   UserField = "public_metrics"
 	UserFieldURL             UserField = "url"
 	UserFieldVerified        UserField = "verified"
-	UserFieldWithHeld        UserField = "withhel"
+	UserFieldVerifiedType    UserField = "verified_type"
+	UserFieldSubscriptionType UserField = "subscription_type"
+	UserFieldWithHeld        UserField = "withheld"
 )
 
 type User struct {
@@ -42,6 +44,8 @@ type User struct {
 	PublicMetrics   *UserPublicMetrics `json:"public_metrics,omitempty"`
 	URL             string             `json:"url,omitempty"`
 	Verified        bool               `json:"verified,omitempty"`
+	VerifiedType    string             `json:"verified_type,omitempty"`
+	SubscriptionType string            `json:"subscription_type,omitempty"`
 	Withheld        *UserWithheld      `json:"withheld,omitempty"`
 }
 

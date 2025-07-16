@@ -36,7 +36,7 @@ func retweetsLookup(ctx context.Context, c *client, tweetID string, opt ...*Retw
 	if err != nil {
 		return nil, fmt.Errorf("retweets lookup response: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	var retweetsLookup RetweetsResponse
 	if err := json.NewDecoder(resp.Body).Decode(&retweetsLookup); err != nil {
@@ -81,7 +81,7 @@ func postRetweet(ctx context.Context, c *client, userID string, tweetID string) 
 	if err != nil {
 		return nil, fmt.Errorf("post retweet response: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	var postRetweet PostRetweetResponse
 	if err := json.NewDecoder(resp.Body).Decode(&postRetweet); err != nil {
@@ -117,7 +117,7 @@ func undoRetweet(ctx context.Context, c *client, userID string, sourceTweetID st
 	if err != nil {
 		return nil, fmt.Errorf("undo retweet response: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	var undoRetweet UndoRetweetResponse
 	if err := json.NewDecoder(resp.Body).Decode(&undoRetweet); err != nil {

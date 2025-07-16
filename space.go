@@ -27,6 +27,7 @@ const (
 	SpaceFieldUpdatedAt        SpaceField = "updated_at"
 	SpaceFieldScheduledStart   SpaceField = "scheduled_start"
 	SpaceFieldIsTicketed       SpaceField = "is_ticketed"
+	SpaceFieldSubscriberCount  SpaceField = "subscriber_count"
 )
 
 func spaceFieldsToString(sfs []SpaceField) []string {
@@ -54,6 +55,7 @@ type Space struct {
 	Title            string   `json:"title,omitempty"`
 	UpdatedAt        string   `json:"updated_at,omitempty"`
 	CreatorID        string   `json:"creator_id,omitempty"`
+	SubscriberCount  int      `json:"subscriber_count,omitempty"`
 }
 
 type SearchSpacesResponse struct {

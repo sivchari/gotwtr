@@ -36,7 +36,7 @@ func pinnedLists(ctx context.Context, c *client, userID string, opt ...*PinnedLi
 	if err != nil {
 		return nil, fmt.Errorf("pinned lists response: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	var plr PinnedListsResponse
 	if err := json.NewDecoder(resp.Body).Decode(&plr); err != nil {
@@ -81,7 +81,7 @@ func postPinnedLists(ctx context.Context, c *client, listID string, userID strin
 	if err != nil {
 		return nil, fmt.Errorf("post pinned lists response: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	var ppl PostPinnedListsResponse
 	if err := json.NewDecoder(resp.Body).Decode(&ppl); err != nil {
@@ -116,7 +116,7 @@ func undoPinnedLists(ctx context.Context, c *client, listID string, userID strin
 	if err != nil {
 		return nil, fmt.Errorf("undo pinned lists response: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	var upl UndoPinnedListsResponse
 	if err := json.NewDecoder(resp.Body).Decode(&upl); err != nil {

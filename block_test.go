@@ -716,18 +716,18 @@ func Test_blocking(t *testing.T) {
 			wantErr: true,
 		},
 	}
-	for i, tt := range tests {
+	for _, tt := range tests {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
 			got, err := c.Blocking(tt.args.ctx, tt.args.userID, tt.args.opt...)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("client.Blocking() index = %v error = %v, wantErr %v", i, err, tt.wantErr)
+				t.Errorf("client.Blocking() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if diff := cmp.Diff(tt.want, got); diff != "" {
-				t.Errorf("client.Blocking() index = %v mismatch (-want +got):\n%s", i, diff)
+				t.Errorf("client.Blocking() mismatch (-want +got):\n%s", diff)
 				return
 			}
 		})
@@ -818,18 +818,18 @@ func Test_postBlocking(t *testing.T) {
 			wantErr: true,
 		},
 	}
-	for i, tt := range tests {
+	for _, tt := range tests {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
 			got, err := c.PostBlocking(tt.args.ctx, tt.args.userID, tt.args.targetUserID)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("PostBlocking() index = %v error = %v, wantErr %v", i, err, tt.wantErr)
+				t.Errorf("PostBlocking() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if diff := cmp.Diff(got, tt.want); diff != "" {
-				t.Errorf("PostBlocking() index = %v mismatch (-want +got):\n%s", i, diff)
+				t.Errorf("PostBlocking() mismatch (-want +got):\n%s", diff)
 				return
 			}
 		})
@@ -920,18 +920,18 @@ func Test_undoBlocking(t *testing.T) {
 			wantErr: true,
 		},
 	}
-	for i, tt := range tests {
+	for _, tt := range tests {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
 			got, err := c.UndoBlocking(tt.args.ctx, tt.args.sourceUserID, tt.args.targetUserID)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("UndoBlocking() index = %v error = %v, wantErr %v", i, err, tt.wantErr)
+				t.Errorf("UndoBlocking() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if diff := cmp.Diff(got, tt.want); diff != "" {
-				t.Errorf("UndoBlocking() index = %v mismatch (-want +got):\n%s", i, diff)
+				t.Errorf("UndoBlocking() mismatch (-want +got):\n%s", diff)
 				return
 			}
 		})

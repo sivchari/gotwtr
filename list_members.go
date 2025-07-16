@@ -49,7 +49,7 @@ func listMembers(ctx context.Context, c *client, listID string, opt ...*ListMemb
 		return nil, fmt.Errorf("look up list members: %w", err)
 	}
 
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	var lmr ListMembersResponse
 	if err := json.NewDecoder(resp.Body).Decode(&lmr); err != nil {
@@ -107,7 +107,7 @@ func listsSpecifiedUser(ctx context.Context, c *client, userID string, opt ...*L
 		return nil, fmt.Errorf("lists specified user: %w", err)
 	}
 
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	var lmr ListsSpecifiedUserResponse
 	if err := json.NewDecoder(resp.Body).Decode(&lmr); err != nil {
@@ -152,7 +152,7 @@ func postListMembers(ctx context.Context, c *client, listID string, userID strin
 	if err != nil {
 		return nil, fmt.Errorf("post list members response: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	var postListMembers PostListMembersResponse
 	if err := json.NewDecoder(resp.Body).Decode(&postListMembers); err != nil {
@@ -188,7 +188,7 @@ func undoListMembers(ctx context.Context, c *client, listID string, userID strin
 	if err != nil {
 		return nil, fmt.Errorf("undo list members response: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	var undoListMembers UndoListMembersResponse
 	if err := json.NewDecoder(resp.Body).Decode(&undoListMembers); err != nil {

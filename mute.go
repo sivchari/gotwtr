@@ -49,7 +49,7 @@ func muting(ctx context.Context, c *client, userID string, opt ...*MuteOption) (
 		return nil, fmt.Errorf("muting response: %w", err)
 	}
 
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	var m MutingResponse
 	if err := json.NewDecoder(resp.Body).Decode(&m); err != nil {
@@ -94,7 +94,7 @@ func postMuting(ctx context.Context, c *client, userID string, targetUserID stri
 	if err != nil {
 		return nil, fmt.Errorf("post muting response: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	var postMuting PostMutingResponse
 	if err := json.NewDecoder(resp.Body).Decode(&postMuting); err != nil {
@@ -130,7 +130,7 @@ func undoMuting(ctx context.Context, c *client, sourceUserID string, targetUserI
 	if err != nil {
 		return nil, fmt.Errorf("undo muting response: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	var undoMuting UndoMutingResponse
 	if err := json.NewDecoder(resp.Body).Decode(&undoMuting); err != nil {

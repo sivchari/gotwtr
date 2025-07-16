@@ -48,7 +48,7 @@ func searchRecentTweets(ctx context.Context, c *client, tweet string, opt ...*Se
 	if err != nil {
 		return nil, fmt.Errorf("search recent tweets: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	var str SearchTweetsResponse
 	if err := json.NewDecoder(resp.Body).Decode(&str); err != nil {
@@ -105,7 +105,7 @@ func searchAllTweets(ctx context.Context, c *client, tweet string, opt ...*Searc
 	if err != nil {
 		return nil, fmt.Errorf("search all tweets: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	var str SearchTweetsResponse
 	if err := json.NewDecoder(resp.Body).Decode(&str); err != nil {

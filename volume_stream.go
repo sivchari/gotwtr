@@ -31,7 +31,7 @@ func (s *VolumeStreams) retry(req *http.Request) {
 		s.errCh <- err
 		return
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 	if resp.StatusCode != http.StatusOK {
 		s.errCh <- &HTTPError{
 			APIName: "sampled stream",

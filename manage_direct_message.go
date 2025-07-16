@@ -30,7 +30,7 @@ func createOneToOneDM(ctx context.Context, c *client, participantID string, body
 	if err != nil {
 		return nil, fmt.Errorf("create a one to one DM response: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	var createOneToOneDM CreateOneToOneDMResponse
 	if err := json.NewDecoder(resp.Body).Decode(&createOneToOneDM); err != nil {
@@ -67,7 +67,7 @@ func createNewGroupDM(ctx context.Context, c *client, conversationID string, bod
 	if err != nil {
 		return nil, fmt.Errorf("create new group DM response: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	var createNewGroupDM CreateNewGroupDMResponse
 	if err := json.NewDecoder(resp.Body).Decode(&createNewGroupDM); err != nil {
@@ -100,7 +100,7 @@ func postDM(ctx context.Context, c *client, body *PostDMBody) (*PostDMResponse, 
 	if err != nil {
 		return nil, fmt.Errorf("post DM response: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	var postDM PostDMResponse
 	if err := json.NewDecoder(resp.Body).Decode(&postDM); err != nil {

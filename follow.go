@@ -49,7 +49,7 @@ func followers(ctx context.Context, c *client, userID string, opt ...*FollowOpti
 		return nil, fmt.Errorf("followers response: %w", err)
 	}
 
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	var f FollowersResponse
 	if err := json.NewDecoder(resp.Body).Decode(&f); err != nil {
@@ -106,7 +106,7 @@ func following(ctx context.Context, c *client, userID string, opt ...*FollowOpti
 		return nil, fmt.Errorf("following response: %w", err)
 	}
 
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	var f FollowingResponse
 	if err := json.NewDecoder(resp.Body).Decode(&f); err != nil {
@@ -151,7 +151,7 @@ func postFollowing(ctx context.Context, c *client, userID string, targetUserID s
 	if err != nil {
 		return nil, fmt.Errorf("post following response: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	var postFollowing PostFollowingResponse
 	if err := json.NewDecoder(resp.Body).Decode(&postFollowing); err != nil {
@@ -187,7 +187,7 @@ func undoFollowing(ctx context.Context, c *client, sourceUserID string, targetUs
 	if err != nil {
 		return nil, fmt.Errorf("undo following response: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	var undoFollowing UndoFollowingResponse
 	if err := json.NewDecoder(resp.Body).Decode(&undoFollowing); err != nil {

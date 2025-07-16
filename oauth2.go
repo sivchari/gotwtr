@@ -52,7 +52,7 @@ func generateAppOnlyBearerToken(ctx context.Context, c *client) (bool, error) {
 	if err != nil {
 		return false, err
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	if resp.StatusCode != http.StatusOK {
 		return false, &HTTPError{

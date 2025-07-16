@@ -36,7 +36,7 @@ func lookupUserBookmarks(ctx context.Context, c *client, userID string, opt ...*
 	if err != nil {
 		return nil, fmt.Errorf("lookup user bookmarks response: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	var lookupUserBookmarks LookupUserBookmarksResponse
 	if err := json.NewDecoder(resp.Body).Decode(&lookupUserBookmarks); err != nil {
@@ -78,7 +78,7 @@ func bookmarkTweet(ctx context.Context, c *client, userID string, body *Bookmark
 	if err != nil {
 		return nil, fmt.Errorf("bookmark tweet response: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	var bookmarkTweet BookmarkTweetResponse
 	if err := json.NewDecoder(resp.Body).Decode(&bookmarkTweet); err != nil {
@@ -114,7 +114,7 @@ func removeBookmarkOfTweet(ctx context.Context, c *client, userID string, tweetI
 	if err != nil {
 		return nil, fmt.Errorf("remove bookmark of tweet response: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	var removeBookmarkOfTweet RemoveBookmarkOfTweetResponse
 	if err := json.NewDecoder(resp.Body).Decode(&removeBookmarkOfTweet); err != nil {

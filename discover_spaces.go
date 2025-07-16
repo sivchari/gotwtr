@@ -46,7 +46,7 @@ func discoverSpaces(ctx context.Context, c *client, userIDs []string, opt ...*Di
 	if err != nil {
 		return nil, fmt.Errorf("discover spaces: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	var dsr DiscoverSpacesResponse
 

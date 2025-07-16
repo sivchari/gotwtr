@@ -33,7 +33,7 @@ func blocking(ctx context.Context, c *client, userID string, opt ...*BlockOption
 	if err != nil {
 		return nil, fmt.Errorf("blocking response: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 	var blocking BlockingResponse
 	if err := json.NewDecoder(resp.Body).Decode(&blocking); err != nil {
 		return nil, fmt.Errorf("blocking decode: %w", err)
@@ -77,7 +77,7 @@ func postBlocking(ctx context.Context, c *client, userID string, targetUserID st
 	if err != nil {
 		return nil, fmt.Errorf("post blocking response: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	var postBlocking PostBlockingResponse
 	if err := json.NewDecoder(resp.Body).Decode(&postBlocking); err != nil {
@@ -113,7 +113,7 @@ func undoBlocking(ctx context.Context, c *client, sourceUserID string, targetUse
 	if err != nil {
 		return nil, fmt.Errorf("undo blocking response: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	var undoBlocking UndoBlockingResponse
 	if err := json.NewDecoder(resp.Body).Decode(&undoBlocking); err != nil {

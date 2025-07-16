@@ -56,18 +56,18 @@ func Test_postTweet(t *testing.T) {
 			wantErr: false,
 		},
 	}
-	for i, tt := range tests {
+	for _, tt := range tests {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
 			got, err := c.PostTweet(tt.args.ctx, tt.args.body)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("PostTweet() index = %v error = %v, wantErr %v", i, err, tt.wantErr)
+				t.Errorf("PostTweet() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if diff := cmp.Diff(tt.want, got); diff != "" {
-				t.Errorf("PostTweet() index = %v mismatch (-want +got):\n%s", i, diff)
+				t.Errorf("PostTweet() mismatch (-want +got):\n%s", diff)
 				return
 			}
 		})

@@ -40,7 +40,20 @@ func Test_retriveMultipleTweets(t *testing.T) {
 						"data": [
 							{
 								"id": "123456789",
-								"text": "Hello, world!"
+								"text": "Hello, world!",
+								"edit_controls": {
+									"edit_remaining": 5,
+									"is_edit_eligible": true,
+									"editable_until": "2023-01-01T12:00:00Z"
+								},
+								"public_metrics": {
+									"retweet_count": 10,
+									"like_count": 20,
+									"reply_count": 5,
+									"quote_count": 2,
+									"bookmark_count": 8,
+									"view_count": 150
+								}
 							}
 						]
 					}`
@@ -57,6 +70,19 @@ func Test_retriveMultipleTweets(t *testing.T) {
 					{
 						ID:   "123456789",
 						Text: "Hello, world!",
+						EditControls: &gotwtr.TweetEditControls{
+							EditRemaining:  5,
+							IsEditEligible: true,
+							EditableUntil:  "2023-01-01T12:00:00Z",
+						},
+						PublicMetrics: &gotwtr.TweetMetrics{
+							RetweetCount:  10,
+							LikeCount:     20,
+							ReplyCount:    5,
+							QuoteCount:    2,
+							BookmarkCount: 8,
+							ViewCount:     150,
+						},
 					},
 				},
 				Includes: nil,

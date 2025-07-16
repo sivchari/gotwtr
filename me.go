@@ -30,7 +30,7 @@ func me(ctx context.Context, c *client, opt ...*MeOption) (*MeResponse, error) {
 	if err != nil {
 		return nil, fmt.Errorf("me response: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	var me MeResponse
 	if err := json.NewDecoder(resp.Body).Decode(&me); err != nil {

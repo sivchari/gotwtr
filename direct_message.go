@@ -12,6 +12,8 @@ const (
 	DirectMessageFieldParticipantIDs   DMEventField = "participant_ids"
 	DirectMessageFieldReferencedTweets DMEventField = "referenced_tweets"
 	DirectMessageFieldAttachments      DMEventField = "attachments"
+	DirectMessageFieldMediaKeys        DMEventField = "media_keys"
+	DirectMessageFieldPublicMetrics    DMEventField = "public_metrics"
 )
 
 type EventTypes string
@@ -30,6 +32,8 @@ type DirectMessage struct {
 	ID               string                    `json:"id"`
 	SenderID         string                    `json:"sender_id"`
 	Text             string                    `json:"text,omitempty"`
+	MediaKeys        []string                  `json:"media_keys,omitempty"`
+	PublicMetrics    *DirectMessageMetrics     `json:"public_metrics,omitempty"`
 }
 
 type DirectMessageMeta struct {
@@ -40,6 +44,10 @@ type DirectMessageMeta struct {
 
 type DirectMessageAttachment struct {
 	MediaID string `json:"media_id"`
+}
+
+type DirectMessageMetrics struct {
+	ReadCount int `json:"read_count"`
 }
 
 type CreateOneToOneDMBody struct {

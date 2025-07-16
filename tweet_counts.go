@@ -34,7 +34,7 @@ func countRecentTweets(ctx context.Context, c *client, tweet string, opt ...*Twe
 	if err != nil {
 		return nil, fmt.Errorf("count of recent tweets: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	var tcr TweetCountsResponse
 	if err := json.NewDecoder(resp.Body).Decode(&tcr); err != nil {
@@ -77,7 +77,7 @@ func countAllTweets(ctx context.Context, c *client, tweet string, opt ...*TweetC
 	if err != nil {
 		return nil, fmt.Errorf("count of all tweets: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	var tcr TweetCountsResponse
 	if err := json.NewDecoder(resp.Body).Decode(&tcr); err != nil {

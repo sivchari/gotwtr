@@ -716,18 +716,18 @@ func Test_followers(t *testing.T) {
 			wantErr: true,
 		},
 	}
-	for i, tt := range tests {
+	for _, tt := range tests {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
 			got, err := c.Followers(tt.args.ctx, tt.args.userID, tt.args.opt...)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("client.Followers() index = %v error = %v, wantErr %v", i, err, tt.wantErr)
+				t.Errorf("client.Followers() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if diff := cmp.Diff(tt.want, got); diff != "" {
-				t.Errorf("client.Followers() index = %v mismatch (-want +got):\n%s", i, diff)
+				t.Errorf("client.Followers() mismatch (-want +got):\n%s", diff)
 				return
 			}
 		})
@@ -1438,18 +1438,18 @@ func Test_following(t *testing.T) {
 			wantErr: true,
 		},
 	}
-	for i, tt := range tests {
+	for _, tt := range tests {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
 			got, err := c.Following(tt.args.ctx, tt.args.userID, tt.args.opt...)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("client.Following() index = %v error = %v, wantErr %v", i, err, tt.wantErr)
+				t.Errorf("client.Following() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if diff := cmp.Diff(tt.want, got); diff != "" {
-				t.Errorf("client.Following() index = %v mismatch (-want +got):\n%s", i, diff)
+				t.Errorf("client.Following() mismatch (-want +got):\n%s", diff)
 				return
 			}
 		})
@@ -1638,18 +1638,18 @@ func Test_postFollowing(t *testing.T) {
 			wantErr: true,
 		},
 	}
-	for i, tt := range tests {
+	for _, tt := range tests {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
 			got, err := c.PostFollowing(tt.args.ctx, tt.args.userID, tt.args.targetUserID)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("PostFollowing() index = %v error = %v, wantErr %v", i, err, tt.wantErr)
+				t.Errorf("PostFollowing() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if diff := cmp.Diff(got, tt.want); diff != "" {
-				t.Errorf("PostFollowing() index = %v mismatch (-want +got):\n%s", i, diff)
+				t.Errorf("PostFollowing() mismatch (-want +got):\n%s", diff)
 				return
 			}
 		})
@@ -1806,18 +1806,18 @@ func Test_undoFollowing(t *testing.T) {
 			wantErr: true,
 		},
 	}
-	for i, tt := range tests {
+	for _, tt := range tests {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			c := gotwtr.New("test-key", gotwtr.WithHTTPClient(tt.args.client))
 			got, err := c.UndoFollowing(tt.args.ctx, tt.args.sourceUserID, tt.args.targetUserID)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("UndoFollowing() index = %v error = %v, wantErr %v", i, err, tt.wantErr)
+				t.Errorf("UndoFollowing() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if diff := cmp.Diff(got, tt.want); diff != "" {
-				t.Errorf("UndoFollowing() index = %v mismatch (-want +got):\n%s", i, diff)
+				t.Errorf("UndoFollowing() mismatch (-want +got):\n%s", diff)
 				return
 			}
 		})
