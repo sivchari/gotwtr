@@ -143,3 +143,8 @@ const (
 	// Trends
 	trendsByWOEIDURL = "https://api.x.com/2/trends/by/woeid/%v"
 )
+
+const (
+	// Media Upload
+	mediaUploadURL = "https://api.x.com/2/media/upload"
+)
