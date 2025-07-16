@@ -14,8 +14,8 @@ const (
 	deleteTweetURL = "https://api.twitter.com/2/tweets/%v"
 	postTweetURL   = "https://api.twitter.com/2/tweets"
 	// Timelines
-	userMentionTimelineURL             = "https://api.twitter.com/2/users/%v/mentions"
-	userTweetTimelineURL               = "https://api.twitter.com/2/users/%v/tweets"
+	userMentionTimelineURL              = "https://api.twitter.com/2/users/%v/mentions"
+	userTweetTimelineURL                = "https://api.twitter.com/2/users/%v/tweets"
 	userReverseChronologicalTimelineURL = "https://api.twitter.com/2/users/%v/timelines/reverse_chronological"
 	// Search Tweets
 	searchAllTweetsURL    = "https://api.twitter.com/2/tweets/search/all"
@@ -28,8 +28,8 @@ const (
 	retrieveStreamRulesURL = "https://api.twitter.com/2/tweets/search/stream/rules"
 	addOrDeleteRulesURL    = "https://api.twitter.com/2/tweets/search/stream/rules"
 	// Volume streams
-	volumeStreamsURL    = "https://api.twitter.com/2/tweets/sample/stream"
-	volumeStreams10URL  = "https://api.twitter.com/2/tweets/sample10/stream"
+	volumeStreamsURL   = "https://api.twitter.com/2/tweets/sample/stream"
+	volumeStreams10URL = "https://api.twitter.com/2/tweets/sample10/stream"
 	// Retweets
 	undoRetweetURL    = "https://api.twitter.com/2/users/%v/retweets/%v"
 	retweetsLookupURL = "https://api.twitter.com/2/tweets/%v/retweeted_by"

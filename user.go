@@ -12,41 +12,41 @@ type UserField string
 */
 
 const (
-	UserFieldID              UserField = "id"
-	UserFieldName            UserField = "name"
-	UserFieldUserName        UserField = "username"
-	UserFieldCreatedAt       UserField = "created_at"
-	UserFieldDescription     UserField = "description"
-	UserFieldEntities        UserField = "entities"
-	UserFieldLocation        UserField = "location"
-	UserFieldPinnedTweetID   UserField = "pinned_tweet_id"
-	UserFieldProfileImageURL UserField = "profile_image_url"
-	UserFieldProtected       UserField = "protected"
-	UserFieldPublicMetrics   UserField = "public_metrics"
-	UserFieldURL             UserField = "url"
-	UserFieldVerified        UserField = "verified"
-	UserFieldVerifiedType    UserField = "verified_type"
+	UserFieldID               UserField = "id"
+	UserFieldName             UserField = "name"
+	UserFieldUserName         UserField = "username"
+	UserFieldCreatedAt        UserField = "created_at"
+	UserFieldDescription      UserField = "description"
+	UserFieldEntities         UserField = "entities"
+	UserFieldLocation         UserField = "location"
+	UserFieldPinnedTweetID    UserField = "pinned_tweet_id"
+	UserFieldProfileImageURL  UserField = "profile_image_url"
+	UserFieldProtected        UserField = "protected"
+	UserFieldPublicMetrics    UserField = "public_metrics"
+	UserFieldURL              UserField = "url"
+	UserFieldVerified         UserField = "verified"
+	UserFieldVerifiedType     UserField = "verified_type"
 	UserFieldSubscriptionType UserField = "subscription_type"
-	UserFieldWithHeld        UserField = "withheld"
+	UserFieldWithHeld         UserField = "withheld"
 )
 
 type User struct {
-	ID              string             `json:"id"`
-	Name            string             `json:"name"`
-	UserName        string             `json:"username"`
-	CreatedAt       string             `json:"created_at,omitempty"`
-	Description     string             `json:"description,omitempty"`
-	Entities        *UserEntity        `json:"entities,omitempty"`
-	Location        string             `json:"location,omitempty"`
-	PinnedTweetID   string             `json:"pinned_tweet_id,omitempty"`
-	ProfileImageURL string             `json:"profile_image_url,omitempty"`
-	Protected       bool               `json:"protected,omitempty"`
-	PublicMetrics   *UserPublicMetrics `json:"public_metrics,omitempty"`
-	URL             string             `json:"url,omitempty"`
-	Verified        bool               `json:"verified,omitempty"`
-	VerifiedType    string             `json:"verified_type,omitempty"`
-	SubscriptionType string            `json:"subscription_type,omitempty"`
-	Withheld        *UserWithheld      `json:"withheld,omitempty"`
+	ID               string             `json:"id"`
+	Name             string             `json:"name"`
+	UserName         string             `json:"username"`
+	CreatedAt        string             `json:"created_at,omitempty"`
+	Description      string             `json:"description,omitempty"`
+	Entities         *UserEntity        `json:"entities,omitempty"`
+	Location         string             `json:"location,omitempty"`
+	PinnedTweetID    string             `json:"pinned_tweet_id,omitempty"`
+	ProfileImageURL  string             `json:"profile_image_url,omitempty"`
+	Protected        bool               `json:"protected,omitempty"`
+	PublicMetrics    *UserPublicMetrics `json:"public_metrics,omitempty"`
+	URL              string             `json:"url,omitempty"`
+	Verified         bool               `json:"verified,omitempty"`
+	VerifiedType     string             `json:"verified_type,omitempty"`
+	SubscriptionType string             `json:"subscription_type,omitempty"`
+	Withheld         *UserWithheld      `json:"withheld,omitempty"`
 }
 
 type UserEntity struct {
