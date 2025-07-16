@@ -59,7 +59,7 @@ type Tweets interface {
 	RetrieveSingleTweet(ctx context.Context, tweetID string, opt ...*RetriveTweetOption) (*TweetResponse, error)
 	// Volume stream
 	VolumeStreams(ctx context.Context, ch chan<- VolumeStreamsResponse, errCh chan<- error, opt ...*VolumeStreamsOption) *VolumeStreams
-	// TODO: /2/tweets/sample10/stream
+	VolumeStreams10(ctx context.Context, ch chan<- VolumeStreamsResponse, errCh chan<- error, opt ...*VolumeStreamsOption) *VolumeStreams
 }
 
 type Users interface {
@@ -314,6 +314,11 @@ func (c *Client) ConnectToStream(ctx context.Context, ch chan<- ConnectToStreamR
 // VolumeStreams streams about 1% of all Tweets in real-time.
 func (c *Client) VolumeStreams(ctx context.Context, ch chan<- VolumeStreamsResponse, errCh chan<- error, opt ...*VolumeStreamsOption) *VolumeStreams {
 	return volumeStreams(ctx, c.client, ch, errCh, opt...)
+}
+
+// VolumeStreams10 streams about 10% of all Tweets in real-time.
+func (c *Client) VolumeStreams10(ctx context.Context, ch chan<- VolumeStreamsResponse, errCh chan<- error, opt ...*VolumeStreamsOption) *VolumeStreams {
+	return volumeStreams10(ctx, c.client, ch, errCh, opt...)
 }
 
 // RetweetsLookup allows you to get information about who has Retweeted a Tweet.
