@@ -1,5 +1,19 @@
 # Changelog
 
+## [v1.2.2](https://github.com/sivchari/gotwtr/compare/v1.2.1...v1.2.2) - 2025-07-16
+- feat: add missing API fields to structs by @sivchari in https://github.com/sivchari/gotwtr/pull/210
+- feat: implement User Search endpoint (GET /2/users/search) by @sivchari in https://github.com/sivchari/gotwtr/pull/212
+- feat: implement Quote Tweets endpoint (GET /2/tweets/:id/quote_tweets) by @sivchari in https://github.com/sivchari/gotwtr/pull/213
+- feat: implement Reverse Chronological Timeline endpoint (GET /2/users… by @sivchari in https://github.com/sivchari/gotwtr/pull/214
+- feat: implement OAuth2 Token Invalidation endpoint (POST /oauth2/inva… by @sivchari in https://github.com/sivchari/gotwtr/pull/215
+- feat: implement Spaces Tweets endpoint (GET /2/spaces/:id/tweets) by @sivchari in https://github.com/sivchari/gotwtr/pull/216
+- Feature/volume streams 10 percent by @sivchari in https://github.com/sivchari/gotwtr/pull/217
+- feat: implement Community Notes API endpoints by @sivchari in https://github.com/sivchari/gotwtr/pull/218
+- feat: implement Trends API endpoint (GET /2/trends/by/woeid/{woeid}) by @sivchari in https://github.com/sivchari/gotwtr/pull/219
+- feat: implement Advanced Media Upload API endpoints by @sivchari in https://github.com/sivchari/gotwtr/pull/220
+- feat: implement DM Blocks management API endpoints by @sivchari in https://github.com/sivchari/gotwtr/pull/221
+- feat: implement analytics endpoints and utilities by @sivchari in https://github.com/sivchari/gotwtr/pull/222
+
 ## [v1.2.1](https://github.com/sivchari/gotwtr/compare/v1.2.0...v1.2.1) - 2023-07-31
 - fix: Go version by @sivchari in https://github.com/sivchari/gotwtr/pull/180
 - fix: Go version by @sivchari in https://github.com/sivchari/gotwtr/pull/182
