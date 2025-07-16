@@ -93,7 +93,8 @@ type Spaces interface {
 	LookUpSpaces(ctx context.Context, spaceIDs []string, opt ...*SpaceOption) (*SpacesResponse, error)
 	LookUpSpace(ctx context.Context, spaceID string, opt ...*SpaceOption) (*SpaceResponse, error)
 	UsersPurchasedSpaceTicket(ctx context.Context, spaceID string, opt ...*UsersPurchasedSpaceTicketOption) (*UsersPurchasedSpaceTicketResponse, error)
-	// TODO: /2/spaces/:id/tweets
+	// Spaces tweets
+	SpacesTweets(ctx context.Context, spaceID string, opt ...*SpacesTweetsOption) (*SpacesTweetsResponse, error)
 	DiscoverSpaces(ctx context.Context, userIDs []string, opt ...*DiscoverSpacesOption) (*DiscoverSpacesResponse, error)
 }
 
@@ -595,4 +596,9 @@ func (c *Client) LookUpDM(ctx context.Context, dmConversationID string, opt ...*
 // Supports retrieving events from the previous 30 days.
 func (c *Client) LookUpAllDM(ctx context.Context, opt ...*DirectMessageOption) (*LookUpAllDMResponse, error) {
 	return lookUpAllDM(ctx, c.client, opt...)
+}
+
+// SpacesTweets returns Tweets shared in the specified Space.
+func (c *Client) SpacesTweets(ctx context.Context, spaceID string, opt ...*SpacesTweetsOption) (*SpacesTweetsResponse, error) {
+	return spacesTweets(ctx, c.client, spaceID, opt...)
 }

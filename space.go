@@ -112,3 +112,17 @@ type UsersPurchasedSpaceTicketResponse struct {
 type LookUpUsersWhoPurchasedSpaceTicketIncludes struct {
 	Tweets []*Tweet
 }
+
+type SpacesTweetsResponse struct {
+	Tweets   []*Tweet            `json:"data"`
+	Includes *TweetIncludes      `json:"includes,omitempty"`
+	Errors   []*APIResponseError `json:"errors,omitempty"`
+	Meta     *SpacesTweetsMeta   `json:"meta,omitempty"`
+	Title    string              `json:"title,omitempty"`
+	Detail   string              `json:"detail,omitempty"`
+	Type     string              `json:"type,omitempty"`
+}
+
+type SpacesTweetsMeta struct {
+	ResultCount int `json:"result_count,omitempty"`
+}

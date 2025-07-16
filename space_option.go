@@ -137,3 +137,25 @@ func (u *UsersPurchasedSpaceTicketOption) addQuery(req *http.Request) {
 		req.URL.RawQuery = q.Encode()
 	}
 }
+
+type SpacesTweetsOption struct {
+	Expansions  []Expansion
+	TweetFields []TweetField
+	UserFields  []UserField
+}
+
+func (s *SpacesTweetsOption) addQuery(req *http.Request) {
+	q := req.URL.Query()
+	if len(s.Expansions) > 0 {
+		q.Add("expansions", strings.Join(expansionsToString(s.Expansions), ","))
+	}
+	if len(s.TweetFields) > 0 {
+		q.Add("tweet.fields", strings.Join(tweetFieldsToString(s.TweetFields), ","))
+	}
+	if len(s.UserFields) > 0 {
+		q.Add("user.fields", strings.Join(userFieldsToString(s.UserFields), ","))
+	}
+	if len(q) > 0 {
+		req.URL.RawQuery = q.Encode()
+	}
+}
