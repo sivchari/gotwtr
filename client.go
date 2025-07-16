@@ -16,7 +16,7 @@ const (
 
 type OAuth interface {
 	GenerateAppOnlyBearerToken(ctx context.Context) (bool, error)
-	// TODO: oauth2/invalidate_token
+	InvalidateToken(ctx context.Context) (*InvalidateTokenResponse, error)
 }
 
 type Tweets interface {
@@ -201,8 +201,13 @@ func New(bearerToken string, opts ...ClientOption) *Client {
 }
 
 // GenerateAppOnlyBearerToken generates a bearer token for app-only auth.
-func (c *client) GenerateAppOnlyBearerToken(ctx context.Context) (bool, error) {
-	return generateAppOnlyBearerToken(ctx, c)
+func (c *Client) GenerateAppOnlyBearerToken(ctx context.Context) (bool, error) {
+	return generateAppOnlyBearerToken(ctx, c.client)
+}
+
+// InvalidateToken invalidates the current bearer token.
+func (c *Client) InvalidateToken(ctx context.Context) (*InvalidateTokenResponse, error) {
+	return c.client.InvalidateToken(ctx)
 }
 
 // RetrieveMultipleTweets returns a variety of information about the Tweet specified by the requested ID or list of IDs.
