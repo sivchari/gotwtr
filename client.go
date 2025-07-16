@@ -38,7 +38,8 @@ type Tweets interface {
 	// Manage Tweets
 	DeleteTweet(ctx context.Context, tweetID string) (*DeleteTweetResponse, error)
 	PostTweet(ctx context.Context, body *PostTweetOption) (*PostTweetResponse, error)
-	// TODO: /2/tweets/:id/quote_tweets
+	// Quote tweets
+	QuoteTweets(ctx context.Context, tweetID string, opt ...*QuoteTweetsOption) (*QuoteTweetsResponse, error)
 	// Retweets
 	UndoRetweet(ctx context.Context, userID string, sourceTweetID string) (*UndoRetweetResponse, error)
 	RetweetsLookup(ctx context.Context, tweetID string, opt ...*RetweetsLookupOption) (*RetweetsResponse, error)
@@ -212,6 +213,11 @@ func (c *Client) RetrieveMultipleTweets(ctx context.Context, tweetIDs []string, 
 // RetrieveSingleTweet returns a variety of information about a single Tweet specified by the requested ID.
 func (c *Client) RetrieveSingleTweet(ctx context.Context, tweetID string, opt ...*RetriveTweetOption) (*TweetResponse, error) {
 	return retrieveSingleTweet(ctx, c.client, tweetID, opt...)
+}
+
+// QuoteTweets returns a list of Tweets that quote the specified Tweet ID.
+func (c *Client) QuoteTweets(ctx context.Context, tweetID string, opt ...*QuoteTweetsOption) (*QuoteTweetsResponse, error) {
+	return quoteTweets(ctx, c.client, tweetID, opt...)
 }
 
 // UserMentionTimeline returns Tweets mentioning a single user specified by the requested userID.

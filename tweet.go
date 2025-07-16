@@ -708,3 +708,19 @@ type TweetsUserLikedEditControls struct {
 	IsEditEligible bool   `json:"is_edit_eligible"`
 	EditableUntil  string `json:"editable_until"`
 }
+
+type QuoteTweetsResponse struct {
+	Tweets   []*Tweet            `json:"data"`
+	Includes *TweetIncludes      `json:"includes,omitempty"`
+	Meta     *QuoteTweetsMeta    `json:"meta,omitempty"`
+	Errors   []*APIResponseError `json:"errors,omitempty"`
+	Title    string              `json:"title,omitempty"`
+	Detail   string              `json:"detail,omitempty"`
+	Type     string              `json:"type,omitempty"`
+}
+
+type QuoteTweetsMeta struct {
+	ResultCount   int    `json:"result_count,omitempty"`
+	NextToken     string `json:"next_token,omitempty"`
+	PreviousToken string `json:"previous_token,omitempty"`
+}

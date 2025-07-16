@@ -33,7 +33,8 @@ const (
 	undoRetweetURL    = "https://api.twitter.com/2/users/%v/retweets/%v"
 	retweetsLookupURL = "https://api.twitter.com/2/tweets/%v/retweeted_by"
 	postRetweetURL    = "https://api.twitter.com/2/users/%v/retweets"
-	// TODO: /2/tweets/:id/quote_tweets
+	// Quote tweets
+	quoteTweetsURL = "https://api.twitter.com/2/tweets/%v/quote_tweets"
 	// Likes
 	usersLikingTweetURL     = "https://api.twitter.com/2/tweets/%v/liking_users"
 	tweetsUserLikedURL      = "https://api.twitter.com/2/users/%v/liked_tweets"

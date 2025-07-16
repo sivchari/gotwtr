@@ -991,3 +991,81 @@ func Test_lookUpByID(t *testing.T) {
 		})
 	}
 }
+
+func Test_quoteTweets(t *testing.T) {
+	t.Parallel()
+	type args struct {
+		ctx     context.Context
+		client  *http.Client
+		tweetID string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    *gotwtr.QuoteTweetsResponse
+		wantErr bool
+	}{
+		{
+			name: "200 ok default payload",
+			args: args{
+				ctx: context.Background(),
+				client: mockHTTPClient(func(request *http.Request) *http.Response {
+					data := `{
+						"data": [
+							{
+								"id": "1460323737035677698",
+								"text": "Quoting this amazing tweet!"
+							}
+						],
+						"meta": {
+							"result_count": 1
+						}
+					}`
+					return &http.Response{
+						StatusCode: http.StatusOK,
+						Body:       io.NopCloser(strings.NewReader(data)),
+					}
+				}),
+				tweetID: "1460323737035677698",
+			},
+			want: &gotwtr.QuoteTweetsResponse{
+				Tweets: []*gotwtr.Tweet{
+					{
+						ID:   "1460323737035677698",
+						Text: "Quoting this amazing tweet!",
+					},
+				},
+				Meta: &gotwtr.QuoteTweetsMeta{
+					ResultCount: 1,
+				},
+			},
+			wantErr: false,
+		},
+		{
+			name: "empty tweet id",
+			args: args{
+				ctx:     context.Background(),
+				client:  mockHTTPClient(func(request *http.Request) *http.Response { return nil }),
+				tweetID: "",
+			},
+			want:    nil,
+			wantErr: true,
+		},
+	}
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			c := gotwtr.New("key", gotwtr.WithHTTPClient(tt.args.client))
+			got, err := c.QuoteTweets(tt.args.ctx, tt.args.tweetID)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("client.QuoteTweets() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("client.QuoteTweets() diff = %v", diff)
+				return
+			}
+		})
+	}
+}
