@@ -138,3 +138,8 @@ const (
 	searchNotesWrittenURL          = "https://api.x.com/2/notes/search/notes_written"
 	createCommunityNoteURL         = "https://api.x.com/2/notes"
 )
+
+const (
+	// Trends
+	trendsByWOEIDURL = "https://api.x.com/2/trends/by/woeid/%v"
+)

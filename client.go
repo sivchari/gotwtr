@@ -148,6 +148,11 @@ type CommunityNotes interface {
 	CreateCommunityNote(ctx context.Context, body *CreateCommunityNoteBody) (*CreateCommunityNoteResponse, error)
 }
 
+type Trends interface {
+	// Trends
+	TrendsByWOEID(ctx context.Context, woeid string) (*TrendsByWOEIDResponse, error)
+}
+
 // Twtr is a main interface for all Twitter API calls.
 type Twtr interface {
 	OAuth
@@ -158,6 +163,7 @@ type Twtr interface {
 	Compliances
 	DirectMessages
 	CommunityNotes
+	Trends
 }
 
 type client struct {
@@ -629,4 +635,9 @@ func (c *Client) SearchNotesWritten(ctx context.Context, opt ...*SearchNotesWrit
 // CreateCommunityNote creates a Community Note on a post.
 func (c *Client) CreateCommunityNote(ctx context.Context, body *CreateCommunityNoteBody) (*CreateCommunityNoteResponse, error) {
 	return createCommunityNote(ctx, c.client, body)
+}
+
+// TrendsByWOEID returns trending topics for a specific location using Where On Earth ID (WOEID).
+func (c *Client) TrendsByWOEID(ctx context.Context, woeid string) (*TrendsByWOEIDResponse, error) {
+	return trendsByWOEID(ctx, c.client, woeid)
 }
