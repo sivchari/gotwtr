@@ -78,6 +78,8 @@ const (
 	spacesURL                    = "https://api.twitter.com/2/spaces?ids="
 	usersPurchasedSpaceTicketURL = "https://api.twitter.com/2/spaces/%v/buyers"
 	discoverSpacesURL            = "https://api.twitter.com/2/spaces/by/creator_ids?user_ids="
+	// Spaces tweets
+	spacesTweetsURL = "https://api.twitter.com/2/spaces/%v/tweets"
 	// Search Spaces
 	searchSpacesURL = "https://api.twitter.com/2/spaces/search"
 )

@@ -423,3 +423,117 @@ func Test_usersPurchasedSpaceTicket(t *testing.T) {
 		})
 	}
 }
+
+func Test_spacesTweets(t *testing.T) {
+	t.Parallel()
+	type args struct {
+		ctx     context.Context
+		client  *http.Client
+		spaceID string
+		opt     []*gotwtr.SpacesTweetsOption
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    *gotwtr.SpacesTweetsResponse
+		wantErr bool
+	}{
+		{
+			name: "200 ok the request was successful",
+			args: args{
+				ctx:     context.Background(),
+				spaceID: "1YqKDqWqdPLsV",
+				client: mockHTTPClient(func(request *http.Request) *http.Response {
+					data := `{
+						"data": [
+							{
+								"id": "1460323737035677698",
+								"text": "Excited to share what we've been working on at Twitter!"
+							},
+							{
+								"id": "1460323739882364928", 
+								"text": "This is a test tweet shared in a Space"
+							}
+						],
+						"meta": {
+							"result_count": 2
+						}
+					}`
+					return &http.Response{
+						StatusCode: http.StatusOK,
+						Header:     http.Header{"Content-Type": []string{"application/json"}},
+						Body:       io.NopCloser(strings.NewReader(data)),
+					}
+				}),
+				opt: []*gotwtr.SpacesTweetsOption{},
+			},
+			want: &gotwtr.SpacesTweetsResponse{
+				Tweets: []*gotwtr.Tweet{
+					{
+						ID:   "1460323737035677698",
+						Text: "Excited to share what we've been working on at Twitter!",
+					},
+					{
+						ID:   "1460323739882364928",
+						Text: "This is a test tweet shared in a Space",
+					},
+				},
+				Meta: &gotwtr.SpacesTweetsMeta{
+					ResultCount: 2,
+				},
+			},
+			wantErr: false,
+		},
+		{
+			name: "404 not found",
+			args: args{
+				ctx:     context.Background(),
+				spaceID: "invalidSpaceID",
+				client: mockHTTPClient(func(request *http.Request) *http.Response {
+					data := `{
+						"title": "Not Found Error",
+						"detail": "Could not find space with id: [invalidSpaceID].",
+						"type": "https://api.twitter.com/2/problems/resource-not-found"
+					}`
+					return &http.Response{
+						StatusCode: http.StatusNotFound,
+						Header:     http.Header{"Content-Type": []string{"application/json"}},
+						Body:       io.NopCloser(strings.NewReader(data)),
+					}
+				}),
+			},
+			want: &gotwtr.SpacesTweetsResponse{
+				Title:  "Not Found Error",
+				Detail: "Could not find space with id: [invalidSpaceID].",
+				Type:   "https://api.twitter.com/2/problems/resource-not-found",
+			},
+			wantErr: true,
+		},
+		{
+			name: "empty spaceID",
+			args: args{
+				ctx:     context.Background(),
+				spaceID: "",
+				client:  http.DefaultClient,
+			},
+			want:    nil,
+			wantErr: true,
+		},
+	}
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			c := gotwtr.New("key", gotwtr.WithHTTPClient(tt.args.client))
+			got, err := c.SpacesTweets(tt.args.ctx, tt.args.spaceID, tt.args.opt...)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("client.SpacesTweets() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("client.SpacesTweets() mismatch (-want +got):\n%s", diff)
+				return
+			}
+		})
+	}
+}

@@ -158,3 +158,50 @@ func usersPurchasedSpaceTicket(ctx context.Context, c *client, spaceID string, o
 
 	return &upstr, nil
 }
+
+func spacesTweets(ctx context.Context, c *client, spaceID string, opt ...*SpacesTweetsOption) (*SpacesTweetsResponse, error) {
+	if spaceID == "" {
+		return nil, errors.New("spaces tweets: spaceID parameter is required")
+	}
+	ep := fmt.Sprintf(spacesTweetsURL, spaceID)
+
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, ep, nil)
+	if err != nil {
+		return nil, fmt.Errorf("spaces tweets new request with ctx: %w", err)
+	}
+
+	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.bearerToken))
+
+	var sopt SpacesTweetsOption
+	switch len(opt) {
+	case 0:
+		// do nothing
+	case 1:
+		sopt = *opt[0]
+	default:
+		return nil, errors.New("spaces tweets: only one option is allowed")
+	}
+	sopt.addQuery(req)
+
+	resp, err := c.client.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("spaces tweets response: %w", err)
+	}
+
+	defer func() { _ = resp.Body.Close() }()
+
+	var str SpacesTweetsResponse
+	if err := json.NewDecoder(resp.Body).Decode(&str); err != nil {
+		return nil, fmt.Errorf("spaces tweets: %w", err)
+	}
+
+	if resp.StatusCode != http.StatusOK {
+		return &str, &HTTPError{
+			APIName: "spaces tweets",
+			Status:  resp.Status,
+			URL:     req.URL.String(),
+		}
+	}
+
+	return &str, nil
+}
