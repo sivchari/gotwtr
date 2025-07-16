@@ -81,6 +81,8 @@ type Users interface {
 	RetrieveMultipleUsersWithUserNames(ctx context.Context, userNames []string, opt ...*RetrieveUserOption) (*UsersResponse, error)
 	RetrieveSingleUserWithUserName(ctx context.Context, userName string, opt ...*RetrieveUserOption) (*UserResponse, error)
 	Me(ctx context.Context, opt ...*MeOption) (*MeResponse, error)
+	// User search
+	SearchUsers(ctx context.Context, query string, opt ...*SearchUsersOption) (*SearchUsersResponse, error)
 }
 
 type Spaces interface {
@@ -357,6 +359,11 @@ func (c *Client) RetrieveSingleUserWithUserName(ctx context.Context, userName st
 // Me returns information about an authorized user.
 func (c *Client) Me(ctx context.Context, opt ...*MeOption) (*MeResponse, error) {
 	return me(ctx, c.client, opt...)
+}
+
+// SearchUsers searches for users matching the specified query.
+func (c *Client) SearchUsers(ctx context.Context, query string, opt ...*SearchUsersOption) (*SearchUsersResponse, error) {
+	return searchUsers(ctx, c.client, query, opt...)
 }
 
 // Followers returns a list of users who are followers of the specified userID.

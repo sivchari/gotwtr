@@ -969,3 +969,83 @@ func Test_retrieveMultipleUsersWithUserNames(t *testing.T) {
 		})
 	}
 }
+
+func Test_searchUsers(t *testing.T) {
+	t.Parallel()
+	type args struct {
+		ctx    context.Context
+		client *http.Client
+		query  string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    *gotwtr.SearchUsersResponse
+		wantErr bool
+	}{
+		{
+			name: "200 ok default payload",
+			args: args{
+				ctx: context.Background(),
+				client: mockHTTPClient(func(request *http.Request) *http.Response {
+					data := `{
+						"data": [
+							{
+								"id": "2244994945",
+								"name": "Twitter Dev",
+								"username": "TwitterDev"
+							}
+						],
+						"meta": {
+							"result_count": 1
+						}
+					}`
+					return &http.Response{
+						StatusCode: http.StatusOK,
+						Body:       io.NopCloser(strings.NewReader(data)),
+					}
+				}),
+				query: "TwitterDev",
+			},
+			want: &gotwtr.SearchUsersResponse{
+				Users: []*gotwtr.User{
+					{
+						ID:       "2244994945",
+						Name:     "Twitter Dev",
+						UserName: "TwitterDev",
+					},
+				},
+				Meta: &gotwtr.SearchUsersMeta{
+					ResultCount: 1,
+				},
+			},
+			wantErr: false,
+		},
+		{
+			name: "empty query",
+			args: args{
+				ctx:    context.Background(),
+				client: mockHTTPClient(func(request *http.Request) *http.Response { return nil }),
+				query:  "",
+			},
+			want:    nil,
+			wantErr: true,
+		},
+	}
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			c := gotwtr.New("key", gotwtr.WithHTTPClient(tt.args.client))
+			got, err := c.SearchUsers(tt.args.ctx, tt.args.query)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("client.SearchUsers() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("client.SearchUsers() diff = %v", diff)
+				return
+			}
+		})
+	}
+}

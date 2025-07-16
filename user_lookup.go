@@ -198,3 +198,50 @@ func retrieveSingleUserWithUserName(ctx context.Context, c *client, userName str
 
 	return &ur, nil
 }
+
+func searchUsers(ctx context.Context, c *client, query string, opt ...*SearchUsersOption) (*SearchUsersResponse, error) {
+	if len(query) == 0 {
+		return nil, errors.New("search users: query parameter is required")
+	}
+
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, searchUsersURL, nil)
+	if err != nil {
+		return nil, fmt.Errorf("search users new request with ctx: %w", err)
+	}
+	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.bearerToken))
+
+	q := req.URL.Query()
+	q.Add("query", query)
+	req.URL.RawQuery = q.Encode()
+
+	var sopt SearchUsersOption
+	switch len(opt) {
+	case 0:
+		// do nothing
+	case 1:
+		sopt = *opt[0]
+	default:
+		return nil, errors.New("search users: only one option is allowed")
+	}
+	sopt.addQuery(req)
+
+	resp, err := c.client.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("search users response: %w", err)
+	}
+	defer func() { _ = resp.Body.Close() }()
+
+	var sur SearchUsersResponse
+	if err := json.NewDecoder(resp.Body).Decode(&sur); err != nil {
+		return nil, fmt.Errorf("search users decode: %w", err)
+	}
+	if resp.StatusCode != http.StatusOK {
+		return &sur, &HTTPError{
+			APIName: "search users",
+			Status:  resp.Status,
+			URL:     req.URL.String(),
+		}
+	}
+
+	return &sur, nil
+}
